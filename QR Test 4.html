@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UCAT QR Practice - MedwithPurpose</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        /* Custom styles for better UI/UX */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scrolling on body */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f2f5; /* Light background like UCAT */
+        }
+        #app-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 2rem); /* Full height minus padding */
+            width: 100%;
+            background-color: #ffffff;
+            border: 1px solid #d1d5db; /* Border like UCAT */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-radius: 0.375rem; /* Slightly rounded corners */
+            margin: 1rem; /* Add some margin */
+            overflow: hidden; /* Prevent content overflow from container */
+            position: relative; /* For calculator positioning */
+        }
+        /* Header and Footer */
+        .header-bar { /* Topmost bar */
+            flex-shrink: 0;
+            background-color: #005A8C; /* Slightly darker blue for top bar */
+            color: white;
+            padding: 0.5rem 1.5rem; /* Adjusted padding */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 20; /* Ensure it's above the secondary bar if overlapping */
+        }
+
+        .secondary-toolbar { /* New toolbar for calculator and flag */
+            flex-shrink: 0;
+            background-color: #007BBD; /* Lighter blue for secondary bar */
+            color: white;
+            padding: 0.5rem 1.5rem; /* Consistent padding */
+            display: flex;
+            justify-content: space-between; /* Align items */
+            align-items: center;
+            border-bottom: 1px solid #005A8C; /* Optional: a subtle separator */
+            z-index: 19;
+        }
+
+        /* Specific text colors within header/footer */
+        .header-bar span, .header-bar div, .secondary-toolbar span, .secondary-toolbar div {
+             color: white;
+        }
+        #timer {
+             background-color: rgba(255, 255, 255, 0.2); 
+             color: white;
+             font-weight: bold;
+             padding: 0.25rem 0.75rem; 
+             border-radius: 0.25rem; 
+        }
+        
+        /* Buttons in secondary toolbar */
+        .secondary-toolbar-button {
+            background-color: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 0.3rem 0.7rem;
+            font-size: 0.8rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            margin-left: 0.5rem; /* Spacing between buttons */
+        }
+        .secondary-toolbar-button:hover:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: white;
+        }
+        .secondary-toolbar-button.active { /* For calculator button when active */
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: white;
+        }
+
+
+         /* Footer Button Styling */
+        .footer-bar {
+            flex-shrink: 0;
+            background-color: #005A8C; /* Match top bar color */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .footer-bar button {
+            background-color: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.5); 
+            padding: 0.4rem 0.8rem; 
+            font-size: 0.8rem; 
+            border-radius: 0.375rem;
+             transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .footer-bar button:hover:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.15); 
+            border-color: white;
+        }
+         .footer-bar button:disabled {
+             opacity: 0.5;
+             cursor: not-allowed;
+             border-color: rgba(255, 255, 255, 0.3);
+         }
+         .footer-bar button#next-button {
+             background-color: #ffffff; 
+             color: #006DAA; 
+             border: 1px solid white;
+             font-weight: 500;
+         }
+         .footer-bar button#next-button:hover:not(:disabled) {
+             background-color: #f0f0f0; 
+         }
+         #flag-button.flagged {
+             background-color: #facc15; 
+             border-color: #facc15;
+             color: #422006; 
+          }
+          #flag-button.flagged:hover {
+             background-color: #f59e0b; 
+             border-color: #f59e0b;
+          }
+
+        /* Main Content Area */
+        .main-content-area {
+            flex-grow: 1; 
+            display: flex;
+            overflow: hidden; 
+            padding: 1rem; 
+            gap: 1rem; 
+        }
+        .passage-column { /* Stimulus column */
+            flex: 0 0 60%; 
+            overflow-y: auto; 
+            padding: 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            background-color: #fff; /* Changed to white */
+            height: 100%; 
+        }
+        .question-column {
+             flex: 0 0 40%; 
+             overflow-y: auto; 
+             padding: 1rem;
+             border: 1px solid #e5e7eb;
+             border-radius: 0.375rem;
+             background-color: #fff;  /* Changed to white */
+             height: 100%; 
+             position: relative; 
+        }
+        /* Sticky headers inside passage/question columns */
+        .passage-column h3, .question-column h4 {
+            background-color: #fff !important; /* Ensure white background for sticky headers */
+        }
+
+
+        .selected-answer {
+            background-color: #bfdbfe !important; 
+            border-color: #3b82f6 !important; 
+        }
+        .nav-answered { background-color: #a7f3d0; }
+        .nav-current { border: 2px solid #3b82f6 !important; font-weight: bold; }
+        .nav-flagged, .review-flagged { border: 2px solid #f59e0b !important; position: relative; }
+        
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
+        .modal-content { background-color: #fefefe; margin: auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 600px; border-radius: 0.5rem; }
+        .modal.flex { display: flex; }
+
+        button, .button {
+            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+            border-radius: 0.375rem; padding: 0.5rem 1rem; font-size: 0.875rem; font-weight: 500;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); cursor: pointer;
+        }
+        button:active, .button:active { transform: scale(0.98); }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .primary-button { background-color: #3b82f6; color: white; border: 1px solid transparent; }
+        .primary-button:hover:not(:disabled) { background-color: #2563eb; }
+        .secondary-button { background-color: white; color: #374151; border: 1px solid #d1d5db; }
+        .secondary-button:hover:not(:disabled) { background-color: #f9fafb; }
+        .danger-button { background-color: #ef4444; color: white; border: 1px solid transparent; }
+        .danger-button:hover:not(:disabled) { background-color: #dc2626; }
+        
+        .option-label {
+            display: block; padding: 0.75rem 1rem; border: 1px solid #d1d5db; 
+            border-radius: 0.375rem; margin-bottom: 0.5rem; cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            background-color: #ffffff; 
+        }
+        .option-label:hover:not(.selected-answer) { background-color: #f3f4f6; border-color: #a5b4fc; }
+        input[type="radio"] { display: none; }
+
+        #results-details-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); 
+            gap: 1rem; padding-top: 0.5rem; max-width: 500px; margin-left: auto; margin-right: auto;
+        }
+        .result-summary-item { display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .result-summary-box {
+            width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;
+            border-radius: 0.375rem; font-weight: 600; color: white; cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .result-summary-box:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+        .correct-box { background-color: #22c55e; border: 2px solid #16a34a; }
+        .incorrect-box { background-color: #ef4444; border: 2px solid #dc2626; }
+        .not-answered-box { background-color: #9ca3af; border: 2px solid #6b7280; }
+        .time-display-in-box { font-size: 1rem; }
+        .question-number-label { margin-top: 0.5rem; font-size: 0.875rem; color: #4b5563; font-weight: 500; }
+        
+        .explanation-box {
+             background-color: #fef3c7; border: 1px solid #fcd34d; padding: 0.5rem 0.75rem; 
+             margin-top: 0.75rem; border-radius: 0.375rem; font-size: 0.875rem; color: #78350f; 
+        }
+        .review-grid-button {
+             padding: 0.5rem 0.25rem; border: 1px solid #d1d5db; border-radius: 0.375rem;
+             text-align: center; transition: background-color 0.2s ease, border-color 0.2s ease;
+             font-size: 0.875rem; line-height: 1.25rem; cursor: pointer;
+        }
+        .review-grid-button-answered { background-color: #dcfce7; border-color: #86efac; color: #15803d; }
+        .review-grid-button-unanswered { background-color: #f3f4f6; border-color: #d1d5db; color: #4b5563; }
+        .review-grid-button:hover { filter: brightness(95%); }
+
+        /* Calculator Styles */
+        #calculator-ui {
+            display: none; 
+            position: absolute;
+            top: 100px; 
+            left: 50%;
+            width: 225px; 
+            background-color: #007BBD; 
+            border: 2px solid #005A8C; 
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            padding: 12px; 
+            z-index: 1000; 
+            cursor: grab; 
+        }
+        #calculator-ui.visible { display: block; }
+        .calculator-header {
+            display: flex; justify-content: space-between; align-items: center;
+            color: white; margin-bottom: 8px; font-size: 0.8rem; padding: 0 3px;
+        }
+        .calculator-header .title { font-weight: 600; }
+        .calculator-header .close-calc-btn {
+            background: none; border: none; color: white; font-size: 1.1rem; cursor: pointer;
+        }
+        .calculator-decorative-text {
+            color: rgba(255, 255, 255, 0.7); 
+            font-size: 0.6rem;
+            text-align: center;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        #calc-display-container {
+            background-color: #E2E8F0; border: 2px inset #A0AEC0; 
+            border-radius: 4px; padding: 4px 6px; 
+            margin-bottom: 12px; text-align: right; min-height: 36px; 
+            display: flex; align-items: center; justify-content: flex-end;
+            position: relative; /* For memory indicator */
+        }
+        #calc-memory-indicator {
+            position: absolute;
+            left: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4A5568; /* Darker color for M */
+            font-weight: bold;
+            font-size: 0.9rem; /* Slightly smaller M */
+            display: none; /* Hidden by default */
+        }
+        #calc-display {
+            font-family: 'Courier New', Courier, monospace; font-size: 1.6rem; 
+            color: #2D3748; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%;
+        }
+        .calc-buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px; 
+        }
+        .calc-button {
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 4px;
+            padding: 10px 0; 
+            font-size: 0.9rem; 
+            font-weight: 500; cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .calc-button:active { transform: scale(0.95); }
+
+        .calc-button-num {
+            background-color: #FFFFFF; 
+            color: #1A202C; 
+        }
+        .calc-button-num:hover { background-color: #F7FAFC; }
+
+        .calc-button-red {
+            background-color: #C53030; 
+            color: white;
+            border-color: #9B2C2C; 
+        }
+        .calc-button-red:hover { background-color: #E53E3E; }
+        
+        .calc-button.equals { 
+            grid-row: span 2; /* Make equals button span two rows */
+        }
+        .sr-only { /* For screen reader only text */
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+
+        @media (max-width: 768px) {
+            #app-container { height: auto; margin: 0.5rem; }
+            .main-content-area { flex-direction: column; padding: 0.5rem; gap: 0.5rem; }
+            .passage-column, .question-column { flex-basis: auto; width: 100%; height: auto; max-height: 35vh; padding: 0.75rem; }
+            .header-bar, .secondary-toolbar, .footer-bar { padding: 0.5rem 1rem; }
+            .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: 0.8rem; }
+            button, .button { padding: 0.4rem 0.8rem; }
+            .footer-bar button { padding: 0.3rem 0.6rem; font-size: 0.75rem; }
+            #review-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } 
+            .review-grid-button { font-size: 0.8rem; }
+            #results-details-grid { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 0.75rem; }
+            .result-summary-box { width: 60px; height: 60px; }
+            .time-display-in-box { font-size: 0.9rem; }
+            #calculator-ui { width: 210px; top: 90px; padding: 10px;} 
+            .calc-button { padding: 8px 0; font-size: 0.8rem;}
+            #calc-display { font-size: 1.4rem; }
+        }
+         @media (max-width: 480px) {
+             #review-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } 
+             .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: 0.75rem; }
+             button, .button { padding: 0.3rem 0.6rem; }
+             .footer-bar button { padding: 0.25rem 0.5rem; font-size: 0.7rem; }
+             .option-label { padding: 0.5rem 0.75rem; font-size: 0.8rem;}
+             .review-grid-button { font-size: 0.75rem; }
+             #results-details-grid { grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 0.5rem; }
+             .result-summary-box { width: 50px; height: 50px; }
+             .time-display-in-box { font-size: 0.8rem; }
+             .question-number-label { font-size: 0.8rem; }
+             #calculator-ui { width: 90%; max-width: 200px; top: 85px; padding: 8px; } 
+             .calc-button { padding: 7px 0; font-size: 0.75rem;}
+             #calc-display { font-size: 1.3rem; }
+         }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app-container">
+
+        <div id="setup-screen" class="p-6 md:p-8 flex flex-col justify-center items-center h-full">
+             <div class="text-center mb-6">
+                <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
+                     alt="MedwithPurpose Logo" class="mx-auto h-20 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
+                <h1 class="text-2xl md:text-3xl font-bold text-blue-600">UCAT Quantitative Reasoning Practice</h1>
+                <p class="text-gray-600 mt-2">Prepare for the UCAT QR section.</p>
+                 <p class="text-sm text-gray-500 mt-4">
+                     This section contains <strong id="setup-question-count">4 questions</strong> and you have <strong id="setup-time-limit">4 minutes</strong> to complete it.
+                 </p>
+            </div>
+            <div class="space-y-4 w-full max-w-md">
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700">Name:</label>
+                    <input type="text" id="name" name="name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your name">
+                </div>
+                <div>
+                    <label for="goal" class="block text-sm font-medium text-gray-700">Goal (Score out of 4):</label>
+                    <input type="number" id="goal" name="goal" min="0" max="4" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., 3">
+                </div>
+                <div>
+                    <label for="focus-area" class="block text-sm font-medium text-gray-700">Area of Focus / Intention For Practice:</label>
+                    <input type="text" id="focus-area" name="focus-area" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., Calculations, Speed">
+                </div>
+            </div>
+            <div class="mt-8 text-center">
+                <button id="start-button" class="primary-button text-lg px-8 py-3">Begin timed set</button>
+            </div>
+            <div class="mt-4 text-center">
+                <button onclick="window.location.href='student_dashboard.html'" class="secondary-button text-md px-6 py-2">Return to Dashboard</button>
+            </div>
+        </div>
+
+        <div id="exam-screen" class="hidden flex flex-col h-full">
+            <div class="header-bar">
+                <span id="exam-title" class="font-semibold">Quantitative Reasoning</span>
+                <div class="flex items-center space-x-4">
+                    <div id="timer" class="text-base px-3 py-1 rounded-md">04:00</div>
+                    <span class="text-sm">Question <span id="question-number-info">1</span> of 4</span>
+                </div>
+            </div>
+            <div class="secondary-toolbar">
+                <div> <button id="calculator-toggle-button" class="secondary-toolbar-button">Calculator (Alt+C)</button>
+                </div>
+                <div> <button id="flag-button" class="secondary-toolbar-button">Flag for Review</button>
+                </div>
+            </div>
+
+            <div class="main-content-area">
+                <div class="passage-column">
+                    <h3 class="text-lg font-semibold mb-2 sticky top-0 bg-white pt-1 pb-1"><span id="passage-number" class="sr-only">1</span></h3>
+                    <div id="passage-text" class="text-black leading-relaxed whitespace-pre-wrap"></div>
+                </div>
+                <div class="question-column">
+                    <h4 class="text-md font-semibold mb-3 sticky top-0 bg-white pt-1 pb-1">Question <span id="question-number">1</span></h4>
+                    <p id="question-text" class="mb-4 text-black"></p>
+                    <div id="options-container" class="space-y-2"></div>
+                    <div id="review-explanation-container"></div>
+                </div>
+            </div>
+
+            <div class="footer-bar">
+                 <button id="back-to-results-button" class="hidden mr-auto">← Back to Results</button>
+                 <button id="end-exam-button-footer">End Exam</button>
+                 <div class="flex items-center space-x-2 ml-auto">
+                     <button id="prev-button" disabled>← Previous (Alt+P)</button>
+                     <button id="navigator-button">Navigator</button>
+                     <button id="next-button">Next (Alt+N) →</button>
+                 </div>
+            </div>
+        </div>
+        
+        <div id="calculator-ui">
+            <div class="calculator-header" id="calculator-drag-header">
+                <span class="title">Calculator</span>
+                <button class="close-calc-btn" id="close-calculator-button">&times;</button>
+            </div>
+            <div class="calculator-decorative-text">TEXAS INSTRUMENTS TI-108</div>
+            <div id="calc-display-container">
+                <span id="calc-memory-indicator">M</span>
+                <div id="calc-display">0</div>
+            </div>
+            <div class="calc-buttons-grid">
+                <button class="calc-button calc-button-red" data-calc-action="negate">+/-</button>
+                <button class="calc-button calc-button-red" data-calc-action="sqrt">√</button>
+                <button class="calc-button calc-button-red" data-calc-action="percent">%</button>
+                <button class="calc-button calc-button-red operator" data-calc-value="/">÷</button>
+                
+                <button class="calc-button calc-button-red" data-calc-action="mrc">MRC</button>
+                <button class="calc-button calc-button-red" data-calc-action="m-">M-</button>
+                <button class="calc-button calc-button-red" data-calc-action="m+">M+</button>
+                <button class="calc-button calc-button-red operator" data-calc-value="*">×</button>
+
+                <button class="calc-button calc-button-num" data-calc-value="7">7</button>
+                <button class="calc-button calc-button-num" data-calc-value="8">8</button>
+                <button class="calc-button calc-button-num" data-calc-value="9">9</button>
+                <button class="calc-button calc-button-red operator" data-calc-value="-">-</button>
+
+                <button class="calc-button calc-button-num" data-calc-value="4">4</button>
+                <button class="calc-button calc-button-num" data-calc-value="5">5</button>
+                <button class="calc-button calc-button-num" data-calc-value="6">6</button>
+                <button class="calc-button calc-button-red operator" data-calc-value="+">+</button>
+                
+                <button class="calc-button calc-button-num" data-calc-value="1">1</button>
+                <button class="calc-button calc-button-num" data-calc-value="2">2</button>
+                <button class="calc-button calc-button-num" data-calc-value="3">3</button>
+                <button class="calc-button calc-button-red equals" data-calc-action="equals" style="grid-row: span 2;">=</button>
+
+                <button class="calc-button calc-button-red" data-calc-action="clear">ON/C</button>
+                <button class="calc-button calc-button-num" data-calc-value="0">0</button>
+                <button class="calc-button calc-button-num" data-calc-value=".">.</button>
+            </div>
+        </div>
+
+
+        <div id="review-screen" class="hidden p-6 md:p-8 flex flex-col items-center h-full overflow-y-auto">
+             <div class="w-full max-w-3xl mb-4 flex justify-between items-center">
+                 <h2 class="text-2xl font-bold text-blue-600">Review Your Answers</h2>
+                 <button id="filter-flagged-button" class="secondary-button text-sm">Show Flagged Only</button>
+             </div>
+             <p class="text-center text-gray-600 mb-6">Click on a question number to review it. Green indicates answered, Yellow border indicates flagged.</p>
+            <div id="review-grid" class="grid grid-cols-4 gap-3 mb-6 w-full max-w-xs sm:max-w-sm md:max-w-md"></div>
+            <div class="mt-auto pt-6">
+                <button id="end-exam-button" class="danger-button text-lg px-8 py-3">End Exam & See Results</button>
+            </div>
+        </div>
+
+        <div id="results-screen" class="hidden p-6 md:p-8 flex flex-col h-full">
+             <div class="text-center mb-6 flex-shrink-0">
+                <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
+                     alt="MedwithPurpose Logo" class="mx-auto h-16 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
+                 <h2 class="text-2xl md:text-3xl font-bold text-blue-600">Exam Results</h2>
+             </div>
+            <div class="bg-blue-50 p-4 rounded-lg mb-6 text-center flex-shrink-0">
+                 <p class="text-lg font-semibold">Your Score: <span id="score" class="text-blue-700">0</span> / <span id="total-questions-results">4</span></p>
+                 <p class="text-gray-600">Time Taken: <span id="time-taken"></span></p>
+            </div>
+            <h3 class="text-xl font-semibold mb-2 flex-shrink-0">Detailed Results:</h3>
+            <p class="text-sm text-gray-500 mb-4 flex-shrink-0">Click on a question box below to review it.</p>
+            <div id="results-details-grid" class="overflow-y-auto flex-grow"></div>
+            <div class="mt-6 flex-shrink-0 border-t pt-4">
+                 <div class="mb-4">
+                    <label for="focus-rating" class="block text-md font-semibold text-gray-700 mb-1">My focus out of 5 (1 very low, 5 very high):</label>
+                    <input type="number" id="focus-rating" name="focus-rating" min="1" max="5" class="mt-1 block w-20 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="1-5">
+                 </div>
+                 <div>
+                    <label for="reflection-text" class="block text-md font-semibold text-gray-700 mb-1">Main takeaway from this practice:</label>
+                    <textarea id="reflection-text" name="reflection-text" rows="3" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Reflect on your performance, strategies, or areas for improvement..."></textarea>
+                 </div>
+            </div>
+              <div class="mt-6 text-center flex-shrink-0 flex justify-center space-x-4">
+                <button onclick="window.location.href='student_dashboard.html'" class="secondary-button px-6 py-2">Return to Dashboard</button>
+                <button onclick="window.location.reload()" class="secondary-button px-6 py-2">Try Again</button>
+                <button id="download-pdf-button" class="primary-button px-6 py-2">Download Results PDF</button>
+            </div>
+        </div>
+
+        <div id="navigator-modal" class="modal">
+            <div class="modal-content bg-white p-6 rounded-lg shadow-xl">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800">Question Navigator</h3>
+                    <button id="close-modal-button" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+                </div>
+                 <p class="text-sm text-gray-600 mb-4">Click a number to jump. Green: answered, Yellow border: flagged.</p>
+                <div id="navigator-grid" class="grid grid-cols-4 gap-3"> </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Data ---
+        const passages = [
+            // Stimulus for all questions: Garden Layout and Gardener Costs
+            `<p class="text-black mb-2">The diagram below shows the layout of four gardens in a suburban area.</p><img src="https://ik.imagekit.io/mwp/imaged?updatedAt=1746598046423" alt="Garden Layout Diagram" style="width:100%; max-width:495px; margin:auto; display:block; border: 1px solid #ddd; padding: 5px; background-color: #f9f9f9;"><p class="text-black text-center mt-2">Gardens A & B have the same dimensions and Garden C is a perfect square.</p>`
+        ];
+        const questions = [
+            { 
+                passageIndex: 0, 
+                text: "What will it cost to cut the grass which covers garden C?",
+                options: ["£27.36", "£22.82", "£19.58", "£18.92", "£31.68"], 
+                correctAnswer: "C", 
+                explanation: 'Garden C is a sq with sides of 24. 24 squared x 3.4 = 1958 (option C) decimals not necessary for this question due to answer options.' 
+            },
+            { 
+                passageIndex: 0, 
+                text: "What will it cost to trim a hedge the length of y?", 
+                options: ["£16.20", "£16.40", "£16.60", "£16.80", "£17.20"], 
+                correctAnswer: "D", 
+                explanation: 'Find length of y by converting area of 15814.8ftsq into msq. Then divide by length (42) to find y. multiple y by $4.8  to get correct answer of D' 
+            },
+            { 
+                passageIndex: 0, 
+                text: "The owners of gardens A and B decide to equally split the cost of restoring the flower bed which lines the border between their two gardens. What will each of the owners pay?", 
+                options: ["£77", "£103", "£119", "£154", "£220"], 
+                correctAnswer: "A", 
+                explanation: '28/2 x 5.5' 
+            },
+            { 
+                passageIndex: 0, 
+                text: "The grass which covers garden B was cut after there had been heavy rain leaving it damp and the grass subsequently required a second cut the next day. If the gardener gave a 50% discount on the second cut as compensation, what was the total cost of both cuts?", 
+                options: ["£15.88", "£19.04", "£28.56", "£29.38", "£40.32"], 
+                correctAnswer: "C", 
+                explanation: '1.5 x 3.4 x 28 x 131.2/3.28 / 2 = C' 
+            }
+        ];
+
+        // --- State ---
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+        let timerInterval;
+        let timeLeft = 4 * 60; 
+        let examStartTime; let examEndTime;
+        let userName = ''; let userGoal = ''; let userFocusArea = '';
+        let isReviewingFromResults = false;
+        let questionStartTime = null;
+        let questionTimes = new Array(questions.length).fill(0);
+        let flaggedQuestions = new Array(questions.length).fill(false);
+        let isFilteringFlagged = false;
+        let currentlyDisplayedPassageIndex = -1;
+
+        // --- Calculator State ---
+        let calcCurrentInput = '0';
+        let calcPreviousInput = '';
+        let calcOperator = null;
+        let calcMemory = 0;
+        let calcShouldResetDisplay = false; 
+        let calcMrcPressedOnce = false; 
+        let isDraggingCalculator = false;
+        let calculatorOffsetX, calculatorOffsetY;
+
+
+        // --- Elements ---
+        const appContainer = document.getElementById('app-container');
+        const setupScreen = document.getElementById('setup-screen');
+        const examScreen = document.getElementById('exam-screen');
+        const reviewScreen = document.getElementById('review-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const navigatorModal = document.getElementById('navigator-modal');
+        const startButton = document.getElementById('start-button');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const navigatorButton = document.getElementById('navigator-button');
+        const closeModalButton = document.getElementById('close-modal-button');
+        const endExamButton = document.getElementById('end-exam-button');
+        const endExamButtonFooter = document.getElementById('end-exam-button-footer');
+        const backToResultsButton = document.getElementById('back-to-results-button');
+        const flagButton = document.getElementById('flag-button');
+        const passageNumberEl = document.getElementById('passage-number');
+        const passageTextEl = document.getElementById('passage-text');
+        const questionNumberEl = document.getElementById('question-number');
+        const questionNumberInfoEl = document.getElementById('question-number-info');
+        const questionTextEl = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const timerEl = document.getElementById('timer');
+        const reviewGrid = document.getElementById('review-grid');
+        const navigatorGrid = document.getElementById('navigator-grid');
+        const scoreEl = document.getElementById('score');
+        const totalQuestionsResultsEl = document.getElementById('total-questions-results');
+        const timeTakenEl = document.getElementById('time-taken');
+        const resultsDetailsGrid = document.getElementById('results-details-grid');
+        const nameInput = document.getElementById('name');
+        const goalInput = document.getElementById('goal');
+        const focusAreaInput = document.getElementById('focus-area');
+        const examTitleEl = document.getElementById('exam-title');
+        const filterFlaggedButton = document.getElementById('filter-flagged-button');
+        const setupQuestionCountEl = document.getElementById('setup-question-count');
+        const setupTimeLimitEl = document.getElementById('setup-time-limit');
+        const reviewExplanationContainer = document.getElementById('review-explanation-container');
+        const reflectionText = document.getElementById('reflection-text');
+        const downloadPdfButton = document.getElementById('download-pdf-button');
+        const focusRatingInput = document.getElementById('focus-rating');
+        const calculatorToggleButton = document.getElementById('calculator-toggle-button');
+        const calculatorUI = document.getElementById('calculator-ui');
+        const calcDisplay = document.getElementById('calc-display');
+        const calcButtons = document.querySelectorAll('.calc-button');
+        const closeCalculatorButton = document.getElementById('close-calculator-button');
+        const calculatorDragHeader = document.getElementById('calculator-drag-header');
+        const calcMemoryIndicator = document.getElementById('calc-memory-indicator');
+
+
+        // --- Functions ---
+        function startTimer() {
+            examStartTime = new Date();
+            clearInterval(timerInterval);
+            timerEl.textContent = formatTimeSeconds(timeLeft);
+            timerEl.classList.remove('text-gray-300');
+            timerEl.classList.add('text-white', 'bg-opacity-20', 'bg-white');
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerEl.textContent = formatTimeSeconds(timeLeft);
+                if (timeLeft <= 0) {
+                    endExamAndShowResults();
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            examEndTime = examEndTime || new Date();
+            timerEl.classList.remove('text-white', 'bg-opacity-20', 'bg-white');
+            timerEl.classList.add('text-gray-300');
+        }
+
+        function formatTimeSeconds(totalSeconds) {
+             if (totalSeconds < 0) totalSeconds = 0;
+             const minutes = Math.floor(totalSeconds / 60);
+             const seconds = totalSeconds % 60;
+             return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+
+        function formatTimeDifference(milliseconds) {
+            if (!milliseconds || milliseconds < 0) return "0 min 00 sec";
+            const totalSeconds = Math.round(milliseconds / 1000);
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${minutes} min ${seconds < 10 ? '0' : ''}${seconds} sec`;
+        }
+
+        function recordTimeSpent(index) {
+            if (questionStartTime && index >= 0 && index < questions.length) {
+                const timeSpent = Date.now() - questionStartTime;
+                questionTimes[index] = (questionTimes[index] || 0) + timeSpent;
+            }
+            questionStartTime = null;
+        }
+
+        function toggleFlag() {
+            if (isReviewingFromResults) return;
+            const index = currentQuestionIndex;
+            flaggedQuestions[index] = !flaggedQuestions[index];
+            updateFlagButtonAppearance();
+            updateNavigatorButtons();
+        }
+
+        function updateFlagButtonAppearance() {
+            const isFlagged = flaggedQuestions[currentQuestionIndex];
+            flagButton.textContent = isFlagged ? 'Unflag' : 'Flag for Review';
+            flagButton.classList.toggle('flagged', isFlagged);
+        }
+
+        function loadQuestion(index, reviewMode = false) {
+            if (index < 0 || index >= questions.length) return;
+             if (!isReviewingFromResults && !reviewMode) {
+                 recordTimeSpent(currentQuestionIndex);
+            }
+            const question = questions[index];
+            const newPassageIndex = question.passageIndex;
+            const passageContainer = document.querySelector('.passage-column');
+            const questionContainer = document.querySelector('.question-column');
+            
+            passageTextEl.innerHTML = passages[newPassageIndex]; 
+            // passageNumberEl.textContent = ''; // Clear passage number as it's a single stimulus
+            document.querySelector('.passage-column h3').innerHTML = `<span id="passage-number" class="sr-only">${newPassageIndex + 1}</span>`;
+
+            currentlyDisplayedPassageIndex = newPassageIndex;
+            if(passageContainer) passageContainer.scrollTop = 0;
+            
+            currentQuestionIndex = index;
+            isReviewingFromResults = reviewMode;
+            questionNumberEl.textContent = index + 1;
+            questionNumberInfoEl.textContent = `${index + 1} of ${questions.length}`;
+            questionTextEl.textContent = question.text;
+             if(questionContainer) questionContainer.scrollTop = 0;
+            optionsContainer.innerHTML = '';
+            reviewExplanationContainer.innerHTML = '';
+            const optionLetters = ['A', 'B', 'C', 'D', 'E'];
+            question.options.forEach((option, i) => {
+                const optionId = `q${index}_opt${i}`;
+                const label = document.createElement('label');
+                label.htmlFor = optionId;
+                label.classList.add('option-label');
+                label.dataset.optionIndex = i;
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.id = optionId;
+                radio.name = `question_${index}`;
+                radio.value = optionLetters[i];
+                radio.disabled = reviewMode;
+                label.classList.remove('border-green-500', 'border-red-500', 'border-2', 'bg-green-50', 'bg-red-50', 'selected-answer');
+                label.style.cursor = reviewMode ? 'default' : 'pointer';
+                if (userAnswers[index] === optionLetters[i]) {
+                    radio.checked = true;
+                    label.classList.add('selected-answer');
+                }
+                if (reviewMode) {
+                    const isCorrectAnswer = question.correctAnswer === optionLetters[i];
+                    const isSelectedAnswer = userAnswers[index] === optionLetters[i];
+                    if (isCorrectAnswer) {
+                        label.classList.add('border-green-500', 'border-2');
+                        if (!isSelectedAnswer) label.classList.add('bg-green-50');
+                    } else if (isSelectedAnswer) {
+                        label.classList.add('border-red-500', 'border-2', 'bg-red-50');
+                    }
+                }
+                label.appendChild(radio);
+                const textNode = document.createTextNode(`${optionLetters[i]}) ${option}`);
+                label.appendChild(textNode);
+                if (!reviewMode) {
+                    label.addEventListener('click', (e) => {
+                        if (e.target.tagName !== 'INPUT') handleOptionSelect(index, i, optionLetters[i]);
+                    });
+                    radio.addEventListener('change', () => handleOptionSelect(index, i, optionLetters[i]));
+                }
+                optionsContainer.appendChild(label);
+            });
+            if (reviewMode && question.explanation) {
+                const explanationDiv = document.createElement('div');
+                explanationDiv.classList.add('explanation-box');
+                explanationDiv.innerHTML = `<strong class="font-semibold">Explanation:</strong> ${question.explanation.replace(/\n/g, '<br>')}`;
+                reviewExplanationContainer.appendChild(explanationDiv);
+            }
+            prevButton.disabled = index === 0;
+            if (!reviewMode && index === questions.length - 1) {
+                 nextButton.textContent = 'Finish & Review';
+                 nextButton.disabled = false;
+            } else if (!reviewMode) {
+                 nextButton.textContent = 'Next (Alt+N) →';
+                 nextButton.disabled = false;
+            } else {
+                 nextButton.disabled = index === questions.length - 1;
+                 if (!nextButton.disabled) nextButton.textContent = 'Next →';
+            }
+            updateFlagButtonAppearance();
+            if (reviewMode) {
+                backToResultsButton.classList.remove('hidden');
+                endExamButtonFooter.classList.add('hidden');
+                examTitleEl.textContent = "Reviewing Question";
+                prevButton.disabled = index === 0;
+                navigatorButton.disabled = false;
+                flagButton.disabled = true;
+            } else {
+                backToResultsButton.classList.add('hidden');
+                endExamButtonFooter.classList.remove('hidden');
+                examTitleEl.textContent = "Quantitative Reasoning";
+                navigatorButton.disabled = false;
+                flagButton.disabled = false;
+                prevButton.disabled = index === 0;
+            }
+            updateNavigatorHighlight();
+            if (!isReviewingFromResults) {
+                questionStartTime = Date.now();
+            }
+        }
+
+         function handleOptionSelect(questionIndex, optionIndex, optionValue) {
+             if (questionIndex !== currentQuestionIndex || isReviewingFromResults) return;
+             userAnswers[questionIndex] = optionValue;
+             document.querySelectorAll(`#options-container .option-label`).forEach(lbl => {
+                 lbl.classList.remove('selected-answer');
+                 const radio = lbl.querySelector('input[type="radio"]');
+                 if(radio) radio.checked = false;
+             });
+             const selectedLabel = document.querySelector(`#options-container label[for="q${questionIndex}_opt${optionIndex}"]`);
+              if (selectedLabel) {
+                 selectedLabel.classList.add('selected-answer');
+                 const radio = selectedLabel.querySelector('input[type="radio"]');
+                 if (radio) radio.checked = true;
+             }
+             updateNavigatorButtons();
+         }
+
+        function showNextQuestion() {
+            // Hide calculator if it's open
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator();
+            }
+            
+            if (isReviewingFromResults) {
+                if (currentQuestionIndex < questions.length - 1) {
+                    loadQuestion(currentQuestionIndex + 1, true);
+                }
+            }
+            else if (!isReviewingFromResults) {
+                 recordTimeSpent(currentQuestionIndex);
+                 if (currentQuestionIndex === questions.length - 1) {
+                     // Don't stop the timer when showing review screen
+                     showReviewScreen();
+                 } else if (currentQuestionIndex < questions.length - 1) {
+                     loadQuestion(currentQuestionIndex + 1);
+                 }
+            }
+        }
+
+        function showPrevQuestion() {
+            // Hide calculator if it's open
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator();
+            }
+            
+             if (isReviewingFromResults) {
+                 if (currentQuestionIndex > 0) {
+                     loadQuestion(currentQuestionIndex - 1, true);
+                 }
+             }
+             else if (currentQuestionIndex > 0 && !isReviewingFromResults) {
+                 recordTimeSpent(currentQuestionIndex);
+                 loadQuestion(currentQuestionIndex - 1);
+            }
+        }
+
+        function showSetupScreen() {
+            setupScreen.classList.remove('hidden');
+            examScreen.classList.add('hidden');
+            reviewScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            appContainer.classList.remove('flex', 'flex-col');
+            currentlyDisplayedPassageIndex = -1;
+            if (setupQuestionCountEl) setupQuestionCountEl.textContent = questions.length;
+            if (setupTimeLimitEl) setupTimeLimitEl.textContent = `${Math.floor(timeLeft / 60)} minutes`;
+            if (goalInput) {
+                goalInput.max = questions.length;
+                const goalLabel = document.querySelector('label[for="goal"]');
+                if (goalLabel) goalLabel.textContent = `Goal (Score out of ${questions.length}):`;
+            }
+        }
+
+        function showExamScreen() {
+            setupScreen.classList.add('hidden');
+            examScreen.classList.remove('hidden');
+            examScreen.classList.add('flex');
+            reviewScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            appContainer.classList.add('flex', 'flex-col');
+            currentlyDisplayedPassageIndex = -1;
+        }
+
+        function showReviewScreen(filterFlagged = false) {
+            recordTimeSpent(currentQuestionIndex);
+            // Remove stopTimer() call to keep timer running when going to review screen
+            examScreen.classList.add('hidden');
+            reviewScreen.classList.remove('hidden');
+            reviewScreen.classList.add('flex');
+            resultsScreen.classList.add('hidden');
+            resultsScreen.classList.remove('flex');
+            setupScreen.classList.add('hidden');
+            appContainer.classList.add('flex', 'flex-col');
+            reviewGrid.innerHTML = '';
+            questions.forEach((_, index) => {
+                 if (filterFlagged && !flaggedQuestions[index]) {
+                     return;
+                 }
+                const button = document.createElement('button');
+                button.textContent = index + 1;
+                button.className = 'review-grid-button';
+                if (userAnswers[index] !== null && userAnswers[index] !== undefined) {
+                    button.classList.add('review-grid-button-answered');
+                } else {
+                     button.classList.add('review-grid-button-unanswered');
+                }
+                if (flaggedQuestions[index]) {
+                    button.classList.add('review-flagged');
+                }
+                button.onclick = () => {
+                    reviewScreen.classList.add('hidden');
+                    reviewScreen.classList.remove('flex');
+                    showExamScreen();
+                    // Hide calculator if it's open
+                    if (calculatorUI.classList.contains('visible')) {
+                        toggleCalculator();
+                    }
+                    loadQuestion(index);
+                };
+                reviewGrid.appendChild(button);
+            });
+             filterFlaggedButton.textContent = filterFlagged ? 'Show All Questions' : 'Show Flagged Only';
+        }
+
+         function populateNavigator() {
+             navigatorGrid.innerHTML = '';
+             questions.forEach((_, index) => {
+                 const button = document.createElement('button');
+                 button.textContent = index + 1;
+                 button.classList.add('py-2', 'px-1', 'border', 'border-gray-300', 'rounded-md', 'text-center', 'transition', 'duration-150', 'ease-in-out', 'text-sm', 'hover:bg-gray-100');
+                 button.dataset.questionIndex = index;
+                 if (userAnswers[index]) button.classList.add('nav-answered');
+                 if (index === currentQuestionIndex) button.classList.add('nav-current');
+                 if (flaggedQuestions[index]) button.classList.add('nav-flagged');
+                 button.onclick = () => {
+                     navigatorModal.classList.remove('flex');
+                     navigatorModal.classList.add('hidden');
+                     // Hide calculator if it's open
+                     if (calculatorUI.classList.contains('visible')) {
+                         toggleCalculator();
+                     }
+                     const targetIndex = parseInt(button.dataset.questionIndex, 10);
+                     loadQuestion(targetIndex, isReviewingFromResults);
+                 };
+                 navigatorGrid.appendChild(button);
+             });
+         }
+
+        function updateNavigatorButtons() {
+            if (!navigatorGrid) return;
+            const buttons = navigatorGrid.querySelectorAll('button');
+            buttons.forEach(button => {
+                const index = parseInt(button.dataset.questionIndex, 10);
+                button.classList.remove('nav-answered', 'nav-current', 'nav-flagged');
+                if (userAnswers[index]) button.classList.add('nav-answered');
+                if (index === currentQuestionIndex) button.classList.add('nav-current');
+                if (flaggedQuestions[index]) button.classList.add('nav-flagged');
+            });
+        }
+
+         function updateNavigatorHighlight() {
+             if (!navigatorGrid) return;
+             const buttons = navigatorGrid.querySelectorAll('button');
+             buttons.forEach(button => {
+                 const index = parseInt(button.dataset.questionIndex, 10);
+                 button.classList.remove('nav-current');
+                 if (index === currentQuestionIndex) button.classList.add('nav-current');
+             });
+         }
+
+        function showResultsScreen() {
+            examEndTime = examEndTime || new Date();
+            recordTimeSpent(currentQuestionIndex);
+            stopTimer();
+
+            examScreen.classList.add('hidden');
+            reviewScreen.classList.add('hidden');
+            reviewScreen.classList.remove('flex');
+            resultsScreen.classList.remove('hidden');
+            resultsScreen.classList.add('flex');
+            setupScreen.classList.add('hidden');
+            appContainer.classList.add('flex', 'flex-col');
+
+            let score = 0;
+            resultsDetailsGrid.innerHTML = ''; 
+
+            questions.forEach((qData, index) => {
+                const userAnswer = userAnswers[index];
+                const correctAnswer = qData.correctAnswer;
+                const isCorrect = userAnswer !== null && userAnswer !== undefined && userAnswer === correctAnswer;
+                if (isCorrect) score++;
+
+                const timeSpentMs = questionTimes[index] || 0;
+                const timeSpentSec = Math.round(timeSpentMs / 1000);
+
+                const summaryItem = document.createElement('div');
+                summaryItem.classList.add('result-summary-item');
+
+                const summaryBox = document.createElement('div');
+                summaryBox.classList.add('result-summary-box');
+                if (userAnswer === null || userAnswer === undefined) {
+                    summaryBox.classList.add('not-answered-box');
+                } else {
+                    summaryBox.classList.add(isCorrect ? 'correct-box' : 'incorrect-box');
+                }
+                summaryBox.dataset.index = index;
+                summaryBox.title = `Click to review Question ${index + 1}`;
+
+                const timeDisplay = document.createElement('span');
+                timeDisplay.classList.add('time-display-in-box');
+                timeDisplay.textContent = `${timeSpentSec}s`;
+                summaryBox.appendChild(timeDisplay);
+
+                const numberLabel = document.createElement('div');
+                numberLabel.classList.add('question-number-label');
+                numberLabel.textContent = `Q${index + 1}`;
+
+                summaryBox.addEventListener('click', () => {
+                    revisitQuestionFromResults(index);
+                });
+
+                summaryItem.appendChild(summaryBox);
+                summaryItem.appendChild(numberLabel);
+                resultsDetailsGrid.appendChild(summaryItem);
+            });
+
+            scoreEl.textContent = score;
+            totalQuestionsResultsEl.textContent = questions.length;
+            const timeDiff = examEndTime - examStartTime;
+            timeTakenEl.textContent = formatTimeDifference(timeDiff);
+        }
+
+
+        function revisitQuestionFromResults(index) {
+            resultsScreen.classList.add('hidden');
+            resultsScreen.classList.remove('flex');
+            showExamScreen();
+            // Hide calculator if it's open
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator();
+            }
+            loadQuestion(index, true);
+            // Make sure we show the back button when reviewing from results
+            backToResultsButton.classList.remove('hidden');
+        }
+
+        function endExamAndShowResults() {
+            stopTimer();
+            showResultsScreen();
+        }
+         function handleEndExamFooterClick() {
+             recordTimeSpent(currentQuestionIndex);
+             // Don't stop the timer when showing review screen
+             showReviewScreen();
+         }
+
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const reflection = reflectionText.value.trim();
+            const focusRating = focusRatingInput.value;
+            const finalScore = scoreEl.textContent;
+            const totalQs = totalQuestionsResultsEl.textContent;
+            const timeTaken = timeTakenEl.textContent;
+            let y = 15;
+            const lineHeight = 7;
+            const pageHeight = doc.internal.pageSize.height;
+            const margin = 15;
+
+            doc.setFontSize(18);
+            doc.text("UCAT Quantitative Reasoning Results", margin, y);
+            y += lineHeight * 1.5;
+            doc.setFontSize(12);
+            doc.text(`Name: ${userName || 'N/A'}`, margin, y); y += lineHeight;
+            doc.text(`Goal: ${userGoal || 'N/A'} / ${totalQs}`, margin, y); y += lineHeight;
+            doc.text(`Focus Area: ${userFocusArea || 'N/A'}`, margin, y); y += lineHeight;
+            doc.text(`Final Score: ${finalScore} / ${totalQs}`, margin, y); y += lineHeight;
+            doc.text(`Time Taken: ${timeTaken}`, margin, y); y += lineHeight * 1.5;
+            doc.setFontSize(14);
+            doc.text("Focus Rating (1-5):", margin, y); y += lineHeight;
+            doc.setFontSize(10);
+            doc.text(focusRating || 'N/A', margin, y); y += lineHeight * 1.5;
+            doc.setFontSize(14);
+            doc.text("Main Takeaway:", margin, y); y += lineHeight;
+            doc.setFontSize(10);
+            const reflectionLines = doc.splitTextToSize(reflection || 'No reflection provided.', doc.internal.pageSize.width - margin * 2);
+            doc.text(reflectionLines, margin, y);
+            y += reflectionLines.length * (lineHeight * 0.7) + lineHeight;
+            doc.setFontSize(14);
+            doc.text("Detailed Results Summary:", margin, y); y += lineHeight * 1.5;
+            doc.setFontSize(10);
+
+            questions.forEach((qData, index) => {
+                const userAnswer = userAnswers[index];
+                const correctAnswer = qData.correctAnswer;
+                const isCorrect = userAnswer !== null && userAnswer !== undefined && userAnswer === correctAnswer;
+                const status = userAnswer === null || userAnswer === undefined ? "Not Answered" : (isCorrect ? "Correct" : "Incorrect");
+                const timeSpentSec = Math.round((questionTimes[index] || 0) / 1000);
+                const resultText = `Q${index + 1}: Your Ans: ${userAnswer || 'N/A'}, Correct: ${correctAnswer}, Status: ${status}, Time: ${timeSpentSec}s`;
+                
+                let textLines = doc.splitTextToSize(resultText, doc.internal.pageSize.width - margin * 2);
+                if (y + (textLines.length * (lineHeight * 0.7)) > pageHeight - margin) {
+                    doc.addPage();
+                    y = margin;
+                }
+                doc.text(textLines, margin, y);
+                y += textLines.length * (lineHeight * 0.7) + (lineHeight*0.3);
+            });
+            doc.save(`ucat_qr_results_${userName || 'user'}.pdf`);
+        }
+        
+        // --- Calculator Functions ---
+        function updateCalcDisplay() {
+            if (calcCurrentInput.length > 12 && calcCurrentInput !== 'Error') { 
+                calcDisplay.textContent = 'Error'; 
+            } else {
+                 calcDisplay.textContent = calcCurrentInput;
+            }
+            calcMemoryIndicator.style.display = calcMemory !== 0 ? 'block' : 'none';
+        }
+
+        function clearCalculator() {
+            calcCurrentInput = '0';
+            calcPreviousInput = '';
+            calcOperator = null;
+            calcShouldResetDisplay = false;
+            calcMrcPressedOnce = false; 
+            updateCalcDisplay();
+        }
+        
+        function inputDigit(digit) {
+            if (calcCurrentInput === 'Error') calcCurrentInput = '0'; 
+            if (calcShouldResetDisplay) {
+                calcCurrentInput = digit;
+                calcShouldResetDisplay = false;
+            } else {
+                if (calcCurrentInput.includes('.') && calcCurrentInput.split('.')[1].length >= 8) return; 
+                if (!calcCurrentInput.includes('.') && calcCurrentInput.length >= 10 && calcCurrentInput !== '0') return; 
+
+                calcCurrentInput = calcCurrentInput === '0' ? digit : calcCurrentInput + digit;
+            }
+            updateCalcDisplay();
+            calcMrcPressedOnce = false; 
+        }
+
+        function inputDecimal() {
+            if (calcCurrentInput === 'Error') calcCurrentInput = '0';
+            if (calcShouldResetDisplay) {
+                calcCurrentInput = '0.';
+                calcShouldResetDisplay = false;
+            } else if (!calcCurrentInput.includes('.')) {
+                calcCurrentInput += '.';
+            }
+            updateCalcDisplay();
+            calcMrcPressedOnce = false;
+        }
+
+        function handleOperator(nextOperator) {
+            if (calcCurrentInput === 'Error') return;
+            const inputValue = parseFloat(calcCurrentInput);
+            if (calcOperator && !calcShouldResetDisplay) { 
+                calculate();
+                if (calcCurrentInput === 'Error') return; 
+                calcPreviousInput = calcCurrentInput; 
+            } else {
+                calcPreviousInput = calcCurrentInput;
+            }
+            calcOperator = nextOperator;
+            calcShouldResetDisplay = true;
+            calcMrcPressedOnce = false;
+        }
+
+        function calculate() {
+            if (!calcOperator || calcPreviousInput === '' || calcCurrentInput === 'Error') return;
+            const prev = parseFloat(calcPreviousInput);
+            const current = parseFloat(calcCurrentInput);
+            if (isNaN(prev) || isNaN(current)) {
+                calcCurrentInput = 'Error'; 
+                updateCalcDisplay();
+                return;
+            }
+
+            let result = 0;
+            switch (calcOperator) {
+                case '+': result = prev + current; break;
+                case '-': result = prev - current; break;
+                case '*': result = prev * current; break;
+                case '/': 
+                    if (current === 0) {
+                        result = 'Error';
+                    } else {
+                        result = prev / current;
+                    }
+                    break;
+                default: return;
+            }
+
+            if (result === 'Error') {
+                calcCurrentInput = 'Error';
+            } else {
+                let resultStr = parseFloat(result.toPrecision(10)).toString(); 
+                calcCurrentInput = resultStr;
+            }
+            calcOperator = null;
+            calcShouldResetDisplay = true; 
+            updateCalcDisplay();
+        }
+
+        function handleMemory(action) {
+            const currentValue = parseFloat(calcCurrentInput);
+            if (calcCurrentInput === 'Error' && action !== 'mrc') return;
+
+            switch (action) {
+                case 'm+':
+                    if (!isNaN(currentValue)) calcMemory += currentValue;
+                    break;
+                case 'm-':
+                    if (!isNaN(currentValue)) calcMemory -= currentValue;
+                    break;
+                case 'mrc':
+                    if (calcMrcPressedOnce) { 
+                        calcMemory = 0;
+                        calcMrcPressedOnce = false;
+                    } else { 
+                        calcCurrentInput = String(parseFloat(calcMemory.toPrecision(10))); 
+                        calcMrcPressedOnce = true;
+                        calcShouldResetDisplay = true; 
+                    }
+                    break;
+            }
+            if (action !== 'mrc') { 
+                calcShouldResetDisplay = true; 
+                calcMrcPressedOnce = false; 
+            }
+            updateCalcDisplay(); 
+        }
+
+        function handleSpecialFunction(func) {
+            if (calcCurrentInput === 'Error' && func !== 'clear') return;
+            const currentValue = parseFloat(calcCurrentInput);
+
+            switch (func) {
+                case 'sqrt':
+                    if (currentValue < 0 || isNaN(currentValue)) {
+                        calcCurrentInput = 'Error';
+                    } else {
+                        calcCurrentInput = String(parseFloat(Math.sqrt(currentValue).toPrecision(10)));
+                    }
+                    break;
+                case 'percent':
+                    if (isNaN(currentValue)) { calcCurrentInput = 'Error'; break; }
+                    if (calcPreviousInput !== '' && calcOperator) {
+                        const prev = parseFloat(calcPreviousInput);
+                        if (isNaN(prev)) { calcCurrentInput = 'Error'; break; }
+                        calcCurrentInput = String(parseFloat((prev * (currentValue / 100)).toPrecision(10)));
+                    } else { 
+                        calcCurrentInput = String(parseFloat((currentValue / 100).toPrecision(10)));
+                    }
+                    break;
+                case 'negate':
+                     if (calcCurrentInput !== '0' && !isNaN(currentValue)) { 
+                        calcCurrentInput = String(currentValue * -1);
+                    }
+                    break;
+                case 'backspace': 
+                    if (calcCurrentInput === 'Error' || calcShouldResetDisplay) {
+                        calcCurrentInput = '0';
+                        calcShouldResetDisplay = false;
+                    } else if (calcCurrentInput.length > 1) {
+                        calcCurrentInput = calcCurrentInput.slice(0, -1);
+                    } else {
+                        calcCurrentInput = '0';
+                    }
+                    break;
+            }
+            updateCalcDisplay();
+            if (func !== 'backspace' && func !== 'negate') { 
+                calcShouldResetDisplay = true;
+            }
+            calcMrcPressedOnce = false;
+        }
+
+
+        function toggleCalculator() {
+            const isVisible = calculatorUI.classList.toggle('visible');
+            calculatorToggleButton.classList.toggle('active', isVisible);
+            if (isVisible) {
+                clearCalculator(); 
+            }
+        }
+         function makeDraggable(element, handle) {
+            let currentX, currentY;
+            handle.onmousedown = function(event) {
+                event.preventDefault();
+                isDraggingCalculator = true;
+                calculatorUI.style.cursor = 'grabbing';
+                currentX = event.clientX;
+                currentY = event.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            };
+            function elementDrag(event) {
+                event.preventDefault();
+                if (!isDraggingCalculator) return;
+                const dx = currentX - event.clientX;
+                const dy = currentY - event.clientY;
+                currentX = event.clientX;
+                currentY = event.clientY;
+                let newTop = element.offsetTop - dy;
+                let newLeft = element.offsetLeft - dx;
+                const appRect = appContainer.getBoundingClientRect();
+                const calcRect = element.getBoundingClientRect();
+                const parentRect = element.parentElement.getBoundingClientRect();
+                if (newLeft < 0) newLeft = 0;
+                if (newTop < 0) newTop = 0; 
+                if (newLeft + element.offsetWidth > parentRect.width) newLeft = parentRect.width - element.offsetWidth;
+                if (newTop + element.offsetHeight > parentRect.height) newTop = parentRect.height - element.offsetHeight;
+
+                element.style.top = newTop + "px";
+                element.style.left = newLeft + "px";
+            }
+            function closeDragElement() {
+                isDraggingCalculator = false;
+                calculatorUI.style.cursor = 'grab';
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+
+
+        // --- Event Listeners ---
+        startButton.addEventListener('click', () => {
+            userName = nameInput.value.trim();
+            userGoal = goalInput.value.trim();
+            userFocusArea = focusAreaInput.value.trim();
+            timeLeft = 4 * 60;
+            userAnswers = new Array(questions.length).fill(null);
+            questionTimes = new Array(questions.length).fill(0);
+            flaggedQuestions = new Array(questions.length).fill(false);
+            questionStartTime = null;
+            currentQuestionIndex = 0;
+            isReviewingFromResults = false;
+            isFilteringFlagged = false;
+            currentlyDisplayedPassageIndex = -1;
+            examEndTime = null;
+            showExamScreen();
+            startTimer();
+            loadQuestion(0);
+            populateNavigator();
+        });
+
+        nextButton.addEventListener('click', showNextQuestion);
+        prevButton.addEventListener('click', showPrevQuestion);
+        endExamButton.addEventListener('click', endExamAndShowResults);
+        endExamButtonFooter.addEventListener('click', handleEndExamFooterClick);
+        backToResultsButton.addEventListener('click', () => { isReviewingFromResults = false; showResultsScreen(); });
+        navigatorButton.addEventListener('click', () => { 
+            // Hide calculator if it's open
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator(); 
+            }
+            recordTimeSpent(currentQuestionIndex); 
+            updateNavigatorButtons(); 
+            navigatorModal.classList.remove('hidden'); 
+            navigatorModal.classList.add('flex'); 
+        });
+        closeModalButton.addEventListener('click', () => { navigatorModal.classList.remove('flex'); navigatorModal.classList.add('hidden'); if (!isReviewingFromResults) questionStartTime = Date.now(); });
+        navigatorModal.addEventListener('click', (event) => { if (event.target === navigatorModal) closeModalButton.click(); });
+        flagButton.addEventListener('click', toggleFlag);
+        filterFlaggedButton.addEventListener('click', () => { isFilteringFlagged = !isFilteringFlagged; showReviewScreen(isFilteringFlagged); });
+        downloadPdfButton.addEventListener('click', generatePDF);
+
+        calculatorToggleButton.addEventListener('click', toggleCalculator);
+        closeCalculatorButton.addEventListener('click', toggleCalculator);
+        makeDraggable(calculatorUI, calculatorDragHeader);
+
+
+        calcButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const value = button.dataset.calcValue;
+                const action = button.dataset.calcAction;
+
+                if (value !== undefined) { 
+                    if (value === '.') { inputDecimal(); } 
+                    else { inputDigit(value); }
+                } else if (action) { 
+                    if (['+', '-', '*', '/'].includes(action)) { handleOperator(action); } 
+                    else if (action === 'equals') { calculate(); } 
+                    else if (action === 'clear') { clearCalculator(); } 
+                    else if (['m+', 'm-', 'mrc'].includes(action)) { handleMemory(action); } 
+                    else if (['sqrt', 'percent', 'negate', 'backspace'].includes(action)) { handleSpecialFunction(action); }
+                }
+            });
+        });
+
+        function handleKeyboardShortcuts(e) {
+             const isExamVisible = !examScreen.classList.contains('hidden');
+             const isModalVisible = navigatorModal.classList.contains('flex');
+             const isInputFocused = document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA');
+             const isCalcVisible = calculatorUI.classList.contains('visible');
+
+             if (isCalcVisible && !isInputFocused) { 
+                if (e.key >= '0' && e.key <= '9') { e.preventDefault(); inputDigit(e.key); return; }
+                if (e.key === '.') { e.preventDefault(); inputDecimal(); return; }
+                if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') { e.preventDefault(); handleOperator(e.key); return; }
+                if (e.key === 'Enter' || e.key === '=') { e.preventDefault(); calculate(); return; }
+                if (e.key === 'Backspace') { e.preventDefault(); handleSpecialFunction('backspace'); return; } 
+                if (e.key === 'Escape') { e.preventDefault(); toggleCalculator(); return; } 
+                if (e.key.toLowerCase() === 'p') { e.preventDefault(); handleMemory('m+'); return; }
+                if (e.key.toLowerCase() === 'm') { e.preventDefault(); handleMemory('m-'); return; }
+                if (e.key.toLowerCase() === 'c' && !e.altKey && !e.metaKey && !e.ctrlKey) { e.preventDefault(); handleMemory('mrc'); return; } 
+                if (e.key.toLowerCase() === 'x') { e.preventDefault(); handleSpecialFunction('sqrt'); return; }
+             }
+             
+             if (isModalVisible || isInputFocused) return; 
+             if (!isExamVisible) return; 
+             
+             const key = e.key.toLowerCase();
+             const altOrOption = e.altKey || e.metaKey; 
+             const code = e.code.toLowerCase(); 
+
+             if (altOrOption) {
+                 switch (code) { 
+                     case 'keyn': e.preventDefault(); if (!nextButton.disabled) nextButton.click(); return;
+                     case 'keyp': e.preventDefault(); if (!prevButton.disabled) prevButton.click(); return;
+                     case 'keyf': e.preventDefault(); if (!isReviewingFromResults && !flagButton.disabled) flagButton.click(); return;
+                     case 'keyc': e.preventDefault(); toggleCalculator(); return; 
+                     default: return; 
+                 }
+             } else { 
+                 if (['a', 'b', 'c', 'd', 'e'].includes(key) && !isReviewingFromResults && !isCalcVisible) { 
+                     e.preventDefault();
+                     const optionIndex = ['a', 'b', 'c', 'd', 'e'].indexOf(key);
+                     const optionValue = ['A', 'B', 'C', 'D', 'E'][optionIndex];
+                     const currentQuestionData = questions[currentQuestionIndex];
+                     if (optionIndex < currentQuestionData.options.length) {
+                         handleOptionSelect(currentQuestionIndex, optionIndex, optionValue);
+                     }
+                     return;
+                 }
+             }
+        }
+        document.addEventListener('keydown', handleKeyboardShortcuts);
+
+        // --- Initial Load ---
+        showSetupScreen();
+        updateCalcDisplay(); 
+    </script>
+</body>
+</html>

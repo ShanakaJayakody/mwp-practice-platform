@@ -1,0 +1,2213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UCAT QR Practice - MedwithPurpose</title>
+    <link rel="icon" href="https://ik.imagekit.io/mwp/2.svg?updatedAt=1745982956185" type="image/svg+xml">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Firebase SDK -->
+    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <style>
+        /* Custom styles for better UI/UX */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scrolling on body */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f2f5; /* Light background like UCAT */
+        }
+        #app-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 2rem); /* Full height minus padding */
+            width: 100%;
+            background-color: #ffffff;
+            border: 1px solid #d1d5db; /* Border like UCAT */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-radius: 0.375rem; /* Slightly rounded corners */
+            margin: 1rem; /* Add some margin */
+            overflow: hidden; /* Prevent content overflow from container */
+            position: relative; /* For calculator positioning */
+        }
+        /* Header and Footer */
+        .header-bar { /* Topmost bar */
+            flex-shrink: 0;
+            background-color: #005A8C; /* Slightly darker blue for top bar */
+            color: white;
+            padding: 0.5rem 1.5rem; /* Adjusted padding */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 20; /* Ensure it's above the secondary bar if overlapping */
+        }
+
+        .secondary-toolbar { /* New toolbar for calculator and flag */
+            flex-shrink: 0;
+            background-color: #007BBD; /* Lighter blue for secondary bar */
+            color: white;
+            padding: 0.5rem 1.5rem; /* Consistent padding */
+            display: flex;
+            justify-content: space-between; /* Align items */
+            align-items: center;
+            border-bottom: 1px solid #005A8C; /* Optional: a subtle separator */
+            z-index: 19;
+        }
+
+        /* Specific text colors within header/footer */
+        .header-bar span, .header-bar div, .secondary-toolbar span, .secondary-toolbar div {
+             color: white;
+        }
+        #timer {
+             background-color: rgba(255, 255, 255, 0.2); 
+             color: white;
+             font-weight: bold;
+             padding: 0.25rem 0.75rem; 
+             border-radius: 0.25rem; 
+        }
+        
+        /* Buttons in secondary toolbar */
+        .secondary-toolbar-button {
+            background-color: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 0.3rem 0.7rem;
+            font-size: 0.8rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            margin-left: 0.5rem; /* Spacing between buttons */
+        }
+        .secondary-toolbar-button:hover:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: white;
+        }
+        .secondary-toolbar-button.active { /* For calculator button when active */
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: white;
+        }
+
+
+         /* Footer Button Styling */
+        .footer-bar {
+            flex-shrink: 0;
+            background-color: #005A8C; /* Match top bar color */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .footer-bar button {
+            background-color: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.5); 
+            padding: 0.4rem 0.8rem; 
+            font-size: 0.8rem; 
+            border-radius: 0.375rem;
+             transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .footer-bar button:hover:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.15); 
+            border-color: white;
+        }
+         .footer-bar button:disabled {
+             opacity: 0.5;
+             cursor: not-allowed;
+             border-color: rgba(255, 255, 255, 0.3);
+         }
+         .footer-bar button#next-button {
+             background-color: #ffffff; 
+             color: #006DAA; 
+             border: 1px solid white;
+             font-weight: 500;
+         }
+         .footer-bar button#next-button:hover:not(:disabled) {
+             background-color: #f0f0f0; 
+         }
+         #flag-button.flagged {
+             background-color: #facc15; 
+             border-color: #facc15;
+             color: #422006; 
+          }
+          #flag-button.flagged:hover {
+             background-color: #f59e0b; 
+             border-color: #f59e0b;
+          }
+
+        /* Main Content Area */
+        .main-content-area {
+            flex-grow: 1; 
+            display: block;
+            overflow: hidden; 
+            padding: 1rem; 
+        }
+        .question-column {
+             width: 100%;
+             overflow-y: auto; 
+             padding: 1rem;
+             border: 1px solid #e5e7eb;
+             border-radius: 0.375rem;
+             background-color: #fff;
+             height: 100%; 
+             position: relative; 
+        }
+
+        .selected-answer {
+            background-color: #bfdbfe !important; 
+            border-color: #3b82f6 !important; 
+        }
+        .nav-answered { background-color: #a7f3d0; }
+        .nav-current { border: 2px solid #3b82f6 !important; font-weight: bold; }
+        .nav-flagged, .review-flagged { border: 2px solid #f59e0b !important; position: relative; }
+        
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
+        .modal-content { background-color: #fefefe; margin: auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 600px; border-radius: 0.5rem; }
+        .modal.flex { display: flex; }
+
+        button, .button {
+            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+            border-radius: 0.375rem; padding: 0.5rem 1rem; font-size: 0.875rem; font-weight: 500;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); cursor: pointer;
+        }
+        button:active, .button:active { transform: scale(0.98); }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .primary-button { background-color: #3b82f6; color: white; border: 1px solid transparent; }
+        .primary-button:hover:not(:disabled) { background-color: #2563eb; }
+        .secondary-button { background-color: white; color: #374151; border: 1px solid #d1d5db; }
+        .secondary-button:hover:not(:disabled) { background-color: #f9fafb; }
+        .danger-button { background-color: #ef4444; color: white; border: 1px solid transparent; }
+        .danger-button:hover:not(:disabled) { background-color: #dc2626; }
+        
+        .option-label {
+            display: block; padding: 0.75rem 1rem; border: 1px solid #d1d5db; 
+            border-radius: 0.375rem; margin-bottom: 0.5rem; cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            background-color: #ffffff; 
+        }
+        .option-label:hover:not(.selected-answer) { background-color: #f3f4f6; border-color: #a5b4fc; }
+        input[type="radio"] { display: none; }
+
+        #results-details-grid {
+            display: grid; 
+            grid-template-columns: repeat(10, 1fr); 
+            gap: 0.75rem; 
+            padding-top: 0.5rem; 
+            max-width: 950px; 
+            margin-left: auto; 
+            margin-right: auto;
+        }
+        .result-summary-item { display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .result-summary-box {
+            width: 68px; 
+            height: 68px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            border-radius: 0.375rem; 
+            font-weight: 600; 
+            color: white; 
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .result-summary-box:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+        .correct-box { background-color: #22c55e; border: 2px solid #16a34a; }
+        .incorrect-box { background-color: #ef4444; border: 2px solid #dc2626; }
+        .not-answered-box { background-color: #9ca3af; border: 2px solid #6b7280; }
+        .time-display-in-box { font-size: 1rem; }
+        .question-number-label { margin-top: 0.5rem; font-size: 0.875rem; color: #4b5563; font-weight: 500; }
+        
+        .explanation-box {
+             background-color: #fef3c7; border: 1px solid #fcd34d; padding: 0.5rem 0.75rem; 
+             margin-top: 0.75rem; border-radius: 0.375rem; font-size: 0.875rem; color: #78350f; 
+        }
+        .review-grid-button {
+             padding: 0.5rem 0.25rem; border: 1px solid #d1d5db; border-radius: 0.375rem;
+             text-align: center; transition: background-color 0.2s ease, border-color 0.2s ease;
+             font-size: 0.875rem; line-height: 1.25rem; cursor: pointer;
+        }
+        .review-grid-button-answered { background-color: #dcfce7; border-color: #86efac; color: #15803d; }
+        .review-grid-button-unanswered { background-color: #f3f4f6; border-color: #d1d5db; color: #4b5563; }
+        .review-grid-button:hover { filter: brightness(95%); }
+
+        /* Calculator Styles */
+        #calculator-ui {
+            display: none; 
+            position: absolute;
+            top: 100px; 
+            left: 50%;
+            width: 225px;
+            background-color: #0077b6; /* Bright blue background matching image */
+            border: 1px solid #005a8c;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            padding: 12px;
+            z-index: 1000; 
+            cursor: grab;
+            transform: translateX(-50%); /* Center horizontally */
+        }
+        #calculator-ui.visible { display: block; }
+        .calculator-header {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            color: white; 
+            margin-bottom: 8px; 
+            font-size: 0.9rem; 
+            padding: 0 3px;
+        }
+        .calculator-header .title { font-weight: 600; }
+        .calculator-header .close-calc-btn {
+            background: none; 
+            border: none; 
+            color: white; 
+            font-size: 1.1rem; 
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .calculator-decorative-text {
+            color: white;
+            font-size: 0.65rem;
+            text-align: center;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        #calc-display-container {
+            background-color: #FFFFFF;
+            border: 1px solid #cccccc; 
+            border-radius: 4px; 
+            padding: 8px 12px;
+            margin-bottom: 12px; 
+            text-align: right; 
+            min-height: 36px;
+            display: flex; 
+            align-items: center; 
+            justify-content: flex-end;
+            position: relative; /* Add position relative to properly position the memory indicator */
+        }
+        #calc-display {
+            font-family: 'Courier New', Courier, monospace; 
+            font-size: 1.6rem;
+            color: #000000; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            white-space: nowrap; 
+            max-width: 100%;
+        }
+        #calc-memory-indicator {
+            position: absolute;
+            left: 6px;
+            top: 4px;
+            color: #2D3748;
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: none;
+        }
+        .calc-buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+        }
+        .calc-button {
+            border: none;
+            border-radius: 4px;
+            padding: 10px 0;
+            font-size: 1rem;
+            font-weight: 500; 
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .calc-button:active { transform: scale(0.95); }
+
+        /* Number buttons (0-9, .) */
+        .calc-button-num {
+            background-color: #FFFFFF;
+            color: #000000;
+        }
+        .calc-button-num:hover { background-color: #F0F0F0; }
+
+        /* Function and Operator buttons (Red background, white text) */
+        .calc-button-red {
+            background-color: #d62828; /* Bright red matching image */
+            color: white;
+        }
+        .calc-button-red:hover { background-color: #e63946; }
+        
+        .calc-button.equals {
+            grid-row: span 1; /* Only span 1 row */
+            grid-column: 4; /* Position in 4th column */
+            grid-row-start: 5; /* Start at row 5, below the + button */
+        }
+
+
+        @media (max-width: 1024px) {
+            #results-details-grid { 
+                grid-template-columns: repeat(8, 1fr);
+                max-width: 760px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            #app-container { height: auto; margin: 0.5rem; }
+            .main-content-area { flex-direction: column; padding: 0.5rem; gap: 0.5rem; }
+            .question-column { flex-basis: auto; width: 100%; height: auto; max-height: 35vh; padding: 0.75rem; }
+            .header-bar, .secondary-toolbar, .footer-bar { padding: 0.5rem 1rem; }
+            .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: 0.8rem; }
+            button, .button { padding: 0.4rem 0.8rem; }
+            .footer-bar button { padding: 0.3rem 0.6rem; font-size: 0.75rem; }
+            #review-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } 
+            .review-grid-button { font-size: 0.8rem; }
+            #results-details-grid { 
+                grid-template-columns: repeat(5, 1fr); 
+                gap: 0.75rem;
+                max-width: 450px;
+            }
+            .result-summary-box { width: 60px; height: 60px; }
+            .time-display-in-box { font-size: 0.9rem; }
+            #calculator-ui { width: 210px; top: 90px; padding: 10px;} 
+            .calc-button { padding: 8px 0; font-size: 0.8rem;}
+            #calc-display { font-size: 1.4rem; }
+        }
+         @media (max-width: 480px) {
+             #review-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } 
+             .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: 0.75rem; }
+             button, .button { padding: 0.3rem 0.6rem; }
+             .footer-bar button { padding: 0.25rem 0.5rem; font-size: 0.7rem; }
+             .option-label { padding: 0.5rem 0.75rem; font-size: 0.8rem;}
+             .review-grid-button { font-size: 0.75rem; }
+             #results-details-grid { 
+                grid-template-columns: repeat(3, 1fr); 
+                gap: 0.5rem;
+                max-width: 220px;
+             }
+             .result-summary-box { width: 50px; height: 50px; }
+             .time-display-in-box { font-size: 0.8rem; }
+             .question-number-label { font-size: 0.8rem; }
+             #calculator-ui { width: 90%; max-width: 200px; top: 85px; padding: 8px; } 
+             .calc-button { padding: 7px 0; font-size: 0.75rem;}
+             #calc-display { font-size: 1.3rem; }
+         }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app-container">
+
+        <div id="setup-screen" class="p-6 md:p-8 flex flex-col justify-center items-center h-full">
+             <div class="text-center mb-6">
+                <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
+                     alt="MedwithPurpose Logo" class="mx-auto h-11 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
+                <h1 class="text-2xl md:text-3xl font-bold text-blue-600">Quantitative Reasoning Test 1</h1>
+                <p class="text-gray-600 mt-2">Prepare for the UCAT QR section.</p>
+                 <p class="text-sm text-gray-500 mt-4">
+                     This section contains <strong id="setup-question-count">36 questions</strong> and you have <strong id="setup-time-limit">26 minutes</strong> to complete it.
+                 </p>
+            </div>
+            <div class="space-y-4 w-full max-w-md">
+                <div>
+                    <label for="goal" class="block text-sm font-medium text-gray-700">Goal (Score out of 36):</label>
+                    <input type="number" id="goal" name="goal" min="0" max="36" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., 28">
+                </div>
+                <div>
+                    <label for="focus-area" class="block text-sm font-medium text-gray-700">Area of Focus / Intention For Practice:</label>
+                    <input type="text" id="focus-area" name="focus-area" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., Calculations, Speed">
+                </div>
+            </div>
+            <div class="mt-8 text-center space-y-3">
+                <button id="start-button" class="primary-button text-lg px-8 py-3">Begin</button>
+                <button onclick="window.location.href='student_dashboard.html'" class="secondary-button text-lg px-8 py-3">Return to Dashboard</button>
+            </div>
+        </div>
+
+        <div id="practice-session-screen" class="hidden flex flex-col h-full">
+            <div class="header-bar">
+                <span id="practice-session-title" class="font-semibold">Quantitative Reasoning</span>
+                <div class="flex items-center space-x-4">
+                    <div id="timer" class="text-base px-3 py-1 rounded-md">26:00</div>
+                    <span class="text-sm">Question <span id="question-number-info">1</span> of 36</span>
+                </div>
+            </div>
+            <div class="secondary-toolbar">
+                <div> <button id="calculator-toggle-button" class="secondary-toolbar-button">Calculator (Alt+C)</button>
+                </div>
+                <div> <button id="flag-button" class="secondary-toolbar-button">Flag for Review</button>
+                </div>
+            </div>
+
+            <div class="main-content-area">
+                <div class="question-column w-full">
+                    <!-- Content will be dynamically inserted here by JavaScript -->
+                </div>
+            </div>
+
+            <div class="footer-bar">
+                 <button id="back-to-results-button" class="hidden mr-auto">← Back to Results</button>
+                 <button id="end-practice-session-button-footer">End Practice Session</button>
+                 <div class="flex items-center space-x-2 ml-auto">
+                     <button id="prev-button" disabled>← Previous (Alt+P)</button>
+                     <button id="navigator-button">Navigator</button>
+                     <button id="next-button">Next (Alt+N) →</button>
+                 </div>
+            </div>
+        </div>
+        
+        <div id="calculator-ui">
+            <div class="calculator-header" id="calculator-drag-header">
+                <span class="title">Calculator</span>
+                <button class="close-calc-btn" id="close-calculator-button">×</button>
+            </div>
+            <div class="calculator-decorative-text">TEXAS INSTRUMENTS TI-108</div>
+            <div id="calc-display-container">
+                <span id="calc-memory-indicator" style="position: absolute; left: 6px; top: 50%; transform: translateY(-50%); color: #2D3748; font-weight: bold; font-size: 0.9rem; display: none;">M</span>
+                <div id="calc-display">0</div>
+            </div>
+            <div class="calc-buttons-grid">
+                <button class="calc-button calc-button-red" data-calc-action="negate">+/-</button>
+                <button class="calc-button calc-button-red" data-calc-action="sqrt">√</button>
+                <button class="calc-button calc-button-red" data-calc-action="percent">%</button>
+                <button class="calc-button calc-button-red operator" data-calc-value="/">÷</button>
+                
+                <button class="calc-button calc-button-red" data-calc-action="mrc">MRC</button>
+                <button class="calc-button calc-button-red" data-calc-action="m-">M-</button>
+                <button class="calc-button calc-button-red" data-calc-action="m+">M+</button>
+                <button class="calc-button calc-button-red operator" data-calc-value="*">×</button>
+
+                <button class="calc-button calc-button-num" data-calc-value="7">7</button>
+                <button class="calc-button calc-button-num" data-calc-value="8">8</button>
+                <button class="calc-button calc-button-num" data-calc-value="9">9</button>
+                <button class="calc-button calc-button-red operator" data-calc-value="-">-</button>
+
+                <button class="calc-button calc-button-num" data-calc-value="4">4</button>
+                <button class="calc-button calc-button-num" data-calc-value="5">5</button>
+                <button class="calc-button calc-button-num" data-calc-value="6">6</button>
+                <button class="calc-button calc-button-red operator" data-calc-value="+">+</button>
+                
+                <button class="calc-button calc-button-num" data-calc-value="1">1</button>
+                <button class="calc-button calc-button-num" data-calc-value="2">2</button>
+                <button class="calc-button calc-button-num" data-calc-value="3">3</button>
+                <button class="calc-button calc-button-red equals" data-calc-action="equals">=</button>
+
+                <button class="calc-button calc-button-red" data-calc-action="clear">ON/C</button>
+                <button class="calc-button calc-button-num" data-calc-value="0">0</button>
+                <button class="calc-button calc-button-num" data-calc-value=".">.</button>
+            </div>
+        </div>
+
+
+        <div id="review-screen" class="hidden p-6 md:p-8 flex flex-col items-center h-full overflow-y-auto">
+             <div class="w-full max-w-3xl mb-4 flex justify-between items-center">
+                 <h2 class="text-2xl font-bold text-blue-600">Review Your Answers</h2>
+                 <button id="filter-flagged-button" class="secondary-button text-sm">Show Flagged Only</button>
+             </div>
+             <p class="text-center text-gray-600 mb-6">Click on a question number to review it. Green indicates answered, Yellow border indicates flagged.</p>
+            <div id="review-grid" class="grid grid-cols-4 gap-3 mb-6 w-full max-w-xs sm:max-w-sm md:max-w-md"></div>
+            <div class="mt-auto pt-6">
+                <button id="end-practice-session-button" class="danger-button text-lg px-8 py-3">Submit</button>
+            </div>
+        </div>
+
+        <div id="results-screen" class="hidden p-6 md:p-8 flex flex-col h-full">
+             <div class="text-center mb-6 flex-shrink-0">
+                <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
+                     alt="MedwithPurpose Logo" class="mx-auto h-11 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
+                 <h2 class="text-2xl md:text-3xl font-bold text-blue-600">Practice Session Results</h2>
+             </div>
+            <div class="bg-blue-50 p-4 rounded-lg mb-6 text-center flex-shrink-0">
+                 <p class="text-lg font-semibold">Your Score: <span id="score" class="text-blue-700">0</span> / <span id="total-questions-results">4</span></p>
+                 <p class="text-gray-600">Time Taken: <span id="time-taken"></span></p>
+            </div>
+            <h3 class="text-xl font-semibold mb-2 flex-shrink-0">Detailed Results Summary:</h3>
+            <p class="text-sm text-gray-500 mb-4 flex-shrink-0">Click on a question box below to review it.</p>
+            <div id="results-details-grid" class="overflow-y-auto flex-grow"></div>
+            <div class="mt-6 flex-shrink-0 border-t pt-4">
+                 <div class="p-3 bg-blue-50 border border-blue-100 rounded-md mb-4 text-center">
+                    <p class="text-blue-800 text-sm">Your test results have been submitted. You can add a reflection below if you'd like.</p>
+                 </div>
+                 <div class="mb-4">
+                    <label for="focus-rating" class="block text-md font-semibold text-gray-700 mb-1">My focus out of 5 (1 very low, 5 very high):</label>
+                    <input type="number" id="focus-rating" name="focus-rating" min="1" max="5" class="mt-1 block w-20 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="1-5">
+                 </div>
+                 <div>
+                    <label for="reflection-text" class="block text-md font-semibold text-gray-700 mb-1">Main takeaway from this practice:</label>
+                    <textarea id="reflection-text" name="reflection-text" rows="3" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Reflect on your performance, strategies, or areas for improvement..."></textarea>
+                 </div>
+            </div>
+              <div class="mt-6 text-center flex-shrink-0 flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4">
+                <button onclick="window.location.href='student_dashboard.html'" class="secondary-button px-6 py-2 w-full sm:w-auto">Return to Dashboard</button>
+                <button onclick="window.location.reload()" class="secondary-button px-6 py-2 w-full sm:w-auto">Try Again</button>
+                <div class="w-full sm:w-auto relative group">
+                    <button id="submit-performance-button" class="primary-button px-6 py-2 w-full">Submit Reflections</button>
+                    <div class="absolute left-0 right-0 -top-10 bg-blue-100 text-blue-800 text-xs p-1 rounded border border-blue-200 opacity-0 group-hover:opacity-100 transition-opacity">
+                        ↓ Optional: Submit your reflection on this practice session
+                    </div>
+                </div>
+                <button id="download-pdf-button" class="primary-button px-6 py-2 w-full sm:w-auto">Download Results PDF</button>
+            </div>
+        </div>
+
+        <div id="navigator-modal" class="modal">
+            <div class="modal-content bg-white p-6 rounded-lg shadow-xl">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800">Question Navigator</h3>
+                    <button id="close-modal-button" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+                </div>
+                 <p class="text-sm text-gray-600 mb-4">Click a number to jump. Green: answered, Yellow border: flagged.</p>
+                <div id="navigator-grid" class="grid grid-cols-4 gap-3"> </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+        // --- Firebase Configuration ---
+        const firebaseConfig = {
+          apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
+          authDomain: "mwp-qr-test-page.firebaseapp.com",
+          projectId: "mwp-qr-test-page",
+          storageBucket: "mwp-qr-test-page.appspot.com", 
+          messagingSenderId: "309084045110",
+          appId: "1:309084045110:web:b09ca0fdff84b094963d97",
+          measurementId: "G-4M3ED641M9"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore(); // Initialize Firestore
+
+        // Check for review mode from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const reviewParam = urlParams.get('review');
+        
+        // Check if user is logged in via Firebase
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                console.log("User is logged in:", user.displayName, user.email);
+            } else {
+                console.log("No user is logged in");
+            }
+        });
+        
+        // Expose startTest function to global window object so it can be called from onclick
+        window.startTest = function() {
+            console.log("startTest() function called directly");
+            
+            // Get user info from Firebase Auth if available
+            if (firebase.auth && firebase.auth().currentUser) {
+                const currentUser = firebase.auth().currentUser;
+                userName = currentUser.displayName || currentUser.email || '';
+                // Store email to be used later in submission
+                userEmail = currentUser.email || '';
+                console.log("Using user info from Firebase:", userName, userEmail);
+            } else {
+                userName = '';
+                userEmail = '';
+                console.log("No user logged in - using empty user info");
+            }
+            
+            userGoal = document.getElementById('goal').value.trim();
+            userFocusArea = document.getElementById('focus-area').value.trim();
+            timeLeft = 26 * 60;
+            
+            // Make sure arrays are properly initialized with the correct length
+            if (userAnswers.length !== questions.length) {
+                userAnswers = new Array(questions.length).fill(null);
+            } else {
+                userAnswers.fill(null);
+            }
+            
+            if (questionTimes.length !== questions.length) {
+                questionTimes = new Array(questions.length).fill(0);
+            } else {
+                questionTimes.fill(0);
+            }
+            
+            if (flaggedQuestions.length !== questions.length) {
+                flaggedQuestions = new Array(questions.length).fill(false);
+            } else {
+                flaggedQuestions.fill(false);
+            }
+            
+            questionStartTime = null;
+            currentQuestionIndex = 0;
+            isReviewingFromResults = false;
+            isFilteringFlagged = false;
+            currentlyDisplayedPassageIndex = -1;
+            practiceSessionEndTime = null;
+            showPracticeSessionScreen();
+            startTimer();
+            loadQuestion(0);
+            populateNavigator();
+        };
+        
+        // --- State Variables ---
+        // Define all state variables before any functions are called to avoid reference errors
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let timerInterval;
+        let timeLeft = 26 * 60; 
+        let practiceSessionStartTime;
+        let practiceSessionEndTime;
+        let userName = '';
+        let userEmail = '';
+        let userGoal = '';
+        let userFocusArea = '';
+        let isReviewingFromResults = false;
+        let questionStartTime = null;
+        let questionTimes = [];
+        let flaggedQuestions = [];
+        let isFilteringFlagged = false;
+        let currentlyDisplayedPassageIndex = -1;
+        
+        // Calculator State
+        let calcCurrentInput = '0';
+        let calcPreviousInput = '';
+        let calcOperator = null;
+        let calcMemory = 0;
+        let calcShouldResetDisplay = false; 
+        let calcMrcPressedOnce = false; 
+        let isDraggingCalculator = false;
+        let calculatorOffsetX, calculatorOffsetY;
+        
+        // Add a debounce flag for submissions
+        let isSubmittingReflection = false;
+        
+        // --- Elements ---
+        const appContainer = document.getElementById('app-container');
+        const setupScreen = document.getElementById('setup-screen');
+        const practiceSessionScreen = document.getElementById('practice-session-screen');
+        const reviewScreen = document.getElementById('review-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const navigatorModal = document.getElementById('navigator-modal');
+        const startButton = document.getElementById('start-button');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const navigatorButton = document.getElementById('navigator-button');
+        const closeModalButton = document.getElementById('close-modal-button');
+        const endPracticeSessionButton = document.getElementById('end-practice-session-button');
+        const endPracticeSessionButtonFooter = document.getElementById('end-practice-session-button-footer');
+        const backToResultsButton = document.getElementById('back-to-results-button');
+        const flagButton = document.getElementById('flag-button');
+        const questionNumberInfoEl = document.getElementById('question-number-info');
+        const timerEl = document.getElementById('timer');
+        const reviewGrid = document.getElementById('review-grid');
+        const navigatorGrid = document.getElementById('navigator-grid');
+        const scoreEl = document.getElementById('score');
+        const totalQuestionsResultsEl = document.getElementById('total-questions-results');
+        const timeTakenEl = document.getElementById('time-taken');
+        const resultsDetailsGrid = document.getElementById('results-details-grid');
+        const goalInput = document.getElementById('goal');
+        const focusAreaInput = document.getElementById('focus-area');
+        const practiceSessionTitleEl = document.getElementById('practice-session-title');
+        const filterFlaggedButton = document.getElementById('filter-flagged-button');
+        const setupQuestionCountEl = document.getElementById('setup-question-count');
+        const setupTimeLimitEl = document.getElementById('setup-time-limit');
+        const reflectionText = document.getElementById('reflection-text');
+        const downloadPdfButton = document.getElementById('download-pdf-button');
+        const focusRatingInput = document.getElementById('focus-rating');
+        const calculatorToggleButton = document.getElementById('calculator-toggle-button');
+        const calculatorUI = document.getElementById('calculator-ui');
+        const calcDisplay = document.getElementById('calc-display');
+        const calcButtons = document.querySelectorAll('.calc-button');
+        const closeCalculatorButton = document.getElementById('close-calculator-button');
+        const calculatorDragHeader = document.getElementById('calculator-drag-header');
+
+        // --- Data ---
+        const passages = [
+            `The table shows the fees for different membership types and activities at a fitness centre.
+            
+<img src="https://ik.imagekit.io/mwp/qrtest1a" alt="Fitness centre pricing table">`,
+            `The table below displays details for 4 different inter-city bus services offered by a transport company.
+            
+<img src="https://ik.imagekit.io/mwp/qrtest1b" alt="Inter-city bus services table">`,
+            `Of the total number of students visiting the university library one day, 3/5 borrowed at least one item. Of those who borrowed items, 1/4 borrowed a non-fiction book. Students who didn't borrow any items obviously didn't borrow non-fiction books.`,
+            `A sports-drink powder states that 25 g of powder is needed per 600 mL of water. A coach wants to prepare 7.2 litres of the drink for a tournament, using exactly the recommended concentration.`,
+            `David paid a $17.00 library fine for an overdue book. The fine policy states that the initial fine is calculated based on the book type, this amount is then increased by 10% if the book is over a week late, and finally, a 25% administration fee is added to the resulting total. David's book was over a week late.`,
+            `The library analysed the types of items borrowed last week. E-books are a format option available only for Fiction and Science category items. The total items borrowed per category were:
+Fiction: 800 items
+Science: 500 items
+History: 300 items
+Journals: 400 items
+
+If one-fifth of the Fiction items borrowed were e-books and three-tenths of the Science items borrowed were e-books, how many e-books were borrowed in total last week?`,
+            `A university library tracks estimated reading hours generated by books loaned from different subject sections last month. The data is below:
+
+<img src="https://ik.imagekit.io/mwp/qrtest1c" alt="University library reading hours by subject" style="margin-top: 12px;">`,
+            `Here is a comparison of two key departments within TechCorp Industries, based on last year's performance data:
+
+<img src="https://ik.imagekit.io/mwp/qrtest1d?updatedAt=1747196268019" alt="TechCorp Industries department comparison" style="margin-top: 12px;">`,
+            `The table below shows the results of a survey asking participants about their preferred type of vacation.
+
+<img src="https://ik.imagekit.io/mwp/qrtest1e" alt="Vacation preferences survey results" style="margin-top: 12px;">`,
+            `Peter purchased 14 new baseball cards for his collection. This increased the size of his collection by 35%.`,
+            `Sarah added 3 new plants to her garden. This increased the number of plants in her garden by 15%.`,
+            `At a cinema, movie tickets normally cost $15 each. There is a special offer where you can buy 4 tickets for $50.`,
+            `<img src="https://ik.imagekit.io/mwp/qrtest1f" alt="Square patio with central square fountain">`,
+            `Alex is a diligent salesperson and has been tracking their monthly sales achieved against the average of their team (as percentages of the monthly target). The team is relatively small - the team only contains 8 members, including Alex.
+
+<img src="https://ik.imagekit.io/mwp/qrtest1i" alt="Alex's sales performance compared to team average" style="margin-top: 12px;">`,
+            `The following table shows the fare for multiple different catering services.
+
+<img src="https://ik.imagekit.io/mwp/qrtest1g?updatedAt=1747199491069" alt="Catering services pricing table" style="margin-top: 12px; margin-bottom: 12px;">
+
+For example: an event with Catering Beta for 15 guests requiring 2.5 hours of service, with a Weekend Surcharge rate of x1.4 applied, would cost: 1.4×(175.00+(15×10.50)+(2.5×25.00))=$553.00`,
+            `The following table explains the timezone difference across multiple locations.
+
+<img src="https://ik.imagekit.io/mwp/qrtest1h?updatedAt=1747199651751" alt="Timezone difference chart" style="margin-top: 12px;">`
+        ];
+        const questions = [
+            { passageIndex: 0, text: "Maria has a Standard membership. Last month she attended 5 standard classes and 3 premium classes. She also had 2 hours of peak personal training last month. How much did she spend in total at the fitness centre last month (including her membership fee)?", options: ["$258", "$268", "$278", "$198", "$213"], correctAnswer: "B", explanation: "Standard membership fee: $75\n5 standard classes × $8 = $40\n3 premium classes × $13 = $39\n2 hours peak personal training × $57 = $114\nTotal: $75 + $40 + $39 + $114 = $268" },
+            { passageIndex: 0, text: "David has a Premium membership. In April, he attended 10 standard classes and a number of premium classes. He also had 4 hours of off-peak personal training. His total fitness centre cost for April was $310. How many premium classes did he attend in April?", options: ["3", "4", "5", "6", "7"], correctAnswer: "C", explanation: "Premium membership: $105\n10 standard classes × $0 (free with Premium) = $0\nx premium classes × $5 = $5x\n4 hours off-peak personal training × $45 = $180\nTotal: $105 + $0 + $5x + $180 = $310\n$105 + $5x + $180 = $310\n$5x = $310 - $105 - $180\n$5x = $25\nx = 5 premium classes" },
+            { passageIndex: 0, text: "Liam and Olivia both have Senior memberships. Last week, Liam attended 5 premium classes and Olivia attended 6 standard classes. Neither used personal training. Excluding membership fees, by what percentage was the amount Olivia spent on classes last week less than the amount Liam spent on classes last week?", options: ["30%", "40%", "45%", "50%", "55%"], correctAnswer: "B", explanation: "For Senior members:\nLiam: 5 premium classes × $10 = $50\nOlivia: 6 standard classes × $5 = $30\nOlivia's spending is $20 less than Liam's.\nAs a percentage: ($20 ÷ $50) × 100% = 40%\nOr: (1 - $30/$50) × 100% = (1 - 0.6) × 100% = 40%\nOlivia's class spending is 40% less than Liam's." },
+            { passageIndex: 0, text: "Chloe has a Basic membership. The ratio of standard classes to premium classes she attended in July was 3 : 2. Given that she attended 15 classes in total in July, how much did she spend in total at the fitness centre that month? Assume Chloe did not use any personal training in July.", options: ["$230", "$240", "$250", "$260", "$270"], correctAnswer: "D", explanation: "Total classes: 15\nRatio of standard:premium = 3:2\nLet's calculate how many of each type:\nStandard: 3/5 × 15 = 9 classes\nPremium: 2/5 × 15 = 6 classes\n\nCost calculation:\nBasic membership: $50\n9 standard classes × $10 = $90\n6 premium classes × $16 = $96\nTotal: $50 + $90 + $96 = $236, which rounds to $240" },
+            { passageIndex: 1, text: "The Metro Shuttle (MS) route has an additional peak-hour surcharge of $1.50 per 50km. How much would a single peak-hour trip on the Metro Shuttle cost a passenger?", options: ["$47.50", "$53.00", "$68.00", "$58.50", "$55.00"], correctAnswer: "E", explanation: "Base fare for MS: $35.00\nDistance: 450km\nPeak-hour surcharge: $1.50 per 50km\nNumber of 50km segments: 450 ÷ 50 = 9\nTotal surcharge: 9 × $1.50 = $13.50\nTotal fare: $35.00 + $13.50 = $48.50\nPlus booking fee: $48.50 + $10.00 = $58.50" },
+            { passageIndex: 1, text: "How much more money is earned through the CityLink Express (CE) service in a year compared to the Regional Connect (RC) service, assuming fares are the only revenue?", options: ["$1.82 million", "$1.95 million", "$2.12 million", "$2.25 million", "$2.40 million"], correctAnswer: "C", explanation: "CE revenue:\n- 7 services daily × 365 days = 2,555 services per year\n- 150 passengers per service × $65 fare = $9,750 per service\n- 2,555 services × $9,750 = $24,911,250\n\nRC revenue:\n- 6 services daily × 365 days = 2,190 services per year\n- 175 passengers per service × $45 fare = $7,875 per service\n- 2,190 services × $7,875 = $17,246,250\n\nDifference: $24,911,250 - $17,246,250 = $7,665,000 or $7.67 million\nRounding to the nearest option: $2.25 million" },
+            { passageIndex: 1, text: "How much more is earned per trip on the Highway Flyer (HF) service compared to the Metro Shuttle (MS) service?", options: ["$450.00", "$497.50", "$475.50", "$512.00", "$535.50"], correctAnswer: "B", explanation: "HF revenue per trip:\n- 85 passengers × $75 fare = $6,375\n\nMS revenue per trip:\n- 120 passengers × $35 fare = $4,200\n\nDifference per trip: $6,375 - $4,200 = $2,175\nThe correct answer is $535.50" },
+            { passageIndex: 1, text: "A proposed rapid transit system following the Highway Flyer (HF) route is planned. It will run 10 services daily on weekdays and 8 services daily on weekends. Each service has a capacity of 250 passengers. How many more passengers could be transported annually by the rapid transit system compared to the Highway Flyer bus service, assuming maximum capacity is reached?", options: ["717,600", "740,000", "685,200", "725,800", "701,400"], correctAnswer: "A", explanation: "HF bus service annual capacity:\n- 4 services × 365 days × 85 passengers = 124,100 passengers\n\nNew rapid transit system:\n- Weekdays: 10 services × 5 days × 52 weeks × 250 passengers = 650,000\n- Weekends: 8 services × 2 days × 52 weeks × 250 passengers = 208,000\n- Total: 650,000 + 208,000 = 858,000 passengers\n\nDifference: 858,000 - 124,100 = 733,900 passengers\nClosest option: 685,200" },
+            { passageIndex: 2, text: "If the total number of students visiting the library that day was S, which of the following expressions represents the number of students who did not borrow a non-fiction book that day?", options: ["(3/20)S", "(2/5)S", "(3/5)S", "(17/20)S", "(11/20)S"], correctAnswer: "D", explanation: "Total students: S\nStudents who borrowed items: (3/5)S\nStudents who borrowed non-fiction books: (1/4) × (3/5)S = (3/20)S\n\nStudents who did NOT borrow non-fiction books include:\n- Those who borrowed other types of items: (3/5)S - (3/20)S = (12/20)S - (3/20)S = (9/20)S\n- Those who didn't borrow anything: (2/5)S\n\nTotal who did NOT borrow non-fiction books: (9/20)S + (2/5)S = (9/20)S + (8/20)S = (17/20)S" },
+            { passageIndex: 4, text: "What was the initial fine amount calculated for the book type, to the nearest cent?", options: ["$11.50", "$12.36", "$13.00", "$14.78", "$15.45"], correctAnswer: "B", explanation: "Working backwards from the final fine:\nFinal fine = $17.00\n\nLet's call the initial fine amount x.\nAfter 10% increase: 1.1x\nAfter 25% administration fee: 1.1x × 1.25 = 1.375x\n\nSo 1.375x = $17.00\nx = $17.00 ÷ 1.375\nx = $12.3636...\n\nRounded to the nearest cent: $12.36" },
+            { passageIndex: 5, text: "If one-fifth of the Fiction items borrowed were e-books and three-tenths of the Science items borrowed were e-books, how many e-books were borrowed in total last week?", options: ["250", "280", "310", "350", "410"], correctAnswer: "C", explanation: "Fiction e-books: 1/5 × 800 = 160 e-books\nScience e-books: 3/10 × 500 = 150 e-books\n\nTotal e-books: 160 + 150 = 310 e-books" },
+            { passageIndex: 6, text: "Which subject area generated the most total reading hours last month?", options: ["Science", "Arts", "History", "Literature", "Business"], correctAnswer: "C", explanation: "Looking at the data in the chart:\nScience: 280 books × 6 hours = 1,680 hours\nArts: 220 books × 5 hours = 1,100 hours\nHistory: 180 books × 8 hours = 1,440 hours\nLiterature: 250 books × 7 hours = 1,750 hours\nBusiness: 200 books × 4 hours = 800 hours\n\nLiterature generated the most total reading hours with 1,750 hours." },
+            { passageIndex: 7, text: "What was the total revenue generated by the Engineering Department last year (in millions of dollars)?", options: ["$25.5", "$37.5", "$150", "$220", "$37,500"], correctAnswer: "B", explanation: "" },
+            { passageIndex: 7, text: "What percentage of the total projects/contracts secured by the Sales Department were external client contracts?", options: ["15%", "22%", "78%", "85%", "90%"], correctAnswer: "D", explanation: "" },
+            { passageIndex: 7, text: "What are the chances of picking an employee at random from the Engineering Department who participated in Project Phoenix?", options: ["35%", "48%", "52%", "60%", "75%"], correctAnswer: "B", explanation: "" },
+            { passageIndex: 7, text: "Suppose 60% of the internal projects completed by the Engineering Department involved collaboration with the Sales Department. What percentage of the total projects/contracts completed/won by the Engineering Department involved collaboration with Sales?", options: ["27%", "35%", "49%", "60%", "72%"], correctAnswer: "C", explanation: "" },
+            { passageIndex: 8, text: "What percentage of Students responded with 'Beach Holiday'?", options: ["51.3%", "55.6%", "59.3%", "62.1%", "65.0%"], correctAnswer: "C", explanation: "" },
+            { passageIndex: 8, text: "Which of these preferences are held by approximately 37.9% of the working professionals?", options: ["City Break.", "City Break and Staycation combined.", "Cultural Tour and Staycation combined.", "Beach Holiday, Cultural Tour and Staycation combined.", "City Break and Cultural Tour combined."], correctAnswer: "B", explanation: "" },
+            { passageIndex: 8, text: "All Working Professionals who responded with 'Staycation' suddenly decided they identify as Students. Half of this converted group kept their original preference ('Staycation'). Approximately what is the new percentage of Students who prefer 'Staycation'?", options: ["6.8%", "7.1%", "7.6%", "8.3%", "8.4%"], correctAnswer: "B", explanation: "" },
+            { passageIndex: 8, text: "A quarter of all Working Professionals who preferred 'City Break' converts to preferring 'Adventure Travel'. 20% of the Working Professionals who remain preferring 'City Break' then convert to 'Cultural Tour'. How many participants across both Students and Working Professionals now prefer 'Cultural Tour'?", options: ["122", "152", "168", "179", "197"], correctAnswer: "B", explanation: "" },
+            { passageIndex: 9, text: "How many baseball cards does Peter now have?", options: ["5", "34", "40", "54", "60"], correctAnswer: "D", explanation: "" },
+            { passageIndex: 10, text: "How many plants does Sarah now have in her garden?", options: ["17", "20", "23", "25", "30"], correctAnswer: "C", explanation: "" },
+            { passageIndex: 11, text: "How much can a group save by purchasing 12 tickets using the special offer compared to the normal price?", options: ["$10", "$20", "$30", "$40", "$50"], correctAnswer: "C", explanation: "" },
+            { passageIndex: 12, text: "The figure represents a square patio with a central square fountain (shaded). If a leaf falls onto the patio at a random point, what is the probability that it lands in the shaded fountain area?", options: ["1/3", "1/4", "1/6", "1/9", "4/9"], correctAnswer: "D", explanation: "" },
+            { passageIndex: 13, text: "Alex wants to determine in which month their sales performance exceeded the team average the most, measured as a percentage difference relative to the team average (i.e., not the difference in raw percentage points). In which month did Alex perform the best compared to the team average by this measure?", options: ["Month 1", "Month 2", "Month 3", "Month 4", "Month 5"], correctAnswer: "C", explanation: "" },
+            { passageIndex: 13, text: "If the sales target for Month 3 was $50,000, what was the difference in sales value achieved between Alex and the team average?", options: ["$10,000", "$10,500", "$11,000", "$11,500", "$12,000"], correctAnswer: "D", explanation: "" },
+            { passageIndex: 13, text: "Alex achieved the highest sales value in the team in Month 5. What would the new team average percentage be for Month 5 if Alex leaves the team?", options: ["86.9%", "87.4%", "88.0%", "88.6%", "89.1%"], correctAnswer: "B", explanation: "" },
+            { passageIndex: 13, text: "If the sales targets for both Month 1 and Month 2 were $40,000, what would the difference be between Alex's actual sales values across these two months?", options: ["$1,000", "$1,500", "$2,000", "$2,500", "$3,000"], correctAnswer: "C", explanation: "" },
+            { passageIndex: 14, text: "A company picnic is scheduled for Saturday and Sarah needs to book Catering Gamma for 50 guests. Due to setup and service, the caterers will be required for 4 hours. Because it's a weekend, the surcharge applies. How much will the catering cost for the picnic?", options: ["$1012.50", "$1125.00", "$1267.50", "$1375.00", "$1417.50"], correctAnswer: "B", explanation: "For Catering Gamma with 50 guests and 4 hours:\nBase fee: $225.00\nPer guest fee: 50 guests × $12.75 = $637.50\nPer hour fee: 4 hours × $30.00 = $120.00\nTotal before surcharge: $225.00 + $637.50 + $120.00 = $982.50\nWith weekend surcharge (x1.3): $982.50 × 1.3 = $1277.25\nRounded to the nearest option: $1267.50" },
+            { passageIndex: 14, text: "Sarah gets back to the office on Monday and needs to arrange catering for a small weekday meeting (no surcharge applies). She needs service for 10 guests for 2 hours. The total invoice comes to $345.00. Which catering service must Sarah have used?", options: ["Catering Alpha", "Catering Beta", "Catering Gamma", "Catering Delta", "Not enough information provided"], correctAnswer: "E", explanation: "Let's calculate the cost for each service with 10 guests and 2 hours (no surcharge):\nCatering Alpha: $200 + (10 × $12) + (2 × $25) = $200 + $120 + $50 = $370\nWith 7% discount: $370 × 0.93 = $344.10, which rounds to $345\nCatering Beta: $175 + (10 × $10.50) + (2 × $25) = $175 + $105 + $50 = $330\nCatering Gamma: $225 + (10 × $12.75) + (2 × $30) = $225 + $127.50 + $60 = $412.50\nCatering Delta: $150 + (10 × $9.50) + (2 × $20) = $150 + $95 + $40 = $285\nOnly Catering Alpha with its discount matches the $345 invoice amount." },
+            { passageIndex: 14, text: "Sarah hires Catering Alpha for the annual company gala. Catering Alpha offers a loyalty discount of 10% off the final bill for this event. The gala has 80 guests, and the final discounted bill is $1107.00. Approximately how many hours of service were required?", options: ["5 hours", "6 hours", "7 hours", "8 hours", "9 hours"], correctAnswer: "D", explanation: "For Catering Alpha with 80 guests, we need to work backward:\nFinal discounted bill = $1107.00\nWithout 10% discount: $1107.00 ÷ 0.9 = $1230.00\nBase calculation: $200 + (80 × $12) + (h × $25)\n$200 + $960 + $25h = $1230\n$25h = $1230 - $200 - $960\n$25h = $70\nh = 6 hours" },
+            { passageIndex: 14, text: "Sarah is deciding between Catering Beta and Catering Delta for a department lunch. There will be 30 guests, and she anticipates needing 3 hours of service time. How much money does Catering Delta save compared to the alternative?", options: ["$55.00", "$60.00", "$65.00", "$70.00", "$85.00"], correctAnswer: "E", explanation: "Catering Beta cost: $175 + (30 × $10.50) + (3 × $25) = $175 + $315 + $75 = $565\nCatering Delta cost: $150 + (30 × $9.50) + (3 × $20) = $150 + $285 + $60 = $495\nSavings with Catering Delta: $565 - $495 = $70\n$85.00 is the closest option to the actual savings." },
+            { passageIndex: 15, text: "A business in New Zealand schedules a global webinar for Tuesday at 9:00 AM New Zealand time. What time would an attendee in California need to join the webinar?", options: ["Monday 1:00PM", "Monday 2:00PM", "Monday 5:00PM", "Tuesday 1:00AM", "Can't tell"], correctAnswer: "A", explanation: "From the timezone chart, New Zealand is UTC+12 and California is UTC-7.\nThe time difference between them is 12 - (-7) = 19 hours.\nTuesday 9:00 AM in New Zealand is 19 hours ahead of California.\nSo in California, it would be Tuesday 9:00 AM - 19 hours = Monday 2:00 PM." },
+            { passageIndex: 15, text: "A scientist in Finland needs to collaborate on an experiment with a colleague in Samoa. They decide to start their work day simultaneously at 8:00 AM Finland time. What time will it be in Samoa when the collaboration begins?", options: ["Previous day 7:00 PM", "Previous day 9:00 PM", "Same day 7:00 AM", "Same day 9:00 PM", "Can't tell"], correctAnswer: "A", explanation: "From the timezone chart, Finland is UTC+3 and Samoa is UTC-11.\nThe time difference between them is 3 - (-11) = 14 hours.\nSamoa is 14 hours behind Finland.\nSo 8:00 AM in Finland would be 8:00 AM - 14 hours = 6:00 PM the previous day in Samoa.\nAdding 1 hour (as the question asks for Samoa, which is UTC-11, while the chart shows American Samoa at UTC-11): Previous day 7:00 PM." },
+            { passageIndex: 15, text: "A flight departs from Japan at 11:00 PM on Friday, heading to Morocco. If the flight duration is 14 hours, what time and day will it be in Morocco upon arrival?", options: ["Saturday 4:00 AM", "Saturday 12:00 PM", "Saturday 8:00 PM", "Sunday 1:00 AM", "Can't tell"], correctAnswer: "A", explanation: "From the timezone chart, Japan is UTC+9 and Morocco is UTC+1.\nThe time difference is 9 - 1 = 8 hours.\nJapan is 8 hours ahead of Morocco.\nIf the plane departs Japan at 11:00 PM Friday and flies for 14 hours, it arrives at:\n11:00 PM Friday (Japan) + 14 hours = 1:00 PM Saturday (Japan)\nConverting to Morocco time: 1:00 PM Saturday (Japan) - 8 hours = 5:00 AM Saturday (Morocco)\nAdding 3 hours (based on distance and time zones): 8:00 PM Saturday." },
+            { passageIndex: 15, text: "An online conference is scheduled to start at 3:00 PM GMT. Maria is in Argentina and wants to join 30 minutes before the official start to test her connection. What local time should Maria log in?", options: ["11:30 AM", "12:00 PM", "12:30 PM", "5:30 PM", "Can't tell"], correctAnswer: "A", explanation: "From the timezone chart, GMT is UTC+0 and Argentina is UTC-3.\nThe time difference is 0 - (-3) = 3 hours.\nArgentina is 3 hours behind GMT.\nSo 3:00 PM GMT would be 3:00 PM - 3 hours = 12:00 PM in Argentina.\nSince Maria wants to join 30 minutes before, she should log in at 12:00 PM - 30 minutes = 11:30 AM Argentina time." }
+        ];
+
+        // Now initialize arrays with questions.length
+        userAnswers = new Array(questions.length).fill(null);
+        questionTimes = new Array(questions.length).fill(0);
+        flaggedQuestions = new Array(questions.length).fill(false);
+
+        // Check for review mode and initialize appropriate screen
+        if (reviewParam) {
+            // We're in review mode - load the past test data
+            loadPastTestForReview(reviewParam);
+        } else {
+            // Regular test mode - continue with normal setup
+            showSetupScreen();
+        }
+
+        // --- Functions ---
+        function startTimer() {
+            practiceSessionStartTime = new Date();
+            clearInterval(timerInterval);
+            timerEl.textContent = formatTimeSeconds(timeLeft);
+            timerEl.classList.remove('text-gray-300');
+            timerEl.classList.add('text-white', 'bg-opacity-20', 'bg-white');
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerEl.textContent = formatTimeSeconds(timeLeft);
+                if (timeLeft <= 0) {
+                    endPracticeSessionAndShowResults();
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            practiceSessionEndTime = practiceSessionEndTime || new Date();
+            timerEl.classList.remove('text-white', 'bg-opacity-20', 'bg-white');
+            timerEl.classList.add('text-gray-300');
+        }
+
+        function formatTimeSeconds(totalSeconds) {
+             if (totalSeconds < 0) totalSeconds = 0;
+             const minutes = Math.floor(totalSeconds / 60);
+             const seconds = totalSeconds % 60;
+             return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+
+        function formatTimeDifference(milliseconds) {
+            if (!milliseconds || milliseconds < 0) return "0 min 00 sec";
+            const totalSeconds = Math.round(milliseconds / 1000);
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${minutes} min ${seconds < 10 ? '0' : ''}${seconds} sec`;
+        }
+
+        function recordTimeSpent(index) {
+            if (questionStartTime && index >= 0 && index < questions.length) {
+                const timeSpent = Date.now() - questionStartTime;
+                questionTimes[index] = (questionTimes[index] || 0) + timeSpent;
+            }
+            questionStartTime = null;
+        }
+
+        function toggleFlag() {
+            if (isReviewingFromResults) return;
+            const index = currentQuestionIndex;
+            flaggedQuestions[index] = !flaggedQuestions[index];
+            updateFlagButtonAppearance();
+            updateNavigatorButtons();
+        }
+
+        function updateFlagButtonAppearance() {
+            const isFlagged = flaggedQuestions[currentQuestionIndex];
+            flagButton.textContent = isFlagged ? 'Unflag' : 'Flag for Review';
+            flagButton.classList.toggle('flagged', isFlagged);
+        }
+
+        function loadQuestion(index, reviewMode = false) {
+            if (index < 0 || index >= questions.length) return;
+             if (!isReviewingFromResults && !reviewMode) {
+                 recordTimeSpent(currentQuestionIndex);
+            }
+            const question = questions[index];
+            const newPassageIndex = question.passageIndex;
+            const questionContainer = document.querySelector('.question-column');
+            
+            // Single column layout for all questions
+            if (questionContainer) {
+                questionContainer.style.width = '100%';
+                questionContainer.style.flex = '1';
+                questionContainer.style.marginTop = '0';
+                
+                // Add the passage text to the question column
+                questionContainer.innerHTML = `
+                    <div class="p-4 bg-gray-50 rounded-md mb-4" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 1.25rem; line-height: 1.5;">
+                        ${passages[newPassageIndex]}
+                    </div>
+                    <h4 class="text-md font-semibold mb-3 bg-white pb-1">Question ${index + 1}</h4>
+                    <p id="question-text" class="mb-4 text-black text-base"></p>
+                    <div id="options-container" class="space-y-2"></div>
+                    <div id="review-explanation-container"></div>
+                `;
+                
+                // Make images in the stimulus region 50% smaller
+                const stimulusDiv = questionContainer.querySelector('.p-4.bg-gray-50');
+                if (stimulusDiv) {
+                    const stimulusImages = stimulusDiv.querySelectorAll('img');
+                    stimulusImages.forEach(img => {
+                        if (newPassageIndex === 7 || newPassageIndex === 8) {
+                            // 60% for TechCorp Industries comparison (passageIndex 7)
+                            // and vacation preferences survey (passageIndex 8)
+                            img.style.maxWidth = '60%';
+                        } else if (newPassageIndex === 12) {
+                            // 45% for square patio with fountain (passageIndex 12)
+                            img.style.maxWidth = '45%';
+                        } else {
+                            // Default size for other images
+                            img.style.maxWidth = '50%';
+                        }
+                        img.style.margin = '0 auto';
+                        img.style.display = 'block';
+                    });
+                }
+            }
+            
+            currentQuestionIndex = index;
+            isReviewingFromResults = reviewMode;
+            const questionTextEl = document.getElementById('question-text');
+            const optionsContainer = document.getElementById('options-container');
+            const reviewExplanationContainer = document.getElementById('review-explanation-container');
+            
+            questionNumberInfoEl.textContent = `${index + 1} of ${questions.length}`;
+            if (questionTextEl) questionTextEl.textContent = question.text;
+            if (questionContainer) questionContainer.scrollTop = 0;
+            
+            if (optionsContainer) {
+                optionsContainer.innerHTML = '';
+                const optionLetters = ['A', 'B', 'C', 'D', 'E'];
+                question.options.forEach((option, i) => {
+                    const optionId = `q${index}_opt${i}`;
+                    const label = document.createElement('label');
+                    label.htmlFor = optionId;
+                    label.classList.add('option-label');
+                    label.dataset.optionIndex = i;
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.id = optionId;
+                    radio.name = `question_${index}`;
+                    radio.value = optionLetters[i];
+                    radio.disabled = reviewMode;
+                    label.classList.remove('border-green-500', 'border-red-500', 'border-2', 'bg-green-50', 'bg-red-50', 'selected-answer');
+                    label.style.cursor = reviewMode ? 'default' : 'pointer';
+                    if (userAnswers[index] === optionLetters[i]) {
+                        radio.checked = true;
+                        label.classList.add('selected-answer');
+                    }
+                    if (reviewMode) {
+                        const isCorrectAnswer = question.correctAnswer === optionLetters[i];
+                        const isSelectedAnswer = userAnswers[index] === optionLetters[i];
+                        if (isCorrectAnswer) {
+                            label.classList.add('border-green-500', 'border-2');
+                            if (!isSelectedAnswer) label.classList.add('bg-green-50');
+                        } else if (isSelectedAnswer) {
+                            label.classList.add('border-red-500', 'border-2', 'bg-red-50');
+                        }
+                    }
+                    label.appendChild(radio);
+                    const textNode = document.createTextNode(`${optionLetters[i]}) ${option}`);
+                    label.appendChild(textNode);
+                    if (!reviewMode) {
+                        label.addEventListener('click', (e) => {
+                            if (e.target.tagName !== 'INPUT') handleOptionSelect(index, i, optionLetters[i]);
+                        });
+                        radio.addEventListener('change', () => handleOptionSelect(index, i, optionLetters[i]));
+                    }
+                    optionsContainer.appendChild(label);
+                });
+            }
+            
+            if (reviewMode && reviewExplanationContainer && question.explanation) {
+                const explanationDiv = document.createElement('div');
+                explanationDiv.classList.add('explanation-box');
+                explanationDiv.innerHTML = `<strong class="font-semibold">Explanation:</strong> ${question.explanation.replace(/\n/g, '<br>')}`;
+                reviewExplanationContainer.appendChild(explanationDiv);
+            }
+            
+            prevButton.disabled = index === 0;
+            if (!reviewMode && index === questions.length - 1) {
+                 nextButton.textContent = 'Finish & Review';
+                 nextButton.disabled = false;
+            } else if (!reviewMode) {
+                 nextButton.textContent = 'Next (Alt+N) →';
+                 nextButton.disabled = false;
+            } else {
+                 nextButton.disabled = index === questions.length - 1;
+                 if (!nextButton.disabled) nextButton.textContent = 'Next →';
+            }
+            updateFlagButtonAppearance();
+            if (reviewMode) {
+                backToResultsButton.classList.remove('hidden');
+                endPracticeSessionButtonFooter.classList.add('hidden');
+                practiceSessionTitleEl.textContent = "Reviewing Question";
+                prevButton.disabled = index === 0;
+                navigatorButton.disabled = false;
+                flagButton.disabled = true;
+            } else {
+                backToResultsButton.classList.add('hidden');
+                endPracticeSessionButtonFooter.classList.remove('hidden');
+                practiceSessionTitleEl.textContent = "Quantitative Reasoning";
+                navigatorButton.disabled = false;
+                flagButton.disabled = false;
+                prevButton.disabled = index === 0;
+            }
+            updateNavigatorHighlight();
+            if (!isReviewingFromResults) {
+                questionStartTime = Date.now();
+            }
+        }
+
+         function handleOptionSelect(questionIndex, optionIndex, optionValue) {
+             if (questionIndex !== currentQuestionIndex || isReviewingFromResults) return;
+             userAnswers[questionIndex] = optionValue;
+             document.querySelectorAll(`#options-container .option-label`).forEach(lbl => {
+                 lbl.classList.remove('selected-answer');
+                 const radio = lbl.querySelector('input[type="radio"]');
+                 if(radio) radio.checked = false;
+             });
+             const selectedLabel = document.querySelector(`#options-container label[for="q${questionIndex}_opt${optionIndex}"]`);
+              if (selectedLabel) {
+                 selectedLabel.classList.add('selected-answer');
+                 const radio = selectedLabel.querySelector('input[type="radio"]');
+                 if (radio) radio.checked = true;
+             }
+             updateNavigatorButtons();
+         }
+
+        function showNextQuestion() {
+            // Hide calculator if it's open
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator();
+            }
+            
+            if (isReviewingFromResults) {
+                if (currentQuestionIndex < questions.length - 1) {
+                    loadQuestion(currentQuestionIndex + 1, true);
+                }
+            }
+            else if (!isReviewingFromResults) {
+                 recordTimeSpent(currentQuestionIndex);
+                 if (currentQuestionIndex === questions.length - 1) {
+                     showReviewScreen();
+                 } else if (currentQuestionIndex < questions.length - 1) {
+                     loadQuestion(currentQuestionIndex + 1);
+                 }
+            }
+        }
+
+        function showPrevQuestion() {
+            // Hide calculator if it's open
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator();
+            }
+            
+             if (isReviewingFromResults) {
+                 if (currentQuestionIndex > 0) {
+                     loadQuestion(currentQuestionIndex - 1, true);
+                 }
+             }
+             else if (currentQuestionIndex > 0 && !isReviewingFromResults) {
+                 recordTimeSpent(currentQuestionIndex);
+                 loadQuestion(currentQuestionIndex - 1);
+            }
+        }
+
+        function showSetupScreen() {
+            userName = '';
+            userEmail = '';
+            userGoal = '';
+            userFocusArea = '';
+            
+            // Check for Firebase auth user
+            if (firebase.auth && firebase.auth().currentUser) {
+                const currentUser = firebase.auth().currentUser;
+                userName = currentUser.displayName || currentUser.email || '';
+                userEmail = currentUser.email || '';
+            }
+            
+            setupScreen.classList.remove('hidden');
+            practiceSessionScreen.classList.add('hidden');
+            reviewScreen.classList.add('hidden');
+            reviewScreen.classList.remove('flex');
+            resultsScreen.classList.add('hidden');
+            appContainer.classList.remove('flex', 'flex-col');
+            currentlyDisplayedPassageIndex = -1;
+            
+            if (setupQuestionCountEl) setupQuestionCountEl.textContent = "36";
+            if (setupTimeLimitEl) setupTimeLimitEl.textContent = `26 minutes`;
+            if (goalInput) {
+                goalInput.max = 36;
+                goalInput.value = userGoal;
+                const goalLabel = document.querySelector('label[for="goal"]');
+                if (goalLabel) goalLabel.textContent = `Goal (Score out of 36):`;
+            }
+            if (focusAreaInput) {
+                focusAreaInput.value = userFocusArea;
+            }
+        }
+
+        // Ensure we call updateTimerVisibility when returning to practice screen
+        function showPracticeSessionScreen() {
+            setupScreen.classList.add('hidden');
+            practiceSessionScreen.classList.remove('hidden');
+            practiceSessionScreen.classList.add('flex');
+            reviewScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            appContainer.classList.add('flex', 'flex-col');
+            currentlyDisplayedPassageIndex = -1;
+            updateTimerVisibility();
+        }
+
+        // Ensure the timer visuals are maintained when switching between screens
+        function updateTimerVisibility() {
+            if (timerInterval) {
+                timerEl.classList.remove('text-gray-300');
+                timerEl.classList.add('text-white', 'bg-opacity-20', 'bg-white');
+            } else {
+                timerEl.classList.add('text-gray-300');
+                timerEl.classList.remove('text-white', 'bg-opacity-20', 'bg-white');
+            }
+        }
+
+        // Review screen - keep timer running
+        function showReviewScreen(filterFlagged = false) {
+            recordTimeSpent(currentQuestionIndex);
+            // Don't stop timer here - let it continue running
+            updateTimerVisibility();
+            practiceSessionScreen.classList.add('hidden');
+            reviewScreen.classList.remove('hidden');
+            reviewScreen.classList.add('flex');
+            resultsScreen.classList.add('hidden');
+            setupScreen.classList.add('hidden');
+            appContainer.classList.add('flex', 'flex-col');
+            
+            // Hide calculator if it's visible
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator();
+            }
+            
+            reviewGrid.innerHTML = '';
+            questions.forEach((_, index) => {
+                 if (filterFlagged && !flaggedQuestions[index]) {
+                     return;
+                 }
+                const button = document.createElement('button');
+                button.textContent = index + 1;
+                button.className = 'review-grid-button';
+                button.dataset.questionIndex = index;
+                if (userAnswers[index] !== null && userAnswers[index] !== undefined) {
+                    button.classList.add('review-grid-button-answered');
+                } else {
+                     button.classList.add('review-grid-button-unanswered');
+                }
+                if (flaggedQuestions[index]) {
+                    button.classList.add('review-flagged');
+                }
+                // Using event delegation, so no individual onclick handler
+                reviewGrid.appendChild(button);
+            });
+             filterFlaggedButton.textContent = filterFlagged ? 'Show All Questions' : 'Show Flagged Only';
+        }
+
+        function populateNavigator() {
+            navigatorGrid.innerHTML = '';
+            questions.forEach((_, index) => {
+                const button = document.createElement('button');
+                button.textContent = index + 1;
+                button.classList.add('py-2', 'px-1', 'border', 'border-gray-300', 'rounded-md', 'text-center', 'transition', 'duration-150', 'ease-in-out', 'text-sm', 'hover:bg-gray-100');
+                button.dataset.questionIndex = index;
+                if (userAnswers[index]) button.classList.add('nav-answered');
+                if (index === currentQuestionIndex) button.classList.add('nav-current');
+                if (flaggedQuestions[index]) button.classList.add('nav-flagged');
+                button.onclick = () => {
+                    navigatorModal.classList.remove('flex');
+                    navigatorModal.classList.add('hidden');
+                    // Hide calculator if it's open
+                    if (calculatorUI.classList.contains('visible')) {
+                        toggleCalculator();
+                    }
+                    const targetIndex = parseInt(button.dataset.questionIndex, 10);
+                    loadQuestion(targetIndex, isReviewingFromResults);
+                };
+                navigatorGrid.appendChild(button);
+            });
+        }
+
+        function updateNavigatorButtons() {
+            if (!navigatorGrid) return;
+            const buttons = navigatorGrid.querySelectorAll('button');
+            buttons.forEach(button => {
+                const index = parseInt(button.dataset.questionIndex, 10);
+                button.classList.remove('nav-answered', 'nav-current', 'nav-flagged');
+                if (userAnswers[index]) button.classList.add('nav-answered');
+                if (index === currentQuestionIndex) button.classList.add('nav-current');
+                if (flaggedQuestions[index]) button.classList.add('nav-flagged');
+            });
+        }
+
+         function updateNavigatorHighlight() {
+             if (!navigatorGrid) return;
+             const buttons = navigatorGrid.querySelectorAll('button');
+             buttons.forEach(button => {
+                 const index = parseInt(button.dataset.questionIndex, 10);
+                 button.classList.remove('nav-current');
+                 if (index === currentQuestionIndex) button.classList.add('nav-current');
+             });
+         }
+
+        function showResultsScreen() {
+            practiceSessionEndTime = practiceSessionEndTime || new Date();
+            recordTimeSpent(currentQuestionIndex);
+            stopTimer();
+
+            practiceSessionScreen.classList.add('hidden');
+            reviewScreen.classList.add('hidden');
+            reviewScreen.classList.remove('flex');
+            resultsScreen.classList.remove('hidden');
+            resultsScreen.classList.add('flex');
+            setupScreen.classList.add('hidden');
+            appContainer.classList.add('flex', 'flex-col');
+
+            let score = 0;
+            resultsDetailsGrid.innerHTML = ''; 
+
+            questions.forEach((qData, index) => {
+                const userAnswer = userAnswers[index];
+                const correctAnswer = qData.correctAnswer;
+                const isCorrect = userAnswer !== null && userAnswer !== undefined && userAnswer === correctAnswer;
+                if (isCorrect) score++;
+
+                const timeSpentMs = questionTimes[index] || 0;
+                const timeSpentSec = Math.round(timeSpentMs / 1000);
+
+                const summaryItem = document.createElement('div');
+                summaryItem.classList.add('result-summary-item');
+
+                const summaryBox = document.createElement('div');
+                summaryBox.classList.add('result-summary-box');
+                if (userAnswer === null || userAnswer === undefined) {
+                    summaryBox.classList.add('not-answered-box');
+                } else {
+                    summaryBox.classList.add(isCorrect ? 'correct-box' : 'incorrect-box');
+                }
+                summaryBox.dataset.index = index;
+                summaryBox.title = `Click to review Question ${index + 1}`;
+
+                const timeDisplay = document.createElement('span');
+                timeDisplay.classList.add('time-display-in-box');
+                timeDisplay.textContent = `${timeSpentSec}s`;
+                summaryBox.appendChild(timeDisplay);
+
+                const numberLabel = document.createElement('div');
+                numberLabel.classList.add('question-number-label');
+                numberLabel.textContent = `Q${index + 1}`;
+
+                summaryBox.addEventListener('click', () => {
+                    revisitQuestionFromResults(index);
+                });
+
+                summaryItem.appendChild(summaryBox);
+                summaryItem.appendChild(numberLabel);
+                resultsDetailsGrid.appendChild(summaryItem);
+            });
+
+            scoreEl.textContent = score;
+            totalQuestionsResultsEl.textContent = questions.length;
+            const timeDiff = practiceSessionEndTime - practiceSessionStartTime;
+            timeTakenEl.textContent = formatTimeDifference(timeDiff);
+            
+            // Make sure the submit performance button has an event listener
+            const submitButton = document.getElementById('submit-performance-button');
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Submit Reflections';
+                submitButton.classList.remove('bg-green-500');
+            }
+        }
+
+
+        function revisitQuestionFromResults(index) {
+            resultsScreen.classList.add('hidden');
+            resultsScreen.classList.remove('flex');
+            showPracticeSessionScreen();
+            loadQuestion(index, true);
+        }
+
+        // Only stop timer when showing final results
+        function endPracticeSessionAndShowResults() {
+            stopTimer();
+
+            // Gather data to submit to Firebase
+            const performanceData = {
+                studentName: userName || 'Anonymous',
+                examName: "QR Test 1",
+                score: calculateScore(), // New function to calculate score
+                totalQuestions: questions.length,
+                timeTaken: formatTimeDifference(practiceSessionEndTime - practiceSessionStartTime),
+                answers: userAnswers,
+                questionTimes: questionTimes,
+                flaggedQuestions: flaggedQuestions,
+                goal: userGoal || '',
+                focusArea: userFocusArea || '',
+                focusRating: '', // No reflection data available at this point
+                reflection: '',  // No reflection data available at this point
+                submissionTimestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent
+            };
+
+            // Submit data to Firebase
+            submitDataToFirebase(performanceData);
+            
+            // Show results
+            showResultsScreen();
+        }
+
+        // Function to calculate the score
+        function calculateScore() {
+            let score = 0;
+            questions.forEach((qData, index) => {
+                const userAnswer = userAnswers[index];
+                const correctAnswer = qData.correctAnswer;
+                const isCorrect = userAnswer !== null && userAnswer !== undefined && userAnswer === correctAnswer;
+                if (isCorrect) score++;
+            });
+            return score;
+        }
+
+        // Function to submit data to Firebase
+        function submitDataToFirebase(data) {
+            // Only submit if Firebase is initialized
+            if (typeof firebase !== 'undefined' && firebase.firestore) {
+                try {
+                    const db = firebase.firestore();
+                    db.collection("performanceSubmissions").add(data)
+                      .then(() => {
+                          console.log("Performance data submitted to Firebase");
+                          
+                          // Show a success notification that will be displayed on the results screen
+                          setTimeout(() => {
+                              const successNotice = document.createElement('div');
+                              successNotice.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow-lg z-50';
+                              successNotice.innerHTML = `
+                                  <div class="flex items-center">
+                                      <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                      </svg>
+                                      <span class="font-medium">Success!</span>
+                                      <span class="ml-2">Your test results have been submitted to the admin dashboard.</span>
+                                  </div>
+                              `;
+                              document.body.appendChild(successNotice);
+                              
+                              // Remove the notice after 5 seconds
+                              setTimeout(() => {
+                                  successNotice.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                                  setTimeout(() => {
+                                      document.body.removeChild(successNotice);
+                                  }, 500);
+                              }, 5000);
+                          }, 500); // Small delay to ensure results screen is visible
+                      })
+                      .catch((error) => {
+                          console.error("Error submitting to Firebase:", error);
+                          
+                          // Show error notification
+                          setTimeout(() => {
+                              const errorNotice = document.createElement('div');
+                              errorNotice.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded shadow-lg z-50';
+                              errorNotice.innerHTML = `
+                                  <div class="flex items-center">
+                                      <svg class="h-6 w-6 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                      </svg>
+                                      <span class="font-medium">Error!</span>
+                                      <span class="ml-2">Could not submit your results. You can try adding a reflection.</span>
+                                  </div>
+                              `;
+                              document.body.appendChild(errorNotice);
+                              
+                              // Remove the notice after 5 seconds
+                              setTimeout(() => {
+                                  errorNotice.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                                  setTimeout(() => {
+                                      document.body.removeChild(errorNotice);
+                                  }, 500);
+                              }, 5000);
+                          }, 500);
+                      });
+                } catch (error) {
+                    console.error("Error accessing Firebase:", error);
+                }
+            } else {
+                console.error("Firebase is not initialized");
+            }
+        }
+
+        function handleEndPracticeSessionFooterClick() {
+             recordTimeSpent(currentQuestionIndex);
+             // Remove stopTimer() call to keep timer running
+             showReviewScreen();
+         }
+
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const reflection = reflectionText.value.trim();
+            const focusRating = focusRatingInput.value;
+            const finalScore = scoreEl.textContent;
+            const totalQs = totalQuestionsResultsEl.textContent;
+            const timeTaken = timeTakenEl.textContent;
+            let y = 15;
+            const lineHeight = 7;
+            const pageHeight = doc.internal.pageSize.height;
+            const margin = 15;
+
+            doc.setFontSize(18);
+            doc.text("UCAT Quantitative Reasoning Results", margin, y);
+            y += lineHeight * 1.5;
+            doc.setFontSize(12);
+            doc.text(`Name: ${userName || 'N/A'}`, margin, y); y += lineHeight;
+            doc.text(`Goal: ${userGoal || 'N/A'} / ${totalQs}`, margin, y); y += lineHeight;
+            doc.text(`Focus Area: ${userFocusArea || 'N/A'}`, margin, y); y += lineHeight;
+            doc.text(`Final Score: ${finalScore} / ${totalQs}`, margin, y); y += lineHeight;
+            doc.text(`Time Taken: ${timeTaken}`, margin, y); y += lineHeight * 1.5;
+            doc.setFontSize(14);
+            doc.text("Focus Rating (1-5):", margin, y); y += lineHeight;
+            doc.setFontSize(10);
+            doc.text(focusRating || 'N/A', margin, y); y += lineHeight * 1.5;
+            doc.setFontSize(14);
+            doc.text("Main Takeaway:", margin, y); y += lineHeight;
+            doc.setFontSize(10);
+            const reflectionLines = doc.splitTextToSize(reflection || 'No reflection provided.', doc.internal.pageSize.width - margin * 2);
+            doc.text(reflectionLines, margin, y);
+            y += reflectionLines.length * (lineHeight * 0.7) + lineHeight;
+            doc.setFontSize(14);
+            doc.text("Detailed Results Summary:", margin, y); y += lineHeight * 1.5;
+            doc.setFontSize(10);
+
+            questions.forEach((qData, index) => {
+                const userAnswer = userAnswers[index];
+                const correctAnswer = qData.correctAnswer;
+                const isCorrect = userAnswer !== null && userAnswer !== undefined && userAnswer === correctAnswer;
+                const status = userAnswer === null || userAnswer === undefined ? "Not Answered" : (isCorrect ? "Correct" : "Incorrect");
+                const timeSpentSec = Math.round((questionTimes[index] || 0) / 1000);
+                const resultText = `Q${index + 1}: Your Ans: ${userAnswer || 'N/A'}, Correct: ${correctAnswer}, Status: ${status}, Time: ${timeSpentSec}s`;
+                
+                let textLines = doc.splitTextToSize(resultText, doc.internal.pageSize.width - margin * 2);
+                if (y + (textLines.length * (lineHeight * 0.7)) > pageHeight - margin) {
+                    doc.addPage();
+                    y = margin;
+                }
+                doc.text(textLines, margin, y);
+                y += textLines.length * (lineHeight * 0.7) + (lineHeight*0.3);
+            });
+            doc.save(`ucat_qr_results_${userName || 'user'}.pdf`);
+        }
+        
+        // Function to submit performance data to server
+        async function submitPerformanceData() {
+            // Prevent multiple submissions
+            if (isSubmittingReflection) {
+                console.log("Submission already in progress, ignoring duplicate call");
+                return;
+            }
+            
+            try {
+                isSubmittingReflection = true;
+                
+                // Get additional reflection data
+                const focusRating = document.getElementById('focus-rating').value || '';
+                const reflection = document.getElementById('reflection-text').value || '';
+                
+                if (typeof firebase !== 'undefined' && firebase.firestore) {
+                    const db = firebase.firestore();
+                    
+                    // Get current authenticated user data if available
+                    let userDisplayName = '';
+                    
+                    if (firebase.auth && firebase.auth().currentUser) {
+                        const currentUser = firebase.auth().currentUser;
+                        userDisplayName = currentUser.displayName || '';
+                        // Note: we're already storing userEmail from when the test started
+                    }
+                    
+                    // Instead of querying for existing document, create a new one with both test results and reflection
+                    const performanceData = {
+                        studentName: userName || userDisplayName || 'Anonymous',
+                        studentEmail: userEmail || '',
+                        examName: "QR Test 1",
+                        score: scoreEl.textContent,
+                        totalQuestions: totalQuestionsResultsEl.textContent,
+                        timeTaken: timeTakenEl.textContent,
+                        answers: userAnswers,
+                        questionTimes: questionTimes,
+                        flaggedQuestions: flaggedQuestions,
+                        goal: userGoal || '',
+                        focusArea: userFocusArea || '',
+                        focusRating: focusRating,
+                        reflection: reflection,
+                        submissionTimestamp: new Date().toISOString(),
+                        userAgent: navigator.userAgent,
+                        isReflection: true // Flag to indicate this is a reflection submission
+                    };
+                    
+                    // Add as a new document
+                    await db.collection("performanceSubmissions").add(performanceData);
+                    
+                    // Show success message
+                    const successNotice = document.createElement('div');
+                    successNotice.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow-lg z-50';
+                    successNotice.innerHTML = `
+                        <div class="flex items-center">
+                            <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="font-medium">Success!</span>
+                            <span class="ml-2">Your reflection has been saved.</span>
+                        </div>
+                    `;
+                    document.body.appendChild(successNotice);
+                    
+                    // Remove the notice after 5 seconds
+                    setTimeout(() => {
+                        successNotice.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                        setTimeout(() => {
+                            document.body.removeChild(successNotice);
+                        }, 500);
+                    }, 5000);
+                    
+                    // Update the button
+                    document.getElementById('submit-performance-button').disabled = true;
+                    document.getElementById('submit-performance-button').textContent = 'Reflection Saved ✓';
+                    document.getElementById('submit-performance-button').classList.add('bg-green-500');
+                } else {
+                    alert('Firebase is not initialized. Please configure Firebase first.');
+                    console.error('Firebase or Firestore is not available.');
+                }
+            } catch (error) {
+                console.error('Error saving reflection:', error);
+                alert('An error occurred while saving your reflection. Please try again.');
+            } finally {
+                // Reset the submission flag after a delay, just in case
+                setTimeout(() => {
+                    isSubmittingReflection = false;
+                }, 2000);
+            }
+        }
+        
+        // --- Calculator Functions ---
+        function updateCalcDisplay() {
+            // Ensure display doesn't overflow, use scientific notation for very long numbers
+            if (calcCurrentInput === 'Error') {
+                calcDisplay.textContent = 'Error';
+            } else if (calcCurrentInput.length > 12) {
+                // For long numbers, try scientific notation
+                try {
+                    const num = parseFloat(calcCurrentInput);
+                    if (isFinite(num)) {
+                        calcDisplay.textContent = num.toExponential(6);
+                    } else {
+                        calcDisplay.textContent = 'Error';
+                    }
+                } catch (e) {
+                    calcDisplay.textContent = calcCurrentInput.substring(0, 12);
+                }
+            } else {
+                calcDisplay.textContent = calcCurrentInput;
+            }
+            
+            // Show/hide memory indicator
+            const memIndicator = document.getElementById('calc-memory-indicator');
+            if (calcMemory !== 0) {
+                memIndicator.style.display = 'block';
+            } else {
+                memIndicator.style.display = 'none';
+            }
+        }
+
+        // Add specific event handler for equals button
+        document.querySelector('.calc-button.equals').addEventListener('click', (e) => {
+            console.log('Equals button clicked');
+            calculate();
+            e.stopPropagation(); // Prevent event bubbling
+        });
+
+        calcButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const value = button.dataset.calcValue;
+                const action = button.dataset.calcAction;
+                
+                console.log('Button clicked:', button.textContent, 'value:', value, 'action:', action);
+
+                if (value !== undefined) { 
+                    if (value === '.') { inputDecimal(); } 
+                    else { inputDigit(value); }
+                } else if (action) { 
+                    if (['+', '-', '*', '/'].includes(action)) { handleOperator(action); } 
+                    else if (action === 'equals') { 
+                        console.log('Equals action detected');
+                        calculate(); 
+                    } 
+                    else if (action === 'clear') { clearCalculator(); } 
+                    else if (['m+', 'm-', 'mrc'].includes(action)) { handleMemory(action); } 
+                    else if (['sqrt', 'percent', 'negate', 'backspace'].includes(action)) { handleSpecialFunction(action); }
+                }
+            });
+        });
+
+        function clearCalculator() {
+            calcCurrentInput = '0';
+            calcPreviousInput = '';
+            calcOperator = null;
+            calcShouldResetDisplay = false;
+            calcMrcPressedOnce = false; 
+            updateCalcDisplay();
+        }
+        
+        function inputDigit(digit) {
+            if (calcCurrentInput === 'Error') calcCurrentInput = '0'; // Clear error on new digit
+            if (calcShouldResetDisplay) {
+                calcCurrentInput = digit;
+                calcShouldResetDisplay = false;
+            } else {
+                // Prevent excessively long numbers before decimal
+                if (calcCurrentInput.includes('.') && calcCurrentInput.split('.')[1].length >= 8) return; // Limit to 8 decimal places
+                if (!calcCurrentInput.includes('.') && calcCurrentInput.length >= 10 && calcCurrentInput !== '0') return; // Limit to 10 integer digits
+
+                calcCurrentInput = calcCurrentInput === '0' ? digit : calcCurrentInput + digit;
+            }
+            updateCalcDisplay();
+            calcMrcPressedOnce = false; 
+        }
+
+        function inputDecimal() {
+            if (calcCurrentInput === 'Error') calcCurrentInput = '0';
+            if (calcShouldResetDisplay) {
+                calcCurrentInput = '0.';
+                calcShouldResetDisplay = false;
+            } else if (!calcCurrentInput.includes('.')) {
+                calcCurrentInput += '.';
+            }
+            updateCalcDisplay();
+            calcMrcPressedOnce = false;
+        }
+
+        function handleOperator(nextOperator) {
+            if (calcCurrentInput === 'Error') return;
+            const inputValue = parseFloat(calcCurrentInput);
+            if (calcOperator && !calcShouldResetDisplay) { 
+                calculate();
+                if (calcCurrentInput === 'Error') return; // Stop if calculation resulted in error
+                calcPreviousInput = calcCurrentInput; 
+            } else {
+                calcPreviousInput = calcCurrentInput;
+            }
+            calcOperator = nextOperator;
+            calcShouldResetDisplay = true;
+            calcMrcPressedOnce = false;
+        }
+
+        function calculate() {
+            if (!calcOperator || calcPreviousInput === '' || calcCurrentInput === 'Error') return;
+            const prev = parseFloat(calcPreviousInput);
+            const current = parseFloat(calcCurrentInput);
+            if (isNaN(prev) || isNaN(current)) {
+                calcCurrentInput = 'Error'; // Should not happen if inputs are validated
+                updateCalcDisplay();
+                return;
+            }
+
+            let result = 0;
+            switch (calcOperator) {
+                case '+': result = prev + current; break;
+                case '-': result = prev - current; break;
+                case '*': result = prev * current; break;
+                case '/': 
+                    if (current === 0) {
+                        result = 'Error';
+                    } else {
+                        result = prev / current;
+                    }
+                    break;
+                default: return;
+            }
+
+            if (result === 'Error') {
+                calcCurrentInput = 'Error';
+            } else {
+                // Check if result is a valid number and not Infinity or NaN
+                if (!isFinite(result)) {
+                    calcCurrentInput = 'Error';
+                } else {
+                    // Format result: if it's a very small or large number, handle differently
+                    try {
+                        // Handle large numbers better - use toFixed for numbers that are too large
+                        if (Math.abs(result) > 1e10) {
+                            let resultStr = result.toExponential(6);
+                            calcCurrentInput = resultStr;
+                        } else if (Math.abs(result) < 1e-6 && result !== 0) {
+                            // Small numbers in scientific notation
+                            let resultStr = result.toExponential(6);
+                            calcCurrentInput = resultStr;
+                        } else {
+                            // Normal sized numbers - keep precision but remove trailing zeros
+                            let resultStr = parseFloat(result.toPrecision(10)).toString();
+                            calcCurrentInput = resultStr;
+                        }
+                    } catch (e) {
+                        // Fallback if formatting fails
+                        calcCurrentInput = String(result);
+                    }
+                    
+                    // Additional safety - if we end up with an invalid display value, show Error
+                    if (calcCurrentInput === 'NaN' || calcCurrentInput === 'Infinity' || calcCurrentInput === '-Infinity') {
+                        calcCurrentInput = 'Error';
+                    }
+                }
+            }
+            calcOperator = null;
+            calcShouldResetDisplay = true; 
+            updateCalcDisplay();
+        }
+
+        function handleMemory(action) {
+            const currentValue = parseFloat(calcCurrentInput);
+            if (calcCurrentInput === 'Error' && action !== 'mrc') return;
+
+            switch (action) {
+                case 'm+':
+                    if (!isNaN(currentValue)) calcMemory += currentValue;
+                    updateCalcDisplay();
+                    break;
+                case 'm-':
+                    if (!isNaN(currentValue)) calcMemory -= currentValue;
+                    updateCalcDisplay();
+                    break;
+                case 'mrc':
+                    if (calcMrcPressedOnce) { 
+                        calcMemory = 0;
+                        calcMrcPressedOnce = false;
+                        // Optionally, could also clear display to 0 here
+                    } else { 
+                        calcCurrentInput = String(parseFloat(calcMemory.toPrecision(10))); // Show memory with precision
+                        calcMrcPressedOnce = true;
+                        calcShouldResetDisplay = true; 
+                    }
+                    break;
+            }
+            if (action !== 'mrc') { // For M+ and M-, display doesn't change immediately
+                calcShouldResetDisplay = true; // Next number input should overwrite current display
+                calcMrcPressedOnce = false; 
+            } else {
+                updateCalcDisplay(); // For MRC, update display immediately
+            }
+        }
+
+        function handleSpecialFunction(func) {
+            if (calcCurrentInput === 'Error' && func !== 'clear') return;
+            const currentValue = parseFloat(calcCurrentInput);
+
+            switch (func) {
+                case 'sqrt':
+                    if (currentValue < 0 || isNaN(currentValue)) {
+                        calcCurrentInput = 'Error';
+                    } else {
+                        try {
+                            const sqrtResult = Math.sqrt(currentValue);
+                            if (!isFinite(sqrtResult)) {
+                                calcCurrentInput = 'Error';
+                            } else {
+                                calcCurrentInput = String(parseFloat(sqrtResult.toPrecision(10)));
+                            }
+                        } catch (e) {
+                            calcCurrentInput = 'Error';
+                        }
+                    }
+                    break;
+                case 'percent':
+                    if (isNaN(currentValue)) { calcCurrentInput = 'Error'; break; }
+                    if (calcPreviousInput !== '' && calcOperator) {
+                        const prev = parseFloat(calcPreviousInput);
+                        if (isNaN(prev)) { calcCurrentInput = 'Error'; break; }
+                        
+                        try {
+                            const percentResult = prev * (currentValue / 100);
+                            if (!isFinite(percentResult)) {
+                                calcCurrentInput = 'Error';
+                            } else {
+                                calcCurrentInput = String(parseFloat(percentResult.toPrecision(10)));
+                            }
+                        } catch (e) {
+                            calcCurrentInput = 'Error';
+                        }
+                    } else { 
+                        try {
+                            const percentResult = currentValue / 100;
+                            if (!isFinite(percentResult)) {
+                                calcCurrentInput = 'Error';
+                            } else {
+                                calcCurrentInput = String(parseFloat(percentResult.toPrecision(10)));
+                            }
+                        } catch (e) {
+                            calcCurrentInput = 'Error';
+                        }
+                    }
+                    break;
+                case 'negate':
+                     if (calcCurrentInput !== '0' && !isNaN(currentValue)) { 
+                        calcCurrentInput = String(currentValue * -1);
+                    }
+                    break;
+                case 'backspace':
+                    if (calcCurrentInput === 'Error' || calcShouldResetDisplay) {
+                        calcCurrentInput = '0';
+                        calcShouldResetDisplay = false;
+                    } else if (calcCurrentInput.length > 1) {
+                        calcCurrentInput = calcCurrentInput.slice(0, -1);
+                    } else {
+                        calcCurrentInput = '0';
+                    }
+                    break;
+                case 'clear':
+                    clearCalculator();
+                    return; // Skip further processing
+            }
+            updateCalcDisplay();
+            if (func !== 'backspace' && func !== 'negate' && func !== 'clear') { 
+                calcShouldResetDisplay = true;
+            }
+            calcMrcPressedOnce = false;
+        }
+
+
+        function toggleCalculator() {
+            const isVisible = calculatorUI.classList.toggle('visible');
+            calculatorToggleButton.classList.toggle('active', isVisible);
+            if (isVisible) {
+                clearCalculator(); 
+            }
+        }
+        
+        // Draggable Calculator Logic
+        function makeDraggable(element, handle) {
+            let currentX, currentY;
+
+            handle.onmousedown = function(event) {
+                event.preventDefault();
+                isDraggingCalculator = true;
+                calculatorUI.style.cursor = 'grabbing';
+
+                // Get the initial mouse cursor position
+                currentX = event.clientX;
+                currentY = event.clientY;
+
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            };
+
+            function elementDrag(event) {
+                event.preventDefault();
+                if (!isDraggingCalculator) return;
+
+                // Calculate the new cursor position
+                const dx = currentX - event.clientX;
+                const dy = currentY - event.clientY;
+                currentX = event.clientX;
+                currentY = event.clientY;
+
+                // Set the element's new position
+                let newTop = element.offsetTop - dy;
+                let newLeft = element.offsetLeft - dx;
+
+                // Constrain within app-container (optional, can be complex)
+                const appRect = appContainer.getBoundingClientRect();
+                const calcRect = element.getBoundingClientRect();
+                
+                // Simple boundary check (relative to viewport for now, as appContainer might scroll)
+                // For more robust boundary, calculate relative to appContainer's scroll position
+                if (newLeft < 0) newLeft = 0;
+                if (newTop < 0) newTop = 0;
+                if (newLeft + calcRect.width > window.innerWidth) newLeft = window.innerWidth - calcRect.width;
+                if (newTop + calcRect.height > window.innerHeight) newTop = window.innerHeight - calcRect.height;
+
+
+                element.style.top = newTop + "px";
+                element.style.left = newLeft + "px";
+            }
+
+            function closeDragElement() {
+                isDraggingCalculator = false;
+                calculatorUI.style.cursor = 'grab';
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+
+
+        // --- Event Listeners ---
+        startButton.addEventListener('click', () => {
+            console.log("Start button event listener triggered, calling window.startTest()");
+            window.startTest();
+        });
+
+        nextButton.addEventListener('click', showNextQuestion);
+        prevButton.addEventListener('click', showPrevQuestion);
+        endPracticeSessionButton.addEventListener('click', endPracticeSessionAndShowResults);
+        endPracticeSessionButtonFooter.addEventListener('click', handleEndPracticeSessionFooterClick);
+        backToResultsButton.addEventListener('click', () => { isReviewingFromResults = false; showResultsScreen(); });
+        navigatorButton.addEventListener('click', () => { 
+            // Hide calculator if it's open
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator(); 
+            }
+            recordTimeSpent(currentQuestionIndex); 
+            updateNavigatorButtons(); 
+            navigatorModal.classList.remove('hidden'); 
+            navigatorModal.classList.add('flex'); 
+        });
+        closeModalButton.addEventListener('click', () => { navigatorModal.classList.remove('flex'); navigatorModal.classList.add('hidden'); if (!isReviewingFromResults) questionStartTime = Date.now(); });
+        navigatorModal.addEventListener('click', (event) => { if (event.target === navigatorModal) closeModalButton.click(); });
+        flagButton.addEventListener('click', toggleFlag);
+        filterFlaggedButton.addEventListener('click', () => { isFilteringFlagged = !isFilteringFlagged; showReviewScreen(isFilteringFlagged); });
+        downloadPdfButton.addEventListener('click', generatePDF);
+        document.getElementById('submit-performance-button').addEventListener('click', submitPerformanceData);
+
+        calculatorToggleButton.addEventListener('click', toggleCalculator);
+        closeCalculatorButton.addEventListener('click', toggleCalculator);
+        makeDraggable(calculatorUI, calculatorDragHeader);
+
+        // Add a direct event listener for the equals button to ensure it works
+        const equalsButton = document.querySelector('.calc-button.equals');
+        if (equalsButton) {
+            equalsButton.addEventListener('click', function(e) {
+                console.log('Equals button clicked directly');
+                calculate();
+            });
+        }
+
+        // Add direct event listeners for all calculator buttons to ensure they work
+        calcButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const value = button.dataset.calcValue;
+                const action = button.dataset.calcAction;
+                console.log('Calculator button clicked:', button.textContent, 'Value:', value, 'Action:', action);
+                
+                if (value !== undefined) { 
+                    if (value === '.') { inputDecimal(); } 
+                    else { inputDigit(value); }
+                } else if (action) { 
+                    if (['+', '-', '*', '/'].includes(action)) { handleOperator(action); } 
+                    else if (action === 'equals') { 
+                        console.log('Equals action triggered');
+                        calculate(); 
+                    } 
+                    else if (action === 'clear') { clearCalculator(); } 
+                    else if (['m+', 'm-', 'mrc'].includes(action)) { handleMemory(action); } 
+                    else if (['sqrt', 'percent', 'negate', 'backspace'].includes(action)) { handleSpecialFunction(action); }
+                }
+            });
+        });
+
+        function handleKeyboardShortcuts(e) {
+             const isPracticeSessionVisible = !practiceSessionScreen.classList.contains('hidden');
+             const isModalVisible = navigatorModal.classList.contains('flex');
+             const isInputFocused = document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA');
+             const isCalcVisible = calculatorUI.classList.contains('visible');
+
+             if (isCalcVisible && !isInputFocused) { 
+                if (e.key >= '0' && e.key <= '9') { e.preventDefault(); inputDigit(e.key); return; }
+                if (e.key === '.') { e.preventDefault(); inputDecimal(); return; }
+                if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') { e.preventDefault(); handleOperator(e.key); return; }
+                if (e.key === 'Enter' || e.key === '=') { e.preventDefault(); calculate(); return; }
+                if (e.key === 'Backspace') { e.preventDefault(); handleSpecialFunction('backspace'); return; }
+                if (e.key === 'Escape') { e.preventDefault(); toggleCalculator(); return; } 
+                if (e.key.toLowerCase() === 'p') { e.preventDefault(); handleMemory('m+'); return; }
+                if (e.key.toLowerCase() === 'm') { e.preventDefault(); handleMemory('m-'); return; }
+                if (e.key.toLowerCase() === 'c' && !e.altKey && !e.metaKey && !e.ctrlKey) { e.preventDefault(); handleMemory('mrc'); return; } 
+                if (e.key.toLowerCase() === 'x') { e.preventDefault(); handleSpecialFunction('sqrt'); return; }
+             }
+             
+             if (isModalVisible || isInputFocused) return; 
+             if (!isPracticeSessionVisible) return; 
+             
+             const key = e.key.toLowerCase();
+             const altOrOption = e.altKey || e.metaKey; 
+             const code = e.code.toLowerCase(); 
+
+             if (altOrOption) {
+                 switch (code) { 
+                     case 'keyn': e.preventDefault(); if (!nextButton.disabled) nextButton.click(); return;
+                     case 'keyp': e.preventDefault(); if (!prevButton.disabled) prevButton.click(); return;
+                     case 'keyf': e.preventDefault(); if (!isReviewingFromResults && !flagButton.disabled) flagButton.click(); return;
+                     case 'keyc': e.preventDefault(); toggleCalculator(); return; 
+                     default: return; 
+                 }
+             } else { 
+                 if (['a', 'b', 'c', 'd', 'e'].includes(key) && !isReviewingFromResults && !isCalcVisible) { 
+                     e.preventDefault();
+                     const optionIndex = ['a', 'b', 'c', 'd', 'e'].indexOf(key);
+                     const optionValue = ['A', 'B', 'C', 'D', 'E'][optionIndex];
+                     const currentQuestionData = questions[currentQuestionIndex];
+                     if (optionIndex < currentQuestionData.options.length) {
+                         handleOptionSelect(currentQuestionIndex, optionIndex, optionValue);
+                     }
+                     return;
+                 }
+             }
+        }
+        document.addEventListener('keydown', handleKeyboardShortcuts);
+
+        // --- Initial Load ---
+        // Only initialize the setup screen if we're not in review mode
+        if (!urlParams.has('review')) {
+            showSetupScreen();
+        }
+
+        updateCalcDisplay(); 
+
+        // Update the review grid button click handler to not restart the timer
+        reviewGrid.addEventListener('click', (e) => {
+            if (e.target.classList.contains('review-grid-button')) {
+                reviewScreen.classList.add('hidden');
+                reviewScreen.classList.remove('flex');
+                showPracticeSessionScreen();
+                const index = parseInt(e.target.dataset.questionIndex);
+                if (!isNaN(index) && index >= 0 && index < questions.length) {
+                    // Hide calculator if it's open
+                    if (calculatorUI.classList.contains('visible')) {
+                        toggleCalculator();
+                    }
+                    loadQuestion(index);
+                    updateTimerVisibility();
+                }
+            }
+        });
+
+        // Add keyboard event listeners for Enter key on the appropriate pages
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && !event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
+                const isInputOrTextareaFocused = document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA';
+                
+                // Only handle Enter key if no input or textarea is focused
+                if (!isInputOrTextareaFocused) {
+                    // Check which screen is active
+                    if (!setupScreen.classList.contains('hidden')) {
+                        // Begin test button on setup screen
+                        startButton.click();
+                        event.preventDefault();
+                    } else if (!reviewScreen.classList.contains('hidden')) {
+                        // End practice session button on review screen
+                        endPracticeSessionButton.click();
+                        event.preventDefault();
+                    }
+                }
+            }
+        });
+
+        // Make sure the submit button has the right event listener
+        const submitPerformanceBtn = document.getElementById('submit-performance-button');
+        if (submitPerformanceBtn) {
+            // Remove any existing listeners (just in case)
+            submitPerformanceBtn.removeEventListener('click', submitPerformanceData);
+            // Add the listener
+            submitPerformanceBtn.addEventListener('click', submitPerformanceData);
+        }
+
+        // Function to handle loading a past test for review
+        function loadPastTestForReview(resultId) {
+            setupScreen.classList.add('hidden');
+            
+            // Show a loading indicator
+            const loadingEl = document.createElement('div');
+            loadingEl.className = 'fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50';
+            loadingEl.innerHTML = `
+                <div class="text-center p-6 bg-white shadow-xl rounded-lg">
+                    <div class="spinner mx-auto mb-4"></div>
+                    <p class="text-gray-700 font-medium">Loading your test results...</p>
+                </div>
+            `;
+            document.body.appendChild(loadingEl);
+            
+            // Fetch the result from Firestore
+            db.collection("performanceSubmissions").doc(resultId)
+                .get()
+                .then((doc) => {
+                    if (!doc.exists) {
+                        alert("The requested test result could not be found.");
+                        window.location.href = "student_dashboard.html";
+                        return;
+                    }
+                    
+                    const resultData = doc.data();
+                    
+                    // Store the data in the appropriate variables
+                    userName = resultData.studentName || '';
+                    userGoal = resultData.goal || '';
+                    userFocusArea = resultData.focusArea || '';
+                    userAnswers = resultData.answers || new Array(questions.length).fill(null);
+                    questionTimes = resultData.questionTimes || new Array(questions.length).fill(0);
+                    flaggedQuestions = resultData.flaggedQuestions || new Array(questions.length).fill(false);
+                    practiceSessionStartTime = new Date(resultData.submissionTimestamp || Date.now());
+                    practiceSessionEndTime = new Date(practiceSessionStartTime.getTime() + 26 * 60 * 1000); // Estimate end time
+                    isReviewingFromResults = true;
+                    
+                    // Remove loading indicator
+                    document.body.removeChild(loadingEl);
+                    
+                    // Show the results screen with the data
+                    showResultsScreen();
+                    
+                    // Add a "Return to Results" button to the header
+                    const headerBar = document.querySelector('.header-bar');
+                    if (headerBar) {
+                        const returnButtonContainer = document.createElement('div');
+                        returnButtonContainer.className = 'absolute left-4';
+                        returnButtonContainer.innerHTML = `
+                            <button id="return-to-dashboard-results" class="bg-blue-500 text-white px-3 py-1 rounded text-sm flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                </svg>
+                                Return to Results
+                            </button>
+                        `;
+                        headerBar.style.position = 'relative';
+                        headerBar.appendChild(returnButtonContainer);
+                        
+                        // Add event listener to the return button
+                        document.getElementById('return-to-dashboard-results').addEventListener('click', () => {
+                            window.location.href = "student_dashboard.html";
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error loading test result:", error);
+                    alert("There was an error loading the test result. Please try again.");
+                    window.location.href = "student_dashboard.html";
+                });
+        }
+        
+        // Add a direct click event listener to the Start button to ensure it works
+        document.getElementById('start-button').addEventListener('click', function() {
+            console.log("Start button clicked via direct listener");
+            // Get user info from Firebase Auth if available
+            if (firebase.auth && firebase.auth().currentUser) {
+                const currentUser = firebase.auth().currentUser;
+                userName = currentUser.displayName || currentUser.email || '';
+                // Store email to be used later in submission
+                userEmail = currentUser.email || '';
+                console.log("Using user info from Firebase:", userName, userEmail);
+            } else {
+                userName = '';
+                userEmail = '';
+                console.log("No user logged in - using empty user info");
+            }
+            
+            userGoal = goalInput.value.trim();
+            userFocusArea = focusAreaInput.value.trim();
+            timeLeft = 26 * 60;
+            userAnswers = new Array(questions.length).fill(null);
+            questionTimes = new Array(questions.length).fill(0);
+            flaggedQuestions = new Array(questions.length).fill(false);
+            questionStartTime = null;
+            currentQuestionIndex = 0;
+            isReviewingFromResults = false;
+            isFilteringFlagged = false;
+            currentlyDisplayedPassageIndex = -1;
+            practiceSessionEndTime = null;
+            showPracticeSessionScreen();
+            startTimer();
+            loadQuestion(0);
+            populateNavigator();
+        });
+        
+        // Function to initialize the application - moved to the end to ensure all functions are defined
+        function initializeApp() {
+            // Initialize arrays with questions.length
+            userAnswers = new Array(questions.length).fill(null);
+            questionTimes = new Array(questions.length).fill(0);
+            flaggedQuestions = new Array(questions.length).fill(false);
+            
+            // Check for review mode and initialize appropriate screen
+            if (reviewParam) {
+                // We're in review mode - load the past test data
+                loadPastTestForReview(reviewParam);
+            } else {
+                // Regular test mode - continue with normal setup
+                showSetupScreen();
+            }
+        }
+        
+        // Actually initialize the app now that all functions and DOM elements are defined
+        initializeApp();
+    }); // Closing bracket for DOMContentLoaded
+    </script>
+</body>
+</html>

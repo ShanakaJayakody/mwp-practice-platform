@@ -1,0 +1,41 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Rules for the 'performanceSubmissions' collection
+    match /performanceSubmissions/{submissionId} {
+
+      // Allow anyone to create (submit) new performance records for now.
+      // We can make this more secure later if students have their own logins.
+      // For example, by checking if request.auth.uid matches a studentUid field in the data:
+      // allow create: if request.auth != null && request.resource.data.studentUid == request.auth.uid;
+      allow create: if true;
+
+      // ONLY allow read and list operations IF the authenticated user's UID
+      // matches the specific admin UID you provided.
+      // If you have other admin UIDs, you can add them with "||" (OR) conditions.
+      allow read, list: if request.auth != null &&
+                          request.auth.uid == "mUgcxuWWOYWErgf0MzjgUacHCEf2";
+                          // Example if you had another admin UID:
+                          // (request.auth.uid == "mUgcxuWWOYWErgf0MzjgUacHCEf2" ||
+                          //  request.auth.uid == "ANOTHER_ADMIN_UID_HERE");
+
+      // Generally, prevent client-side updates or deletes by non-admins.
+      // Admins could be allowed to update/delete via specific rules if needed,
+      // or these operations could be handled by Cloud Functions (Admin SDK).
+      allow update, delete: if false;
+    }
+
+    // If you add other collections later (e.g., a 'students' collection or an 'admins' collection for Option B),
+    // you would add specific rules for them here.
+    // Example for an 'admins' collection (if you choose Option B for admin management later):
+    // match /admins/{adminId} {
+    //   allow read: if request.auth != null && request.auth.token.admin == true; // Or check against their UID
+    //   // Write access to 'admins' collection should be highly restricted, e.g., only via Admin SDK.
+    //   allow write: if false; // Default deny client-side writes
+    // }
+
+    // By default, if no rule above matches a path, access is denied.
+  }
+}

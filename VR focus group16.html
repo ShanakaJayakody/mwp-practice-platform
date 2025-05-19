@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UCAT VR Focus Group 16 - MedwithPurpose</title>
+    <link rel="icon" href="https://ik.imagekit.io/mwp/2.svg?updatedAt=1745982956185" type="image/svg+xml">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <style>
+        /* Custom styles for better UI/UX */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scrolling on body */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f2f5; /* Light background like UCAT */
+        }
+        #app-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 2rem); /* Full height minus padding */
+            width: 100%;
+            background-color: #ffffff;
+            border: 1px solid #d1d5db; /* Border like UCAT */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-radius: 0.375rem; /* Slightly rounded corners */
+            margin: 1rem; /* Add some margin */
+            overflow: hidden; /* Prevent content overflow from container */
+            position: relative; /* For calculator positioning */
+        }
+        
+        /* Header and Footer */
+        .header-bar { /* Topmost bar */
+            flex-shrink: 0;
+            background-color: #005A8C; /* Slightly darker blue for top bar */
+            color: white;
+            padding: 0.5rem 1.5rem; /* Adjusted padding */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 20; /* Ensure it's above the secondary bar if overlapping */
+        }
+
+        .secondary-toolbar { /* New toolbar for calculator and flag */
+            flex-shrink: 0;
+            background-color: #007BBD; /* Lighter blue for secondary bar */
+            color: white;
+            padding: 0.5rem 1.5rem; /* Consistent padding */
+            display: flex;
+            justify-content: space-between; /* Align items */
+            align-items: center;
+            border-bottom: 1px solid #005A8C; /* Optional: a subtle separator */
+            z-index: 19;
+        }
+
+        /* Specific text colors within header/footer */
+        .header-bar span, .header-bar div, .secondary-toolbar span, .secondary-toolbar div {
+             color: white;
+        }
+        #timer {
+             background-color: rgba(255, 255, 255, 0.2); 
+             color: white;
+             font-weight: bold;
+             padding: 0.25rem 0.75rem; 
+             border-radius: 0.25rem; 
+        }
+        
+        /* Buttons in secondary toolbar */
+        .secondary-toolbar-button {
+            background-color: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 0.3rem 0.7rem;
+            font-size: 0.8rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            margin-left: 0.5rem; /* Spacing between buttons */
+        }
+        .secondary-toolbar-button:hover:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: white;
+        }
+        .secondary-toolbar-button.active { /* For calculator button when active */
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: white;
+        }
+
+        /* Footer Button Styling */
+        .footer-bar {
+            flex-shrink: 0;
+            background-color: #005A8C; /* Match top bar color */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .footer-bar button {
+            background-color: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.5); 
+            padding: 0.4rem 0.8rem; 
+            font-size: 0.8rem; 
+            border-radius: 0.375rem;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .footer-bar button:hover:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.15); 
+            border-color: white;
+        }
+        .footer-bar button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .footer-bar button#next-button {
+            background-color: #ffffff; 
+            color: #006DAA; 
+            border: 1px solid white;
+            font-weight: 500;
+        }
+        .footer-bar button#next-button:hover:not(:disabled) {
+            background-color: #f0f0f0; 
+        }
+        #flag-button.flagged {
+            background-color: #facc15; 
+            border-color: #facc15;
+            color: #422006; 
+        }
+        #flag-button.flagged:hover {
+            background-color: #f59e0b; 
+            border-color: #f59e0b;
+        }
+
+        /* Main Content Area */
+        .main-content-area {
+            flex-grow: 1; 
+            display: flex;
+            overflow: hidden; 
+            padding: 1rem; 
+        }
+        
+        .passage-column {
+            width: 50%;
+            overflow-y: auto;
+            padding: 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            background-color: #fff;
+            height: 100%;
+            margin-right: 0.5rem;
+        }
+        
+        .question-column {
+            width: 50%;
+            overflow-y: auto; 
+            padding: 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            background-color: #fff;
+            height: 100%; 
+            position: relative;
+            margin-left: 0.5rem;
+        }
+
+        .selected-answer {
+            background-color: #bfdbfe !important; 
+            border-color: #3b82f6 !important; 
+        }
+        .nav-answered { background-color: #a7f3d0; }
+        .nav-current { border: 2px solid #3b82f6 !important; font-weight: bold; }
+        .nav-flagged, .review-flagged { border: 2px solid #f59e0b !important; position: relative; }
+        
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
+        .modal-content { background-color: #fefefe; margin: auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 600px; border-radius: 0.5rem; }
+        .modal.flex { display: flex; }
+
+        button, .button {
+            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+            border-radius: 0.375rem; padding: 0.5rem 1rem; font-size: 0.875rem; font-weight: 500;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); cursor: pointer;
+        }
+        button:active, .button:active { transform: scale(0.98); }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .primary-button { background-color: #3b82f6; color: white; border: 1px solid transparent; }
+        .primary-button:hover:not(:disabled) { background-color: #2563eb; }
+        .secondary-button { background-color: white; color: #374151; border: 1px solid #d1d5db; }
+        .secondary-button:hover:not(:disabled) { background-color: #f9fafb; }
+        .danger-button { background-color: #ef4444; color: white; border: 1px solid transparent; }
+        .danger-button:hover:not(:disabled) { background-color: #dc2626; }
+        
+        .option-label {
+            display: block; padding: 0.75rem 1rem; border: 1px solid #d1d5db; 
+            border-radius: 0.375rem; margin-bottom: 0.5rem; cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            background-color: #ffffff; 
+        }
+        .option-label:hover:not(.selected-answer) { background-color: #f3f4f6; border-color: #a5b4fc; }
+        input[type="radio"] { display: none; }
+
+        #results-details-grid {
+            display: grid; 
+            grid-template-columns: repeat(6, 1fr); 
+            gap: 0.75rem; 
+            padding-top: 0.5rem; 
+            max-width: 950px; 
+            margin-left: auto; 
+            margin-right: auto;
+        }
+        .result-summary-item { display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .result-summary-box {
+            width: 68px; 
+            height: 68px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            border-radius: 0.375rem; 
+            font-weight: 600; 
+            color: white; 
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .result-summary-box:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+        .correct-box { background-color: #22c55e; border: 2px solid #16a34a; }
+        .incorrect-box { background-color: #ef4444; border: 2px solid #dc2626; }
+        .not-answered-box { background-color: #9ca3af; border: 2px solid #6b7280; }
+        .time-display-in-box { font-size: 1rem; }
+        .question-number-label { margin-top: 0.5rem; font-size: 0.875rem; color: #4b5563; font-weight: 500; }
+        
+        .explanation-box {
+             background-color: #fef3c7; border: 1px solid #fcd34d; padding: 0.5rem 0.75rem; 
+             margin-top: 0.75rem; border-radius: 0.375rem; font-size: 0.875rem; color: #78350f; 
+        }
+        .review-grid-button {
+             padding: 0.5rem 0.25rem; border: 1px solid #d1d5db; border-radius: 0.375rem;
+             text-align: center; transition: background-color 0.2s ease, border-color 0.2s ease;
+             font-size: 0.875rem; line-height: 1.25rem; cursor: pointer;
+        }
+        .review-grid-button-answered { background-color: #dcfce7; border-color: #86efac; color: #15803d; }
+        .review-grid-button-unanswered { background-color: #f3f4f6; border-color: #d1d5db; color: #4b5563; }
+        .review-grid-button:hover { filter: brightness(95%); }
+
+        /* Loading Overlay */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #3b82f6;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .main-content-area {
+                flex-direction: column;
+            }
+            .passage-column, .question-column {
+                width: 100%;
+                margin: 0;
+                height: 50%;
+            }
+            .passage-column {
+                margin-bottom: 0.5rem;
+            }
+            .question-column {
+                margin-top: 0.5rem;
+            }
+            .nav-tab {
+                padding: 0.5rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading VR Focus Group 16...</p>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app-container">
+        <!-- Setup Screen -->
+        <div id="setup-screen" class="p-6 md:p-8 flex flex-col justify-center items-center h-full">
+            <div class="text-center mb-6">
+                <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
+                     alt="MedwithPurpose Logo" class="mx-auto h-11 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
+                <h1 class="text-2xl md:text-3xl font-bold text-blue-600">Verbal Reasoning Focus Group 16</h1>
+                <p class="text-gray-600 mt-2">Practice your verbal reasoning skills with this focused VR test.</p>
+                <p class="text-sm text-gray-500 mt-4">
+                    This section contains <strong id="setup-question-count">16 questions</strong> and you have <strong id="setup-time-limit">10 minutes</strong> to complete it.
+                </p>
+            </div>
+            <div class="space-y-4 w-full max-w-md">
+                <div>
+                    <label for="goal" class="block text-sm font-medium text-gray-700">Goal (Score out of 16):</label>
+                    <input type="number" id="goal" name="goal" min="0" max="16" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., 12">
+                </div>
+                <div>
+                    <label for="focus-area" class="block text-sm font-medium text-gray-700">Area of Focus / Intention For Practice:</label>
+                    <input type="text" id="focus-area" name="focus-area" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., Understanding implications, Speed">
+                </div>
+            </div>
+            <div class="mt-8 text-center space-y-3">
+                <button id="start-button" class="primary-button text-lg px-8 py-3">Begin</button>
+                <button onclick="window.location.href='student_dashboard.html'" class="secondary-button text-lg px-8 py-3">Return to Dashboard</button>
+                <button onclick="window.location.href='focus_groups.html'" class="secondary-button text-lg px-8 py-3">Return to Home</button>
+            </div>
+        </div>
+
+        <!-- Main Test Screen -->
+        <div id="practice-session-screen" class="hidden flex flex-col h-full">
+            <!-- Header Bar -->
+            <div class="header-bar">
+                <div class="text-lg font-bold">VR Focus Group 16</div>
+                <div id="timer">10:00</div>
+            </div>
+            
+            <!-- Secondary Toolbar -->
+            <div class="secondary-toolbar">
+                <div>
+                    <span id="question-counter">Question 1 of 16</span>
+                </div>
+                <div>
+                    <button id="flag-button" class="secondary-toolbar-button">Flag Question</button>
+                </div>
+            </div>
+            
+            <!-- Main Content Area with Split View -->
+            <div class="main-content-area">
+                <div class="passage-column">
+                    <!-- Passage content will be loaded here -->
+                </div>
+                <div class="question-column">
+                    <!-- Question content will be loaded here -->
+                </div>
+            </div>
+            
+            <!-- Footer Bar -->
+            <div class="footer-bar">
+                <button id="back-to-results-button" class="hidden mr-auto">← Back to Results</button>
+                <button id="end-practice-session-button-footer">End Practice Session</button>
+                <div class="flex items-center space-x-2 ml-auto">
+                    <button id="prev-button" disabled>← Previous</button>
+                    <button id="navigator-button">Navigator</button>
+                    <button id="next-button">Next →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Review Screen -->
+        <div id="review-screen" class="hidden p-6 md:p-8 flex flex-col items-center h-full overflow-y-auto">
+            <div class="w-full max-w-3xl mb-4 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-blue-600">Review Your Answers</h2>
+                <button id="filter-flagged-button" class="secondary-button text-sm">Show Flagged Only</button>
+            </div>
+            <p class="text-center text-gray-600 mb-6">Click on a question number to review it. Green indicates answered, Yellow border indicates flagged.</p>
+            <div id="review-grid" class="grid grid-cols-4 gap-3 mb-6 w-full max-w-xs sm:max-w-sm md:max-w-md"></div>
+            <div class="mt-auto pt-6">
+                <button id="end-practice-session-button" class="danger-button text-lg px-8 py-3">Submit</button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="hidden p-6 md:p-8 flex flex-col h-full">
+            <div class="text-center mb-6 flex-shrink-0">
+                <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
+                     alt="MedwithPurpose Logo" class="mx-auto h-11 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
+                <h2 class="text-2xl md:text-3xl font-bold text-blue-600">Practice Session Results</h2>
+            </div>
+            <div class="bg-blue-50 p-4 rounded-lg mb-6 text-center flex-shrink-0">
+                <p class="text-lg font-semibold">Your Score: <span id="score" class="text-blue-700">0</span> / <span id="total-questions-results">4</span></p>
+                <p class="text-gray-600">Time Taken: <span id="time-taken"></span></p>
+            </div>
+            <h3 class="text-xl font-semibold mb-2 flex-shrink-0">Detailed Results Summary:</h3>
+            <p class="text-sm text-gray-500 mb-4 flex-shrink-0">Click on a question box below to review it.</p>
+            <div id="results-details-grid" class="overflow-y-auto flex-grow"></div>
+            <div class="mt-6 flex-shrink-0 border-t pt-4">
+                <div class="p-3 bg-blue-50 border border-blue-100 rounded-md mb-4 text-center">
+                    <p class="text-blue-800 text-sm">Your test results have been submitted. You can add a reflection below if you'd like.</p>
+                </div>
+                <div class="mb-4">
+                    <label for="focus-rating" class="block text-md font-semibold text-gray-700 mb-1">My focus out of 5 (1 very low, 5 very high):</label>
+                    <input type="number" id="focus-rating" name="focus-rating" min="1" max="5" class="mt-1 block w-20 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="1-5">
+                </div>
+                <div>
+                    <label for="reflection-text" class="block text-md font-semibold text-gray-700 mb-1">Main takeaway from this practice:</label>
+                    <textarea id="reflection-text" name="reflection-text" rows="3" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Reflect on your performance, strategies, or areas for improvement..."></textarea>
+                </div>
+            </div>
+            <div class="mt-6 text-center flex-shrink-0 flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4">
+                <button onclick="window.location.href='student_dashboard.html'" class="secondary-button px-6 py-2 w-full sm:w-auto">Return to Dashboard</button>
+                <button onclick="window.location.href='focus_groups.html'" class="secondary-button px-6 py-2 w-full sm:w-auto">Return to Home</button>
+                <button onclick="window.location.reload()" class="secondary-button px-6 py-2 w-full sm:w-auto">Try Again</button>
+                <div class="w-full sm:w-auto relative group">
+                    <button id="submit-performance-button" class="primary-button px-6 py-2 w-full">Submit Reflections</button>
+                    <div class="absolute left-0 right-0 -top-10 bg-blue-100 text-blue-800 text-xs p-1 rounded border border-blue-200 opacity-0 group-hover:opacity-100 transition-opacity">
+                        ↓ Optional: Submit your reflection on this practice session
+                    </div>
+                </div>
+                <button id="download-pdf-button" class="primary-button px-6 py-2 w-full sm:w-auto">Download Results PDF</button>
+            </div>
+        </div>
+
+        <!-- Navigator Modal -->
+        <div id="navigator-modal" class="modal">
+            <div class="modal-content bg-white p-6 rounded-lg shadow-xl">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800">Question Navigator</h3>
+                    <button id="close-modal-button" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+                </div>
+                <p class="text-sm text-gray-600 mb-4">Click a number to jump. Green: answered, Yellow border: flagged.</p>
+                <div id="navigator-grid" class="grid grid-cols-4 gap-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- Firebase Configuration ---
+        const firebaseConfig = {
+          apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
+          authDomain: "mwp-qr-test-page.firebaseapp.com",
+          projectId: "mwp-qr-test-page",
+          storageBucket: "mwp-qr-test-page.appspot.com", 
+          messagingSenderId: "309084045110",
+          appId: "1:309084045110:web:b09ca0fdff84b094963d97",
+          measurementId: "G-4M3ED641M9"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore(); // Initialize Firestore
+
+        // Check for review mode from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const reviewParam = urlParams.get('review');
+        
+        // Check if user is logged in via Firebase
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                console.log("User is logged in:", user.displayName, user.email);
+            } else {
+                console.log("No user is logged in");
+            }
+        });
+        
+        // Hide loading overlay when page is ready
+        document.getElementById('loading-overlay').style.display = 'none';
+        
+        // --- State Variables ---
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let timerInterval;
+        let timeLeft = 10 * 60; // 10 minutes in seconds 
+        let practiceSessionStartTime;
+        let practiceSessionEndTime;
+        let userName = '';
+        let userEmail = '';
+        let userGoal = '';
+        let userFocusArea = '';
+        let isReviewingFromResults = false;
+        let questionStartTime = null;
+        let questionTimes = [];
+        let flaggedQuestions = [];
+        let isFilteringFlagged = false;
+        
+        // Add a debounce flag for submissions
+        let isSubmittingReflection = false;
+        
+        // --- Test Data: Passages and Questions ---
+        const passages = [
+            {
+                text: "<p class='mb-4'>For decades, the Brentworth Quarter was a symbol of urban decay, its once-bustling factories now silent shells. Young architect, Elara Vance, however, saw potential amidst the dereliction. In the early 2010s, inspired by a visit to a thriving innovation park in Germany, she championed a radical plan: to transform Brentworth into a dedicated hub for augmented reality (AR) startups. \"Many dismissed the vision as impractical,\" recalls Marcus Thorne, a city council member at the time. Funding was scarce, and the local workforce lacked the specific skills. Yet, the initiative persevered. Today, Brentworth is a global leader in AR development, attracting talent and investment worldwide. Last year alone, companies within the hub secured over £150 million in venture capital.</p><p class='mb-4'>The city of Silverdale, previously the dominant tech centre in the region, has seen its growth stagnate, as larger corporations proved slow to adapt to niche technological shifts. AR hub developers face unique challenges: they must provide cutting-edge infrastructure, foster a collaborative ecosystem, and constantly adapt to rapidly evolving technology. But Brentworth's readily available, repurposable industrial spaces offered a cost-effective advantage that newer developments couldn't match, so entrepreneurs flocked to the revitalized district. This transformation has not only created thousands of high-skilled jobs but has also reversed the population decline in the surrounding neighbourhoods, with new cafes and services flourishing.</p><p class='mb-4'>\"Our next goal is to establish an accredited AR training institute right here,\" states Dr. Jian Li, director of the Brentworth Hub Association. \"Silverdale still holds significant prestige, but we aim to achieve a 'Centre of Excellence' designation within three years.\" A further hurdle is the current public unfamiliarity with many AR applications. Early tech adoption was often seen as purely for entertainment. To Brentworth, however, AR represents the future of industry, education, and daily life.</p>",
+                questions: [
+                    {
+                        text: "Which of the following best describes Elara Vance's initial approach to the Brentworth Quarter project?",
+                        options: [
+                            "Cautiously optimistic, seeking broad consensus before acting.",
+                            "Pragmatically focused on leveraging existing local skills.",
+                            "Visionary and tenacious, despite initial scepticism and resource limitations.",
+                            "Primarily driven by a desire to emulate German innovation parks precisely."
+                        ],
+                        correctAnswer: "C"
+                    },
+                    {
+                        text: "The passage suggests that Silverdale's decline as the dominant tech centre was primarily due to:",
+                        options: [
+                            "A sudden exodus of talent to the more affordable Brentworth Quarter.",
+                            "An inability of its established entities to embrace specialized technological advancements.",
+                            "Brentworth actively undercutting Silverdale's operational costs.",
+                            "A general downturn in the regional tech industry affecting all centres."
+                        ],
+                        correctAnswer: "B"
+                    },
+                    {
+                        text: "What is the primary implication of Dr. Jian Li's statement regarding the AR training institute and the \"Centre of Excellence\" designation?",
+                        options: [
+                            "Brentworth currently lacks the necessary prestige to attract skilled AR professionals.",
+                            "The hub aims to become self-sufficient in talent development and achieve recognized leadership status.",
+                            "Silverdale is actively preventing Brentworth from gaining international recognition.",
+                            "The main purpose of the training institute is to address public unfamiliarity with AR."
+                        ],
+                        correctAnswer: "B"
+                    },
+                    {
+                        text: "The author's overall tone regarding the Brentworth Quarter's transformation can best be described as:",
+                        options: [
+                            "Critically analytical, questioning the long-term viability of the AR hub.",
+                            "Cautiously optimistic, acknowledging success but highlighting overwhelming future risks.",
+                            "Objectively informative, presenting facts without discernible positive or negative bias.",
+                            "Largely positive and admiring of the initiative's success and future aspirations."
+                        ],
+                        correctAnswer: "D"
+                    }
+                ]
+            },
+            {
+                text: "<p class='mb-4'>Imagine a coastal ecosystem showing early signs of stress – slightly declining fish stocks, occasional algal blooms. A resource manager, wary of past interventions that proved harmful, decides to wait for more definitive data before acting. This is \"precautionary inaction.\" However, the ecosystem rapidly deteriorates, a critical tipping point is crossed, and recovery becomes vastly more expensive and uncertain. The manager has made an error of under-response, where the cost of inaction outweighed the initial risk of a measured intervention.</p><p class='mb-4'>Conversely, consider a newly detected, non-native insect species in a local forest. Alarmed by potential devastation seen in other regions with different invasive species, authorities launch an immediate, wide-scale pesticide spraying campaign. Later analysis reveals this particular insect was benign, posing no significant threat, and the pesticide inadvertently harmed native pollinator populations. This is \"over-intervention,\" an error of over-response, where the action taken was disproportionate to the actual threat, leading to unintended negative consequences.</p><p class='mb-4'>Learning to differentiate between genuine threats requiring urgent action and minor fluctuations or misidentified risks is critical in environmental stewardship. It involves balancing the risk of doing too little against the risk of doing too much. The scientist who dismisses early warnings of coral bleaching as \"natural variation\" without deeper investigation, or the activist who demands a complete halt to a well-regulated local fishery based on isolated incidents, may both be failing to accurately assess the balance of evidence and potential outcomes.</p>",
+                questions: [
+                    {
+                        text: "According to the passage, \"precautionary inaction\" becomes problematic when:",
+                        options: [
+                            "It is based on a desire to avoid repeating any past intervention mistakes.",
+                            "The delay in action leads to significantly more challenging or costly remediation.",
+                            "Authorities lack the resources for immediate, wide-scale intervention.",
+                            "It prioritizes data collection over the concerns of environmental activists."
+                        ],
+                        correctAnswer: "B"
+                    },
+                    {
+                        text: "The author implies that effective environmental stewardship primarily requires:",
+                        options: [
+                            "Prioritizing immediate action whenever a potential threat is identified.",
+                            "A willingness to accept a certain level of environmental degradation as natural.",
+                            "A nuanced judgment in assessing risks and the appropriate scale of response.",
+                            "Deferring to scientific consensus over activist demands in all situations."
+                        ],
+                        correctAnswer: "C"
+                    },
+                    {
+                        text: "Which of the following scenarios, if true, would be an example of \"over-intervention\" as described in the passage?",
+                        options: [
+                            "A city invests in reinforcing its sea walls after climate models predict a significant rise in sea levels over 50 years.",
+                            "Following a single unconfirmed report of a rare bird in a development zone, all construction is halted indefinitely.",
+                            "Farmers reduce pesticide use after studies show a minor, localized decline in a common insect species.",
+                            "A community starts a water conservation program during a prolonged and severe drought."
+                        ],
+                        correctAnswer: "B"
+                    },
+                    {
+                        text: "The author's primary purpose in this passage is to:",
+                        options: [
+                            "Advocate for stricter regulations on environmental interventions.",
+                            "Critique the indecisiveness of resource managers in coastal ecosystems.",
+                            "Explain two types of decision-making errors in environmental management and stress the need for balance.",
+                            "Persuade scientists and activists to collaborate more effectively on environmental issues."
+                        ],
+                        correctAnswer: "C"
+                    }
+                ]
+            },
+            {
+                text: "<p class='mb-4'>Dr. Aris Thorne (born 17 March 1935) is a theoretical physicist renowned for his foundational mathematical frameworks. He is most celebrated for his pivotal, though often behind-the-scenes, work with experimentalist Dr. Lena Hanson on the chroniton particle theory. In 1958, Thorne, then a junior researcher at the Cavendish Institute, published a speculative paper on temporal energy fields, which caught Hanson's attention. Hanson, based at CERN, was grappling with anomalous data from her particle collision experiments. Though their initial correspondence was met with scepticism by the broader physics community, they began a fruitful, if sometimes remote, collaboration that spanned decades. Thorne and Hanson were jointly awarded the Nobel Prize in Physics in 1987 for their combined theoretical and experimental work establishing the existence of chronitons.</p><p class='mb-4'>Their partnership, though producing over fifty co-authored papers, had periods of divergence. Between 1969 and 1973, Thorne focused on cosmological models, publishing his solo treatise \"Temporal Mechanics,\" while Hanson led a large international team at the newly commissioned Stanford Linear Accelerator Center (SLAC), refining detection methods for ephemeral particles. Their direct collaboration resumed intensively in the late 1970s when Hanson's team observed consistent particle decay patterns that perfectly matched Thorne's revised chroniton equations, published in his 1978 paper \"Quantum Time.\" Thorne rarely engaged in direct experimental oversight but provided critical theoretical guidance for Hanson's large-scale projects, such as the \"Chronos Array\" detector in the early 1980s and the \"Temporal Echo\" experiment, which involved a global network of observatories. Hanson, in turn, provided the empirical data that validated and refined Thorne's abstract models.</p><p class='mb-4'>At Thorne's 80th birthday symposium at Cambridge in 2015, Hanson, via video link, highlighted their symbiotic relationship. \"Without Aris's equations,\" she stated, \"my team would have been searching in the dark. His theoretical insights were the map.\" Thorne and Hanson's final joint publication was a review article in \"Physics Today\" in 2005, summarizing two decades of chroniton research. Their latest independent accolades include Hanson receiving the National Medal of Science in 2011 and Thorne being knighted for services to theoretical physics in 2013.</p>",
+                questions: [
+                    {
+                        text: "The passage suggests that the initial collaboration between Thorne and Hanson was characterized by:",
+                        options: [
+                            "Immediate recognition and support from the wider scientific community.",
+                            "Hanson taking the lead in developing the foundational theoretical concepts.",
+                            "Overcoming external doubts through a persistent, mutually beneficial partnership.",
+                            "A primary focus on cosmological models rather than particle physics."
+                        ],
+                        correctAnswer: "C"
+                    },
+                    {
+                        text: "What can be inferred about Dr. Thorne's primary role in the major experimental projects like the \"Chronos Array\"?",
+                        options: [
+                            "He was responsible for the day-to-day management and operational oversight of the experiments.",
+                            "His involvement was minimal once his initial theoretical papers were published.",
+                            "He provided the essential conceptual and mathematical direction that underpinned the experimental design.",
+                            "He secured most of the funding and international support for these large-scale projects."
+                        ],
+                        correctAnswer: "C"
+                    },
+                    {
+                        text: "The \"periods of divergence\" between 1969 and 1973 suggest that Thorne and Hanson:",
+                        options: [
+                            "Had a fundamental disagreement that temporarily halted their collaboration on chronitons.",
+                            "Independently pursued specialized research interests that later proved complementary.",
+                            "Competed to achieve breakthroughs in different areas of particle physics.",
+                            "Paused their joint work due to a lack of significant experimental results at the time."
+                        ],
+                        correctAnswer: "B"
+                    },
+                    {
+                        text: "Hanson's quote, \"His theoretical insights were the map,\" primarily emphasizes:",
+                        options: [
+                            "The navigational challenges faced by experimental physicists in new research frontiers.",
+                            "Thorne's ability to predict the exact outcomes of her experiments.",
+                            "The indispensable guiding framework Thorne's theories provided for her empirical investigations.",
+                            "The visual and schematic nature of Thorne's mathematical equations."
+                        ],
+                        correctAnswer: "C"
+                    }
+                ]
+            },
+            {
+                text: "<p class='mb-4'>\"Colleagues, friends: I speak to you today with a profound sense of the responsibility we share, deeply grateful for the dedication you demonstrate daily, and ever mindful of the trust our community places in us. I acknowledge the tireless efforts of my predecessor, Dr. Evans, particularly his stewardship during the initial phases of this challenging transition.</p><p class='mb-4'>Countless medical professionals have dedicated their careers within these walls, through periods of stability and through waves of unprecedented demand. Yet, it is in times of systemic pressure, when resources are strained and the path forward seems uncertain, that our true strength is revealed – not solely through advanced technology or new protocols, but because We, the caregivers, remain committed to the core principles of healing and compassion, enshrined in our professional ethics. So it has always been. So it must continue with each one of us.</p><p class='mb-4'>That our healthcare system is navigating a profound crisis is no secret. We are confronted by escalating operational costs, a nationwide shortage of specialized staff, and the complex health needs of an aging population. Waiting lists lengthen, burnout is a stark reality, and every shift brings fresh evidence that the current models of care delivery are being tested to their limits, sometimes impacting the very communities we strive to serve.</p><p class='mb-4'>These are the tangible pressures, documented in reports and spreadsheets. Less quantifiable, but equally significant, is the erosion of morale that can creep in—a weariness that whispers of insurmountable obstacles, that suggests we must temper our aspirations for patient care. Today, I say to you: the challenges are immense, they are complex, and they demand our utmost ingenuity. They will not be overcome swiftly, nor without significant effort. But hear this: they will be addressed. In this moment, we choose resilience over resignation, collaborative innovation over siloed efforts. In this moment, we reaffirm our commitment to excellence, to compassion, and to the unwavering pursuit of our patients' well-being, pushing past the frustrations and the systemic impediments that have, for too long, hindered our progress.\"</p>",
+                questions: [
+                    {
+                        text: "The speaker implies that the \"true strength\" of the caregivers is most evident when:",
+                        options: [
+                            "New medical technologies and protocols are successfully implemented.",
+                            "They adhere strictly to their professional code of ethics during routine operations.",
+                            "External pressures and resource limitations test their fundamental commitment.",
+                            "The hospital receives positive feedback from the community for its services."
+                        ],
+                        correctAnswer: "C"
+                    },
+                    {
+                        text: "According to the speaker, the \"erosion of morale\" is particularly dangerous because it:",
+                        options: [
+                            "Directly leads to increased operational costs and staff shortages.",
+                            "Is more difficult to address than tangible pressures like waiting lists.",
+                            "Threatens the caregivers' ambition and resolve in providing quality patient care.",
+                            "Is primarily caused by a lack of recognition from hospital management."
+                        ],
+                        correctAnswer: "C"
+                    },
+                    {
+                        text: "When the speaker says, \"In this moment, we choose resilience over resignation, collaborative innovation over siloed efforts,\" they are primarily aiming to:",
+                        options: [
+                            "Announce a new set of mandatory operational guidelines for all staff.",
+                            "Criticize past approaches that relied too heavily on individual efforts.",
+                            "Inspire a proactive and unified mindset among the staff to confront challenges.",
+                            "Promise an immediate solution to the ongoing healthcare crisis."
+                        ],
+                        correctAnswer: "C"
+                    },
+                    {
+                        text: "What is the underlying message the speaker wishes to convey about the current healthcare crisis?",
+                        options: [
+                            "The crisis is largely a result of outdated ethical principles in modern medicine.",
+                            "While severe and multifaceted, the crisis can be navigated through collective resolve and innovation.",
+                            "The primary responsibility for resolving the crisis lies with external policymakers and funders.",
+                            "The current challenges are unprecedented and may require a permanent reduction in service aspirations."
+                        ],
+                        correctAnswer: "B"
+                    }
+                ]
+            }
+        ];
+        
+        // --- DOM Elements ---
+        const appContainer = document.getElementById('app-container');
+        const setupScreen = document.getElementById('setup-screen');
+        const practiceSessionScreen = document.getElementById('practice-session-screen');
+        const reviewScreen = document.getElementById('review-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const navigatorModal = document.getElementById('navigator-modal');
+        const startButton = document.getElementById('start-button');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const navigatorButton = document.getElementById('navigator-button');
+        const closeModalButton = document.getElementById('close-modal-button');
+        const endPracticeSessionButton = document.getElementById('end-practice-session-button');
+        const endPracticeSessionButtonFooter = document.getElementById('end-practice-session-button-footer');
+        const backToResultsButton = document.getElementById('back-to-results-button');
+        const flagButton = document.getElementById('flag-button');
+        const questionCounterEl = document.getElementById('question-counter');
+        const timerEl = document.getElementById('timer');
+        const reviewGrid = document.getElementById('review-grid');
+        const navigatorGrid = document.getElementById('navigator-grid');
+        const scoreEl = document.getElementById('score');
+        const totalQuestionsResultsEl = document.getElementById('total-questions-results');
+        const timeTakenEl = document.getElementById('time-taken');
+        const resultsDetailsGrid = document.getElementById('results-details-grid');
+        const goalInput = document.getElementById('goal');
+        const focusAreaInput = document.getElementById('focus-area');
+        const filterFlaggedButton = document.getElementById('filter-flagged-button');
+        const setupQuestionCountEl = document.getElementById('setup-question-count');
+        const setupTimeLimitEl = document.getElementById('setup-time-limit');
+        const reflectionText = document.getElementById('reflection-text');
+        const downloadPdfButton = document.getElementById('download-pdf-button');
+        const focusRatingInput = document.getElementById('focus-rating');
+        
+        // --- Functions ---
+        function showSetupScreen() {
+            userName = '';
+            userEmail = '';
+            userGoal = '';
+            userFocusArea = '';
+            
+            // Check for Firebase auth user
+            if (firebase.auth && firebase.auth().currentUser) {
+                const currentUser = firebase.auth().currentUser;
+                userName = currentUser.displayName || currentUser.email || '';
+                userEmail = currentUser.email || '';
+            }
+            
+            setupScreen.classList.remove('hidden');
+            practiceSessionScreen.classList.add('hidden');
+            reviewScreen.classList.add('hidden');
+            reviewScreen.classList.remove('flex');
+            resultsScreen.classList.add('hidden');
+            resultsScreen.classList.remove('flex');
+            appContainer.classList.remove('flex', 'flex-col');
+            
+            if (setupQuestionCountEl) setupQuestionCountEl.textContent = "16";
+            if (setupTimeLimitEl) setupTimeLimitEl.textContent = "10 minutes";
+            if (goalInput) {
+                goalInput.max = 16;
+                goalInput.value = userGoal;
+            }
+            if (focusAreaInput) {
+                focusAreaInput.value = userFocusArea;
+            }
+        }
+
+        // Start test function to be called from the setup screen
+        function startTest() {
+            console.log("Starting test...");
+            
+            // Get user info from Firebase Auth if available
+            if (firebase.auth && firebase.auth().currentUser) {
+                const currentUser = firebase.auth().currentUser;
+                userName = currentUser.displayName || currentUser.email || '';
+                userEmail = currentUser.email || '';
+            }
+            
+            userGoal = goalInput.value.trim();
+            userFocusArea = focusAreaInput.value.trim();
+            timeLeft = 10 * 60; // 10 minutes
+            
+            // Initialize arrays
+            userAnswers = new Array(passages.length * 4).fill(null);
+            questionTimes = new Array(passages.length * 4).fill(0);
+            flaggedQuestions = new Array(passages.length * 4).fill(false);
+            
+            questionStartTime = null;
+            currentQuestionIndex = 0;
+            isReviewingFromResults = false;
+            isFilteringFlagged = false;
+            practiceSessionEndTime = null;
+            
+            showPracticeSessionScreen();
+            startTimer();
+            loadQuestion(0);
+            populateNavigator();
+        }
+
+        function showPracticeSessionScreen() {
+            setupScreen.classList.add('hidden');
+            practiceSessionScreen.classList.remove('hidden');
+            practiceSessionScreen.classList.add('flex');
+            reviewScreen.classList.add('hidden');
+            reviewScreen.classList.remove('flex');
+            resultsScreen.classList.add('hidden');
+            resultsScreen.classList.remove('flex');
+            appContainer.classList.add('flex', 'flex-col');
+        }
+
+        function startTimer() {
+            practiceSessionStartTime = new Date();
+            clearInterval(timerInterval);
+            timerEl.textContent = formatTimeSeconds(timeLeft);
+            timerEl.classList.remove('text-gray-300');
+            timerEl.classList.add('text-white', 'bg-opacity-20', 'bg-white');
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerEl.textContent = formatTimeSeconds(timeLeft);
+                if (timeLeft <= 0) {
+                    endPracticeSessionAndShowResults();
+                }
+            }, 1000);
+        }
+
+        function formatTimeSeconds(totalSeconds) {
+            if (totalSeconds < 0) totalSeconds = 0;
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+
+        // Load passage and question
+        function loadQuestion(index) {
+            console.log("Loading question:", index);
+            
+            if (index < 0 || index >= passages.length * 4) {
+                console.error("Question index out of bounds:", index);
+                return;
+            }
+            
+            currentQuestionIndex = index;
+            
+            // Record time spent on the previous question
+            if (questionStartTime && !isReviewingFromResults) {
+                const timeSpent = Date.now() - questionStartTime;
+                questionTimes[index] = (questionTimes[index] || 0) + timeSpent;
+            }
+            
+            // Start timing for this question
+            questionStartTime = Date.now();
+            
+            // Update question counter
+            questionCounterEl.textContent = `Question ${index + 1} of ${passages.length * 4}`;
+            
+            // Update UI buttons
+            prevButton.disabled = index === 0;
+            nextButton.disabled = index === passages.length * 4 - 1;
+            updateFlagButtonAppearance();
+            
+            // Load passage
+            const passageIndex = Math.floor(index / 4);
+            const passage = passages[passageIndex];
+            const passageColumn = document.querySelector('.passage-column');
+            if (passageColumn) {
+                passageColumn.innerHTML = `<div class="passage-text">${passage.text}</div>`;
+            }
+            
+            // Load question
+            const questionIndex = index % 4;
+            const question = passage.questions[questionIndex];
+            const questionColumn = document.querySelector('.question-column');
+            
+            if (questionColumn) {
+                let optionsHTML = '';
+                
+                question.options.forEach((option, i) => {
+                    const letter = String.fromCharCode(65 + i); // A, B, C, D
+                    const isSelected = userAnswers[index] === letter;
+                    
+                    optionsHTML += `
+                        <label class="option-label ${isSelected ? 'selected-answer' : ''}">
+                            <input type="radio" name="question-${index}" value="${letter}" ${isSelected ? 'checked' : ''}>
+                            <span class="font-medium">${letter}.</span> ${option}
+                        </label>
+                    `;
+                });
+                
+                questionColumn.innerHTML = `
+                    <h3 class="text-base font-medium mb-4">${question.text}</h3>
+                    <div class="options-container">
+                        ${optionsHTML}
+                    </div>
+                `;
+                
+                // Add event listeners to the options
+                const optionLabels = questionColumn.querySelectorAll('.option-label');
+                optionLabels.forEach(label => {
+                    label.addEventListener('click', function() {
+                        const input = this.querySelector('input[type="radio"]');
+                        if (input) {
+                            userAnswers[index] = input.value;
+                            optionLabels.forEach(l => l.classList.remove('selected-answer'));
+                            this.classList.add('selected-answer');
+                            updateNavigatorButtons();
+                        }
+                    });
+                });
+            }
+        }
+
+        function updateFlagButtonAppearance() {
+            const isFlagged = flaggedQuestions[currentQuestionIndex];
+            flagButton.textContent = isFlagged ? 'Unflag' : 'Flag Question';
+            flagButton.classList.toggle('flagged', isFlagged);
+        }
+
+        function toggleFlag() {
+            if (isReviewingFromResults) return;
+            
+            flaggedQuestions[currentQuestionIndex] = !flaggedQuestions[currentQuestionIndex];
+            updateFlagButtonAppearance();
+            updateNavigatorButtons();
+        }
+
+        function populateNavigator() {
+            if (!navigatorGrid) return;
+            
+            navigatorGrid.innerHTML = '';
+            
+            for (let i = 0; i < passages.length * 4; i++) {
+                const button = document.createElement('button');
+                button.textContent = i + 1;
+                button.classList.add('py-2', 'px-1', 'border', 'border-gray-300', 'rounded-md', 'text-center', 'transition', 'duration-150', 'ease-in-out', 'text-sm', 'hover:bg-gray-100');
+                button.dataset.questionIndex = i;
+                
+                if (userAnswers[i]) button.classList.add('nav-answered');
+                if (i === currentQuestionIndex) button.classList.add('nav-current');
+                if (flaggedQuestions[i]) button.classList.add('nav-flagged');
+                
+                button.addEventListener('click', function() {
+                    navigatorModal.classList.remove('flex');
+                    navigatorModal.classList.add('hidden');
+                    const targetIndex = parseInt(this.dataset.questionIndex, 10);
+                    loadQuestion(targetIndex);
+                });
+                
+                navigatorGrid.appendChild(button);
+            }
+        }
+
+        function updateNavigatorButtons() {
+            if (!navigatorGrid) return;
+            
+            const buttons = navigatorGrid.querySelectorAll('button');
+            buttons.forEach(button => {
+                const index = parseInt(button.dataset.questionIndex, 10);
+                button.classList.remove('nav-answered', 'nav-current', 'nav-flagged');
+                if (userAnswers[index]) button.classList.add('nav-answered');
+                if (index === currentQuestionIndex) button.classList.add('nav-current');
+                if (flaggedQuestions[index]) button.classList.add('nav-flagged');
+            });
+        }
+
+        // Event listeners
+        if (startButton) {
+            startButton.addEventListener('click', startTest);
+        }
+        
+        if (flagButton) {
+            flagButton.addEventListener('click', toggleFlag);
+        }
+        
+        if (prevButton) {
+            prevButton.addEventListener('click', function() {
+                if (currentQuestionIndex > 0) {
+                    loadQuestion(currentQuestionIndex - 1);
+                }
+            });
+        }
+        
+        if (nextButton) {
+            nextButton.addEventListener('click', function() {
+                if (currentQuestionIndex < passages.length * 4 - 1) {
+                    loadQuestion(currentQuestionIndex + 1);
+                }
+            });
+        }
+        
+        if (navigatorButton) {
+            navigatorButton.addEventListener('click', function() {
+                navigatorModal.classList.add('flex');
+                populateNavigator();
+            });
+        }
+        
+        if (closeModalButton) {
+            closeModalButton.addEventListener('click', function() {
+                navigatorModal.classList.remove('flex');
+                navigatorModal.classList.add('hidden');
+            });
+        }
+        
+        if (endPracticeSessionButton || endPracticeSessionButtonFooter) {
+            const endSession = function() {
+                if (confirm('Are you sure you want to end this practice session? Your progress will be saved.')) {
+                    endPracticeSessionAndShowResults();
+                }
+            };
+            
+            if (endPracticeSessionButton) {
+                endPracticeSessionButton.addEventListener('click', endSession);
+            }
+            
+            if (endPracticeSessionButtonFooter) {
+                endPracticeSessionButtonFooter.addEventListener('click', endSession);
+            }
+        }
+
+        function endPracticeSessionAndShowResults() {
+            // Record time spent on the current question
+            if (questionStartTime) {
+                const timeSpent = Date.now() - questionStartTime;
+                questionTimes[currentQuestionIndex] = (questionTimes[currentQuestionIndex] || 0) + timeSpent;
+                questionStartTime = null;
+            }
+            
+            practiceSessionEndTime = new Date();
+            clearInterval(timerInterval);
+            
+            // Calculate results to submit to Firebase
+            const score = calculateScore();
+            
+            // Submit results to Firebase
+            submitResultsToFirebase(score);
+            
+            // Show results screen
+            showResultsScreen();
+        }
+        
+        // Function to calculate score
+        function calculateScore() {
+            let score = 0;
+            for (let i = 0; i < userAnswers.length; i++) {
+                const passageIndex = Math.floor(i / 4);
+                const questionIndex = i % 4;
+                const question = passages[passageIndex].questions[questionIndex];
+                
+                if (userAnswers[i] === question.correctAnswer) {
+                    score++;
+                }
+            }
+            return score;
+        }
+        
+        // Function to submit results to Firebase
+        function submitResultsToFirebase(score) {
+            try {
+                if (typeof firebase !== 'undefined' && firebase.firestore) {
+                    const db = firebase.firestore();
+                    
+                    // Get current authenticated user data if available
+                    let userDisplayName = '';
+                    
+                    if (firebase.auth && firebase.auth().currentUser) {
+                        const currentUser = firebase.auth().currentUser;
+                        userDisplayName = currentUser.displayName || '';
+                        userEmail = currentUser.email || '';
+                    }
+                    
+                    const timeInMs = practiceSessionEndTime - practiceSessionStartTime;
+                    const minutes = Math.floor(timeInMs / 60000);
+                    const seconds = Math.floor((timeInMs % 60000) / 1000);
+                    const formattedTime = `${minutes} min ${seconds < 10 ? '0' : ''}${seconds} sec`;
+                    
+                    // Create data object
+                    const performanceData = {
+                        studentName: userName || userDisplayName || 'Anonymous',
+                        studentEmail: userEmail || '',
+                        examName: "VR Focus Group 16",
+                        score: score.toString(),
+                        totalQuestions: (passages.length * 4).toString(),
+                        timeTaken: formattedTime,
+                        answers: userAnswers,
+                        correctAnswers: passages.flatMap(p => p.questions.map(q => q.correctAnswer)),
+                        questionTimes: questionTimes,
+                        flaggedQuestions: flaggedQuestions,
+                        goal: userGoal || '',
+                        focusArea: userFocusArea || '',
+                        submissionTimestamp: new Date().toISOString(),
+                        userAgent: navigator.userAgent
+                    };
+                    
+                    // Add to Firestore
+                    db.collection("performanceSubmissions").add(performanceData)
+                        .catch(error => {
+                            console.error("Error saving results to Firebase:", error);
+                        });
+                }
+            } catch (error) {
+                console.error("Error in submitResultsToFirebase:", error);
+            }
+        }
+        
+        function showResultsScreen() {
+            practiceSessionScreen.classList.add('hidden');
+            reviewScreen.classList.add('hidden');
+            reviewScreen.classList.remove('flex');
+            resultsScreen.classList.remove('hidden');
+            resultsScreen.classList.add('flex');
+            setupScreen.classList.add('hidden');
+            
+            // Calculate score
+            let score = 0;
+            for (let i = 0; i < userAnswers.length; i++) {
+                const passageIndex = Math.floor(i / 4);
+                const questionIndex = i % 4;
+                const question = passages[passageIndex].questions[questionIndex];
+                
+                if (userAnswers[i] === question.correctAnswer) {
+                    score++;
+                }
+            }
+            
+            // Update results
+            scoreEl.textContent = score;
+            totalQuestionsResultsEl.textContent = passages.length * 4;
+            
+            // Calculate time taken
+            const timeInMs = practiceSessionEndTime - practiceSessionStartTime;
+            const minutes = Math.floor(timeInMs / 60000);
+            const seconds = Math.floor((timeInMs % 60000) / 1000);
+            timeTakenEl.textContent = `${minutes} min ${seconds < 10 ? '0' : ''}${seconds} sec`;
+            
+            // Populate results grid
+            populateResultsGrid();
+        }
+        
+        function populateResultsGrid() {
+            resultsDetailsGrid.innerHTML = '';
+            
+            for (let i = 0; i < userAnswers.length; i++) {
+                const passageIndex = Math.floor(i / 4);
+                const questionIndex = i % 4;
+                const question = passages[passageIndex].questions[questionIndex];
+                const userAnswer = userAnswers[i];
+                const correctAnswer = question.correctAnswer;
+                const isCorrect = userAnswer === correctAnswer;
+                
+                const summaryItem = document.createElement('div');
+                summaryItem.classList.add('result-summary-item');
+                
+                const summaryBox = document.createElement('div');
+                summaryBox.classList.add('result-summary-box');
+                
+                if (!userAnswer) {
+                    summaryBox.classList.add('not-answered-box');
+                } else {
+                    summaryBox.classList.add(isCorrect ? 'correct-box' : 'incorrect-box');
+                }
+                
+                const timeSpentMs = questionTimes[i] || 0;
+                const timeSpentSec = Math.round(timeSpentMs / 1000);
+                
+                const timeDisplay = document.createElement('span');
+                timeDisplay.classList.add('time-display-in-box');
+                timeDisplay.textContent = `${timeSpentSec}s`;
+                
+                summaryBox.appendChild(timeDisplay);
+                
+                const numberLabel = document.createElement('div');
+                numberLabel.classList.add('question-number-label');
+                numberLabel.textContent = `Q${i + 1}`;
+                
+                summaryItem.appendChild(summaryBox);
+                summaryItem.appendChild(numberLabel);
+                
+                resultsDetailsGrid.appendChild(summaryItem);
+            }
+        }
+
+        // Initialize the setup screen
+        showSetupScreen();
+        
+        // Add download PDF functionality
+        if (downloadPdfButton) {
+            downloadPdfButton.addEventListener('click', function() {
+                generatePDF();
+            });
+        }
+        
+        // Add submit reflections functionality
+        if (document.getElementById('submit-performance-button')) {
+            document.getElementById('submit-performance-button').addEventListener('click', submitPerformanceData);
+        }
+        
+        // Function to generate PDF of results
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const reflection = reflectionText.value.trim();
+            const focusRating = focusRatingInput.value;
+            const finalScore = scoreEl.textContent;
+            const totalQs = totalQuestionsResultsEl.textContent;
+            const timeTaken = timeTakenEl.textContent;
+            let y = 15;
+            const lineHeight = 7;
+            const pageHeight = doc.internal.pageSize.height;
+            const margin = 15;
+
+            doc.setFontSize(18);
+            doc.text("UCAT Verbal Reasoning Results", margin, y);
+            y += lineHeight * 1.5;
+            doc.setFontSize(12);
+            doc.text(`Name: ${userName || 'N/A'}`, margin, y); y += lineHeight;
+            doc.text(`Goal: ${userGoal || 'N/A'} / ${totalQs}`, margin, y); y += lineHeight;
+            doc.text(`Focus Area: ${userFocusArea || 'N/A'}`, margin, y); y += lineHeight;
+            doc.text(`Final Score: ${finalScore} / ${totalQs}`, margin, y); y += lineHeight;
+            doc.text(`Time Taken: ${timeTaken}`, margin, y); y += lineHeight * 1.5;
+            doc.setFontSize(14);
+            doc.text("Focus Rating (1-5):", margin, y); y += lineHeight;
+            doc.setFontSize(10);
+            doc.text(focusRating || 'N/A', margin, y); y += lineHeight * 1.5;
+            doc.setFontSize(14);
+            doc.text("Main Takeaway:", margin, y); y += lineHeight;
+            doc.setFontSize(10);
+            const reflectionLines = doc.splitTextToSize(reflection || 'No reflection provided.', doc.internal.pageSize.width - margin * 2);
+            doc.text(reflectionLines, margin, y);
+            
+            // Save the PDF
+            doc.save(`VR_Focus_Group_16_Results_${new Date().toISOString().slice(0,10)}.pdf`);
+        }
+        
+        // Function to submit reflection data to Firebase
+        async function submitPerformanceData() {
+            // Prevent multiple submissions
+            if (isSubmittingReflection) {
+                console.log("Submission already in progress, ignoring duplicate call");
+                return;
+            }
+            
+            try {
+                isSubmittingReflection = true;
+                
+                // Get additional reflection data
+                const focusRating = document.getElementById('focus-rating').value || '';
+                const reflection = document.getElementById('reflection-text').value || '';
+                
+                if (typeof firebase !== 'undefined' && firebase.firestore) {
+                    const db = firebase.firestore();
+                    
+                    // Get current authenticated user data if available
+                    let userDisplayName = '';
+                    
+                    if (firebase.auth && firebase.auth().currentUser) {
+                        const currentUser = firebase.auth().currentUser;
+                        userDisplayName = currentUser.displayName || '';
+                        // Note: we're already storing userEmail from when the test started
+                    }
+                    
+                    // Create a new document with both test results and reflection
+                    const performanceData = {
+                        studentName: userName || userDisplayName || 'Anonymous',
+                        studentEmail: userEmail || '',
+                        examName: "VR Focus Group 16",
+                        score: scoreEl.textContent,
+                        totalQuestions: totalQuestionsResultsEl.textContent,
+                        timeTaken: timeTakenEl.textContent,
+                        answers: userAnswers,
+                        correctAnswers: passages.flatMap(p => p.questions.map(q => q.correctAnswer)),
+                        questionTimes: questionTimes,
+                        flaggedQuestions: flaggedQuestions,
+                        goal: userGoal || '',
+                        focusArea: userFocusArea || '',
+                        focusRating: focusRating,
+                        reflection: reflection,
+                        submissionTimestamp: new Date().toISOString(),
+                        userAgent: navigator.userAgent,
+                        isReflection: true // Flag to indicate this is a reflection submission
+                    };
+                    
+                    // Add as a new document
+                    await db.collection("performanceSubmissions").add(performanceData);
+                    
+                    // Show success message
+                    const successNotice = document.createElement('div');
+                    successNotice.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow-lg z-50';
+                    successNotice.innerHTML = `
+                        <div class="flex">
+                            <div class="py-1">
+                                <svg class="fill-current h-6 w-6 text-green-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-bold">Success!</p>
+                                <p class="text-sm">Your reflection has been saved.</p>
+                            </div>
+                        </div>
+                    `;
+                    document.body.appendChild(successNotice);
+                    
+                    // Update button state
+                    document.getElementById('submit-performance-button').disabled = true;
+                    document.getElementById('submit-performance-button').textContent = 'Reflection Saved ✓';
+                    document.getElementById('submit-performance-button').classList.add('bg-green-500');
+                    
+                    // Remove the notice after a few seconds
+                    setTimeout(() => {
+                        if (successNotice.parentNode) {
+                            successNotice.parentNode.removeChild(successNotice);
+                        }
+                    }, 3000);
+                } else {
+                    console.error("Firebase/Firestore not available");
+                    alert("Unable to save your reflection at this time. Please try again later.");
+                }
+            } catch (error) {
+                console.error("Error submitting performance data:", error);
+                alert("There was an error saving your reflection. Please try again.");
+            } finally {
+                isSubmittingReflection = false;
+            }
+        }
+    });
+    </script>
+</body>
+</html> 
