@@ -262,10 +262,9 @@
             padding: 2rem;
         }
 
-        /* Home Content Specific Styles (can be expanded) */
-        .dashboard-content-area { /* Reusing from student_dashboard for layout consistency */
-            padding: 2.5rem;
-            text-align: center;
+        .dashboard-content-area {
+            padding: 1.5rem; /* Adjusted padding */
+            text-align: left; /* Changed from center */
             flex-grow: 1;
             background-color: var(--color-bg);
             overflow-y: auto;
@@ -273,21 +272,158 @@
         
         #home-content .text-blue-600 { color: var(--color-primary); }
         #home-content .text-green-600 { color: var(--color-success); }
-        #home-content .text-yellow-600 { color: var(--color-warning); } /* Using warning for yellow */
+        #home-content .text-yellow-600 { color: var(--color-warning); }
         #home-content .bg-blue-50 { background-color: var(--color-primary-bg); }
-        #home-content .hover\\:bg-blue-100:hover { background-color: var(--color-primary-light); opacity:0.6; }
+        #home-content .hover\:bg-blue-100:hover { background-color: var(--color-primary-light); opacity:0.6; }
         #home-content .text-blue-700 { color: var(--color-primary-dark); }
-        #home-content .bg-indigo-50 { background-color: #e0e7ff; } /* Custom indigo shade */
-        #home-content .hover\\:bg-indigo-100:hover { background-color: #c7d2fe; } /* Custom indigo shade hover */
-        #home-content .text-indigo-700 { color: #4338ca; } /* Custom indigo text */
+        #home-content .bg-indigo-50 { background-color: #e0e7ff; }
+        #home-content .hover\:bg-indigo-100:hover { background-color: #c7d2fe; }
+        #home-content .text-indigo-700 { color: #4338ca; }
         #home-content .text-indigo-600 { color: #4f46e5; }
         #home-content .bg-green-500 { background-color: var(--color-success); }
-        #home-content .hover\\:bg-green-600:hover { background-color: #059669; }
+        #home-content .hover\:bg-green-600:hover { background-color: #059669; }
+
+        /* Styles for Setup Your Prep Section */
+        .setup-prep-card, .activity-calendar-card {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+        }
+        .setup-prep-card h2, .activity-calendar-card h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 1rem;
+        }
+        .input-group {
+            margin-bottom: 1rem;
+        }
+        .input-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            margin-bottom: 0.25rem;
+        }
+        .input-group input[type="text"],
+        .input-group input[type="date"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            transition: border-color var(--transition);
+        }
+        .input-group input[type="text"]:focus,
+        .input-group input[type="date"]:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+        .days-remaining {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-left: 0.75rem;
+        }
+        .consistency-score {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-success);
+        }
+
+        /* Styles for Activity Calendar */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .calendar-nav button {
+            background: none;
+            border: none;
+            color: var(--color-primary);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        .calendar-nav button:hover {
+            color: var(--color-primary-dark);
+        }
+        .calendar-grid-container {
+            display: flex; /* For side-by-side months */
+            gap: 1.5rem;
+            overflow-x: auto; /* If more than 2 months are shown on small screens */
+        }
+        .calendar-month {
+            flex-shrink: 0; /* Prevent shrinking if container is too small */
+        }
+        .calendar-month-label {
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+        .calendar-day-label {
+            font-size: 0.75rem;
+            text-align: center;
+            color: var(--color-text-tertiary);
+            padding-bottom: 4px;
+        }
+        .calendar-day {
+            width: 30px;
+            height: 30px;
+            border-radius: var(--radius-sm);
+            background-color: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+        .calendar-day.empty { background-color: transparent; border: none; }
+        .calendar-day.today {
+            background-color: var(--color-primary);
+            color: white;
+            font-weight: bold;
+            border-color: var(--color-primary-dark);
+        }
+        .calendar-day.practice-some {
+            background-color: #a7f3d0; /* Light green */
+            border-color: #6ee7b7;
+        }
+        .calendar-day.practice-lots {
+            background-color: #34d399; /* Darker green */
+            border-color: #10b981;
+        }
+        .calendar-legend {
+            display: flex;
+            justify-content: flex-start;
+            gap: 1rem;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .legend-color-box {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+        }
 
 
         @media (max-width: 768px) {
             .dashboard-content-area {
-                padding: 1.5rem 1rem;
+                padding: 1rem; /* Further adjust padding */
             }
             .nav-tab {
                 padding: 0.75rem 1rem;
@@ -298,6 +434,13 @@
                 overflow-x: auto;
                 justify-content: flex-start;
                 padding: 0.25rem 0.5rem;
+            }
+            .calendar-day {
+                width: 25px;
+                height: 25px;
+            }
+            .calendar-grid-container {
+                gap: 1rem;
             }
         }
         @media (max-width: 480px) {
@@ -313,6 +456,15 @@
             .btn-logout {
                 padding: 0.4rem 0.8rem;
                 font-size: 0.75rem;
+            }
+            .grid-cols-1.md\:grid-cols-3 {
+                 grid-template-columns: 1fr; /* Stack cards on small screens */
+            }
+            .calendar-grid-container {
+                 flex-direction: column; /* Stack months vertically */
+            }
+            .calendar-month {
+                width: 100%;
             }
         }
 
@@ -372,13 +524,71 @@
                 <a href="student_dashboard.html" class="text-blue-600 hover:text-blue-800 underline">Go to Login Page</a>
             </div>
 
-            <div id="home-content" class="p-6 md:p-8 text-gray-700"> <!-- Removed hidden class -->
-                <div class="max-w-4xl mx-auto">
-                    <div class="mb-12 text-center">
-                        <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Welcome back, <span id="home-student-name" class="text-blue-600">Student</span>!</h1>
-                        <p class="text-lg text-gray-500 mt-2">Ready to ace the UCAT? Here's your progress at a glance.</p>
+            <div id="home-content" class="p-6 md:p-8 text-gray-700">
+                <div class="max-w-6xl mx-auto">
+                    <div class="mb-8 text-left">
+                        <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Welcome back, <span id="home-student-name-display" class="text-blue-600">Student</span>!</h1>
+                        <p class="text-lg text-gray-500 mt-1">Ready to ace the UCAT? Here's your personalized dashboard.</p>
                     </div>
 
+                    <!-- Grid for new sections -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                        <!-- Setup Your Prep Card -->
+                        <div class="lg:col-span-1 setup-prep-card">
+                            <h2>Setup Your Prep</h2>
+                            <div class="input-group">
+                                <label for="user-name">Your Name:</label>
+                                <input type="text" id="user-name" name="user-name" readonly class="bg-gray-100">
+                            </div>
+                            <div class="input-group">
+                                <label for="exam-date">Date of Your Exam:</label>
+                                <div class="flex items-center">
+                                    <input type="date" id="exam-date" name="exam-date">
+                                    <span id="days-remaining" class="days-remaining ml-3"></span>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Daily Plan Consistency:</label>
+                                <p id="consistency-score" class="consistency-score">0 Day(s) Completed</p>
+                            </div>
+                        </div>
+
+                        <!-- Activity Calendar Card -->
+                        <div class="lg:col-span-2 activity-calendar-card">
+                            <div class="calendar-header">
+                                <h2>Activity Calendar</h2>
+                                <div class="calendar-nav">
+                                    <button id="prev-month-btn">&lt;</button>
+                                    <span id="current-month-year" class="mx-2"></span>
+                                    <button id="next-month-btn">&gt;</button>
+                                </div>
+                            </div>
+                            <div id="calendar-grid-container" class="calendar-grid-container">
+                                <!-- Calendar for current month -->
+                                <div class="calendar-month" id="current-calendar-month">
+                                     <div class="calendar-month-label" id="current-month-label"></div>
+                                     <div class="calendar-grid" id="current-month-grid"></div>
+                                </div>
+                                <!-- Calendar for next month -->
+                                <div class="calendar-month" id="next-calendar-month">
+                                     <div class="calendar-month-label" id="next-month-label"></div>
+                                     <div class="calendar-grid" id="next-month-grid"></div>
+                                </div>
+                            </div>
+                            <div class="calendar-legend">
+                                <div class="legend-item">
+                                    <div class="legend-color-box" style="background-color: #a7f3d0;"></div>
+                                    <span>Some practice</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color-box" style="background-color: #34d399;"></div>
+                                    <span>Lots of practice</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Existing Cards: Activities, Score, Time -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
                         <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center">
                             <svg class="w-12 h-12 text-blue-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
@@ -444,43 +654,62 @@
             console.log("Firebase and Firestore initialized successfully for home.html");
         } catch (error) {
             console.error("Firebase initialization error for home.html:", error);
-            alert("There was an error connecting to the service. Please try again later.");
+            // alert("There was an error connecting to the service. Please try again later.");
         }
 
         // --- DOM Elements ---
         const studentDisplayNameSpan = document.getElementById('student-display-name');
-        const homeStudentNameSpan = document.getElementById('home-student-name');
+        const homeStudentNameDisplay = document.getElementById('home-student-name-display'); // Changed ID for clarity
+        const userNameInput = document.getElementById('user-name');
+        const examDateInput = document.getElementById('exam-date');
+        const daysRemainingSpan = document.getElementById('days-remaining');
+        const consistencyScoreP = document.getElementById('consistency-score');
         const logoutButton = document.getElementById('logout-button');
         const homeContentDiv = document.getElementById('home-content');
         const authMessageContainer = document.getElementById('auth-message-container');
         const dashboardWrapper = document.getElementById('dashboard-wrapper');
 
+        // Activity Calendar Elements
+        const prevMonthBtn = document.getElementById('prev-month-btn');
+        const nextMonthBtn = document.getElementById('next-month-btn');
+        const currentMonthYearSpan = document.getElementById('current-month-year');
+        const currentMonthGrid = document.getElementById('current-month-grid');
+        const nextMonthGrid = document.getElementById('next-month-grid');
+        const currentMonthLabel = document.getElementById('current-month-label');
+        const nextMonthLabel = document.getElementById('next-month-label');
+
+        let currentCalendarDate = new Date();
+        let performanceData = []; // To store fetched performance submissions
 
         // --- Authentication Logic ---
-        firebase.auth().onAuthStateChanged(user => {
+        firebase.auth().onAuthStateChanged(async user => {
             if (user) {
-                // User is signed in
                 const displayName = user.displayName || user.email || 'Student';
                 studentDisplayNameSpan.textContent = displayName;
-                homeStudentNameSpan.textContent = displayName;
+                homeStudentNameDisplay.textContent = displayName; // Update welcome message
+                userNameInput.value = displayName; // Pre-fill name input
                 
-                dashboardWrapper.classList.remove('hidden'); // Show dashboard content
-                authMessageContainer.classList.add('hidden'); // Hide auth message
-                homeContentDiv.classList.remove('hidden'); // Ensure home content is visible
+                dashboardWrapper.classList.remove('hidden');
+                authMessageContainer.classList.add('hidden');
+                homeContentDiv.classList.remove('hidden');
 
-                loadHomeData(user); // Load data for the logged-in user
+                await loadUserPreferences(user);
+                await loadPerformanceData(user); // Load performance data first
+                loadHomeData(user); // Original summary cards
+                updateConsistencyScore(); // Calculate consistency based on loaded data
+                renderCalendars(); // Render calendars after data is loaded
+
             } else {
-                // User is signed out
-                dashboardWrapper.classList.add('hidden'); // Hide dashboard
-                authMessageContainer.classList.remove('hidden'); // Show auth message
-                homeContentDiv.classList.add('hidden'); // Hide home content as well
+                dashboardWrapper.classList.add('hidden');
+                authMessageContainer.classList.remove('hidden');
+                homeContentDiv.classList.add('hidden');
             }
         });
 
         logoutButton.addEventListener('click', () => {
             if (confirm("Are you sure you want to log out?")) {
                 firebase.auth().signOut().then(() => {
-                    window.location.href = "student_dashboard.html"; // Redirect to login page
+                    window.location.href = "student_dashboard.html";
                 }).catch((error) => {
                     console.error("Logout error:", error);
                     alert("There was an error logging out. Please try again.");
@@ -488,112 +717,274 @@
             }
         });
 
-        // --- Home Page Data Loading ---
-        async function loadHomeData(currentUser) {
+        // --- User Preferences (Exam Date) ---
+        async function loadUserPreferences(currentUser) {
+            if (!currentUser) return;
+            const userPrefRef = db.collection('userPreferences').doc(currentUser.uid);
+            try {
+                const doc = await userPrefRef.get();
+                if (doc.exists) {
+                    const data = doc.data();
+                    if (data.examDate) {
+                        examDateInput.value = data.examDate;
+                        updateDaysRemaining(data.examDate);
+                    }
+                } else {
+                    updateDaysRemaining(); // No date set, clear or show default
+                }
+            } catch (error) {
+                console.error("Error loading user preferences:", error);
+                updateDaysRemaining(); // Error, clear or show default
+            }
+        }
+
+        examDateInput.addEventListener('change', async () => {
+            const currentUser = firebase.auth().currentUser;
             if (!currentUser) return;
 
+            const selectedDate = examDateInput.value;
+            if (selectedDate) {
+                try {
+                    await db.collection('userPreferences').doc(currentUser.uid).set({ examDate: selectedDate }, { merge: true });
+                    updateDaysRemaining(selectedDate);
+                } catch (error) {
+                    console.error("Error saving exam date:", error);
+                }
+            } else {
+                // Clear date if input is emptied
+                try {
+                    await db.collection('userPreferences').doc(currentUser.uid).update({ examDate: firebase.firestore.FieldValue.delete() });
+                    updateDaysRemaining();
+                } catch (error) {
+                    console.error("Error deleting exam date:", error);
+                }
+            }
+        });
+
+        function updateDaysRemaining(selectedDateStr) {
+            if (selectedDateStr) {
+                const examDate = new Date(selectedDateStr + "T00:00:00"); // Ensure it's parsed as local time at start of day
+                const today = new Date();
+                today.setHours(0,0,0,0); // Compare date parts only
+
+                if (examDate < today) {
+                    daysRemainingSpan.textContent = "Date has passed";
+                    daysRemainingSpan.style.color = "var(--color-danger)";
+                    return;
+                }
+                
+                const diffTime = Math.abs(examDate - today);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                daysRemainingSpan.textContent = `${diffDays} day(s) remaining`;
+                daysRemainingSpan.style.color = "var(--color-primary)";
+            } else {
+                daysRemainingSpan.textContent = "Set exam date";
+                daysRemainingSpan.style.color = "var(--color-text-tertiary)";
+            }
+        }
+
+        // --- Performance Data & Consistency ---
+        async function loadPerformanceData(currentUser) {
+            if (!currentUser) return;
+            performanceData = []; // Reset before loading
+            const userEmail = currentUser.email;
+            const userName = currentUser.displayName || userEmail;
+            const seenIds = new Set();
+            try {
+                const queries = [
+                    db.collection("performanceSubmissions").where("studentName", "==", userName).get(),
+                ];
+                if (userEmail) {
+                    queries.push(db.collection("performanceSubmissions").where("studentEmail", "==", userEmail).get());
+                }
+
+                const querySnapshots = await Promise.all(queries);
+                querySnapshots.forEach(snapshot => {
+                    snapshot.forEach(doc => {
+                        if (!seenIds.has(doc.id)) {
+                            seenIds.add(doc.id);
+                            performanceData.push(doc.data());
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error("Error loading performance data:", error);
+            }
+        }
+
+        function updateConsistencyScore() {
+            if (performanceData.length === 0) {
+                consistencyScoreP.textContent = '0 Day(s) Completed';
+                return;
+            }
+            const practiceDays = new Set();
+            performanceData.forEach(result => {
+                if (result.submissionTimestamp) {
+                    const date = new Date(result.submissionTimestamp).toLocaleDateString();
+                    practiceDays.add(date);
+                }
+            });
+            consistencyScoreP.textContent = `${practiceDays.size} Day(s) Completed`;
+        }
+
+        // --- Original Home Page Data Loading (Summary Cards) ---
+        async function loadHomeData(currentUser) {
+            if (!currentUser) return;
             const homeTotalActivities = document.getElementById('home-total-activities');
             const homeAverageScore = document.getElementById('home-average-score');
             const homeTimePracticed = document.getElementById('home-time-practiced');
             
-            // Default values
             homeTotalActivities.textContent = '0';
             homeAverageScore.textContent = '0%';
             homeTimePracticed.textContent = '0h 0m';
 
-            try {
-                const db = firebase.firestore();
-                const userEmail = currentUser.email;
-                const userName = currentUser.displayName || userEmail;
-                
-                const results = [];
-                const seenIds = new Set();
+            // Uses performanceData already loaded by loadPerformanceData
+            if (performanceData.length > 0) {
+                homeTotalActivities.textContent = performanceData.length;
+                let totalScoreSum = 0;
+                let validScoresCount = 0;
+                let totalMinutesPracticed = 0;
 
-                // Query by name
-                const nameQuery = await db.collection("performanceSubmissions")
-                                        .where("studentName", "==", userName)
-                                        .get();
-                nameQuery.forEach(doc => {
-                    if (!seenIds.has(doc.id)) {
-                        seenIds.add(doc.id);
-                        results.push(doc.data());
+                performanceData.forEach(result => {
+                    const score = parseFloat(result.score);
+                    const totalQuestions = parseFloat(result.totalQuestions);
+                    if (!isNaN(score) && !isNaN(totalQuestions) && totalQuestions > 0) {
+                        totalScoreSum += (score / totalQuestions) * 100;
+                        validScoresCount++;
+                    }
+                    const timeTaken = result.timeTaken;
+                    if (timeTaken) {
+                        let minutes = 0;
+                        const hourMatch = timeTaken.match(/(\d+)h/);
+                        const minMatch = timeTaken.match(/(\d+)m/);
+                        if (hourMatch) minutes += parseInt(hourMatch[1]) * 60;
+                        if (minMatch) minutes += parseInt(minMatch[1]);
+                        totalMinutesPracticed += minutes;
                     }
                 });
 
-                // Query by email if available and different from name (or if name query yielded no results)
-                if (userEmail && (results.length === 0 || userName !== userEmail)) {
-                    const emailQuery = await db.collection("performanceSubmissions")
-                                            .where("studentEmail", "==", userEmail)
-                                            .get();
-                    emailQuery.forEach(doc => {
-                        if (!seenIds.has(doc.id)) {
-                            seenIds.add(doc.id);
-                            results.push(doc.data());
-                        }
-                    });
+                if (validScoresCount > 0) {
+                    homeAverageScore.textContent = (totalScoreSum / validScoresCount).toFixed(1) + '%';
                 }
-                
-                if (results.length > 0) {
-                    homeTotalActivities.textContent = results.length;
-
-                    let totalScoreSum = 0;
-                    let validScoresCount = 0;
-                    let totalMinutesPracticed = 0;
-
-                    results.forEach(result => {
-                        const score = parseFloat(result.score);
-                        const totalQuestions = parseFloat(result.totalQuestions);
-                        if (!isNaN(score) && !isNaN(totalQuestions) && totalQuestions > 0) {
-                            totalScoreSum += (score / totalQuestions) * 100;
-                            validScoresCount++;
-                        }
-                        
-                        const timeTaken = result.timeTaken; // e.g., "25 min", "1h 10min"
-                        if (timeTaken) {
-                            let minutes = 0;
-                            const hourMatch = timeTaken.match(/(\d+)h/);
-                            const minMatch = timeTaken.match(/(\d+)m/);
-                            if (hourMatch) minutes += parseInt(hourMatch[1]) * 60;
-                            if (minMatch) minutes += parseInt(minMatch[1]);
-                            totalMinutesPracticed += minutes;
-                        }
-                    });
-
-                    if (validScoresCount > 0) {
-                        homeAverageScore.textContent = (totalScoreSum / validScoresCount).toFixed(1) + '%';
-                    }
-
-                    const hours = Math.floor(totalMinutesPracticed / 60);
-                    const minutes = totalMinutesPracticed % 60;
-                    homeTimePracticed.textContent = `${hours}h ${minutes}m`;
-
-                }
-            } catch (error) {
-                console.error("Error loading home data:", error);
-                // Optionally display an error message to the user on the home page
+                const hours = Math.floor(totalMinutesPracticed / 60);
+                const minutes = totalMinutesPracticed % 60;
+                homeTimePracticed.textContent = `${hours}h ${minutes}m`;
             }
         }
+
+        // --- Activity Calendar Logic ---
+        function renderCalendars() {
+            const today = new Date();
+            // Display current month and next month side-by-side
+            renderMonth(currentCalendarDate, currentMonthGrid, currentMonthLabel, 0); // 0 for current month view
+            
+            let nextMonthDate = new Date(currentCalendarDate);
+            nextMonthDate.setMonth(currentCalendarDate.getMonth() + 1);
+            renderMonth(nextMonthDate, nextMonthGrid, nextMonthLabel, 1); // 1 for next month view
+
+            // Update main calendar header (shows current month of the left calendar)
+            currentMonthYearSpan.textContent = currentCalendarDate.toLocaleDateString('default', { month: 'long', year: 'numeric' });
+        }
+
+        function renderMonth(dateToRender, gridElement, labelElement, monthOffset) {
+            gridElement.innerHTML = ''; // Clear previous grid
+            const month = dateToRender.getMonth();
+            const year = dateToRender.getFullYear();
+
+            labelElement.textContent = dateToRender.toLocaleDateString('default', { month: 'long' });
+
+            const firstDayOfMonth = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const dayHeaders = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+            // Add day headers
+            dayHeaders.forEach(header => {
+                const dayLabel = document.createElement('div');
+                dayLabel.className = 'calendar-day-label';
+                dayLabel.textContent = header;
+                gridElement.appendChild(dayLabel);
+            });
+
+            // Adjust for Monday start (getDay() is 0 for Sunday)
+            const startOffset = (firstDayOfMonth === 0) ? 6 : firstDayOfMonth - 1;
+
+            for (let i = 0; i < startOffset; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'calendar-day empty';
+                gridElement.appendChild(emptyCell);
+            }
+
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayCell = document.createElement('div');
+                dayCell.className = 'calendar-day';
+                dayCell.textContent = day;
+                const cellDate = new Date(year, month, day);
+                cellDate.setHours(0,0,0,0);
+
+                if (cellDate.getTime() === today.getTime()) {
+                    dayCell.classList.add('today');
+                }
+
+                // Check for practice activity
+                const activityCount = getActivityCountForDate(cellDate);
+                if (activityCount > 0) {
+                    if (activityCount >= 2) { // Example: 2 or more activities = "Lots of practice"
+                        dayCell.classList.add('practice-lots');
+                    } else {
+                        dayCell.classList.add('practice-some');
+                    }
+                }
+                gridElement.appendChild(dayCell);
+            }
+        }
+
+        function getActivityCountForDate(date) {
+            let count = 0;
+            const dateString = date.toLocaleDateString();
+            performanceData.forEach(result => {
+                if (result.submissionTimestamp) {
+                    const submissionDate = new Date(result.submissionTimestamp).toLocaleDateString();
+                    if (submissionDate === dateString) {
+                        count++;
+                    }
+                }
+            });
+            return count;
+        }
+
+        prevMonthBtn.addEventListener('click', () => {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
+            renderCalendars();
+        });
+
+        nextMonthBtn.addEventListener('click', () => {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
+            renderCalendars();
+        });
+
         
         // --- Navigation Event Listeners for Home Page ---
         document.getElementById('home-view-all-tests-btn').addEventListener('click', () => {
             window.location.href = "student_dashboard.html#qr-tests-content";
         });
 
-        // Ensure "Home" tab is active visually on this page
         document.addEventListener('DOMContentLoaded', () => {
             const navHome = document.getElementById('nav-home');
             if (navHome) {
                 navHome.classList.add('active');
                 navHome.setAttribute('aria-selected', 'true');
             }
-            // Check auth state on load
             firebase.auth().onAuthStateChanged(user => {
                  if (!user) {
                     dashboardWrapper.classList.add('hidden');
                     authMessageContainer.classList.remove('hidden');
                     homeContentDiv.classList.add('hidden');
                  } else {
-                    homeContentDiv.classList.remove('hidden'); // Ensure it's shown if user is logged in
+                    homeContentDiv.classList.remove('hidden');
+                    // Data loading and rendering are now handled in the main onAuthStateChanged listener
                  }
             });
         });
