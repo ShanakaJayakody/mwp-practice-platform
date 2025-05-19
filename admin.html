@@ -4,87 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Performance Dashboard</title>
-    <link rel="icon" href="https://ik.imagekit.io/mwp/2.svg?updatedAt=1745982956185" type="image/svg+xml">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Admin-specific styles that aren't in the shared CSS */
-
         /* Base styles for body and main containers */
         body { 
             font-family: 'Inter', sans-serif; 
             margin: 0; 
-            background-color: var(--color-bg);
-            color: var(--color-text);
+            background-color: #f0f4f8; /* Light grayish blue */
+            color: #1f2937; /* Darker gray for text */
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            padding-top: 2rem;
-            min-height: 100vh;
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            padding-top: 2rem; /* Space from top */
+            min-height: 100vh; 
         }
-        
         .container { 
             background-color: #ffffff; 
             padding: 2rem; 
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-md);
+            border-radius: 0.75rem; /* Softer corners */
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* Softer shadow */
             width: 100%; 
             max-width: 1200px; 
-            margin: 1rem;
-            animation: fadeIn 0.3s ease-out;
+            margin: 1rem; 
         }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
         .login-container { 
             max-width: 400px; 
             margin: 2rem auto; 
-            padding: 2.5rem;
+            padding: 2.5rem; /* More padding */
             background-color: #fff; 
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-md);
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        /* Header section */
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--color-border);
-        }
-
-        .admin-logo {
-            max-width: 154px;
-            transition: all var(--transition);
-        }
-
-        .admin-logo:hover {
-            transform: scale(1.05);
+            border-radius: 0.5rem; 
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1); 
         }
 
         /* Input field styling */
-        input[type="email"], input[type="password"], input[type="text"], select { 
+        input[type="email"], input[type="password"] { 
             width: 100%; 
-            padding: 0.875rem;
+            padding: 0.875rem; /* Slightly more padding */
             margin-bottom: 1.25rem; 
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-sm);
+            border: 1px solid #d1d5db; /* Tailwind gray-300 */
+            border-radius: 0.375rem; 
             box-sizing: border-box; 
             font-size: 1rem;
-            transition: all var(--transition);
+            transition: border-color 0.2s;
         }
-        
-        input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focus, select:focus {
+        input[type="email"]:focus, input[type="password"]:focus {
             outline: none;
-            border-color: var(--color-primary);
+            border-color: #3b82f6; /* Tailwind blue-500 */
             box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
         }
 
@@ -96,178 +61,91 @@
             width: 100%;
             padding: 0.75rem 1.5rem;
             border: none;
-            border-radius: var(--radius-sm);
+            border-radius: 0.375rem;
             cursor: pointer;
             font-weight: 600;
             font-size: 0.95rem;
-            transition: all var(--transition);
+            transition: background-color 0.2s, box-shadow 0.2s;
             text-align: center;
-            box-shadow: var(--shadow-sm);
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
         }
-        
         .btn:hover {
-            box-shadow: var(--shadow);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
         /* Email login button */
         .btn-email {
-            background-color: var(--color-primary-dark);
+            background-color: #2563eb; /* Tailwind blue-600 */
             color: white;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.75rem; /* Space before OR divider */
         }
-        
         .btn-email:hover {
-            background-color: #1d4ed8;
+            background-color: #1d4ed8; /* Tailwind blue-700 */
         }
 
         /* Google login button */
         .btn-google {
             background-color: #ffffff;
-            color: var(--color-text-secondary);
-            border: 1px solid var(--color-border);
-            margin-top: 0.75rem;
+            color: #374151; /* Tailwind gray-700 */
+            border: 1px solid #d1d5db; /* Tailwind gray-300 */
+            margin-top: 0.75rem; /* Space after OR divider */
         }
-        
         .btn-google:hover {
-            background-color: var(--color-bg-secondary);
+            background-color: #f9fafb; /* Tailwind gray-50 */
         }
-        
-        .btn-google img {
+        .btn-google img { /* For Google icon */
             width: 20px;
             height: 20px;
             margin-right: 0.75rem;
         }
 
+
         .btn-logout { 
-            background-color: var(--color-danger);
+            background-color: #ef4444; /* Tailwind red-500 */
             color: white;
         }
-        
         .btn-logout:hover { 
-            background-color: #dc2626;
-        }
-
-        /* Secondary buttons */
-        .btn-secondary {
-            background-color: #ffffff;
-            color: var(--color-text-secondary);
-            border: 1px solid var(--color-border);
-        }
-        
-        .btn-secondary:hover {
-            background-color: var(--color-bg-secondary);
-        }
-
-        /* Action buttons */
-        .btn-action {
-            background-color: var(--color-primary);
-            color: white;
-            border: none;
-        }
-        
-        .btn-action:hover {
-            background-color: var(--color-primary-dark);
+            background-color: #dc2626; /* Tailwind red-600 */
         }
 
         /* Table and other dashboard styles */
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin-top: 20px;
-            box-shadow: var(--shadow-sm);
-            border-radius: var(--radius);
-            overflow: hidden;
-        }
-        
-        th, td { 
-            border: 1px solid var(--color-border);
-            padding: 10px; 
-            text-align: left; 
-            font-size: 0.9rem;
-        }
-        
-        th { 
-            background-color: var(--color-bg-secondary);
-            color: var(--color-text-secondary);
-            font-weight: 600; 
-            text-transform: uppercase; 
-            letter-spacing: 0.05em;
-        }
-        
-        tr:nth-child(even) { 
-            background-color: var(--color-bg);
-        }
-        
-        tr:hover {
-            background-color: var(--color-primary-bg);
-        }
-        
-        h1 { 
-            color: var(--color-text);
-            text-align: center; 
-            margin-bottom: 1.5rem; 
-            font-size: 1.75rem; 
-            font-weight: 700;
-        }
-        
-        h2 { 
-            color: var(--color-text);
-            font-weight: 600;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        td { 
-            word-break: break-word; 
-            white-space: pre-wrap;
-        }
-        
-        .hidden { 
-            display: none !important;
-        }
-        
-        #admin-controls { 
-            text-align: right; 
-            margin-bottom: 1rem; 
-            display: flex; 
-            justify-content: flex-end; 
-            align-items: center;
-            gap: 0.75rem;
-        }
-        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #e5e7eb; padding: 10px; text-align: left; font-size: 0.9rem; }
+        th { background-color: #f3f4f6; color: #374151; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;}
+        tr:nth-child(even) { background-color: #f9fafb; }
+        h1 { color: #111827; text-align: center; margin-bottom: 1.5rem; font-size: 1.75rem; font-weight: 700; }
+        h2 { color: #1f2937; }
+        td { word-break: break-word; white-space: pre-wrap; }
+        .hidden { display: none !important; }
+        #admin-controls { text-align: right; margin-bottom: 1rem; display: flex; justify-content: flex-end; align-items: center; }
         .social-login-divider { 
             display: flex; 
             align-items: center; 
             text-align: center; 
-            color: var(--color-text-tertiary);
-            margin: 1.5rem 0;
+            color: #6b7280; /* Tailwind gray-500 */
+            margin: 1.5rem 0; /* Increased margin */
         }
-        
         .social-login-divider::before,
         .social-login-divider::after {
             content: '';
             flex: 1;
-            border-bottom: 1px solid var(--color-border);
+            border-bottom: 1px solid #e5e7eb; /* Tailwind gray-200 */
         }
-        
         .social-login-divider span { 
-            padding: 0 1rem;
+            padding: 0 1rem; /* More padding for OR text */
             font-size: 0.875rem;
         }
-        
         #login-error {
-            min-height: 1.25rem;
-            color: var(--color-danger);
+            min-height: 1.25rem; /* Reserve space for error message */
         }
 
-        /* Filter controls */
+        /* New styles for filtering controls */
         .filter-controls {
-            background-color: #ffffff;
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius);
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
             padding: 1.25rem;
             margin-bottom: 1.5rem;
-            box-shadow: var(--shadow-sm);
         }
         
         .filter-row {
@@ -287,21 +165,20 @@
         .filter-group label {
             font-size: 0.8rem;
             font-weight: 600;
-            color: var(--color-text-secondary);
+            color: #4b5563;
             margin-bottom: 0.375rem;
         }
         
         .filter-input {
             padding: 0.625rem;
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-sm);
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
             font-size: 0.9rem;
-            transition: all var(--transition);
         }
         
         .filter-input:focus {
             outline: none;
-            border-color: var(--color-primary);
+            border-color: #3b82f6;
             box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
         }
         
@@ -309,489 +186,675 @@
             display: flex;
             justify-content: space-between;
             margin-top: 0.5rem;
-            gap: 0.75rem;
         }
         
         .filter-button {
             padding: 0.5rem 1rem;
             border: none;
-            border-radius: var(--radius-sm);
+            border-radius: 0.375rem;
             font-weight: 500;
             font-size: 0.875rem;
             cursor: pointer;
-            transition: all var(--transition);
+            transition: all 0.2s;
         }
         
-        .btn-filter-apply {
-            background-color: var(--color-primary);
+        .apply-filters {
+            background-color: #3b82f6;
             color: white;
         }
         
-        .btn-filter-apply:hover {
-            background-color: var(--color-primary-dark);
+        .apply-filters:hover {
+            background-color: #2563eb;
         }
         
-        .btn-filter-reset {
-            background-color: var(--color-bg-secondary);
-            color: var(--color-text-secondary);
-            border: 1px solid var(--color-border);
+        .reset-filters {
+            background-color: #f3f4f6;
+            color: #4b5563;
+            border: 1px solid #d1d5db;
         }
         
-        .btn-filter-reset:hover {
-            background-color: var(--color-border);
+        .reset-filters:hover {
+            background-color: #e5e7eb;
         }
         
-        /* Data visualization and summary cards */
-        .summary-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
+        .export-csv {
+            background-color: #10b981;
+            color: white;
         }
         
-        .summary-card {
-            background-color: #ffffff;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-sm);
-            padding: 1.25rem;
-            border-left: 4px solid var(--color-primary);
+        .export-csv:hover {
+            background-color: #059669;
         }
         
-        .summary-card-title {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--color-text-tertiary);
-            margin-bottom: 0.5rem;
-        }
-        
-        .summary-card-value {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--color-text);
-        }
-        
-        .tab-container {
-            margin-bottom: 1.5rem;
-        }
-        
-        .tab-buttons {
-            display: flex;
-            border-bottom: 1px solid var(--color-border);
-            margin-bottom: 1rem;
-        }
-        
-        .tab-button {
-            padding: 0.75rem 1.25rem;
-            background: none;
-            border: none;
-            border-bottom: 3px solid transparent;
-            font-weight: 500;
-            color: var(--color-text-secondary);
+        /* Sortable table headers */
+        th.sortable {
             cursor: pointer;
-            transition: all var(--transition);
+            position: relative;
+            padding-right: 20px;
         }
         
-        .tab-button:hover {
-            color: var(--color-primary);
+        th.sortable::after {
+            content: "↕️";
+            font-size: 0.8rem;
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.5;
         }
         
-        .tab-button.active {
-            color: var(--color-primary);
-            border-bottom-color: var(--color-primary);
+        th.sorted-asc::after {
+            content: "↑";
+            opacity: 1;
+        }
+        
+        th.sorted-desc::after {
+            content: "↓";
+            opacity: 1;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .filter-row {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+            
+            .filter-actions {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .filter-button {
+                width: 100%;
+            }
         }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/mwp-styles.css">
-    
-    <!-- Firebase SDKs -->
-    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    
-    <!-- Critical local JS modules -->
-    <script defer src="js/auth.js"></script>
-    <script defer src="js/ui-components.js"></script>
-    <script defer src="js/error-handling.js"></script>
-    
-    <!-- Other local JS modules -->
-    <script defer src="js/data-service.js"></script>
-    <script defer src="js/form-validation.js"></script>
-    <script defer src="js/performance.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 </head>
 <body>
-    <!-- Login Container (initially hidden) -->
-    <div id="admin-login-container" class="login-container">
-        <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="admin-logo mx-auto mb-6 w-36" onerror="this.style.display='none'; this.onerror=null;">
-        <h1 class="text-xl font-bold mb-6 text-center">Admin Login</h1>
-        <div id="login-error" class="text-sm text-red-600 mb-4 text-center"></div>
+    <div id="login-section" class="login-container">
+        <h2 class="text-2xl font-bold text-center mb-8 text-gray-800">Admin Portal</h2>
+        <input type="email" id="admin-email" placeholder="Email Address">
+        <input type="password" id="admin-password" placeholder="Password">
+        <button id="admin-login-button" class="btn btn-email">Login with Email</button>
         
-        <form id="admin-login-form">
-            <input type="email" id="admin-email" placeholder="Email" required>
-            <input type="password" id="admin-password" placeholder="Password" required>
-            <button type="submit" class="btn btn-email">Sign In</button>
-        </form>
-        
-        <div class="social-login-divider">
-            <span>OR</span>
-        </div>
-        
-        <button id="admin-google-signin" class="btn btn-google">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+        <div class="social-login-divider"><span>OR</span></div>
+
+        <button id="google-login-button" class="btn btn-google">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google icon">
             Sign in with Google
         </button>
-        
-        <p class="text-sm text-center mt-6 text-gray-600">Admin access only. Regular users please use the <a href="student_dashboard.html" class="text-blue-600 hover:text-blue-800">student dashboard</a>.</p>
+        <p id="login-error" class="text-red-600 text-sm mt-4 text-center"></p>
     </div>
 
-    <!-- Main Dashboard (initially hidden) -->
-    <div id="admin-dashboard" class="container hidden">
-        <div class="admin-header">
-            <div>
-                <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="admin-logo" onerror="this.style.display='none'; this.onerror=null;">
-                <h1 class="text-xl font-bold mt-2">Admin Dashboard</h1>
-            </div>
-            <div id="admin-controls">
-                <span id="admin-user-email" class="text-sm text-gray-600 mr-4"></span>
-                <button id="admin-logout" class="btn-secondary text-sm px-4 py-2 rounded-md">Logout</button>
-            </div>
+    <div id="dashboard-section" class="container hidden">
+        <div id="admin-controls">
+            <span id="admin-user-email" class="text-gray-700 mr-4"></span>
+            <button id="admin-logout-button" class="btn btn-logout text-sm px-4 py-2">Logout</button>
         </div>
+        <h1>Student Performance Dashboard</h1>
         
-        <!-- Summary Cards -->
-        <div class="summary-cards">
-            <div class="summary-card">
-                <div class="summary-card-title">Total Submissions</div>
-                <div id="total-submissions" class="summary-card-value">0</div>
-            </div>
-            <div class="summary-card">
-                <div class="summary-card-title">Active Users</div>
-                <div id="active-users" class="summary-card-value">0</div>
-            </div>
-            <div class="summary-card">
-                <div class="summary-card-title">Average Score</div>
-                <div id="average-score" class="summary-card-value">0</div>
-            </div>
-        </div>
-        
-        <!-- Tabs -->
-        <div class="tab-container">
-            <div class="tab-buttons">
-                <button class="tab-button active" data-tab="submissions">Submissions</button>
-                <button class="tab-button" data-tab="users">Users</button>
-                <button class="tab-button" data-tab="analytics">Analytics</button>
-            </div>
+        <!-- Filter controls -->
+        <div class="filter-controls">
+            <h2 class="text-lg font-semibold mb-3">Filter Results</h2>
             
-            <!-- Submissions Tab Content -->
-            <div id="submissions-tab" class="tab-content">
-                <!-- Filter Controls -->
-                <div class="filter-controls">
-                    <div class="filter-row">
-                        <div class="filter-group">
-                            <label for="filter-exam">Exam Type</label>
-                            <select id="filter-exam" class="filter-input">
-                                <option value="">All Exams</option>
-                                <option value="QR Test 1">QR Test 1</option>
-                                <option value="QR Test 2">QR Test 2</option>
-                                <option value="QR Test 3">QR Test 3</option>
-                                <option value="QR Test 4">QR Test 4</option>
-                                <option value="QR Test 5">QR Test 5</option>
-                                <option value="QR Test 6">QR Test 6</option>
-                                <option value="VR Focus Group 16">VR Focus Group 16</option>
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label for="filter-student">Student Email</label>
-                            <input type="text" id="filter-student" class="filter-input" placeholder="Search by email">
-                        </div>
-                        <div class="filter-group">
-                            <label for="filter-date">Date Range</label>
-                            <input type="text" id="filter-date" class="filter-input" placeholder="e.g., last 7 days">
-                        </div>
-                    </div>
-                    <div class="filter-actions">
-                        <button id="apply-filters" class="filter-button btn-filter-apply">Apply Filters</button>
-                        <button id="reset-filters" class="filter-button btn-filter-reset">Reset</button>
-                        <button id="export-data" class="filter-button btn-secondary">Export CSV</button>
-                    </div>
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="filter-student">Student Name/Email</label>
+                    <input type="text" id="filter-student" class="filter-input" placeholder="Filter by student name or email">
                 </div>
                 
-                <!-- Data Table -->
-                <div class="overflow-x-auto">
-                    <table id="submissions-table">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Student</th>
-                                <th>Email</th>
-                                <th>Exam</th>
-                                <th>Score</th>
-                                <th>Time Taken</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="submissions-data">
-                            <!-- Data will be loaded here -->
-                        </tbody>
-                    </table>
+                <div class="filter-group">
+                    <label for="filter-exam">Exam Type</label>
+                    <select id="filter-exam" class="filter-input">
+                        <option value="">All Exams</option>
+                        <option value="QR Test 1">QR Test 1</option>
+                        <option value="QR Test 2">QR Test 2</option>
+                        <option value="QR Test 3">QR Test 3</option>
+                        <option value="QR Test 4">QR Test 4</option>
+                        <option value="QR Test 5">QR Test 5</option>
+                        <option value="QR Test 6">QR Test 6</option>
+                    </select>
                 </div>
                 
-                <div id="loading-message" class="text-center py-8 text-gray-500">Loading data...</div>
-                <div id="empty-message" class="text-center py-8 text-gray-500 hidden">No submissions found.</div>
+                <div class="filter-group">
+                    <label for="filter-date-from">From Date</label>
+                    <input type="date" id="filter-date-from" class="filter-input">
+                </div>
+                
+                <div class="filter-group">
+                    <label for="filter-date-to">To Date</label>
+                    <input type="date" id="filter-date-to" class="filter-input">
+                </div>
             </div>
             
-            <!-- Users Tab Content -->
-            <div id="users-tab" class="tab-content hidden">
-                <!-- Users content will be implemented later -->
-                <p class="text-center py-8 text-gray-500">User management features coming soon.</p>
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="search-input">Search (any field)</label>
+                    <input type="text" id="search-input" class="filter-input" placeholder="Search in all fields">
+                </div>
+                <div class="filter-group">
+                    <label for="filter-score-min">Min Score</label>
+                    <input type="number" id="filter-score-min" class="filter-input" placeholder="Min score" min="0">
+                </div>
+                <div class="filter-group">
+                    <label for="filter-score-max">Max Score</label>
+                    <input type="number" id="filter-score-max" class="filter-input" placeholder="Max score" max="36">
+                </div>
+                <div class="filter-group">
+                    <label for="submissions-count">Results Count</label>
+                    <div id="submissions-count" class="mt-2 text-center text-gray-600 font-semibold">Showing 0 results</div>
+                </div>
             </div>
             
-            <!-- Analytics Tab Content -->
-            <div id="analytics-tab" class="tab-content hidden">
-                <!-- Analytics content will be implemented later -->
-                <p class="text-center py-8 text-gray-500">Analytics features coming soon.</p>
+            <div class="filter-actions">
+                <div>
+                    <button id="apply-filters" class="filter-button apply-filters mr-2">Apply Filters</button>
+                    <button id="reset-filters" class="filter-button reset-filters">Reset</button>
+                </div>
+                <button id="export-csv" class="filter-button export-csv">Export to CSV</button>
             </div>
+        </div>
+        
+        <div id="performance-table-container">
+            <p>Loading performance data...</p>
         </div>
     </div>
 
-    <!-- Authentication Error Message -->
-    <div id="auth-error-message" class="login-container hidden">
-        <h2 class="text-xl font-bold text-red-600 mb-4 text-center">Access Denied</h2>
-        <p class="text-center mb-6">You don't have admin privileges. Please contact an administrator if you believe this is a mistake.</p>
-        <button id="back-to-dashboard" class="btn btn-secondary">Return to Dashboard</button>
-    </div>
-
-    <!-- Firebase Scripts -->
-    
     <script>
-        // Firebase configuration
+        // --- Firebase Configuration ---
         const firebaseConfig = {
-            apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
-            authDomain: "mwp-qr-test-page.firebaseapp.com",
-            projectId: "mwp-qr-test-page",
-            storageBucket: "mwp-qr-test-page.appspot.com", 
-            messagingSenderId: "309084045110",
-            appId: "1:309084045110:web:b09ca0fdff84b094963d97",
-            measurementId: "G-4M3ED641M9"
+          apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
+          authDomain: "mwp-qr-test-page.firebaseapp.com",
+          projectId: "mwp-qr-test-page",
+          storageBucket: "mwp-qr-test-page.appspot.com",
+          messagingSenderId: "309084045110",
+          appId: "1:309084045110:web:b09ca0fdff84b094963d97",
+          measurementId: "G-4M3ED641M9"
         };
 
         // Initialize Firebase
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize Firebase
-            firebase.initializeApp(firebaseConfig);
-            const auth = firebase.auth();
-            const db = firebase.firestore();
-            
-            // DOM Elements
-            const adminLoginContainer = document.getElementById('admin-login-container');
-            const adminDashboard = document.getElementById('admin-dashboard');
-            const authErrorMessage = document.getElementById('auth-error-message');
-            const loginForm = document.getElementById('admin-login-form');
-            const loginErrorDiv = document.getElementById('login-error');
-            const adminUserEmail = document.getElementById('admin-user-email');
-            const adminLogoutButton = document.getElementById('admin-logout');
-            const googleSignInButton = document.getElementById('admin-google-signin');
-            const backToDashboardButton = document.getElementById('back-to-dashboard');
-            
-            // Tab navigation
-            const tabButtons = document.querySelectorAll('.tab-button');
-            const tabContents = document.querySelectorAll('.tab-content');
-            
-            // Define admin emails - in a real app, this would be in Firestore security rules
-            const adminEmails = ['admin@example.com', 'shanak@medwithpurpose.com'];
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
 
-            // Authentication state observer
-            auth.onAuthStateChanged(async function(user) {
-                if (user) {
-                    // Check if the user is an admin
-                    if (adminEmails.includes(user.email)) {
-                        // Show admin dashboard
-                        adminLoginContainer.classList.add('hidden');
-                        adminDashboard.classList.remove('hidden');
-                        authErrorMessage.classList.add('hidden');
-                        
-                        // Display user email
-                        adminUserEmail.textContent = user.email;
-                        
-                        // Load initial data
-                        loadSubmissionsData();
-                    } else {
-                        // Show access denied message
-                        adminLoginContainer.classList.add('hidden');
-                        adminDashboard.classList.add('hidden');
-                        authErrorMessage.classList.remove('hidden');
-                        
-                        // Sign out non-admin user
-                        await auth.signOut();
-                    }
-                } else {
-                    // No user signed in, show login
-                    adminLoginContainer.classList.remove('hidden');
-                    adminDashboard.classList.add('hidden');
-                    authErrorMessage.classList.add('hidden');
-                }
-            });
-            
-            // Login form submission
-            loginForm?.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const email = document.getElementById('admin-email').value;
-                const password = document.getElementById('admin-password').value;
-                
-                loginErrorDiv.textContent = '';
-                
+        // --- DOM Elements ---
+        const loginSection = document.getElementById('login-section');
+        const dashboardSection = document.getElementById('dashboard-section');
+        const adminLoginButton = document.getElementById('admin-login-button');
+        const adminEmailInput = document.getElementById('admin-email');
+        const adminPasswordInput = document.getElementById('admin-password');
+        const loginErrorP = document.getElementById('login-error');
+        const performanceTableContainer = document.getElementById('performance-table-container');
+        const adminLogoutButton = document.getElementById('admin-logout-button');
+        const adminUserEmailSpan = document.getElementById('admin-user-email');
+        const googleLoginButton = document.getElementById('google-login-button');
+        
+        // Filter elements
+        const filterStudent = document.getElementById('filter-student');
+        const filterExam = document.getElementById('filter-exam');
+        const filterDateFrom = document.getElementById('filter-date-from');
+        const filterDateTo = document.getElementById('filter-date-to');
+        const searchInput = document.getElementById('search-input');
+        const filterScoreMin = document.getElementById('filter-score-min');
+        const filterScoreMax = document.getElementById('filter-score-max');
+        const submissionsCount = document.getElementById('submissions-count');
+        const applyFiltersBtn = document.getElementById('apply-filters');
+        const resetFiltersBtn = document.getElementById('reset-filters');
+        const exportCsvBtn = document.getElementById('export-csv');
+
+        // --- Data Storage ---
+        let allPerformanceData = []; // Will store all fetched data
+        let filteredData = []; // Will store currently filtered data
+        let currentSortColumn = 'submissionTimestamp'; // Default sort column
+        let currentSortOrder = 'desc'; // Default sort order: descending
+
+        // --- Authentication Logic ---
+
+        // Email/Password Login
+        if(adminLoginButton) { // Check if element exists
+            adminLoginButton.addEventListener('click', () => {
+                const email = adminEmailInput.value;
+                const password = adminPasswordInput.value;
+                loginErrorP.textContent = ''; 
+
                 auth.signInWithEmailAndPassword(email, password)
-                    .catch(function(error) {
-                        loginErrorDiv.textContent = error.message;
+                    .catch((error) => {
+                        console.error("Admin Email/Pass login error:", error);
+                        loginErrorP.textContent = error.message;
                     });
             });
-            
-            // Google sign-in
-            googleSignInButton?.addEventListener('click', function() {
+        }
+
+
+        // Google Sign-In
+        if (googleLoginButton) {
+            googleLoginButton.addEventListener('click', () => {
                 const provider = new firebase.auth.GoogleAuthProvider();
-                auth.signInWithPopup(provider).catch(function(error) {
-                    loginErrorDiv.textContent = error.message;
+                loginErrorP.textContent = '';
+                auth.signInWithPopup(provider)
+                    .catch((error) => {
+                        console.error("Google Sign-In Error:", error);
+                        loginErrorP.textContent = `Google Sign-In Error: ${error.message}`;
+                    });
+            });
+        }
+
+        // Logout
+        if (adminLogoutButton) {
+            adminLogoutButton.addEventListener('click', () => {
+                auth.signOut().catch((error) => {
+                    console.error("Admin logout error:", error);
                 });
             });
-            
-            // Logout functionality
-            adminLogoutButton?.addEventListener('click', function() {
-                auth.signOut().catch(console.error);
-            });
-            
-            // Back to dashboard button
-            backToDashboardButton?.addEventListener('click', function() {
-                window.location.href = 'student_dashboard.html';
-            });
-            
-            // Tab navigation
-            tabButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const tabName = this.dataset.tab;
-                    
-                    // Update active button
-                    tabButtons.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Show corresponding tab content
-                    tabContents.forEach(content => {
-                        content.classList.add('hidden');
-                    });
-                    document.getElementById(`${tabName}-tab`).classList.remove('hidden');
-                });
-            });
-            
-            // Filter functionality
-            document.getElementById('apply-filters')?.addEventListener('click', function() {
-                loadSubmissionsData();
-            });
-            
-            document.getElementById('reset-filters')?.addEventListener('click', function() {
-                document.getElementById('filter-exam').value = '';
-                document.getElementById('filter-student').value = '';
-                document.getElementById('filter-date').value = '';
-                loadSubmissionsData();
-            });
-            
-            // Load submissions data
-            function loadSubmissionsData() {
-                const submissionsData = document.getElementById('submissions-data');
-                const loadingMessage = document.getElementById('loading-message');
-                const emptyMessage = document.getElementById('empty-message');
-                
-                if (!submissionsData) return;
-                
-                submissionsData.innerHTML = '';
-                loadingMessage.classList.remove('hidden');
-                emptyMessage.classList.add('hidden');
-                
-                // Get filter values
-                const examFilter = document.getElementById('filter-exam').value;
-                const studentFilter = document.getElementById('filter-student').value.toLowerCase();
-                
-                // Build query
-                let query = db.collection('performanceSubmissions').orderBy('submissionTimestamp', 'desc').limit(100);
-                
-                if (examFilter) {
-                    query = query.where('examName', '==', examFilter);
-                }
-                
-                // Execute query
-                query.get().then(function(querySnapshot) {
-                    loadingMessage.classList.add('hidden');
-                    
-                    if (querySnapshot.empty) {
-                        emptyMessage.classList.remove('hidden');
-                        return;
-                    }
-                    
-                    let totalSubmissions = 0;
-                    let totalScore = 0;
-                    const uniqueUsers = new Set();
-                    
-                    querySnapshot.forEach(function(doc) {
-                        const data = doc.data();
-                        
-                        // Apply student email filter client-side
-                        if (studentFilter && !data.studentEmail.toLowerCase().includes(studentFilter)) {
-                            return;
-                        }
-                        
-                        // Update statistics
-                        totalSubmissions++;
-                        uniqueUsers.add(data.studentEmail);
-                        totalScore += parseInt(data.score) || 0;
-                        
-                        // Create table row
-                        const row = document.createElement('tr');
-                        
-                        // Format date
-                        const submissionDate = data.submissionTimestamp ? new Date(data.submissionTimestamp) : new Date();
-                        const formattedDate = submissionDate.toLocaleDateString() + ' ' + submissionDate.toLocaleTimeString();
-                        
-                        row.innerHTML = `
-                            <td>${formattedDate}</td>
-                            <td>${data.studentName || 'Anonymous'}</td>
-                            <td>${data.studentEmail || 'N/A'}</td>
-                            <td>${data.examName || 'Unknown'}</td>
-                            <td>${data.score || '0'}/${data.totalQuestions || '?'}</td>
-                            <td>${data.timeTaken || 'N/A'}</td>
-                            <td>
-                                <button class="view-details text-blue-600 hover:text-blue-800 text-sm underline" data-id="${doc.id}">View Details</button>
-                            </td>
-                        `;
-                        
-                        submissionsData.appendChild(row);
-                    });
-                    
-                    // Update summary cards
-                    document.getElementById('total-submissions').textContent = totalSubmissions;
-                    document.getElementById('active-users').textContent = uniqueUsers.size;
-                    document.getElementById('average-score').textContent = totalSubmissions > 0 
-                        ? Math.round((totalScore / totalSubmissions) * 10) / 10 
-                        : 0;
-                    
-                    // Add event listeners to detail buttons
-                    document.querySelectorAll('.view-details').forEach(button => {
-                        button.addEventListener('click', function() {
-                            const submissionId = this.dataset.id;
-                            alert(`Details for submission ${submissionId} will be implemented soon.`);
-                        });
-                    });
-                }).catch(function(error) {
-                    console.error("Error getting submissions: ", error);
-                    loadingMessage.classList.add('hidden');
-                    emptyMessage.classList.remove('hidden');
-                    emptyMessage.textContent = "Error loading data. Please try again.";
-                });
+        }
+
+
+        // Auth State Change Listener
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                console.log("Auth state changed: User is signed in.", user.uid);
+                if(adminUserEmailSpan) adminUserEmailSpan.textContent = `Logged in as: ${user.email || user.displayName || 'Admin'}`;
+                if(loginSection) loginSection.classList.add('hidden');
+                if(dashboardSection) dashboardSection.classList.remove('hidden');
+                fetchPerformanceData(); 
+            } else {
+                console.log("Auth state changed: User is signed out.");
+                if(adminUserEmailSpan) adminUserEmailSpan.textContent = '';
+                if(loginSection) loginSection.classList.remove('hidden');
+                if(dashboardSection) dashboardSection.classList.add('hidden');
+                if(performanceTableContainer) performanceTableContainer.innerHTML = '<p class="text-center text-gray-500">Please log in to view data.</p>';
+            }
+        });
+
+        // --- Filter Event Listeners ---
+        applyFiltersBtn.addEventListener('click', () => {
+            applyFilters();
+        });
+        
+        resetFiltersBtn.addEventListener('click', () => {
+            resetFilters();
+            applyFilters();
+        });
+        
+        exportCsvBtn.addEventListener('click', () => {
+            exportToCSV();
+        });
+
+        // Live search as you type
+        searchInput.addEventListener('input', () => {
+            applyFilters();
+        });
+        
+        // --- Sorting Logic ---
+        function sortData(column) {
+            // If clicking the same column, toggle sort order
+            if (column === currentSortColumn) {
+                currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSortColumn = column;
+                currentSortOrder = 'asc'; // Default to ascending for a new column
             }
             
-            // Export data functionality
-            document.getElementById('export-data')?.addEventListener('click', function() {
-                alert('Export functionality will be implemented soon.');
+            applyFilters();
+        }
+
+        // --- Filter Functions ---
+        function resetFilters() {
+            filterStudent.value = '';
+            filterExam.value = '';
+            filterDateFrom.value = '';
+            filterDateTo.value = '';
+            searchInput.value = '';
+            filterScoreMin.value = '';
+            filterScoreMax.value = '';
+        }
+
+        function applyFilters() {
+            // Get filter values
+            const studentFilter = filterStudent.value.toLowerCase();
+            const examFilter = filterExam.value;
+            const dateFromFilter = filterDateFrom.value ? new Date(filterDateFrom.value) : null;
+            const dateToFilter = filterDateTo.value ? new Date(filterDateTo.value) : null;
+            const searchFilter = searchInput.value.toLowerCase();
+            const scoreMinFilter = filterScoreMin.value ? parseInt(filterScoreMin.value) : null;
+            const scoreMaxFilter = filterScoreMax.value ? parseInt(filterScoreMax.value) : null;
+            
+            // Apply filters to all data
+            filteredData = allPerformanceData.filter(item => {
+                // Student name filter
+                if (studentFilter && (!item.studentName || !item.studentName.toLowerCase().includes(studentFilter)) && 
+                    (!item.studentEmail || !item.studentEmail.toLowerCase().includes(studentFilter))) {
+                    return false;
+                }
+                
+                // Exam type filter
+                if (examFilter && item.examName !== examFilter) {
+                    return false;
+                }
+                
+                // Date range filter
+                if (item.submissionTimestamp) {
+                    const itemDate = new Date(item.submissionTimestamp);
+                    if (dateFromFilter && itemDate < dateFromFilter) {
+                        return false;
+                    }
+                    if (dateToFilter) {
+                        // Add one day to include the end date
+                        const adjustedToDate = new Date(dateToFilter);
+                        adjustedToDate.setDate(adjustedToDate.getDate() + 1);
+                        if (itemDate > adjustedToDate) {
+                            return false;
+                        }
+                    }
+                }
+                
+                // Score range filter
+                if (scoreMinFilter !== null) {
+                    const score = parseInt(item.score);
+                    if (isNaN(score) || score < scoreMinFilter) {
+                        return false;
+                    }
+                }
+                
+                if (scoreMaxFilter !== null) {
+                    const score = parseInt(item.score);
+                    if (isNaN(score) || score > scoreMaxFilter) {
+                        return false;
+                    }
+                }
+                
+                // General search across all fields
+                if (searchFilter) {
+                    // Create a string with all searchable fields
+                    const searchableText = [
+                        item.studentName,
+                        item.studentEmail,
+                        item.examName, 
+                        item.score,
+                        item.totalQuestions,
+                        item.timeTaken,
+                        item.goal,
+                        item.focusArea,
+                        item.focusRating,
+                        item.reflection
+                    ].filter(Boolean).join(' ').toLowerCase();
+                    
+                    if (!searchableText.includes(searchFilter)) {
+                        return false;
+                    }
+                }
+                
+                return true;
             });
-        });
+            
+            // Sort the filtered data
+            filteredData.sort((a, b) => {
+                let valA = a[currentSortColumn];
+                let valB = b[currentSortColumn];
+                
+                // Special handling for dates
+                if (currentSortColumn === 'submissionTimestamp') {
+                    valA = valA ? new Date(valA).getTime() : 0;
+                    valB = valB ? new Date(valB).getTime() : 0;
+                }
+                
+                // Special handling for numeric values
+                else if (currentSortColumn === 'score' || currentSortColumn === 'focusRating') {
+                    valA = valA ? parseInt(valA) : 0;
+                    valB = valB ? parseInt(valB) : 0;
+                }
+                
+                // String comparison for other columns
+                else {
+                    valA = valA ? String(valA).toLowerCase() : '';
+                    valB = valB ? String(valB).toLowerCase() : '';
+                }
+                
+                // Apply sorting order
+                if (currentSortOrder === 'asc') {
+                    return valA > valB ? 1 : valA < valB ? -1 : 0;
+                } else {
+                    return valA < valB ? 1 : valA > valB ? -1 : 0;
+                }
+            });
+            
+            // Update the results count and display results
+            submissionsCount.textContent = `Showing ${filteredData.length} of ${allPerformanceData.length} results`;
+            displayResults(filteredData);
+        }
+
+        // --- Export to CSV ---
+        function exportToCSV() {
+            // Only export if there's data
+            if (filteredData.length === 0) {
+                alert('No data to export!');
+                return;
+            }
+            
+            // Define CSV headers
+            const headers = [
+                'Submission Time',
+                'Student Name',
+                'Student Email',
+                'Exam Name',
+                'Score',
+                'Total Questions',
+                'Time Taken',
+                'Goal',
+                'Focus Area',
+                'Focus Rating',
+                'Reflection'
+            ];
+            
+            // Format data for CSV
+            const rows = [headers];
+            
+            filteredData.forEach(item => {
+                const row = [
+                    item.submissionTimestamp ? new Date(item.submissionTimestamp).toLocaleString() : 'N/A',
+                    item.studentName || 'N/A',
+                    item.studentEmail || 'N/A',
+                    item.examName || 'N/A',
+                    item.score !== undefined ? item.score.toString() : 'N/A',
+                    item.totalQuestions !== undefined ? item.totalQuestions.toString() : 'N/A',
+                    item.timeTaken || 'N/A',
+                    item.goal || 'N/A',
+                    item.focusArea || 'N/A',
+                    item.focusRating || 'N/A',
+                    item.reflection || 'N/A'
+                ];
+                
+                // Clean up any commas and quotes in the data to avoid CSV issues
+                const cleanedRow = row.map(cell => {
+                    // Escape double quotes with double quotes
+                    const escaped = String(cell).replace(/"/g, '""');
+                    // Wrap in quotes if contains comma, newline or quotes
+                    return /[",\n\r]/.test(escaped) ? `"${escaped}"` : escaped;
+                });
+                
+                rows.push(cleanedRow);
+            });
+            
+            // Convert to CSV string
+            const csvContent = rows.map(row => row.join(',')).join('\n');
+            
+            // Create and trigger download
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', `performance_data_${new Date().toISOString().slice(0,10)}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // --- Display Results Function ---
+        function displayResults(data) {
+            if (data.length === 0) {
+                performanceTableContainer.innerHTML = "<p class=\"text-center text-gray-600\">No matching records found.</p>";
+                return;
+            }
+            
+            let tableHTML = `
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'submissionTimestamp' ? 'sorted-' + currentSortOrder : ''}" 
+                                    data-sort="submissionTimestamp">Submission Time</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'studentName' ? 'sorted-' + currentSortOrder : ''}" 
+                                    data-sort="studentName">Student Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'studentEmail' ? 'sorted-' + currentSortOrder : ''}" 
+                                    data-sort="studentEmail">Student Email</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'examName' ? 'sorted-' + currentSortOrder : ''}" 
+                                    data-sort="examName">Exam Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'score' ? 'sorted-' + currentSortOrder : ''}" 
+                                    data-sort="score">Score</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'totalQuestions' ? 'sorted-' + currentSortOrder : ''}" 
+                                    data-sort="totalQuestions">Total Qs</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'timeTaken' ? 'sorted-' + currentSortOrder : ''}" 
+                                    data-sort="timeTaken">Time Taken</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'goal' ? 'sorted-' + currentSortOrder : ''}" 
+                                    data-sort="goal">Goal</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'focusArea' ? 'sorted-' + currentSortOrder : ''}" 
+                                    data-sort="focusArea">Focus Area</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'focusRating' ? 'sorted-' + currentSortOrder : ''}" 
+                                    data-sort="focusRating">Focus Rating</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'reflection' ? 'sorted-' + currentSortOrder : ''}" 
+                                    data-sort="reflection">Reflection</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+            `;
+
+            data.forEach(item => {
+                const submissionDate = item.submissionTimestamp ? new Date(item.submissionTimestamp).toLocaleString() : 'N/A';
+                const scoreText = item.score !== undefined ? item.score.toString() : 'N/A';
+                const totalQuestionsText = item.totalQuestions !== undefined ? item.totalQuestions.toString() : 'N/A';
+
+                tableHTML += `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">${submissionDate}</td>
+                        <td class="px-6 py-4">
+                            <div class="font-medium">${item.studentName || 'N/A'}</div>
+                            ${item.studentEmail ? `<div class="text-xs text-gray-500 mt-1">${item.studentEmail}</div>` : ''}
+                        </td>
+                        <td class="px-6 py-4">${item.studentEmail || 'N/A'}</td>
+                        <td class="px-6 py-4">${item.examName || 'N/A'}</td>
+                        <td class="px-6 py-4">${scoreText}</td>
+                        <td class="px-6 py-4">${totalQuestionsText}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${item.timeTaken || 'N/A'}</td>
+                        <td class="px-6 py-4">${item.goal || 'N/A'}</td>
+                        <td class="px-6 py-4">${item.focusArea || 'N/A'}</td>
+                        <td class="px-6 py-4">${item.focusRating || 'N/A'}</td>
+                        <td class="px-6 py-4">${item.reflection || 'N/A'}</td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            performanceTableContainer.innerHTML = tableHTML;
+            
+            // Add click handlers for sorting
+            document.querySelectorAll('th.sortable').forEach(th => {
+                th.addEventListener('click', () => {
+                    const column = th.getAttribute('data-sort');
+                    sortData(column);
+                });
+            });
+        }
+
+        // --- Firestore Data Fetching Logic ---
+        async function fetchPerformanceData() {
+            if (!auth.currentUser) {
+                console.log("FetchPerformanceData called, but no user is logged in.");
+                performanceTableContainer.innerHTML = '<p class="text-center text-gray-500">Please log in to view data.</p>';
+                return;
+            }
+
+            console.log("Attempting to fetch performance data (user authenticated)...");
+            performanceTableContainer.innerHTML = '<p class="text-center text-gray-500">Loading performance data...</p>';
+            
+            try {
+                const snapshot = await db.collection("performanceSubmissions")
+                                         .orderBy("submissionTimestamp", "desc")
+                                         .get();
+                console.log("Snapshot received:", snapshot);
+                
+                if (snapshot.empty) {
+                    console.log("No documents found in snapshot.");
+                    performanceTableContainer.innerHTML = "<p class=\"text-center text-gray-600\">No performance data found.</p>";
+                    submissionsCount.textContent = "Showing 0 results";
+                    return;
+                }
+                
+                // Process the data
+                allPerformanceData = snapshot.docs.map(doc => {
+                    const data = doc.data();
+                    return {
+                        id: doc.id,
+                        submissionTimestamp: data.submissionTimestamp,
+                        studentName: data.studentName,
+                        studentEmail: data.studentEmail,
+                        examName: data.examName,
+                        score: data.score,
+                        totalQuestions: data.totalQuestions,
+                        timeTaken: data.timeTaken,
+                        goal: data.goal,
+                        focusArea: data.focusArea,
+                        focusRating: data.focusRating,
+                        reflection: data.reflection
+                    };
+                });
+                
+                // Initially, filtered data is the same as all data
+                filteredData = [...allPerformanceData];
+                
+                // Populate the exam filter dropdown dynamically
+                // First, get unique exam names
+                const examTypes = [...new Set(allPerformanceData.map(item => item.examName).filter(Boolean))];
+                
+                // Clear existing options (except the default "All Exams")
+                while (filterExam.options.length > 1) {
+                    filterExam.remove(1);
+                }
+                
+                // Add options for each unique exam type
+                examTypes.forEach(examType => {
+                    const option = document.createElement('option');
+                    option.value = examType;
+                    option.textContent = examType;
+                    filterExam.appendChild(option);
+                });
+                
+                // Display the initial data without filters
+                applyFilters();
+                
+            } catch (error) {
+                console.error("Error in fetchPerformanceData:", error);
+                performanceTableContainer.innerHTML = "<p class=\"text-center text-red-600\">Error loading data. This could be due to insufficient permissions or a network issue. Check the console.</p>";
+                submissionsCount.textContent = "Error loading data";
+            }
+        }
     </script>
 </body>
 </html>
