@@ -56,18 +56,23 @@
             overflow-x: hidden;
         }
 
+        /* New Menu Bar Box Style */
+        .menu-bar-boxed-container {
+            background-color: #ffffff;
+            border-radius: 18px; /* Pronounced rounded corners like the image */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); /* Soft, slightly spread shadow */
+            margin: 1.5rem auto; /* Space around and center */
+            max-width: 1320px; /* Control width, adjust as needed */
+            overflow: hidden; /* Clip content to rounded corners */
+        }
+
         /* Dashboard Header */
         .dashboard-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 1rem 1.5rem;
-            background-color: #ffffff;
-            border-bottom: 1px solid var(--color-border);
-            box-shadow: var(--shadow-sm);
-            position: sticky;
-            top: 0;
-            z-index: 40;
+            background-color: #ffffff; /* Retain white background */
         }
 
         .dashboard-header .logo-small {
@@ -91,13 +96,8 @@
         .main-nav {
             display: flex;
             justify-content: center;
-            background-color: #ffffff;
+            background-color: #ffffff; /* Retain white background */
             padding: 0.25rem 0;
-            border-bottom: 1px solid var(--color-border);
-            box-shadow: var(--shadow-sm);
-            position: sticky;
-            top: 61px; /* Height of header */
-            z-index: 30;
         }
 
         .nav-tab {
@@ -434,41 +434,44 @@
     </div>
 
     <div id="dashboard-wrapper" class="dashboard-wrapper hidden"> <!-- Initially hidden -->
-        <!-- Header -->
-        <div class="dashboard-header">
-            <a href="home.html">
-                <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="logo-small" onerror="this.style.display='none'; this.onerror=null;">
-            </a>
-            <div class="flex items-center">
-                <span class="welcome-user mr-4">Welcome, <span id="student-display-name" class="font-semibold">Student</span></span>
-                <button id="logout-button" class="btn-logout" aria-label="Logout">
-                    <span>Logout</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Main Navigation -->
-        <nav class="main-nav" role="navigation" aria-label="Main Navigation">
-            <a href="home.html" id="nav-home" class="nav-tab">Home</a>
-            <div id="nav-practice" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
-                <span>Practice</span> <span class="coming-soon-inline">Coming Soon</span>
-            </div>
-            <div class="tests-dropdown-container">
-                <div id="nav-tests" class="nav-tab" role="button" aria-haspopup="true">Tests</div>
-                <div class="tests-dropdown-content" role="menu">
-                    <a href="#" id="nav-tests-exams" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Full Exams <span class="coming-soon-inline">Coming Soon</span></a>
-                    <a href="#" id="nav-tests-vr" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Verbal Reasoning <span class="coming-soon-inline">Coming Soon</span></a>
-                    <a href="#" id="nav-tests-dm" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Decision Making <span class="coming-soon-inline">Coming Soon</span></a>
-                    <a href="student_dashboard.html#qr" id="nav-tests-qr" class="dropdown-item" role="menuitem">Quantitative Reasoning</a>
-                    <a href="#" id="nav-tests-sjt" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Situational Judgement <span class="coming-soon-inline">Coming Soon</span></a>
+        <!-- New Boxed Menu Bar Container -->
+        <div class="menu-bar-boxed-container">
+            <!-- Header -->
+            <div class="dashboard-header">
+                <a href="home.html">
+                    <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="logo-small" onerror="this.style.display='none'; this.onerror=null;">
+                </a>
+                <div class="flex items-center">
+                    <span class="welcome-user mr-4">Welcome, <span id="student-display-name" class="font-semibold">Student</span></span>
+                    <button id="logout-button" class="btn-logout" aria-label="Logout">
+                        <span>Logout</span>
+                    </button>
                 </div>
             </div>
-            <a href="focus_groups.html" id="nav-focus-groups" class="nav-tab" role="button">Focus Groups</a>
-            <a href="student_dashboard.html#results" id="nav-results" class="nav-tab" role="button">Results</a>
-            <div id="nav-skills" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
-                <span>Skills</span> <span class="coming-soon-inline">Coming Soon</span>
-            </div>
-        </nav>
+
+            <!-- Main Navigation -->
+            <nav class="main-nav" role="navigation" aria-label="Main Navigation">
+                <a href="home.html" id="nav-home" class="nav-tab">Home</a>
+                <div id="nav-practice" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
+                    <span>Practice</span> <span class="coming-soon-inline">Coming Soon</span>
+                </div>
+                <div class="tests-dropdown-container">
+                    <div id="nav-tests" class="nav-tab" role="button" aria-haspopup="true">Tests</div>
+                    <div class="tests-dropdown-content" role="menu">
+                        <a href="#" id="nav-tests-exams" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Full Exams <span class="coming-soon-inline">Coming Soon</span></a>
+                        <a href="#" id="nav-tests-vr" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Verbal Reasoning <span class="coming-soon-inline">Coming Soon</span></a>
+                        <a href="#" id="nav-tests-dm" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Decision Making <span class="coming-soon-inline">Coming Soon</span></a>
+                        <a href="student_dashboard.html#qr" id="nav-tests-qr" class="dropdown-item" role="menuitem">Quantitative Reasoning</a>
+                        <a href="#" id="nav-tests-sjt" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Situational Judgement <span class="coming-soon-inline">Coming Soon</span></a>
+                    </div>
+                </div>
+                <a href="focus_groups.html" id="nav-focus-groups" class="nav-tab" role="button">Focus Groups</a>
+                <a href="student_dashboard.html#results" id="nav-results" class="nav-tab" role="button">Results</a>
+                <div id="nav-skills" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
+                    <span>Skills</span> <span class="coming-soon-inline">Coming Soon</span>
+                </div>
+            </nav>
+        </div> <!-- End of New Boxed Menu Bar Container -->
 
         <!-- Content Area for Settings -->
         <main id="dashboard-content-area" class="dashboard-content-area">

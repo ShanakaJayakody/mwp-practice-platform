@@ -41,19 +41,24 @@
             color: var(--color-text); /* Use root variable */
         }
 
+        /* New Menu Bar Box Style */
+        .menu-bar-boxed-container {
+            background-color: #ffffff;
+            border-radius: 18px; /* Pronounced rounded corners like the image */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); /* Soft, slightly spread shadow */
+            margin: 1.5rem auto; /* Space around and center */
+            max-width: 1320px; /* Control width, adjust as needed */
+            overflow: hidden; /* Clip content to rounded corners */
+        }
+
         /* Dashboard Header (Copied from student_dashboard.html) */
         .dashboard-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 1rem 1.5rem;
-            background-color: #ffffff;
-            border-bottom: 1px solid var(--color-border);
-            box-shadow: var(--shadow-sm);
-            position: sticky;
-            top: 0;
-            z-index: 40;
-            width: 100%; /* Ensure header spans full width */
+            background-color: #ffffff; /* Retain white background */
+            /* Removed border-bottom, box-shadow, position: sticky, top, z-index */
         }
 
         .dashboard-header .logo-small { /* Renamed from logo-dashboard for consistency */
@@ -100,13 +105,9 @@
         .main-nav {
             display: flex;
             justify-content: center;
-            background-color: #ffffff;
+            background-color: #ffffff; /* Retain white background */
             padding: 0.25rem 0;
-            border-bottom: 1px solid var(--color-border);
-            box-shadow: var(--shadow-sm);
-            position: sticky;
-            top: 61px; /* Height of dashboard-header */
-            z-index: 30;
+            /* Removed border-bottom, box-shadow, position: sticky, top, z-index */
             width: 100%; /* Ensure nav spans full width */
         }
 
@@ -353,45 +354,48 @@
     </div>
 
     <div id="page-wrapper" class="page-wrapper hidden"> <!-- Initially hidden until auth check -->
-        <!-- Header (Copied from student_dashboard.html) -->
-        <div class="dashboard-header">
-            <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="logo-small" onerror="this.style.display='none'; this.onerror=null;">
-            <div class="flex items-center">
-                <span class="welcome-user mr-4">Welcome, <span id="student-display-name" class="font-semibold">Student</span></span>
-                <a href="settings.html" aria-label="Account Settings" class="mr-4 settings-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                </a>
-                <button id="logout-button" class="btn-logout" aria-label="Logout">
-                    <span>Logout</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Main Navigation (Copied from student_dashboard.html) -->
-        <nav class="main-nav" role="navigation" aria-label="Main Navigation">
-            <a href="home.html" id="nav-home" class="nav-tab" role="button">Home</a>
-            <div id="nav-practice" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
-                <span>Practice</span> <span class="coming-soon-inline">Coming Soon</span>
-            </div>
-            <div class="tests-dropdown-container">
-                <div id="nav-tests" class="nav-tab" role="button" aria-haspopup="true">Tests</div>
-                <div class="tests-dropdown-content" role="menu">
-                    <a href="#" id="nav-tests-exams" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Full Exams <span class="coming-soon-inline">Coming Soon</span></a>
-                    <a href="#" id="nav-tests-vr" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Verbal Reasoning <span class="coming-soon-inline">Coming Soon</span></a>
-                    <a href="#" id="nav-tests-dm" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Decision Making <span class="coming-soon-inline">Coming Soon</span></a>
-                    <a href="student_dashboard.html#qr" id="nav-tests-qr" class="dropdown-item" role="menuitem">Quantitative Reasoning</a>
-                    <a href="#" id="nav-tests-sjt" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Situational Judgement <span class="coming-soon-inline">Coming Soon</span></a>
+        <!-- New Boxed Menu Bar Container -->
+        <div class="menu-bar-boxed-container">
+            <!-- Header (Copied from student_dashboard.html) -->
+            <div class="dashboard-header">
+                <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="logo-small" onerror="this.style.display='none'; this.onerror=null;">
+                <div class="flex items-center">
+                    <span class="welcome-user mr-4">Welcome, <span id="student-display-name" class="font-semibold">Student</span></span>
+                    <a href="settings.html" aria-label="Account Settings" class="mr-4 settings-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </a>
+                    <button id="logout-button" class="btn-logout" aria-label="Logout">
+                        <span>Logout</span>
+                    </button>
                 </div>
             </div>
-            <div id="nav-focus-groups" class="nav-tab active" role="button">Focus Groups</div>
-            <div id="nav-results" class="nav-tab" role="button">Results</div>
-            <div id="nav-skills" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
-                <span>Skills</span> <span class="coming-soon-inline">Coming Soon</span>
-            </div>
-        </nav>
+
+            <!-- Main Navigation (Copied from student_dashboard.html) -->
+            <nav class="main-nav" role="navigation" aria-label="Main Navigation">
+                <a href="home.html" id="nav-home" class="nav-tab" role="button">Home</a>
+                <div id="nav-practice" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
+                    <span>Practice</span> <span class="coming-soon-inline">Coming Soon</span>
+                </div>
+                <div class="tests-dropdown-container">
+                    <div id="nav-tests" class="nav-tab" role="button" aria-haspopup="true">Tests</div>
+                    <div class="tests-dropdown-content" role="menu">
+                        <a href="#" id="nav-tests-exams" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Full Exams <span class="coming-soon-inline">Coming Soon</span></a>
+                        <a href="#" id="nav-tests-vr" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Verbal Reasoning <span class="coming-soon-inline">Coming Soon</span></a>
+                        <a href="#" id="nav-tests-dm" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Decision Making <span class="coming-soon-inline">Coming Soon</span></a>
+                        <a href="student_dashboard.html#qr" id="nav-tests-qr" class="dropdown-item" role="menuitem">Quantitative Reasoning</a>
+                        <a href="#" id="nav-tests-sjt" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Situational Judgement <span class="coming-soon-inline">Coming Soon</span></a>
+                    </div>
+                </div>
+                <div id="nav-focus-groups" class="nav-tab active" role="button">Focus Groups</div>
+                <div id="nav-results" class="nav-tab" role="button">Results</div>
+                <div id="nav-skills" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
+                    <span>Skills</span> <span class="coming-soon-inline">Coming Soon</span>
+                </div>
+            </nav>
+        </div> <!-- End of New Boxed Menu Bar Container -->
         
         <main class="focus-content-area">
             <h1 class="text-3xl font-bold text-gray-800 text-center mb-10">Focus Group Timed Practice</h1>
