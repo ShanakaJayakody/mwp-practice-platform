@@ -701,7 +701,7 @@
 
         <!-- Main Navigation -->
         <nav class="main-nav" role="navigation" aria-label="Main Navigation">
-            <div id="nav-home" class="nav-tab" role="button">Home</div>
+            <a href="home.html" id="nav-home" class="nav-tab" role="button">Home</a>
             <div id="nav-practice" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
                 <span>Practice</span> <span class="coming-soon-inline">Coming Soon</span>
             </div>
@@ -1196,10 +1196,8 @@
             const email = signupEmailInput.value.trim();
             const password = signupPasswordInput.value;
             
-            // Clear previous errors
             signupErrorP.textContent = '';
             
-            // Validate inputs
             if (name === '') {
                 showErrorMessage(signupErrorP, 'Please enter your name.');
                 signupNameInput.focus();
@@ -1218,26 +1216,30 @@
                 return;
             }
 
-            // Show loading state
             setButtonLoading(signupButton, signupSpinner, true);
 
-            // Create account
             firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    // Update profile with name
                     return userCredential.user.updateProfile({
                         displayName: name
-                    });
+                    }).then(() => userCredential); // Pass userCredential to the next then block
+                })
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    const db = firebase.firestore();
+                    return db.collection("users").doc(user.uid).set({
+                        displayName: name,
+                        email: user.email,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true });
                 })
                 .then(() => {
-                    console.log("Account created successfully");
+                    console.log("Account created and user details saved to Firestore");
                     // onAuthStateChanged will handle UI update
                 })
                 .catch((error) => {
                     console.error("Signup error:", error);
                     showErrorMessage(signupErrorP, error.message);
-                    
-                    // Reset loading state
                     setButtonLoading(signupButton, signupSpinner, false);
                 });
         });
@@ -1288,33 +1290,41 @@
         });
 
         function handleGoogleSignIn() {
-            // Clear error messages
             loginErrorP.textContent = '';
             signupErrorP.textContent = '';
             
             const provider = new firebase.auth.GoogleAuthProvider();
             
-            // Show loading indicators on both buttons
             const isOnLoginForm = !loginForm.classList.contains('hidden');
-            setButtonLoading(googleLoginButton, isOnLoginForm ? loginSpinner : signupSpinner, true);
+            // Determine which spinner to use based on the visible form
+            const currentSpinner = isOnLoginForm ? loginSpinner : signupSpinner;
+            const currentButton = isOnLoginForm ? googleLoginButton : googleSignupButton;
+
+            setButtonLoading(currentButton, currentSpinner, true);
             
             firebase.auth().signInWithPopup(provider)
+                .then((result) => {
+                    const user = result.user;
+                    const db = firebase.firestore();
+                    return db.collection("users").doc(user.uid).set({
+                        displayName: user.displayName,
+                        email: user.email,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        provider: 'google.com'
+                    }, { merge: true });
+                })
                 .then(() => {
-                    console.log("Google sign-in successful");
-                    // onAuthStateChanged will handle UI update
+                    console.log("Google sign-in successful and user details saved to Firestore");
+                    // onAuthStateChanged will handle UI update, no need to call setButtonLoading here as page reloads/auth state changes.
                 })
                 .catch((error) => {
                     console.error("Google sign-in error:", error);
-                    
-                    // Show error message on the visible form
                     if (isOnLoginForm) {
                         showErrorMessage(loginErrorP, error.message);
                     } else {
                         showErrorMessage(signupErrorP, error.message);
                     }
-                    
-                    // Reset loading state
-                    setButtonLoading(googleLoginButton, isOnLoginForm ? loginSpinner : signupSpinner, false);
+                    setButtonLoading(currentButton, currentSpinner, false);
                 });
         }
 
