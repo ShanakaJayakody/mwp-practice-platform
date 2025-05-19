@@ -3,28 +3,51 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Allow users to read and write their own document in the 'users' collection
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Allow users to read and write their own document in the 'userPreferences' collection
+    match /userPreferences/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
     // Rules for the 'performanceSubmissions' collection
     match /performanceSubmissions/{submissionId} {
 
-      // Allow anyone to create (submit) new performance records for now.
-      // We can make this more secure later if students have their own logins.
-      // For example, by checking if request.auth.uid matches a studentUid field in the data:
-      // allow create: if request.auth != null && request.resource.data.studentUid == request.auth.uid;
-      allow create: if true;
+      // Allow authenticated users to create new performance records
+      // It's generally better to require authentication for creates as well
+      allow create: if request.auth != null;
 
-      // ONLY allow read and list operations IF the authenticated user's UID
-      // matches the specific admin UID you provided.
-      // If you have other admin UIDs, you can add them with "||" (OR) conditions.
-      allow read, list: if request.auth != null &&
+      // Allow students to read their own data based on UID stored in the document
+      // It's more secure to rely on a 'userId' field in the document that matches request.auth.uid
+      // Assuming you will add/have a 'userId' field in your performanceSubmissions documents:
+      // allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      // For now, keeping your existing logic, but consider updating to UID based checks.
+      allow read: if request.auth != null &&
+                  (resource.data.studentEmail == request.auth.token.email ||
+                   resource.data.studentName == request.auth.token.name || 
+                   (resource.data.userId != null && resource.data.userId == request.auth.uid) );
+
+
+      // Allow admin to read and list all submissions
+      allow list: if request.auth != null &&
                           request.auth.uid == "mUgcxuWWOYWErgf0MzjgUacHCEf2";
-                          // Example if you had another admin UID:
-                          // (request.auth.uid == "mUgcxuWWOYWErgf0MzjgUacHCEf2" ||
-                          //  request.auth.uid == "ANOTHER_ADMIN_UID_HERE");
+      
+      // Admin read access can be combined if list is also desired for admin reads
+      allow read: if (request.auth != null &&
+                  (resource.data.studentEmail == request.auth.token.email ||
+                   resource.data.studentName == request.auth.token.name ||
+                   (resource.data.userId != null && resource.data.userId == request.auth.uid) )) ||
+                  (request.auth != null && request.auth.uid == "mUgcxuWWOYWErgf0MzjgUacHCEf2");
 
-      // Generally, prevent client-side updates or deletes by non-admins.
-      // Admins could be allowed to update/delete via specific rules if needed,
-      // or these operations could be handled by Cloud Functions (Admin SDK).
-      allow update, delete: if false;
+
+      // Prevent client-side updates or deletes by non-admins
+      // Consider if admin should be able to update/delete
+      allow update, delete: if request.auth != null &&
+                               request.auth.uid == "mUgcxuWWOYWErgf0MzjgUacHCEf2"; // Example: Allow admin to update/delete
+      // If only backend/server should do this, then "if false;" is correct for client-side.
     }
 
     // If you add other collections later (e.g., a 'students' collection or an 'admins' collection for Option B),

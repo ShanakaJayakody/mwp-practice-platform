@@ -1348,9 +1348,19 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
             if (typeof firebase !== 'undefined' && firebase.firestore) {
                 try {
                     const db = firebase.firestore();
-                    db.collection("performanceSubmissions").add(data)
+                    let userId = ''; // <--- Add this
+                    if (firebase.auth && firebase.auth().currentUser) {
+                        userId = firebase.auth().currentUser.uid; // <--- Get the UID
+                    }
+                    
+                    const dataToSubmit = {
+                        ...data, // Spread existing data
+                        userId: userId // <--- Add userId here
+                    };
+
+                    db.collection("performanceSubmissions").add(dataToSubmit) // Use dataToSubmit
                       .then(() => {
-                          console.log("Performance data submitted to Firebase");
+                          console.log("Performance data submitted to Firebase with userId");
                           
                           // Show a success notification that will be displayed on the results screen
                           setTimeout(() => {
@@ -1492,10 +1502,12 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
                     
                     // Get current authenticated user data if available
                     let userDisplayName = '';
+                    let userId = ''; // <--- Add this
                     
                     if (firebase.auth && firebase.auth().currentUser) {
                         const currentUser = firebase.auth().currentUser;
                         userDisplayName = currentUser.displayName || '';
+                        userId = currentUser.uid; // <--- Get the UID
                         // Note: we're already storing userEmail from when the test started
                     }
                     
@@ -1503,6 +1515,7 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
                     const performanceData = {
                         studentName: userName || userDisplayName || 'Anonymous',
                         studentEmail: userEmail || '',
+                        userId: userId, // <--- Add userId here
                         examName: "QR Test 1",
                         score: scoreEl.textContent,
                         totalQuestions: totalQuestionsResultsEl.textContent,

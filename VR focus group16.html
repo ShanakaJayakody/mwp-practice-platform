@@ -1050,11 +1050,12 @@
                     
                     // Get current authenticated user data if available
                     let userDisplayName = '';
+                    let userId = '';
                     
                     if (firebase.auth && firebase.auth().currentUser) {
                         const currentUser = firebase.auth().currentUser;
                         userDisplayName = currentUser.displayName || '';
-                        userEmail = currentUser.email || '';
+                        userId = currentUser.uid;
                     }
                     
                     const timeInMs = practiceSessionEndTime - practiceSessionStartTime;
@@ -1066,6 +1067,7 @@
                     const performanceData = {
                         studentName: userName || userDisplayName || 'Anonymous',
                         studentEmail: userEmail || '',
+                        userId: userId,
                         examName: "VR Focus Group 16",
                         score: score.toString(),
                         totalQuestions: (passages.length * 4).toString(),
@@ -1240,10 +1242,12 @@
                     
                     // Get current authenticated user data if available
                     let userDisplayName = '';
+                    let userId = '';
                     
                     if (firebase.auth && firebase.auth().currentUser) {
                         const currentUser = firebase.auth().currentUser;
                         userDisplayName = currentUser.displayName || '';
+                        userId = currentUser.uid;
                         // Note: we're already storing userEmail from when the test started
                     }
                     
@@ -1251,6 +1255,7 @@
                     const performanceData = {
                         studentName: userName || userDisplayName || 'Anonymous',
                         studentEmail: userEmail || '',
+                        userId: userId,
                         examName: "VR Focus Group 16",
                         score: scoreEl.textContent,
                         totalQuestions: totalQuestionsResultsEl.textContent,
