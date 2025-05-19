@@ -7,66 +7,228 @@
     <link rel="icon" href="https://ik.imagekit.io/mwp/2.svg?updatedAt=1745982956185" type="image/svg+xml">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        :root {
+            --color-primary: #3b82f6;
+            --color-primary-dark: #2563eb;
+            --color-primary-light: #93c5fd;
+            --color-primary-bg: #eff6ff;
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-danger: #ef4444;
+            --color-text: #1f2937;
+            --color-text-secondary: #4b5563;
+            --color-text-tertiary: #6b7280;
+            --color-bg: #f9fafb;
+            --color-bg-secondary: #f3f4f6;
+            --color-border: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius-sm: 0.375rem;
+            --radius: 0.5rem;
+            --radius-md: 0.75rem;
+            --transition: 220ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8;
-            display: flex;
-            flex-direction: column; /* Allow header and main content to stack */
-            align-items: center;
-            min-height: 100vh;
-            padding-top: 1rem; /* Space for header */
-            color: #1f2937;
-        }
-        .page-wrapper {
-            background-color: #ffffff;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
-            width: 100%;
-            max-width: 1100px; /* Wider for more content */
-            margin-top: 1rem;
-            min-height: 80vh;
+            background-color: var(--color-bg); /* Use root variable */
             display: flex;
             flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding-top: 0; /* Remove padding-top as sticky header handles it */
+            color: var(--color-text); /* Use root variable */
         }
-        .focus-header {
+
+        /* Dashboard Header (Copied from student_dashboard.html) */
+        .dashboard-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 1rem 1.5rem;
-            border-bottom: 1px solid #e5e7eb;
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--color-border);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            width: 100%; /* Ensure header spans full width */
         }
-        .focus-header .logo-dashboard {
-            max-width: 130px;
+
+        .dashboard-header .logo-small { /* Renamed from logo-dashboard for consistency */
+            max-width: 132px; /* Consistent with dashboard */
             height: auto;
+            transition: all var(--transition);
         }
-        .focus-header .user-actions {
+        .dashboard-header .logo-small:hover {
+            transform: scale(1.03);
+        }
+
+        .welcome-user {
+            font-size: 0.9rem; /* Consistent with dashboard */
+            color: var(--color-text-secondary);
             display: flex;
             align-items: center;
+            margin-right: 1rem; /* Consistent spacing */
         }
-        .welcome-user { font-size: 0.95rem; color: #4b5563; margin-right: 1rem;}
-        .btn-dashboard-link, .btn-logout-focus {
+        .welcome-user::before { /* Online indicator dot */
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: var(--color-success);
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .btn-logout { /* Renamed from btn-logout-focus for consistency */
+            background-color: var(--color-danger);
+            color: white;
             padding: 0.5rem 1rem;
             font-size: 0.875rem;
+            border-radius: var(--radius);
+            transition: all var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+        .btn-logout:hover {
+            background-color: #dc2626; /* Darker red on hover */
+            box-shadow: var(--shadow);
+        }
+
+        /* Main Navigation (Copied and adapted from student_dashboard.html) */
+        .main-nav {
+            display: flex;
+            justify-content: center;
+            background-color: #ffffff;
+            padding: 0.25rem 0;
+            border-bottom: 1px solid var(--color-border);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 61px; /* Height of dashboard-header */
+            z-index: 30;
+            width: 100%; /* Ensure nav spans full width */
+        }
+
+        .nav-tab {
+            padding: 0.875rem 1.5rem;
+            margin: 0 0.5rem;
+            cursor: pointer;
             font-weight: 500;
-            border-radius: 0.375rem;
-            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+            color: var(--color-text-secondary);
+            border-bottom: 2px solid transparent; /* Keep for spacing */
+            transition: color var(--transition), background-color var(--transition);
+            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+            position: relative;
+            user-select: none;
+        }
+        .nav-tab::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 100%;
+            height: 2px;
+            background-color: var(--color-primary);
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 0.3s ease-out;
+        }
+        .nav-tab:hover {
+            color: var(--color-primary);
+            background-color: var(--color-primary-bg);
+        }
+        .nav-tab:hover::after {
+            transform: scaleX(1);
+        }
+        .nav-tab.active {
+            color: var(--color-primary);
+            background-color: var(--color-primary-bg);
+        }
+        .nav-tab.active::after {
+            transform: scaleX(1);
+        }
+        .nav-tab-disabled {
+            color: var(--color-text-tertiary);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .nav-tab-disabled .coming-soon-inline,
+        .dropdown-item.disabled .coming-soon-inline {
+            font-size: 0.65rem;
+            color: var(--color-text-tertiary);
+            margin-left: 4px;
+            background-color: var(--color-bg-secondary); /* Match disabled tab bg for consistency */
+            padding: 0.1rem 0.4rem;
+            border-radius: 1rem;
+        }
+        .dropdown-item.disabled .coming-soon-inline {
+             background-color: rgba(255, 255, 255, 0.7); /* Specific override if needed inside dropdown */
+        }
+
+        /* Dropdown for Tests Tab */
+        .tests-dropdown-container {
+            position: relative;
+        }
+        .tests-dropdown-content {
+            opacity: 0;
+            visibility: hidden;
+            position: absolute;
+            background-color: #ffffff;
+            min-width: 200px;
+            box-shadow: var(--shadow-md);
+            z-index: 50;
+            border-radius: var(--radius);
+            margin-top: 0.25rem;
+            border: 1px solid var(--color-border);
+            transform: translateY(-10px);
+            transition: all var(--transition);
+            overflow: hidden;
+        }
+        .tests-dropdown-container:hover .tests-dropdown-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .dropdown-item {
+            color: var(--color-text-secondary);
+            padding: 0.75rem 1rem;
             text-decoration: none;
+            display: block;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--color-border);
+            transition: all var(--transition);
         }
-        .btn-dashboard-link {
-            background-color: #e0e7ff; /* Light indigo */
-            color: #3730a3; /* Indigo */
-            border: 1px solid #c7d2fe;
-            margin-right: 0.75rem;
+        .dropdown-item:last-child { border-bottom: none; }
+        .dropdown-item:hover:not(.disabled) {
+            background-color: var(--color-primary-bg);
+            color: var(--color-primary-dark);
+            padding-left: 1.25rem;
         }
-        .btn-dashboard-link:hover { background-color: #c7d2fe; color: #312e81; }
-        .btn-logout-focus {
-            background-color: #fee2e2; color: #b91c1c; border: 1px solid #fecaca;
+        .dropdown-item.disabled {
+            color: var(--color-text-tertiary);
+            cursor: not-allowed;
+            background-color: var(--color-bg-secondary);
+            opacity: 0.7;
         }
-        .btn-logout-focus:hover { background-color: #fecaca; color: #991b1b; }
+        /* End of Copied/Adapted dashboard styles */
+
+        .page-wrapper { /* Existing styles for focus_groups, adjusted */
+            background-color: #ffffff;
+            width: 100%; /* Let dashboard-header and main-nav control their width */
+            /* max-width: 1100px; Removed, let content decide or use a new inner wrapper */
+            min-height: 100vh; /* Ensure it takes full viewport height */
+            display: flex;
+            flex-direction: column;
+            /* Removed margin-top, box-shadow, border-radius as these are now on body/dashboard elements */
+        }
 
         .focus-content-area {
             padding: 2rem 2.5rem;
             flex-grow: 1;
+            width: 100%;
+            max-width: 1100px; /* Max width for the content area itself */
+            margin: 0 auto; /* Center content area */
         }
         .section-selection-container {
             display: flex;
@@ -178,16 +340,52 @@
     <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
-    <div id="page-wrapper" class="page-wrapper hidden"> <!-- Initially hidden until auth check -->
-        <header class="focus-header">
-            <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="logo-dashboard" onerror="this.style.display='none'; this.onerror=null;">
-            <div class="user-actions">
-                <span class="welcome-user">Welcome, <span id="focus-user-name" class="font-semibold">Student</span>!</span>
-                <a href="student_dashboard.html" class="btn-dashboard-link focus-ring-blue">Dashboard</a>
-                <button id="focus-logout-button" class="btn-logout-focus focus-ring-blue">Logout</button>
-            </div>
-        </header>
+    <!-- Auth Screen (Copied from student_dashboard.html for consistency if user is logged out) -->
+    <div id="auth-section" class="fixed inset-0 bg-gray-100 flex items-center justify-center z-50 hidden">
+        <div class="auth-container bg-white p-8 rounded-lg shadow-xl max-w-md w-full text-center">
+            <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="mx-auto h-12 w-auto mb-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-3">Access Denied</h2>
+            <p class="text-gray-600 mb-6">You need to be logged in to view this page.</p>
+            <a href="student_dashboard.html" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
+                Go to Login
+            </a>
+        </div>
+    </div>
 
+    <div id="page-wrapper" class="page-wrapper hidden"> <!-- Initially hidden until auth check -->
+        <!-- Header (Copied from student_dashboard.html) -->
+        <div class="dashboard-header">
+            <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="logo-small" onerror="this.style.display='none'; this.onerror=null;">
+            <div class="flex items-center">
+                <span class="welcome-user mr-4">Welcome, <span id="student-display-name" class="font-semibold">Student</span></span>
+                <button id="logout-button" class="btn-logout" aria-label="Logout">
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Navigation (Copied from student_dashboard.html) -->
+        <nav class="main-nav" role="navigation" aria-label="Main Navigation">
+            <div id="nav-practice" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
+                <span>Practice</span> <span class="coming-soon-inline">Coming Soon</span>
+            </div>
+            <div class="tests-dropdown-container">
+                <div id="nav-tests" class="nav-tab" role="button" aria-haspopup="true">Tests</div>
+                <div class="tests-dropdown-content" role="menu">
+                    <a href="#" id="nav-tests-exams" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Full Exams <span class="coming-soon-inline">Coming Soon</span></a>
+                    <a href="#" id="nav-tests-vr" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Verbal Reasoning <span class="coming-soon-inline">Coming Soon</span></a>
+                    <a href="#" id="nav-tests-dm" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Decision Making <span class="coming-soon-inline">Coming Soon</span></a>
+                    <a href="student_dashboard.html#qr" id="nav-tests-qr" class="dropdown-item" role="menuitem">Quantitative Reasoning</a>
+                    <a href="#" id="nav-tests-sjt" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Situational Judgement <span class="coming-soon-inline">Coming Soon</span></a>
+                </div>
+            </div>
+            <div id="nav-focus-groups" class="nav-tab active" role="button">Focus Groups</div>
+            <div id="nav-results" class="nav-tab" role="button">Results</div>
+            <div id="nav-skills" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
+                <span>Skills</span> <span class="coming-soon-inline">Coming Soon</span>
+            </div>
+        </nav>
+        
         <main class="focus-content-area">
             <h1 class="text-3xl font-bold text-gray-800 text-center mb-10">Focus Group Timed Practice</h1>
 
@@ -225,7 +423,6 @@
         <p class="mt-4"><a href="student_dashboard.html" class="text-blue-600 hover:underline">Return to Login</a></p>
     </div>
 
-
     <script>
         // --- Firebase Configuration ---
         const firebaseConfig = {
@@ -258,8 +455,18 @@
                     // --- DOM Elements ---
                     const pageWrapper = document.getElementById('page-wrapper');
                     const authRedirectMessage = document.getElementById('auth-redirect-message');
-                    const focusUserNameSpan = document.getElementById('focus-user-name');
-                    const focusLogoutButton = document.getElementById('focus-logout-button');
+                    const focusUserNameSpan = document.getElementById('focus-user-name'); // To be replaced by student-display-name
+                    const focusLogoutButton = document.getElementById('focus-logout-button'); // To be replaced by logout-button
+                    
+                    // New Nav Elements from dashboard
+                    const studentDisplayNameSpan = document.getElementById('student-display-name');
+                    const logoutButton = document.getElementById('logout-button'); // New logout button from dashboard header
+                    const navPractice = document.getElementById('nav-practice');
+                    const navTests = document.getElementById('nav-tests');
+                    const navFocusGroupsTab = document.getElementById('nav-focus-groups'); // Explicitly get this tab
+                    const navResults = document.getElementById('nav-results');
+                    const navSkills = document.getElementById('nav-skills');
+                    const navTestsQR = document.getElementById('nav-tests-qr');
 
                     const selectVRCard = document.getElementById('select-vr');
                     const selectDMCard = document.getElementById('select-dm');
@@ -274,22 +481,71 @@
                     auth.onAuthStateChanged(user => {
                         if (user) {
                             pageWrapper.classList.remove('hidden');
-                            authRedirectMessage.classList.add('hidden');
-                            focusUserNameSpan.textContent = user.displayName || user.email || 'Student';
-                            localStorage.setItem('qrStudentName', user.displayName || user.email || ''); // Consistent with dashboard
+                            authRedirectMessage.classList.add('hidden'); // Hide the simple auth message
+                            document.getElementById('auth-section').classList.add('hidden'); // Hide the new auth screen if user is logged in
+
+                            // Use the new display name span from the copied header
+                            if(studentDisplayNameSpan) studentDisplayNameSpan.textContent = user.displayName || user.email || 'Student';
+                            localStorage.setItem('qrStudentName', user.displayName || user.email || '');
                         } else {
                             pageWrapper.classList.add('hidden');
-                            authRedirectMessage.classList.remove('hidden');
-                            // Optionally, redirect to login page after a delay
-                            // setTimeout(() => { window.location.href = 'student_dashboard.html'; }, 3000);
+                            document.getElementById('auth-section').classList.remove('hidden'); // Show the new auth screen
                         }
                     });
 
-                    if (focusLogoutButton) {
-                        focusLogoutButton.addEventListener('click', () => {
+                    // Use the new logout button from the copied header
+                    if (logoutButton) {
+                        logoutButton.addEventListener('click', () => {
                             auth.signOut().then(() => {
-                                window.location.href = 'student_dashboard.html'; // Redirect to dashboard which will show login
+                                window.location.href = 'student_dashboard.html'; 
                             }).catch(console.error);
+                        });
+                    }
+
+                    // Navigation Logic for the new nav bar
+                    if (navPractice) {
+                        navPractice.addEventListener('click', () => {
+                            // It's disabled, but good practice if it were enabled
+                            alert('Practice section is coming soon!');
+                        });
+                    }
+                    if (navTests) {
+                        // Main "Tests" tab click might not do anything directly if it's a dropdown trigger
+                        // Or it could default to QR or show a general message
+                         navTests.addEventListener('click', (e) => {
+                            // Allow dropdown to function
+                            // If direct click is needed, check if e.target is navTests itself
+                        });
+                    }
+                    if (navTestsQR) { // Already links to student_dashboard.html#qr via href
+                        navTestsQR.addEventListener('click', (e) => {
+                             // Let href handle navigation
+                        });
+                    }
+                     // Add similar event listeners for other test types if they become active
+                    document.querySelectorAll('#nav-tests-exams, #nav-tests-vr, #nav-tests-dm, #nav-tests-sjt').forEach(item => {
+                        item.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            alert(item.textContent.replace('Coming Soon','').trim() + ' tests are coming soon!');
+                        });
+                    });
+
+
+                    if (navFocusGroupsTab) {
+                        // Already on this page, it's set to active via class in HTML
+                        navFocusGroupsTab.addEventListener('click', (e) => {
+                             e.preventDefault(); // Stay on page
+                        });
+                    }
+
+                    if (navResults) {
+                        navResults.addEventListener('click', () => {
+                            window.location.href = 'student_dashboard.html#results';
+                        });
+                    }
+                    if (navSkills) {
+                         navSkills.addEventListener('click', () => {
+                            alert('Skills section is coming soon!');
                         });
                     }
                     
