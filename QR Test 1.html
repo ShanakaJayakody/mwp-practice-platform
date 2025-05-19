@@ -1308,6 +1308,7 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
             // Gather data to submit to Firebase
             const performanceData = {
                 studentName: userName || 'Anonymous',
+                studentEmail: userEmail || '', // <--- ADD THIS LINE
                 examName: "QR Test 1",
                 score: calculateScore(), // New function to calculate score
                 totalQuestions: questions.length,
