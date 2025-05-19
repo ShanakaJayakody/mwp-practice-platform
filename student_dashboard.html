@@ -126,11 +126,24 @@
             cursor: pointer;
             font-weight: 500;
             color: var(--color-text-secondary);
-            border-bottom: 2px solid transparent;
-            transition: all var(--transition);
+            border-bottom: 2px solid transparent; /* Keep for spacing */
+            transition: color var(--transition), background-color var(--transition); /* Specific transitions */
             border-radius: var(--radius-sm) var(--radius-sm) 0 0;
             position: relative;
             user-select: none;
+        }
+
+        .nav-tab::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px; /* Aligns with the original border-bottom space */
+            width: 100%;
+            height: 2px;
+            background-color: var(--color-primary);
+            transform: scaleX(0);
+            transform-origin: center; /* Underline grows from the center */
+            transition: transform 0.3s ease-out;
         }
 
         .nav-tab:hover {
@@ -138,10 +151,18 @@
             background-color: var(--color-primary-bg);
         }
 
+        .nav-tab:hover::after {
+            transform: scaleX(1); /* Show underline on hover */
+        }
+
         .nav-tab.active {
             color: var(--color-primary);
-            border-bottom-color: var(--color-primary);
+            /* border-bottom-color: var(--color-primary); Removed as ::after handles it */
             background-color: var(--color-primary-bg);
+        }
+
+        .nav-tab.active::after {
+            transform: scaleX(1); /* Ensure active tab also has the underline */
         }
 
         .nav-tab-disabled {
