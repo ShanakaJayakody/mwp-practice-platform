@@ -405,10 +405,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/mwp-styles.css">
     
-    <!-- Load our modular JS files -->
+    <!-- Firebase SDKs -->
+    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Critical local JS modules -->
     <script defer src="js/auth.js"></script>
     <script defer src="js/ui-components.js"></script>
+    <script defer src="js/error-handling.js"></script>
+    
+    <!-- Other local JS modules -->
     <script defer src="js/data-service.js"></script>
+    <script defer src="js/form-validation.js"></script>
+    <script defer src="js/performance.js"></script>
 </head>
 <body>
     <!-- Login Container (initially hidden) -->
@@ -552,9 +562,6 @@
     </div>
 
     <!-- Firebase Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     
     <script>
         // Firebase configuration
