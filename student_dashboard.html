@@ -78,10 +78,12 @@
             background-color: #ffffff;
             width: 100%;
             margin: 0;
-            min-height: 100vh;
+            /* min-height: 100vh; */ /* Changed for diagnostics */
+            height: 100vh; /* Added for diagnostics */
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
+            border: 5px solid red; /* Added for diagnostics */
         }
 
         .logo {
