@@ -54,7 +54,7 @@
             margin: 1.5rem auto; /* Space around and center */
             max-width: 1320px; /* Control width, adjust as needed */
             overflow: hidden; /* Clip content to rounded corners */
-            border: 3px solid blue; /* Diagnostic border */
+            /* border: 3px solid blue; */ /* Removed diagnostic border */
         }
 
         /* Auth Container Styles */
@@ -79,12 +79,12 @@
             background-color: #ffffff;
             width: 100%;
             margin: 0;
-            /* min-height: 100vh; */ /* Changed for diagnostics */
-            height: 100vh; /* Added for diagnostics */
+            min-height: 100vh; /* Restored */
+            /* height: 100vh; */ /* Removed diagnostic */
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
-            border: 5px solid red; /* Added for diagnostics */
+            /* border: 5px solid red; */ /* Removed diagnostic */
         }
 
         .logo {
@@ -256,7 +256,7 @@
             flex-grow: 1;
             background-color: var(--color-bg);
             overflow-y: auto;
-            border: 3px solid green; /* Diagnostic border */
+            /* border: 3px solid green; */ /* Removed diagnostic border */
         }
 
         /* Test Links Styling */
