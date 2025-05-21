@@ -298,6 +298,85 @@
        .result-statement.incorrect { border-left-color: #ef4444; }
        /* --- END Result Styling --- */
 
+        /* --- Results Overview Grid (New) --- */
+        #results-overview-grid {
+            /* Styles for the grid container itself are in Tailwind classes */
+        }
+        .result-summary-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background-color: #fff;
+            border: 1px solid #e5e7eb; /* Tailwind gray-200 */
+            border-radius: 0.5rem; /* Tailwind rounded-lg */
+            padding: 0.75rem; /* Tailwind p-3 */
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Subtle shadow */
+            cursor: pointer;
+        }
+        .result-summary-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .result-summary-item.flagged-result {
+            border-left-width: 4px;
+            border-left-color: #f59e0b; /* Tailwind amber-500 */
+        }
+        .result-summary-points {
+            font-size: 1.125rem; /* Tailwind text-lg */
+            font-weight: 600; /* Tailwind font-semibold */
+            margin-bottom: 0.25rem;
+        }
+        .result-summary-points.correct-2pts { color: #16a34a; } /* Tailwind green-600 */
+        .result-summary-points.correct-1pt { color: #ca8a04; } /* Tailwind yellow-600 */
+        .result-summary-points.incorrect-0pts { color: #dc2626; } /* Tailwind red-600 */
+        
+        .result-summary-qnum {
+            font-size: 0.875rem; /* Tailwind text-sm */
+            color: #4b5563; /* Tailwind gray-600 */
+            margin-bottom: 0.5rem;
+        }
+        .result-summary-statements {
+            font-size: 0.75rem; /* Tailwind text-xs */
+            color: #6b7280; /* Tailwind gray-500 */
+            line-height: 1.2;
+        }
+         /* Tooltip for statement summary on hover (simple version) */
+        .result-summary-item .tooltip-text {
+            visibility: hidden;
+            width: 180px;
+            background-color: #374151; /* Tailwind gray-700 */
+            color: #fff;
+            text-align: left;
+            padding: 8px;
+            border-radius: 6px;
+            position: absolute;
+            z-index: 1;
+            bottom: 110%; /* Position above the item */
+            left: 50%;
+            margin-left: -90px; /* Use half of the width to center */
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 0.75rem;
+            line-height: 1.3;
+        }
+        .result-summary-item:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        .result-summary-item .tooltip-text::after { /* Arrow */
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #374151 transparent transparent transparent;
+        }
+        /* --- END Results Overview Grid --- */
+
         /* Style for explanation box */
         .explanation-box { background-color: #fef3c7; border: 1px solid #fcd34d; padding: 0.75rem; margin-top: 1rem; border-radius: 0.375rem; font-size: 0.875rem; color: #78350f; }
 
@@ -458,12 +537,17 @@
              </div>
             <div class="bg-blue-50 p-4 rounded-lg mb-6 text-center flex-shrink-0">
                  <p class="text-lg font-semibold">Your Score: <span id="score" class="text-blue-700">0</span> / <span id="total-score-possible">10</span> Points</p>
-                 <p class="text-gray-600">Time Taken: <span id="time-taken">N/A</span></p> </div>
-            <h3 class="text-xl font-semibold mb-2 flex-shrink-0">Detailed Results:</h3>
-            <p class="text-sm text-gray-500 mb-4 flex-shrink-0">Click on a question below to review it.</p>
-            <div id="results-details" class="space-y-3 overflow-y-auto flex-grow pr-2">
-                </div>
-            <div class="mt-6 flex-shrink-0 border-t pt-4">
+                 <p class="text-gray-600">Time Taken: <span id="time-taken">N/A</span></p>
+            </div>
+
+            <h3 class="text-xl font-semibold mb-1 text-center flex-shrink-0">Detailed Results Overview</h3>
+            <p class="text-sm text-gray-500 mb-4 text-center flex-shrink-0">Click on a question box below to review it. Hover for statement summary.</p>
+            
+            <div id="results-overview-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6 overflow-y-auto flex-grow px-2 py-1">
+                <!-- Question summary boxes will be populated here by JavaScript -->
+            </div>
+            
+            <div class="mt-auto flex-shrink-0 border-t pt-4">
                  <div class="mb-4">
                      <label for="focus-rating" class="block text-md font-semibold text-gray-700 mb-1">My focus out of 5 (1 very low, 5 very high):</label>
                      <input type="number" id="focus-rating" name="focus-rating" min="1" max="5" class="mt-1 block w-20 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="1-5">
@@ -474,8 +558,8 @@
                  </div>
             </div>
              <div class="mt-6 text-center flex-shrink-0 flex justify-center space-x-4">
-                <button onclick="window.location.reload()" class="secondary-button px-6 py-2">
-                    Try Again
+                <button onclick="window.location.href = 'practice.html#dm-content';" class="secondary-button px-6 py-2">
+                    Back to DM Worksheets
                 </button>
                 <button id="download-pdf-button" class="primary-button px-6 py-2">
                     Download Results PDF
@@ -598,7 +682,7 @@
 
             const question = questionsData[index];
             const newPremiseIndex = question.premiseIndex;
-            const mainContentArea = document.querySelector('.main-content-area'); // Get scrollable area
+            const mainContentArea = document.querySelector('.main-content-area'); 
 
             // Load premises
             if (newPremiseIndex !== currentlyDisplayedPremiseIndex || reviewMode) {
@@ -607,19 +691,19 @@
             }
 
             currentQuestionIndex = index;
-            isReviewingFromResults = reviewMode;
+            isReviewingFromResults = reviewMode; // Ensure this state is set
 
             questionNumberEl.textContent = index + 1;
             questionNumberInfoEl.textContent = `${index + 1} of ${questionsData.length}`;
-            if (mainContentArea) mainContentArea.scrollTop = 0; // Scroll main area to top
+            if (mainContentArea) mainContentArea.scrollTop = 0; 
 
-            statementsListContainer.innerHTML = ''; // Clear previous statements
-            reviewExplanationContainer.innerHTML = ''; // Clear previous explanation
+            statementsListContainer.innerHTML = ''; 
+            reviewExplanationContainer.innerHTML = ''; 
 
             question.statements.forEach((statementText, statementIndex) => {
                 const statementRow = document.createElement('div');
                 statementRow.classList.add('statement-row');
-                statementRow.dataset.qIndex = index; // Store indices on the row
+                statementRow.dataset.qIndex = index; 
                 statementRow.dataset.sIndex = statementIndex;
 
                 const textBox = document.createElement('div');
@@ -629,79 +713,71 @@
 
                 const answerBox = document.createElement('div');
                 answerBox.classList.add('statement-answer-box');
-                answerBox.id = `q${index}-s${statementIndex}-answerbox`; // Unique ID
-                // No need for data attributes on answerBox if drop target is the row
+                answerBox.id = `q${index}-s${statementIndex}-answerbox`; 
                 statementRow.appendChild(answerBox);
 
-                // Set initial state of the answer box
-                const currentAnswer = userAnswers[index] ? userAnswers[index][statementIndex] : null;
-                updateAnswerBox(answerBox, currentAnswer);
+                const currentAnswerForStatement = userAnswers[index] ? userAnswers[index][statementIndex] : null;
+                updateAnswerBox(answerBox, currentAnswerForStatement); // Pass the specific answer for this statement
 
-                // Add drag/drop event listeners to the ROW only if not in review mode
                 if (!reviewMode) {
                     statementRow.addEventListener('dragover', handleDragOver);
                     statementRow.addEventListener('dragleave', handleDragLeave);
                     statementRow.addEventListener('drop', handleDrop);
                 } else {
-                     // Add visual cues for correct/incorrect in review mode
                     const correctAnswer = question.correctAnswers[statementIndex];
-                    if (currentAnswer && currentAnswer !== correctAnswer) {
-                        answerBox.classList.add('border-red-500', 'border-2'); // Highlight border if incorrect
-                    } else if (currentAnswer && currentAnswer === correctAnswer) {
-                         answerBox.classList.add('border-green-500', 'border-2'); // Highlight border if correct
+                    answerBox.classList.remove('answered-yes', 'answered-no'); // Clear normal answer styles
+                    if (currentAnswerForStatement === correctAnswer) {
+                        answerBox.classList.add('answered-yes'); // Show correct as green
+                        answerBox.textContent = currentAnswerForStatement === 'Y' ? 'Yes (Correct)' : 'No (Correct)';
+                    } else {
+                        answerBox.classList.add('answered-no'); // Show incorrect as red
+                        answerBox.textContent = currentAnswerForStatement === 'Y' ? `Yes (Incorrect, Ans: ${correctAnswer})` : (currentAnswerForStatement === 'N' ? `No (Incorrect, Ans: ${correctAnswer})` : `N/A (Ans: ${correctAnswer})`);
                     }
                 }
-
                 statementsListContainer.appendChild(statementRow);
             });
 
-            // Display explanation if in review mode
             if (reviewMode && question.explanation) {
                  const explanationDiv = document.createElement('div');
-                 explanationDiv.classList.add('explanation-box');
+                 explanationDiv.classList.add('explanation-box', 'mt-3'); // Added margin-top for spacing
                  explanationDiv.innerHTML = `<strong class="font-semibold">Explanation:</strong> ${question.explanation}`;
                  reviewExplanationContainer.appendChild(explanationDiv);
             }
 
-
-            // Update navigation buttons
             prevButton.disabled = index === 0;
-            if (!reviewMode && index === questionsData.length - 1) {
-                 nextButton.textContent = 'Finish & Review';
-                 nextButton.disabled = false;
-            } else if (!reviewMode) {
-                 nextButton.textContent = 'Next (Alt+N) →';
-                 nextButton.disabled = false;
-            } else { // In review mode
-                 nextButton.disabled = index === questionsData.length - 1;
-                 if (!nextButton.disabled) nextButton.textContent = 'Next →';
-            }
-
-            updateFlagButtonAppearance();
-
-            // Adjust UI elements based on mode
             if (reviewMode) {
+                nextButton.textContent = 'Next →';
+                nextButton.disabled = index === questionsData.length - 1;
                 backToResultsButton.classList.remove('hidden');
                 endExamButtonFooter.classList.add('hidden');
                 examTitleEl.textContent = "Reviewing Question";
                 flagButton.disabled = true;
-                draggableYes.setAttribute('draggable', 'false'); // Disable dragging in review
+                flagButton.classList.remove('flagged'); // Ensure flag isn't stuck visually
+                if(flaggedQuestions[index]) flagButton.classList.add('flagged'); // Re-apply if it was flagged
+                
+                draggableYes.setAttribute('draggable', 'false'); 
                 draggableNo.setAttribute('draggable', 'false');
                 draggableYes.style.cursor = 'default';
                 draggableNo.style.cursor = 'default';
-                 document.getElementById('draggable-options-sidebar').style.display = 'none'; // Hide draggable options in review
+                 document.getElementById('draggable-options-sidebar').style.display = 'none'; 
             } else {
+                if (index === questionsData.length - 1) {
+                    nextButton.textContent = 'Finish & Review';
+                } else {
+                    nextButton.textContent = 'Next (Alt+N) →';
+                }
+                nextButton.disabled = false; // Generally enabled unless specific conditions met later
                 backToResultsButton.classList.add('hidden');
                 endExamButtonFooter.classList.remove('hidden');
                 examTitleEl.textContent = "Decision Making";
                 flagButton.disabled = false;
-                draggableYes.setAttribute('draggable', 'true'); // Enable dragging
+                draggableYes.setAttribute('draggable', 'true'); 
                 draggableNo.setAttribute('draggable', 'true');
                 draggableYes.style.cursor = 'grab';
                 draggableNo.style.cursor = 'grab';
-                 document.getElementById('draggable-options-sidebar').style.display = 'flex'; // Show draggable options
+                document.getElementById('draggable-options-sidebar').style.display = 'flex'; 
             }
-
+            updateFlagButtonAppearance(); // Call this after reviewMode logic might change flag state
             updateNavigatorHighlight();
         }
 
@@ -945,7 +1021,8 @@
             appContainer.classList.add('flex', 'flex-col');
 
             let totalScore = 0;
-            resultsDetails.innerHTML = '';
+            const resultsOverviewGrid = document.getElementById('results-overview-grid');
+            resultsOverviewGrid.innerHTML = ''; // Clear previous results
 
             questionsData.forEach((qData, index) => {
                 const userAnsArray = userAnswers[index] || Array(5).fill(null);
@@ -959,58 +1036,44 @@
                 });
 
                 let points = 0;
+                let pointsClass = 'incorrect-0pts';
                 if (correctStatements === 5) {
                     points = 2;
+                    pointsClass = 'correct-2pts';
                 } else if (correctStatements === 4) {
                     points = 1;
+                    pointsClass = 'correct-1pt';
                 }
                 totalScore += points;
 
-                const resultDiv = document.createElement('div');
-                resultDiv.classList.add('result-item-clickable', 'p-4', 'rounded-lg', 'mb-3');
-
-                if (points === 2) {
-                    resultDiv.classList.add('correct-answer');
-                } else if (points === 1) {
-                    resultDiv.classList.add('partially-correct-answer');
-                } else {
-                    resultDiv.classList.add('incorrect-answer');
+                const resultItem = document.createElement('div');
+                resultItem.classList.add('result-summary-item', 'relative'); // Added relative for tooltip positioning
+                if (flaggedQuestions[index]) {
+                    resultItem.classList.add('flagged-result');
                 }
+                resultItem.dataset.index = index;
+                resultItem.title = `Click to review Question ${index + 1}`;
 
-                resultDiv.dataset.index = index;
-                resultDiv.title = `Click to review Question ${index + 1}`;
-
-                let statementsHtml = '<div class="mt-2 space-y-1">';
+                let statementsTooltipHtml = '<div class="tooltip-text">';
                 qData.statements.forEach((stmtText, stmtIndex) => {
                     const userAns = userAnsArray[stmtIndex];
                     const correctAns = correctAnsArray[stmtIndex];
                     const isStmtCorrect = userAns === correctAns;
-                    const correctnessClass = isStmtCorrect ? 'correct' : 'incorrect';
-                    const correctnessIndicator = isStmtCorrect ? '<span class="text-green-600">(Correct)</span>' : '<span class="text-red-600">(Incorrect)</span>';
-
-                    statementsHtml += `
-                        <div class="result-statement ${correctnessClass}">
-                            <p>${stmtIndex + 1}. ${stmtText}</p>
-                            <p class="text-xs ml-2">Your Answer: <strong>${userAns || 'N/A'}</strong> | Correct: <strong>${correctAns}</strong> ${userAns ? correctnessIndicator : ''}</p>
-                        </div>`;
+                    statementsTooltipHtml += `<p class=\'${isStmtCorrect ? "text-green-300" : (userAns ? "text-red-300" : "text-gray-400")}\'>${stmtIndex + 1}. Your: ${userAns || '-'} | Ans: ${correctAns}</p>`;
                 });
-                statementsHtml += '</div>';
+                statementsTooltipHtml += '</div>';
 
-                resultDiv.innerHTML = `
-                    <div class="flex justify-between items-start mb-1">
-                        <p class="font-semibold">Question ${index + 1} ${flaggedQuestions[index] ? '<span class="text-xs text-amber-600">(Flagged)</span>' : ''}</p>
-                        <p class="text-sm font-medium">Points: ${points} / 2</p>
-                    </div>
-                    <p class="text-xs text-gray-600 mb-2">(${correctStatements} / 5 statements correct)</p>
-                    ${statementsHtml}
+                resultItem.innerHTML = `
+                    <p class="result-summary-points ${pointsClass}">${points}pt</p>
+                    <p class="result-summary-qnum">Q${index + 1} ${flaggedQuestions[index] ? '&#128681;' : ''}</p> 
+                    <p class="result-summary-statements">(${correctStatements}/5 correct)</p>
+                    ${statementsTooltipHtml}
                 `;
 
-                resultDiv.addEventListener('click', (event) => {
-                    if (!event.target.closest('details')) { // Prevent triggering review when clicking details
-                        revisitQuestionFromResults(index);
-                    }
+                resultItem.addEventListener('click', () => {
+                    revisitQuestionFromResults(index);
                 });
-                resultsDetails.appendChild(resultDiv);
+                resultsOverviewGrid.appendChild(resultItem);
             });
 
             scoreEl.textContent = totalScore;
