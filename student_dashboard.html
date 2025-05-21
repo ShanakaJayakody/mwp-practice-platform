@@ -712,11 +712,10 @@
         <nav class="main-nav" role="navigation" aria-label="Main Navigation">
             <a href="home.html" id="nav-home" class="nav-tab" role="button">Home</a>
             <a href="practice.html" id="nav-practice-main" class="nav-tab" role="button">Practice</a>
-            <a class="nav-tab" id="my-results-tab-main">My Results</a>
-            <div id="nav-resources" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
-                <span>Resources</span> <span class="coming-soon-inline">Soon</span>
+            <a href="student_dashboard.html#results" id="nav-results" class="nav-tab" role="button">Results</a>
+            <div id="nav-skills" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
+                <span>Skills</span> <span class="coming-soon-inline">Coming Soon</span>
             </div>
-            <a id="nav-profile" class="nav-tab" role="button">Profile</a>
         </nav>
 
         <!-- Content Area -->
@@ -890,6 +889,11 @@
                                         <option value="QR Test 5">QR Test 5</option>
                                         <option value="QR Test 6">QR Test 6</option>
                                         <option value="VR Focus Group 16">VR Focus Group 16</option>
+                                        <option value="DM Syllogisms Worksheet 1">DM Syllogisms Worksheet 1</option>
+                                        <option value="DM Syllogisms Worksheet 2">DM Syllogisms Worksheet 2</option>
+                                        <option value="DM Syllogisms Worksheet 3">DM Syllogisms Worksheet 3</option>
+                                        <option value="DM Syllogisms Worksheet 4">DM Syllogisms Worksheet 4</option>
+                                        <option value="DM Syllogisms Worksheet 5">DM Syllogisms Worksheet 5</option>
                                     </select>
                                     <select id="results-sort" class="text-sm border border-gray-300 rounded px-2 py-1">
                                         <option value="date-desc">Newest First</option>
@@ -1038,24 +1042,6 @@
                 <p class="text-sm text-gray-400">Choose "Tests" from the navigation bar to begin.</p>
             </div>
         </div>
-    </div>
-
-    <!-- My Results Content (NEW) -->
-    <section id="my-results-content" class="dashboard-section hidden p-4 md:p-8">
-        <div class="max-w-4xl mx-auto">
-            <h2 class="text-2xl font-semibold text-gray-700 mb-6">My Performance History</h2>
-            <div id="my-results-list-container" class="bg-white p-6 rounded-lg shadow">
-                <p id="my-results-loading-message" class="text-gray-600">Loading your results...</p>
-                <div id="my-results-list" class="space-y-4">
-                    <!-- Results will be populated here -->
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Profile Section -->
-    <div id="profile-section" class="dashboard-section hidden p-4 md:p-8">
-        <!-- Add your profile content here -->
     </div>
 
     <script>
@@ -2259,125 +2245,6 @@
             
             // Redirect to the QR Test with a query parameter
             window.location.href = `${testUrl}?review=${result.id}`;
-        }
-
-        // --- NEW My Results Functionality ---
-        async function loadMyResults(userId) {
-            if (!db) {
-                console.error("Firestore (db) is not initialized.");
-                if(document.getElementById('my-results-loading-message')) document.getElementById('my-results-loading-message').textContent = 'Error: Could not connect to database.';
-                return;
-            }
-            if (!userId) {
-                console.error("User ID is not available for loading results.");
-                 if(document.getElementById('my-results-loading-message')) document.getElementById('my-results-loading-message').textContent = 'Error: User not identified.';
-                return;
-            }
-
-            const resultsListDiv = document.getElementById('my-results-list');
-            const loadingMessageEl = document.getElementById('my-results-loading-message');
-            if (!resultsListDiv || !loadingMessageEl) {
-                console.error('Results list or loading message element not found.');
-                return;
-            }
-
-            loadingMessageEl.textContent = 'Loading your results...';
-            resultsListDiv.innerHTML = ''; // Clear previous results
-
-            try {
-                const querySnapshot = await db.collection("performanceSubmissions")
-                                            .where("userId", "==", userId)
-                                            .orderBy("submissionTimestamp", "desc")
-                                            .get();
-
-                if (querySnapshot.empty) {
-                    loadingMessageEl.textContent = 'No past submissions found.';
-                    return;
-                }
-
-                loadingMessageEl.style.display = 'none'; // Hide loading message
-
-                querySnapshot.forEach(doc => {
-                    const submission = doc.data();
-                    const submissionId = doc.id;
-
-                    const resultItem = document.createElement('div');
-                    resultItem.className = 'p-4 bg-gray-50 rounded-md border border-gray-200 hover:shadow-md transition-shadow duration-200';
-                    
-                    const submissionDate = submission.submissionTimestamp && submission.submissionTimestamp.toDate ? 
-                                           submission.submissionTimestamp.toDate().toLocaleDateString() : 'N/A';
-                    const submissionTime = submission.submissionTimestamp && submission.submissionTimestamp.toDate ?
-                                           submission.submissionTimestamp.toDate().toLocaleTimeString() : '';
-
-                    resultItem.innerHTML = `
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <h4 class="text-lg font-semibold text-blue-600">${submission.examName || 'Unnamed Worksheet'}</h4>
-                                <p class="text-sm text-gray-500">Completed on: ${submissionDate} ${submissionTime}</p>
-                                <p class="text-sm text-gray-700">Score: ${submission.score !== undefined ? submission.score : 'N/A'} / ${submission.totalPossibleScore !== undefined ? submission.totalPossibleScore : 'N/A'}</p>
-                            </div>
-                            <button class="revisit-submission-btn primary-button text-sm px-4 py-2" data-submission-id="${submissionId}" data-exam-name="${submission.examName}">
-                                Revisit
-                            </button>
-                        </div>
-                    `;
-                    resultsListDiv.appendChild(resultItem);
-                });
-
-                // Add event listeners to new buttons
-                document.querySelectorAll('.revisit-submission-btn').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const subId = this.dataset.submissionId;
-                        const examName = this.dataset.examName;
-                        // Determine the HTML file based on examName
-                        // This is a simplified example; you might need a more robust mapping
-                        let targetPage = '';
-                        if (examName && examName.startsWith("DM Syllogisms Worksheet")) {
-                            const worksheetNum = examName.split(" ").pop(); // Gets "1", "2", etc.
-                            targetPage = `DM sylls ${worksheetNum}.html`;
-                        } else if (examName === "VR Focus Group 16") { // Example for other types
-                            targetPage = "VR focus group16.html";
-                        }
-                        // Add more mappings as needed
-
-                        if (targetPage && subId) {
-                            window.open(`${targetPage}?submissionId=${subId}`, '_blank');
-                        } else {
-                            alert("Could not determine the page for this submission or submission ID is missing.");
-                        }
-                    });
-                });
-
-            } catch (error) {
-                console.error("Error loading results: ", error);
-                loadingMessageEl.textContent = 'Failed to load results. Please try again later.';
-            }
-        }
-        // --- END My Results Functionality ---
-
-
-        // --- UI CONTROL & TAB SWITCHING ---
-        const practiceTabMain = document.getElementById('nav-practice-main');
-        const myResultsTabMain = document.getElementById('my-results-tab-main'); // New Tab
-        const resourcesTab = document.getElementById('nav-resources');
-        const profileTab = document.getElementById('nav-profile');
-        const qrTestContent = document.getElementById('qr-test-content');
-        const vrTestContent = document.getElementById('vr-test-content');
-        const myResultsContent = document.getElementById('my-results-content'); // New Section
-        const profileSection = document.getElementById('profile-section');
-
-        if (homeTab) homeTab.addEventListener('click', () => showSection(dashboardContent, homeTab));
-        if (practiceTabMain) practiceTabMain.addEventListener('click', () => window.location.href = 'practice.html');
-        if (myResultsTabMain) myResultsTabMain.addEventListener('click', () => showSection(myResultsContent, myResultsTabMain)); // New Listener
-        if (profileTab) profileTab.addEventListener('click', () => showSection(profileSection, profileTab));
-
-        // If it's not a new login (no redirect), show the dashboard or specific content
-        if (defaultTab && defaultContent) {
-            showSection(defaultContent, defaultTab);
-            loadMyResults(user.uid); // Load results when dashboard is shown for existing user
-        } else if (dashboardContent && homeTab) { // Fallback to dashboard if specific content not found
-            showSection(dashboardContent, homeTab);
-            loadMyResults(user.uid); // Load results
         }
     </script>
 </body>

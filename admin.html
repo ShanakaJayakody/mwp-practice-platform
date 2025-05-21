@@ -451,7 +451,7 @@
                 if(adminUserEmailSpan) adminUserEmailSpan.textContent = `Logged in as: ${user.email || user.displayName || 'Admin'}`;
                 loginContainer.classList.add('hidden');
                 adminPanel.classList.remove('hidden');
-                fetchPerformanceData();
+                fetchPerformanceData(); 
             } else {
                 console.log("User logged out or not logged in.");
                 adminPanel.classList.add('hidden');
