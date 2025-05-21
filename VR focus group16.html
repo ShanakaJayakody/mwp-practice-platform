@@ -1171,149 +1171,116 @@
         }
 
         // Initialize the setup screen
-        showSetupScreen();
-        
-        // Add download PDF functionality
-        if (downloadPdfButton) {
-            downloadPdfButton.addEventListener('click', function() {
-                generatePDF();
-            });
-        }
-        
-        // Add submit reflections functionality
-        if (document.getElementById('submit-performance-button')) {
-            document.getElementById('submit-performance-button').addEventListener('click', submitPerformanceData);
-        }
-        
-        // Function to generate PDF of results
-        function generatePDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            const reflection = reflectionText.value.trim();
-            const focusRating = focusRatingInput.value;
-            const finalScore = scoreEl.textContent;
-            const totalQs = totalQuestionsResultsEl.textContent;
-            const timeTaken = timeTakenEl.textContent;
-            let y = 15;
-            const lineHeight = 7;
-            const pageHeight = doc.internal.pageSize.height;
-            const margin = 15;
+        // showSetupScreen(); // Original initial load
 
-            doc.setFontSize(18);
-            doc.text("UCAT Verbal Reasoning Results", margin, y);
-            y += lineHeight * 1.5;
-            doc.setFontSize(12);
-            doc.text(`Name: ${userName || 'N/A'}`, margin, y); y += lineHeight;
-            doc.text(`Goal: ${userGoal || 'N/A'} / ${totalQs}`, margin, y); y += lineHeight;
-            doc.text(`Focus Area: ${userFocusArea || 'N/A'}`, margin, y); y += lineHeight;
-            doc.text(`Final Score: ${finalScore} / ${totalQs}`, margin, y); y += lineHeight;
-            doc.text(`Time Taken: ${timeTaken}`, margin, y); y += lineHeight * 1.5;
-            doc.setFontSize(14);
-            doc.text("Focus Rating (1-5):", margin, y); y += lineHeight;
-            doc.setFontSize(10);
-            doc.text(focusRating || 'N/A', margin, y); y += lineHeight * 1.5;
-            doc.setFontSize(14);
-            doc.text("Main Takeaway:", margin, y); y += lineHeight;
-            doc.setFontSize(10);
-            const reflectionLines = doc.splitTextToSize(reflection || 'No reflection provided.', doc.internal.pageSize.width - margin * 2);
-            doc.text(reflectionLines, margin, y);
-            
-            // Save the PDF
-            doc.save(`VR_Focus_Group_16_Results_${new Date().toISOString().slice(0,10)}.pdf`);
-        }
-        
-        // Function to submit reflection data to Firebase
-        async function submitPerformanceData() {
-            // Prevent multiple submissions
-            if (isSubmittingReflection) {
-                console.log("Submission already in progress, ignoring duplicate call");
-                return;
-            }
-            
-            try {
-                isSubmittingReflection = true;
+        // --- MODIFIED Initial Load ---
+        // The main DOMContentLoaded listener is already present from line 438.
+        // We will add the call to checkForReviewMode inside the existing one.
+
+        // --- NEW FUNCTION to check for and load review mode ---
+        function checkForReviewMode() {
+            const reviewSubmissionId = localStorage.getItem('reviewSubmissionId');
+            const isReviewHash = window.location.hash === '#review';
+
+            if (reviewSubmissionId && isReviewHash) {
+                console.log("Review mode detected for VR. Submission ID:", reviewSubmissionId);
+                document.getElementById('loading-overlay').style.display = 'flex'; // Show loading
+
+                if(setupScreen) setupScreen.classList.add('hidden');
+                if(resultsScreen) resultsScreen.classList.add('hidden');
+                if(reviewScreen) reviewScreen.classList.add('hidden');
                 
-                // Get additional reflection data
-                const focusRating = document.getElementById('focus-rating').value || '';
-                const reflection = document.getElementById('reflection-text').value || '';
-                
-                if (typeof firebase !== 'undefined' && firebase.firestore) {
-                    const db = firebase.firestore();
-                    
-                    // Get current authenticated user data if available
-                    let userDisplayName = '';
-                    let userId = '';
-                    
-                    if (firebase.auth && firebase.auth().currentUser) {
-                        const currentUser = firebase.auth().currentUser;
-                        userDisplayName = currentUser.displayName || '';
-                        userId = currentUser.uid;
-                        // Note: we're already storing userEmail from when the test started
-                    }
-                    
-                    // Create a new document with both test results and reflection
-                    const performanceData = {
-                        studentName: userName || userDisplayName || 'Anonymous',
-                        studentEmail: userEmail || '',
-                        userId: userId,
-                        examName: "VR Focus Group 16",
-                        score: scoreEl.textContent,
-                        totalQuestions: totalQuestionsResultsEl.textContent,
-                        timeTaken: timeTakenEl.textContent,
-                        answers: userAnswers,
-                        correctAnswers: passages.flatMap(p => p.questions.map(q => q.correctAnswer)),
-                        questionTimes: questionTimes,
-                        flaggedQuestions: flaggedQuestions,
-                        goal: userGoal || '',
-                        focusArea: userFocusArea || '',
-                        focusRating: focusRating,
-                        reflection: reflection,
-                        submissionTimestamp: new Date().toISOString(),
-                        userAgent: navigator.userAgent,
-                        isReflection: true // Flag to indicate this is a reflection submission
-                    };
-                    
-                    // Add as a new document
-                    await db.collection("performanceSubmissions").add(performanceData);
-                    
-                    // Show success message
-                    const successNotice = document.createElement('div');
-                    successNotice.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow-lg z-50';
-                    successNotice.innerHTML = `
-                        <div class="flex">
-                            <div class="py-1">
-                                <svg class="fill-current h-6 w-6 text-green-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="font-bold">Success!</p>
-                                <p class="text-sm">Your reflection has been saved.</p>
-                            </div>
-                        </div>
-                    `;
-                    document.body.appendChild(successNotice);
-                    
-                    // Update button state
-                    document.getElementById('submit-performance-button').disabled = true;
-                    document.getElementById('submit-performance-button').textContent = 'Reflection Saved ✓';
-                    document.getElementById('submit-performance-button').classList.add('bg-green-500');
-                    
-                    // Remove the notice after a few seconds
-                    setTimeout(() => {
-                        if (successNotice.parentNode) {
-                            successNotice.parentNode.removeChild(successNotice);
-                        }
-                    }, 3000);
-                } else {
-                    console.error("Firebase/Firestore not available");
-                    alert("Unable to save your reflection at this time. Please try again later.");
+                if (!db) { // db should be initialized by the time DOMContentLoaded fires
+                    console.error("Firestore (db) is not initialized. Cannot load review data.");
+                    alert("Error: Could not connect to load review data.");
+                    document.getElementById('loading-overlay').style.display = 'none';
+                    showSetupScreen(); 
+                    localStorage.removeItem('reviewSubmissionId');
+                    return;
                 }
-            } catch (error) {
-                console.error("Error submitting performance data:", error);
-                alert("There was an error saving your reflection. Please try again.");
-            } finally {
-                isSubmittingReflection = false;
+
+                db.collection("performanceSubmissions").doc(reviewSubmissionId).get()
+                    .then(doc => {
+                        if (doc.exists) {
+                            const submissionData = doc.data();
+                            console.log("VR Submission data fetched for review:", submissionData);
+                            
+                            // Populate necessary global states from submissionData for VR
+                            // The VR test data structure (passages, questions per passage) is fixed in the file.
+                            // We need to map the flat `submissionData.answers` and `submissionData.flaggedQuestions` 
+                            // (assuming they were saved as flat arrays) to the component's `userAnswers` and `flaggedQuestions`.
+                            if (submissionData.answers && Array.isArray(submissionData.answers)) {
+                                userAnswers = submissionData.answers;
+                            } else {
+                                userAnswers = new Array(passages.length * 4).fill(null); // Default if not found
+                                console.warn("Review data: userAnswers not found or not an array in submissionData.questions.");
+                            }
+                            if (submissionData.flaggedQuestions && Array.isArray(submissionData.flaggedQuestions)) {
+                                flaggedQuestions = submissionData.flaggedQuestions;
+                            } else {
+                                flaggedQuestions = new Array(passages.length * 4).fill(false); // Default
+                                 console.warn("Review data: flaggedQuestions not found or not an array in submissionData.questions.");
+                            }
+                            
+                            userName = submissionData.studentName || 'Review User';
+                            isReviewingFromResults = true; // Critical flag for loadQuestion behavior
+
+                            showPracticeSessionScreen();
+                            
+                            const nextBtn = document.getElementById('next-button');
+                            const endExamFoot = document.getElementById('end-practice-session-button-footer');
+                            const navigatorBtn = document.getElementById('navigator-button');
+                            const backToDashResultsButton = document.createElement('button');
+                            const flagBtn = document.getElementById('flag-button');
+                            const timerElem = document.getElementById('timer');
+
+                            if(nextBtn) nextBtn.textContent = 'Next Question →';
+                            if(endExamFoot) endExamFoot.style.display = 'none';
+                            if(navigatorBtn) navigatorBtn.style.display = 'none';
+                            if(flagBtn) flagBtn.style.display = 'none';
+                            if(timerElem) timerElem.style.display = 'none';
+
+                            backToDashResultsButton.textContent = '← Back to Dashboard Results';
+                            backToDashResultsButton.className = 'secondary-button';
+                            backToDashResultsButton.onclick = () => {
+                                if(localStorage.getItem('returnToDashboardResults')) {
+                                    localStorage.removeItem('reviewSubmissionId');
+                                    localStorage.removeItem('returnToDashboardResults');
+                                    window.location.href = 'student_dashboard.html#results';
+                                } else {
+                                     window.location.href = 'student_dashboard.html';
+                                }
+                            };
+                            const footerBar = document.querySelector('.footer-bar');
+                            if (footerBar) {
+                                const existingBtn = footerBar.querySelector('#back-to-dashboard-results-review-vr');
+                                if(existingBtn) existingBtn.remove();
+                                backToDashResultsButton.id = 'back-to-dashboard-results-review-vr';
+                                footerBar.insertBefore(backToDashResultsButton, footerBar.firstChild);
+                            }
+
+                            currentQuestionIndex = 0;
+                            loadQuestion(currentQuestionIndex); // VR loadQuestion doesn't take a reviewMode flag, it uses isReviewingFromResults global state.
+                            document.getElementById('loading-overlay').style.display = 'none';
+                        } else {
+                            console.error("No such VR submission document! ID:", reviewSubmissionId);
+                            alert("Could not find the VR submission to review.");
+                            document.getElementById('loading-overlay').style.display = 'none';
+                            showSetupScreen();
+                            localStorage.removeItem('reviewSubmissionId');
+                        }
+                    }).catch(error => {
+                        console.error("Error getting VR submission document:", error);
+                        alert("Error fetching VR review data.");
+                        document.getElementById('loading-overlay').style.display = 'none';
+                        showSetupScreen();
+                        localStorage.removeItem('reviewSubmissionId');
+                    });
+            } else {
+                if(reviewSubmissionId) localStorage.removeItem('reviewSubmissionId');
+                if(localStorage.getItem('returnToDashboardResults')) localStorage.removeItem('returnToDashboardResults');
+                showSetupScreen(); // Normal startup
+                document.getElementById('loading-overlay').style.display = 'none';
             }
         }
     });

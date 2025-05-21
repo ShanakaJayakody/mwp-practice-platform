@@ -1267,6 +1267,134 @@
         });
 
         nextButton.addEventListener('click', showNextQuestion);
+        prevButton.addEventListener('click', showPrevQuestion);
+        endExamButton.addEventListener('click', endExamAndShowResults);
+        endExamButtonFooter.addEventListener('click', handleEndExamFooterClick); 
+        backToResultsButton.addEventListener('click', () => { isReviewingFromResults = false; showResultsScreen(); });
+        navigatorButton.addEventListener('click', () => { updateNavigatorButtons(); navigatorModal.classList.remove('hidden'); navigatorModal.classList.add('flex');});
+        closeModalButton.addEventListener('click', () => { navigatorModal.classList.remove('flex'); navigatorModal.classList.add('hidden');});
+        navigatorModal.addEventListener('click', (event) => { if (event.target === navigatorModal) closeModalButton.click(); });
+        flagButton.addEventListener('click', toggleFlag);
+        filterFlaggedButton.addEventListener('click', () => { isFilteringFlagged = !isFilteringFlagged; showReviewScreen(isFilteringFlagged); });
+        downloadPdfButton.addEventListener('click', generatePDF);
+
+        function handleKeyboardShortcuts(e) {
+             const isExamVisible = !examScreen.classList.contains('hidden');
+             const isModalVisible = navigatorModal.classList.contains('flex');
+             const isInputFocused = document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA');
+
+             if (isModalVisible || isInputFocused) return;
+             if (!isExamVisible) return;
+
+             const altOrOption = e.altKey;
+             const code = e.code.toLowerCase();
+
+             if (altOrOption) {
+                 switch (code) {
+                     case 'keyn': e.preventDefault(); if (!nextButton.disabled) nextButton.click(); break;
+                     case 'keyp': e.preventDefault(); if (!prevButton.disabled) prevButton.click(); break;
+                     case 'keyf': e.preventDefault(); if (!isReviewingFromResults && !flagButton.disabled) flagButton.click(); break;
+                 }
+             }
+        }
+        document.addEventListener('keydown', handleKeyboardShortcuts);
+
+        // --- MODIFIED Initial Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            checkForReviewMode();
+        });
+
+        // --- NEW FUNCTION to check for and load review mode ---
+        function checkForReviewMode() {
+            const reviewSubmissionId = localStorage.getItem('reviewSubmissionId');
+            const isReviewHash = window.location.hash === '#review';
+
+            if (reviewSubmissionId && isReviewHash) {
+                console.log("Review mode detected. Submission ID:", reviewSubmissionId);
+                if(setupScreen) setupScreen.classList.add('hidden');
+                if(resultsScreen) resultsScreen.classList.add('hidden');
+                if(reviewScreen) reviewScreen.classList.add('hidden');
+                
+                if (!db) {
+                    console.error("Firestore (db) is not initialized. Cannot load review data.");
+                    alert("Error: Could not connect to load review data.");
+                    showSetupScreen(); 
+                    localStorage.removeItem('reviewSubmissionId'); 
+                    return;
+                }
+
+                db.collection("performanceSubmissions").doc(reviewSubmissionId).get()
+                    .then(doc => {
+                        if (doc.exists) {
+                            const submissionData = doc.data();
+                            console.log("Submission data fetched for review:", submissionData);
+                            
+                            if (submissionData.questions && Array.isArray(submissionData.questions)) {
+                                userAnswers = submissionData.questions.map(q => q.userAnswers || Array(5).fill(null));
+                                flaggedQuestions = submissionData.questions.map(q => q.isFlagged || false);
+                            } else {
+                                console.error("Submission data does not have the expected 'questions' array structure.");
+                                alert("Error: Could not load review data due to unexpected format.");
+                                showSetupScreen(); 
+                                localStorage.removeItem('reviewSubmissionId');
+                                return;
+                            }
+                            userName = submissionData.studentName || 'Review User'; 
+
+                            showExamScreen(); 
+                            
+                            const nextBtn = document.getElementById('next-button');
+                            const endExamFoot = document.getElementById('end-exam-button-footer');
+                            const navigatorBtn = document.getElementById('navigator-button');
+                            const backToDashResultsButton = document.createElement('button');
+
+                            if(nextBtn) nextBtn.textContent = 'Next Question →';
+                            if(endExamFoot) endExamFoot.style.display = 'none'; 
+                            if(navigatorBtn) navigatorBtn.style.display = 'none'; 
+                            if(flagButton) flagButton.style.display = 'none'; 
+                            if(timerDisplay) timerDisplay.style.display = 'none'; 
+                            if(document.getElementById('draggable-options-sidebar')) document.getElementById('draggable-options-sidebar').style.display = 'none';
+
+                            backToDashResultsButton.textContent = '← Back to Dashboard Results';
+                            backToDashResultsButton.className = 'secondary-button'; 
+                            backToDashResultsButton.onclick = () => {
+                                if(localStorage.getItem('returnToDashboardResults')) {
+                                    localStorage.removeItem('reviewSubmissionId');
+                                    localStorage.removeItem('returnToDashboardResults');
+                                    window.location.href = 'student_dashboard.html#results';
+                                } else {
+                                     window.location.href = 'student_dashboard.html'; 
+                                }
+                            };
+                            const footerBar = document.querySelector('.footer-bar');
+                            if (footerBar) {
+                                const existingBackToResults = footerBar.querySelector('#back-to-dashboard-results-review');
+                                if (existingBackToResults) existingBackToResults.remove();
+                                backToDashResultsButton.id = 'back-to-dashboard-results-review';
+                                footerBar.insertBefore(backToDashResultsButton, footerBar.firstChild);
+                            }
+
+                            currentQuestionIndex = 0; 
+                            loadQuestion(currentQuestionIndex, true); 
+
+                        } else {
+                            console.error("No such submission document! ID:", reviewSubmissionId);
+                            alert("Could not find the submission to review. It may have been deleted.");
+                            showSetupScreen(); 
+                            localStorage.removeItem('reviewSubmissionId');
+                        }
+                    }).catch(error => {
+                        console.error("Error getting submission document:", error);
+                        alert("Error fetching review data. Please try again.");
+                        showSetupScreen(); 
+                        localStorage.removeItem('reviewSubmissionId');
+                    });
+            } else {
+                if(reviewSubmissionId) localStorage.removeItem('reviewSubmissionId'); 
+                if(localStorage.getItem('returnToDashboardResults')) localStorage.removeItem('returnToDashboardResults');
+                showSetupScreen();
+            }
+        }
 
         // --- NEW FUNCTION TO SAVE RESULTS TO FIREBASE ---
         function saveResultsToFirebase() {

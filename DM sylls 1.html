@@ -1469,7 +1469,124 @@
         // End Timer Functions
 
         // --- Initial Load ---
-        showSetupScreen();
+        // showSetupScreen(); // Original initial load
+
+        // --- MODIFIED Initial Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            checkForReviewMode();
+        });
+
+        // --- NEW FUNCTION to check for and load review mode ---
+        function checkForReviewMode() {
+            const reviewSubmissionId = localStorage.getItem('reviewSubmissionId');
+            const isReviewHash = window.location.hash === '#review';
+
+            if (reviewSubmissionId && isReviewHash) {
+                console.log("Review mode detected. Submission ID:", reviewSubmissionId);
+                // Potentially show a loading indicator here
+                // Disable normal setup/start
+                if(setupScreen) setupScreen.classList.add('hidden');
+                if(resultsScreen) resultsScreen.classList.add('hidden');
+                if(reviewScreen) reviewScreen.classList.add('hidden'); // Ensure this is hidden too
+                
+                if (!db) {
+                    console.error("Firestore (db) is not initialized. Cannot load review data.");
+                    alert("Error: Could not connect to load review data.");
+                    showSetupScreen(); // Fallback to normal mode
+                    localStorage.removeItem('reviewSubmissionId'); // Clean up
+                    return;
+                }
+
+                db.collection("performanceSubmissions").doc(reviewSubmissionId).get()
+                    .then(doc => {
+                        if (doc.exists) {
+                            const submissionData = doc.data();
+                            console.log("Submission data fetched for review:", submissionData);
+                            
+                            // Populate necessary global states from submissionData
+                            // This is crucial for loadQuestion and other functions to work with the reviewed attempt's data
+                            if (submissionData.questions && Array.isArray(submissionData.questions)) {
+                                userAnswers = submissionData.questions.map(q => q.userAnswers || Array(5).fill(null));
+                                flaggedQuestions = submissionData.questions.map(q => q.isFlagged || false);
+                                // Note: premisesData and questionsData (the structure of questions/statements)
+                                // should be the ones inherent to this specific worksheet file.
+                                // The submissionData.questions provides the user's interaction with that structure.
+                            } else {
+                                console.error("Submission data does not have the expected 'questions' array structure.");
+                                alert("Error: Could not load review data due to unexpected format.");
+                                showSetupScreen(); // Fallback
+                                localStorage.removeItem('reviewSubmissionId');
+                                return;
+                            }
+                            userName = submissionData.studentName || 'Review User'; // Or some indicator
+                            // examStartTime, examEndTime, questionTimings might not be directly needed for simple review of answers,
+                            // but could be displayed if desired.
+
+                            // Modify UI for review mode
+                            showExamScreen(); // This sets up the basic exam layout
+                            
+                            // Update footer for review mode
+                            const nextBtn = document.getElementById('next-button');
+                            const prevBtn = document.getElementById('prev-button');
+                            const endExamFoot = document.getElementById('end-exam-button-footer');
+                            const navigatorBtn = document.getElementById('navigator-button');
+                            const backToDashResultsButton = document.createElement('button');
+
+                            if(nextBtn) nextBtn.textContent = 'Next Question →';
+                            if(endExamFoot) endExamFoot.style.display = 'none'; // Hide regular end practice button
+                            if(navigatorBtn) navigatorBtn.style.display = 'none'; // Hide navigator in review mode
+                            if(flagButton) flagButton.style.display = 'none'; // Hide flag button in review
+                            if(timerDisplay) timerDisplay.style.display = 'none'; // Hide timer
+                            if(document.getElementById('draggable-options-sidebar')) document.getElementById('draggable-options-sidebar').style.display = 'none';
+
+
+                            backToDashResultsButton.textContent = '← Back to Dashboard Results';
+                            backToDashResultsButton.className = 'secondary-button'; // Use existing styling
+                            backToDashResultsButton.onclick = () => {
+                                if(localStorage.getItem('returnToDashboardResults')) {
+                                    localStorage.removeItem('reviewSubmissionId');
+                                    localStorage.removeItem('returnToDashboardResults');
+                                    window.location.href = 'student_dashboard.html#results';
+                                } else {
+                                     window.location.href = 'student_dashboard.html'; // Fallback
+                                }
+                            };
+                            const footerBar = document.querySelector('.footer-bar');
+                            if (footerBar) {
+                                const existingBackToResults = footerBar.querySelector('#back-to-dashboard-results-review');
+                                if (existingBackToResults) existingBackToResults.remove();
+                                backToDashResultsButton.id = 'back-to-dashboard-results-review';
+                                footerBar.insertBefore(backToDashResultsButton, footerBar.firstChild);
+                            }
+
+                            currentQuestionIndex = 0; // Start review from the first question
+                            loadQuestion(currentQuestionIndex, true); // Load in review mode (true)
+
+                            // Clear the localStorage item now that it's used, or on page unload
+                            // For simplicity, clearing it here. Could also do it in an onbeforeunload handler.
+                            // localStorage.removeItem('reviewSubmissionId'); 
+                            // Actually, let's keep it until they navigate away, so refresh works.
+                            // The `returnToDashboardResults` flag will help manage this.
+
+                        } else {
+                            console.error("No such submission document! ID:", reviewSubmissionId);
+                            alert("Could not find the submission to review. It may have been deleted.");
+                            showSetupScreen(); // Fallback
+                            localStorage.removeItem('reviewSubmissionId');
+                        }
+                    }).catch(error => {
+                        console.error("Error getting submission document:", error);
+                        alert("Error fetching review data. Please try again.");
+                        showSetupScreen(); // Fallback
+                        localStorage.removeItem('reviewSubmissionId');
+                    });
+            } else {
+                // Not in review mode, normal startup
+                if(reviewSubmissionId) localStorage.removeItem('reviewSubmissionId'); // Clean up if hash is wrong
+                if(localStorage.getItem('returnToDashboardResults')) localStorage.removeItem('returnToDashboardResults');
+                showSetupScreen();
+            }
+        }
 
     </script>
 </body>

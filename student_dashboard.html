@@ -875,53 +875,151 @@
                             </div>
                         </div>
                         
-                        <!-- Detailed results section -->
-                        <div>
-                            <div class="flex justify-between items-center mb-4">
-                                <h3 class="text-lg font-semibold text-gray-800">Recent Tests</h3>
-                                <div class="flex gap-2">
-                                    <select id="results-filter" class="text-sm border border-gray-300 rounded px-2 py-1">
-                                        <option value="all">All Tests</option>
-                                        <option value="QR Test 1">QR Test 1</option>
-                                        <option value="QR Test 2">QR Test 2</option>
-                                        <option value="QR Test 3">QR Test 3</option>
-                                        <option value="QR Test 4">QR Test 4</option>
-                                        <option value="QR Test 5">QR Test 5</option>
-                                        <option value="QR Test 6">QR Test 6</option>
-                                        <option value="VR Focus Group 16">VR Focus Group 16</option>
-                                        <option value="DM Syllogisms Worksheet 1">DM Syllogisms Worksheet 1</option>
-                                        <option value="DM Syllogisms Worksheet 2">DM Syllogisms Worksheet 2</option>
-                                        <option value="DM Syllogisms Worksheet 3">DM Syllogisms Worksheet 3</option>
-                                        <option value="DM Syllogisms Worksheet 4">DM Syllogisms Worksheet 4</option>
-                                        <option value="DM Syllogisms Worksheet 5">DM Syllogisms Worksheet 5</option>
-                                    </select>
-                                    <select id="results-sort" class="text-sm border border-gray-300 rounded px-2 py-1">
-                                        <option value="date-desc">Newest First</option>
-                                        <option value="date-asc">Oldest First</option>
-                                        <option value="score-desc">Highest Score</option>
-                                        <option value="score-asc">Lowest Score</option>
-                                    </select>
+                        <!-- Filter and Sort Controls -->
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Recent Tests</h3>
+                            <div class="flex gap-2">
+                                <select id="results-filter" class="text-sm border border-gray-300 rounded px-2 py-1">
+                                    <option value="all">All Tests</option>
+                                    <option value="QR Test 1">QR Test 1</option>
+                                    <option value="QR Test 2">QR Test 2</option>
+                                    <option value="QR Test 3">QR Test 3</option>
+                                    <option value="QR Test 4">QR Test 4</option>
+                                    <option value="QR Test 5">QR Test 5</option>
+                                    <option value="QR Test 6">QR Test 6</option>
+                                    <option value="VR Focus Group 16">VR Focus Group 16</option>
+                                    <option value="DM Syllogisms Worksheet 1">DM Syllogisms Worksheet 1</option>
+                                    <option value="DM Syllogisms Worksheet 2">DM Syllogisms Worksheet 2</option>
+                                    <option value="DM Syllogisms Worksheet 3">DM Syllogisms Worksheet 3</option>
+                                    <option value="DM Syllogisms Worksheet 4">DM Syllogisms Worksheet 4</option>
+                                    <option value="DM Syllogisms Worksheet 5">DM Syllogisms Worksheet 5</option>
+                                </select>
+                                <select id="results-sort" class="text-sm border border-gray-300 rounded px-2 py-1">
+                                    <option value="date-desc">Newest First</option>
+                                    <option value="date-asc">Oldest First</option>
+                                    <option value="score-desc">Highest Score</option>
+                                    <option value="score-asc">Lowest Score</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Accordion Sections for Test Types -->
+                        <div id="results-by-section-accordion" class="space-y-3">
+
+                            <!-- Quantitative Reasoning Section -->
+                            <div class="section-accordion-item border border-gray-200 rounded-md">
+                                <button class="section-accordion-header flex justify-between items-center w-full p-4 bg-gray-50 hover:bg-gray-100 transition-colors focus:outline-none">
+                                    <h4 class="text-md font-semibold text-gray-700">Quantitative Reasoning</h4>
+                                    <svg class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                                <div class="section-accordion-content hidden p-4 overflow-x-auto">
+                                    <table class="min-w-full">
+                                        <thead class="bg-gray-50">
+                                            <tr>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Test</th>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Taken</th>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Focus Rating</th>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="results-table-body-qr" class="bg-white divide-y divide-gray-200">
+                                            <!-- QR Results will be populated here -->
+                                        </tbody>
+                                    </table>
+                                    <p id="no-results-qr" class="text-center text-gray-500 py-4 hidden">No Quantitative Reasoning results found.</p>
+                                </div>
+                            </div>
+
+                            <!-- Decision Making Section -->
+                            <div class="section-accordion-item border border-gray-200 rounded-md">
+                                <button class="section-accordion-header flex justify-between items-center w-full p-4 bg-gray-50 hover:bg-gray-100 transition-colors focus:outline-none">
+                                    <h4 class="text-md font-semibold text-gray-700">Decision Making</h4>
+                                    <svg class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                                <div class="section-accordion-content hidden p-4 overflow-x-auto">
+                                    <table class="min-w-full">
+                                        <thead class="bg-gray-50">
+                                            <tr>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Test</th>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Taken</th>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Focus Rating</th>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="results-table-body-dm" class="bg-white divide-y divide-gray-200">
+                                            <!-- DM Results will be populated here -->
+                                        </tbody>
+                                    </table>
+                                     <p id="no-results-dm" class="text-center text-gray-500 py-4 hidden">No Decision Making results found.</p>
                                 </div>
                             </div>
                             
-                            <div class="overflow-x-auto">
-                                <table class="min-w-full">
-                                    <thead class="bg-gray-50">
-                                        <tr>
-                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Test</th>
-                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
-                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Taken</th>
-                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Focus Rating</th>
-                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="results-table-body" class="bg-white divide-y divide-gray-200">
-                                        <!-- Results will be populated here -->
-                                    </tbody>
-                                </table>
+                            <!-- Verbal Reasoning Section -->
+                            <div class="section-accordion-item border border-gray-200 rounded-md">
+                                <button class="section-accordion-header flex justify-between items-center w-full p-4 bg-gray-50 hover:bg-gray-100 transition-colors focus:outline-none">
+                                    <h4 class="text-md font-semibold text-gray-700">Verbal Reasoning</h4>
+                                    <svg class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                                <div class="section-accordion-content hidden p-4 overflow-x-auto">
+                                    <table class="min-w-full">
+                                        <thead class="bg-gray-50">
+                                            <tr>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Test</th>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Taken</th>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Focus Rating</th>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="results-table-body-vr" class="bg-white divide-y divide-gray-200">
+                                            <!-- VR Results will be populated here -->
+                                        </tbody>
+                                    </table>
+                                    <p id="no-results-vr" class="text-center text-gray-500 py-4 hidden">No Verbal Reasoning results found.</p>
+                                </div>
+                            </div>
+
+                            <!-- Abstract Reasoning Section (Coming Soon) -->
+                            <div class="section-accordion-item border border-gray-200 rounded-md opacity-60">
+                                <button class="section-accordion-header flex justify-between items-center w-full p-4 bg-gray-50 cursor-not-allowed">
+                                    <h4 class="text-md font-semibold text-gray-500">Abstract Reasoning <span class="text-xs bg-yellow-200 text-yellow-700 px-2 py-0.5 rounded-full ml-2">Soon</span></h4>
+                                     <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                                <!-- No content div needed yet for coming soon -->
+                            </div>
+
+                            <!-- Situational Judgement Section (Coming Soon) -->
+                            <div class="section-accordion-item border border-gray-200 rounded-md opacity-60">
+                                <button class="section-accordion-header flex justify-between items-center w-full p-4 bg-gray-50 cursor-not-allowed">
+                                    <h4 class="text-md font-semibold text-gray-500">Situational Judgement <span class="text-xs bg-yellow-200 text-yellow-700 px-2 py-0.5 rounded-full ml-2">Soon</span></h4>
+                                     <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                                <!-- No content div needed yet for coming soon -->
                             </div>
                         </div>
+                        
+                        <!-- Original single table - to be removed once sections are populated by JS -->
+                        <!-- <div class="overflow-x-auto">
+                            <table class="min-w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Test</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Taken</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Focus Rating</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="results-table-body" class="bg-white divide-y divide-gray-200">
+                                </tbody>
+                            </table>
+                        </div> -->
                     </div>
                     
                     <!-- Detailed view for a single test result -->
@@ -1537,6 +1635,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Set initial state
             showContent('results');
+            initializeResultAccordions(); // Initialize accordions
             
             // Load user results if on results tab
             if (firebase.auth().currentUser) {
@@ -1577,6 +1676,32 @@
             script.src = 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js';
             script.onload = callback;
             document.head.appendChild(script);
+        }
+
+        // Accordion Logic for Results Sections
+        function initializeResultAccordions() {
+            const accordionHeaders = document.querySelectorAll('.section-accordion-header');
+            accordionHeaders.forEach(header => {
+                if (header.closest('.opacity-60')) return; // Skip disabled sections
+
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    const icon = header.querySelector('svg');
+                    const isOpen = !content.classList.contains('hidden');
+
+                    content.classList.toggle('hidden');
+                    icon.classList.toggle('rotate-180', !isOpen);
+                    // Optional: Close other sections when one is opened
+                    // if (!isOpen) {
+                    //     accordionHeaders.forEach(otherHeader => {
+                    //         if (otherHeader !== header && !otherHeader.closest('.opacity-60')) {
+                    //             otherHeader.nextElementSibling.classList.add('hidden');
+                    //             otherHeader.querySelector('svg').classList.remove('rotate-180');
+                    //         }
+                    //     });
+                    // }
+                });
+            });
         }
 
         // Function to load user results from Firebase
@@ -1631,90 +1756,66 @@
                 
                 function fetchUserResults() {
                     const db = firebase.firestore();
-                    const userEmail = firebase.auth().currentUser.email;
-                    const userName = firebase.auth().currentUser.displayName || userEmail;
-                    
-                    console.log("Fetching results for user:", userName, "with email:", userEmail);
-                    
-                    // Create an array to store promises for both queries
-                    const promises = [];
-                    
-                    // Query by name
-                    promises.push(
-                        db.collection("performanceSubmissions")
-                        .where("studentName", "==", userName)
-                        .orderBy("submissionTimestamp", "desc")
-                        .get()
-                    );
-                    
-                    // Query by email if available
-                    if (userEmail) {
-                        promises.push(
-                            db.collection("performanceSubmissions")
-                            .where("studentEmail", "==", userEmail)
-                            .orderBy("submissionTimestamp", "desc")
-                            .get()
-                        );
-                    }
-                    
-                    // Execute both queries and combine results
-                    Promise.all(promises)
-                      .then((snapshots) => {
-                          console.log("Query snapshots received:", snapshots.length);
+                    const currentUser = firebase.auth().currentUser;
+                    const currentUserId = currentUser.uid;
+
+                    console.log("Fetching results for user ID:", currentUserId);
+
+                    let query = db.collection("performanceSubmissions")
+                                  .where("userId", "==", currentUserId)
+                                  .orderBy("submissionTimestamp", "desc");
+
+                    query.get()
+                      .then((querySnapshot) => {
+                          console.log("Query snapshot received based on userId.");
                           resultsLoading.classList.add('hidden');
                           
-                          // Process results from both queries, removing duplicates
                           const results = [];
-                          const seenIds = new Set();
-                          
-                          snapshots.forEach(querySnapshot => {
-                              querySnapshot.forEach((doc) => {
-                                  // Only add if we haven't seen this document ID before
-                                  if (!seenIds.has(doc.id)) {
-                                      seenIds.add(doc.id);
-                                      const data = doc.data();
-                                      results.push({
-                                          id: doc.id,
-                                          ...data,
-                                          date: new Date(data.submissionTimestamp || Date.now())
-                                      });
-                                  }
+                          querySnapshot.forEach((doc) => {
+                              const data = doc.data();
+                              results.push({
+                                  id: doc.id,
+                                  ...data,
+                                  // Ensure date is a Date object, handle potential Firestore Timestamp
+                                  date: data.submissionTimestamp && data.submissionTimestamp.toDate ? data.submissionTimestamp.toDate() : new Date(data.submissionTimestamp || Date.now())
                               });
                           });
                           
-                          console.log(`Found ${results.length} unique results`);
-                          
-                          // Sort results by date (most recent first)
-                          results.sort((a, b) => b.date - a.date);
+                          console.log(`Found ${results.length} results for userId ${currentUserId}`);
                           
                           if (results.length > 0) {
-                              updateResultsSummary(results);
-                              populateResultsTable(results);
+                              updateResultsSummary(results); // Keep overall summary
+                              populateResultsIntoSections(results); // New function to populate accordions
                               resultsSummary.classList.remove('hidden');
                               
-                              // Add event listeners for filters and sorts
                               const resultsFilter = document.getElementById('results-filter');
                               const resultsSort = document.getElementById('results-sort');
                               
-                              resultsFilter.addEventListener('change', () => {
-                                  populateResultsTable(results);
+                              // Remove old listeners to prevent multiple attachments if loadUserResults is called again
+                              resultsFilter.replaceWith(resultsFilter.cloneNode(true));
+                              resultsSort.replaceWith(resultsSort.cloneNode(true));
+                              
+                              // Re-add event listeners to the new cloned elements
+                              document.getElementById('results-filter').addEventListener('change', () => {
+                                  populateResultsIntoSections(results); // Re-populate sections on filter change
+                              });
+                              document.getElementById('results-sort').addEventListener('change', () => {
+                                  populateResultsIntoSections(results); // Re-populate sections on sort change
                               });
                               
-                              resultsSort.addEventListener('change', () => {
-                                  populateResultsTable(results);
-                              });
-                              
-                              // Load ChartJS if needed
                               loadChartJSIfNeeded(() => {
-                                  renderProgressChart(results);
+                                  renderProgressChart(results); // Overall progress chart
                               });
                           } else {
-                              console.log("No results found for this user");
+                              console.log("No results found for this user ID.");
                               resultsEmpty.classList.remove('hidden');
+                              // Hide all section-specific "no results" messages too initially
+                              document.querySelectorAll('[id^="no-results-"]').forEach(p => p.classList.add('hidden'));
                           }
                       })
                       .catch((error) => {
-                          console.error("Error fetching results:", error);
+                          console.error("Error fetching results by userId:", error);
+                          // Fallback or further error handling can be added here if needed
                           resultsLoading.classList.add('hidden');
                           resultsError.classList.remove('hidden');
                       });
@@ -1798,80 +1899,103 @@
             hoursPracticed.textContent = totalHours.toFixed(1);
         }
         
-        // Function to populate results table
-        function populateResultsTable(allResults) {
-            const resultsTableBody = document.getElementById('results-table-body');
+        // NEW Function to populate results into accordion sections
+        function populateResultsIntoSections(allResults) {
             const resultsFilter = document.getElementById('results-filter');
             const resultsSort = document.getElementById('results-sort');
             
-            // Apply filters
-            let results = [...allResults];
+            let processedResults = [...allResults];
             const filterValue = resultsFilter.value;
             if (filterValue !== 'all') {
-                results = results.filter(r => r.examName === filterValue);
+                processedResults = processedResults.filter(r => r.examName === filterValue);
             }
             
-            // Apply sorting
             const sortValue = resultsSort.value;
-            results.sort((a, b) => {
+            processedResults.sort((a, b) => {
+                const dateA = a.date instanceof Date ? a.date : new Date(a.date);
+                const dateB = b.date instanceof Date ? b.date : new Date(b.date);
+
                 switch(sortValue) {
                     case 'date-asc':
-                        return a.date - b.date;
+                        return dateA - dateB;
                     case 'score-desc':
-                        const scoreA = parseInt(a.score) / parseInt(a.totalQuestions);
-                        const scoreB = parseInt(b.score) / parseInt(b.totalQuestions);
-                        return scoreB - scoreA;
+                        const scoreA_val = (parseInt(a.score) / parseInt(a.totalPossibleScore || a.totalQuestions || 1)) || 0;
+                        const scoreB_val = (parseInt(b.score) / parseInt(b.totalPossibleScore || b.totalQuestions || 1)) || 0;
+                        return scoreB_val - scoreA_val;
                     case 'score-asc':
-                        const scoreC = parseInt(a.score) / parseInt(a.totalQuestions);
-                        const scoreD = parseInt(b.score) / parseInt(b.totalQuestions);
-                        return scoreC - scoreD;
+                        const scoreC_val = (parseInt(a.score) / parseInt(a.totalPossibleScore || a.totalQuestions || 1)) || 0;
+                        const scoreD_val = (parseInt(b.score) / parseInt(b.totalPossibleScore || b.totalQuestions || 1)) || 0;
+                        return scoreC_val - scoreD_val;
                     case 'date-desc':
                     default:
-                        return b.date - a.date;
+                        return dateB - dateA;
                 }
             });
-            
-            // Clear existing table rows
-            resultsTableBody.innerHTML = '';
-            
-            // Populate table
-            results.forEach(result => {
-                const row = document.createElement('tr');
-                row.className = 'hover:bg-gray-50 transition-colors';
-                
-                // Format date
-                const date = result.date;
-                const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                
-                // Format score
-                const score = result.score;
-                const totalQuestions = result.totalQuestions;
-                const scoreDisplay = `${score}/${totalQuestions}`;
-                
-                // Add cells
-                row.innerHTML = `
-                    <td class="px-4 py-3 whitespace-nowrap">${formattedDate}</td>
-                    <td class="px-4 py-3">${result.examName}</td>
-                    <td class="px-4 py-3 font-medium">${scoreDisplay}</td>
-                    <td class="px-4 py-3">${result.timeTaken}</td>
-                    <td class="px-4 py-3">${result.focusRating || '-'}/5</td>
-                    <td class="px-4 py-3">
-                        <button class="text-blue-600 hover:text-blue-800 transition-colors view-detail-button" data-result-id="${result.id}">
-                            View Details
-                        </button>
-                    </td>
-                `;
-                
-                resultsTableBody.appendChild(row);
+
+            const resultsBySection = {
+                qr: [],
+                dm: [],
+                vr: [],
+                // ar: [], // Abstract Reasoning - Placeholder for future
+                // sjt: []  // Situational Judgement - Placeholder for future
+            };
+
+            processedResults.forEach(result => {
+                const examName = result.examName ? result.examName.toLowerCase() : '';
+                if (examName.includes('qr') || examName.includes('quantitative')) {
+                    resultsBySection.qr.push(result);
+                } else if (examName.includes('dm') || examName.includes('decision making') || examName.includes('syllogisms')) {
+                    resultsBySection.dm.push(result);
+                } else if (examName.includes('vr') || examName.includes('verbal reasoning')) {
+                    resultsBySection.vr.push(result);
+                } // Add else if for ar and sjt when implemented
             });
-            
-            // Add event listeners to view detail buttons
+
+            const sections = ['qr', 'dm', 'vr'];
+            sections.forEach(sectionKey => {
+                const tableBody = document.getElementById(`results-table-body-${sectionKey}`);
+                const noResultsP = document.getElementById(`no-results-${sectionKey}`);
+                if (!tableBody || !noResultsP) { // Guard against missing elements
+                    console.warn(`Elements for section ${sectionKey} not found.`);
+                    return;
+                }
+                tableBody.innerHTML = ''; 
+
+                if (resultsBySection[sectionKey] && resultsBySection[sectionKey].length > 0) {
+                    noResultsP.classList.add('hidden');
+                    resultsBySection[sectionKey].forEach(result => {
+                        const row = document.createElement('tr');
+                        row.className = 'hover:bg-gray-50 transition-colors';
+                        
+                        const date = result.date instanceof Date ? result.date : new Date(result.date);
+                        const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                        const scoreDisplay = `${result.score}/${result.totalPossibleScore || result.totalQuestions || '-'}`;
+
+                        row.innerHTML = `
+                            <td class="px-4 py-3 whitespace-nowrap text-sm">${formattedDate}</td>
+                            <td class="px-4 py-3 text-sm">${result.examName}</td>
+                            <td class="px-4 py-3 font-medium text-sm">${scoreDisplay}</td>
+                            <td class="px-4 py-3 text-sm">${result.timeTaken || '-'}</td>
+                            <td class="px-4 py-3 text-sm">${result.focusRating || '-'}/5</td>
+                            <td class="px-4 py-3 text-sm">
+                                <button class="text-blue-600 hover:text-blue-800 transition-colors view-detail-button" data-result-id="${result.id}">
+                                    View Details
+                                </button>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    noResultsP.classList.remove('hidden');
+                }
+            });
+
             document.querySelectorAll('.view-detail-button').forEach(button => {
                 button.addEventListener('click', (e) => {
                     const resultId = e.target.dataset.resultId;
-                    const result = results.find(r => r.id === resultId);
-                    if (result) {
-                        showResultDetail(result);
+                    const resultToShow = allResults.find(r => r.id === resultId);
+                    if (resultToShow) {
+                        showResultDetail(resultToShow);
                     }
                 });
             });
@@ -1895,18 +2019,48 @@
             
             // Populate question-by-question table
             const tableBody = document.getElementById('detail-questions-table-body');
-            tableBody.innerHTML = '';
+            tableBody.innerHTML = ''; // Clear previous content
             
-            if (result.answers && Array.isArray(result.answers)) {
+            // Check if the result has the 'questions' array (used by DM syllogisms)
+            if (result.questions && Array.isArray(result.questions)) {
+                result.questions.forEach((questionDetail, index) => {
+                    const questionNumber = index + 1;
+                    let points = questionDetail.points !== undefined ? questionDetail.points : 'N/A';
+                    let timeSpentSec = questionDetail.timeTakenMs ? Math.round(questionDetail.timeTakenMs / 1000) + 's' : 'N/A';
+
+                    let statementDetailsHtml = '<ul class="list-disc list-inside pl-2 text-xs">';
+                    if (questionDetail.statements && Array.isArray(questionDetail.statements)) {
+                        questionDetail.statements.forEach((stmt, stmtIndex) => {
+                            const userAnswer = questionDetail.userAnswers ? questionDetail.userAnswers[stmtIndex] : '-';
+                            const correctAnswer = questionDetail.correctAnswers ? questionDetail.correctAnswers[stmtIndex] : '-';
+                            const isCorrect = userAnswer === correctAnswer && userAnswer !== null;
+                            statementDetailsHtml += `<li class="mb-1">
+                                                        Statement ${stmtIndex + 1}: Your: <span class="font-semibold ${userAnswer === 'Y' ? 'text-green-600' : (userAnswer === 'N' ? 'text-red-600' : 'text-gray-600')}">${userAnswer || '-'}</span>, 
+                                                        Ans: <span class="font-semibold ${correctAnswer === 'Y' ? 'text-green-700' : 'text-red-700'}">${correctAnswer}</span>
+                                                        ${isCorrect ? '<span class="text-green-500 ml-1">(Correct)</span>' : (userAnswer ? '<span class="text-red-500 ml-1">(Incorrect)</span>' : '')}
+                                                    </li>`;
+                        });
+                    }
+                    statementDetailsHtml += '</ul>';
+
+                    const row = document.createElement('tr');
+                    row.className = 'hover:bg-gray-50 transition-colors';
+                    row.innerHTML = `
+                        <td class="px-3 py-2 font-medium align-top">${questionNumber}</td>
+                        <td class="px-3 py-2 align-top text-center">${points}</td>
+                        <td class="px-3 py-2 align-top">${statementDetailsHtml}</td>
+                        <td class="px-3 py-2 align-top text-center">${timeSpentSec}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            // Fallback for older QR Test structure (if necessary)
+            } else if (result.answers && Array.isArray(result.answers)) { 
                 result.answers.forEach((answer, index) => {
                     const questionNumber = index + 1;
-                    
-                    // Get additional data
                     let correctAnswer = '?';
                     if (result.correctAnswers && Array.isArray(result.correctAnswers)) {
                         correctAnswer = result.correctAnswers[index] || '?';
                     }
-                    
                     let timeSpent = 'N/A';
                     if (result.questionTimes && Array.isArray(result.questionTimes)) {
                         const ms = result.questionTimes[index];
@@ -1915,11 +2069,8 @@
                             timeSpent = `${seconds}s`;
                         }
                     }
-                    
-                    // Determine if answer was correct
                     let resultClass = '';
                     let resultText = '';
-                    
                     if (!answer) {
                         resultClass = 'text-gray-500';
                         resultText = 'Not Answered';
@@ -1930,22 +2081,36 @@
                         resultClass = 'text-red-600 font-medium';
                         resultText = 'Incorrect';
                     }
-                    
                     const row = document.createElement('tr');
                     row.className = 'hover:bg-gray-50 transition-colors';
-                    
                     row.innerHTML = `
                         <td class="px-3 py-2 font-medium">${questionNumber}</td>
-                        <td class="px-3 py-2 ${resultClass}">${resultText}</td>
-                        <td class="px-3 py-2">${answer || '-'}</td>
-                        <td class="px-3 py-2">${correctAnswer}</td>
+                        <td class="px-3 py-2 ${resultClass}" colspan="2">${resultText} (Your: ${answer || '-'}, Correct: ${correctAnswer})</td> 
                         <td class="px-3 py-2">${timeSpent}</td>
                     `;
-                    
                     tableBody.appendChild(row);
                 });
+            } else {
+                tableBody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-gray-500">No detailed question data available for this submission.</td></tr>';
             }
             
+            // Adjust table headers for DM Syllogisms if result.questions exists
+            const aThead = tableBody.closest('table').querySelector('thead tr');
+            if (result.questions && aThead) {
+                aThead.innerHTML = `
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Q #</th>
+                    <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Points</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statements (Your Answer | Correct Answer)</th>
+                    <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Time Spent</th>
+                `;
+            } else if (aThead) { // Revert to original for QR if needed
+                 aThead.innerHTML = `
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Q #</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" colspan="2">Result (Your Answer | Correct Answer)</th>
+                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Spent</th>
+                `;
+            }
+
             // Generate charts
             loadChartJSIfNeeded(() => {
                 renderPerformanceBreakdownChart(result);
@@ -2227,24 +2392,59 @@
             doc.save(`${examName.replace(/\s+/g, '_').toLowerCase()}_results_${studentName.replace(/\s+/g, '_').toLowerCase()}.pdf`);
         }
 
-        // Function to redirect to the QR Test for reviewing questions from a past result
+        // Function to redirect to the Test page for reviewing questions from a past result
         function reviewQuestionsFromResult(result) {
-            // Store the result ID in localStorage for retrieval in the QR Test
-            localStorage.setItem('reviewResultId', result.id);
-            
-            // Store the return page information
-            localStorage.setItem('returnToResultsPage', 'true');
-            
-            // Determine which test to redirect to based on the exam name
-            let testUrl = 'QR Test 1.html';
-            if (result.examName === 'QR Test 2') {
-                testUrl = 'QR Test 2.html';
-            } else if (result.examName === 'QR Test 3') {
-                testUrl = 'QR Test 3.html';
+            if (!result || !result.id || !result.examName) {
+                console.error("Cannot review questions: result data is incomplete.", result);
+                alert("Could not start review session. Essential data is missing.");
+                return;
             }
-            
-            // Redirect to the QR Test with a query parameter
-            window.location.href = `${testUrl}?review=${result.id}`;
+
+            localStorage.setItem('reviewSubmissionId', result.id); 
+            localStorage.setItem('returnToDashboardResults', 'true');
+
+            let targetPage = '';
+            const examNameLower = result.examName.toLowerCase();
+
+            if (examNameLower.includes('dm syllogisms worksheet 1')) {
+                targetPage = 'DM sylls 1.html';
+            } else if (examNameLower.includes('dm syllogisms worksheet 2')) {
+                targetPage = 'DM sylls 2.html';
+            } else if (examNameLower.includes('dm syllogisms worksheet 3')) {
+                targetPage = 'DM sylls 3.html';
+            } else if (examNameLower.includes('dm syllogisms worksheet 4')) {
+                targetPage = 'DM sylls 4.html';
+            } else if (examNameLower.includes('dm syllogisms worksheet 5')) {
+                targetPage = 'DM sylls 5.html';
+            } else if (examNameLower.includes('vr focus group 16')) {
+                targetPage = 'VR focus group16.html';
+            } else if (examNameLower.startsWith('qr test')) {
+                const match = examNameLower.match(/qr test (\d+)/);
+                if (match && match[1]) {
+                    targetPage = `QR Test ${match[1]}.html`;
+                } else {
+                    console.error("Could not determine QR Test number from examName:", result.examName);
+                    alert("Could not determine the correct test page for review.");
+                    localStorage.removeItem('reviewSubmissionId');
+                    localStorage.removeItem('returnToDashboardResults');
+                    return;
+                }
+            } else {
+                console.error("Unknown examName for review:", result.examName);
+                alert("This test type cannot be reviewed at this time.");
+                localStorage.removeItem('reviewSubmissionId');
+                localStorage.removeItem('returnToDashboardResults');
+                return;
+            }
+
+            if (targetPage) {
+                window.location.href = `${targetPage}#review`;
+            } else {
+                 console.error("Target page for review could not be determined.");
+                 alert("Error: Could not navigate to the review page.");
+                 localStorage.removeItem('reviewSubmissionId'); 
+                 localStorage.removeItem('returnToDashboardResults');
+            }
         }
     </script>
 </body>
