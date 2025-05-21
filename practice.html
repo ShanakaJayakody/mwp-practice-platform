@@ -946,16 +946,23 @@
             function populateDmWorksheets(subtopicName) {
                 if (!dmWorksheetsGrid) return;
                 dmWorksheetsGrid.innerHTML = ''; // Clear previous worksheets
-                for (let i = 1; i <= 5; i++) {
-                    const worksheetLink = document.createElement('a');
-                    worksheetLink.href = '#'; // Placeholder link
-                    worksheetLink.classList.add('dm-worksheet-link');
-                    worksheetLink.textContent = `${subtopicName} Worksheet ${i}`;
-                    worksheetLink.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        alert(`${subtopicName} Worksheet ${i} selected (content coming soon).`);
-                    });
-                    dmWorksheetsGrid.appendChild(worksheetLink);
+                
+                // Only create links if the subtopic is "Syllogisms" for now
+                if (subtopicName.toLowerCase() === "syllogisms") {
+                    for (let i = 1; i <= 5; i++) {
+                        const worksheetLink = document.createElement('a');
+                        worksheetLink.href = `DM sylls ${i}.html`; // Link to the actual file
+                        worksheetLink.classList.add('dm-worksheet-link');
+                        worksheetLink.textContent = `${subtopicName} Worksheet ${i}`;
+                        // No alert needed as it's a direct link now
+                        dmWorksheetsGrid.appendChild(worksheetLink);
+                    }
+                } else {
+                    // Placeholder for other subtopics
+                    const placeholderText = document.createElement('p');
+                    placeholderText.textContent = `Worksheets for ${subtopicName} are coming soon.`;
+                    placeholderText.classList.add('text-sm', 'text-gray-500');
+                    dmWorksheetsGrid.appendChild(placeholderText);
                 }
             }
 

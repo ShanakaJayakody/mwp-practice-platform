@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UCAT DM Practice - MedwithPurpose</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        /* Custom styles for better UI/UX */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scrolling on body */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f2f5; /* Light background */
+        }
+        #app-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 2rem); /* Full height minus padding */
+            width: 100%;
+            max-width: 1200px; /* Optional: Max width for larger screens */
+            background-color: #ffffff;
+            border: 1px solid #d1d5db; /* Border */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-radius: 0.375rem; /* Slightly rounded corners */
+            margin: 1rem; /* Add some margin */
+            overflow: hidden; /* Prevent content overflow from container */
+        }
+        /* Header and Footer */
+        .header-bar, .footer-bar {
+            flex-shrink: 0; /* Prevent shrinking */
+            background-color: #006DAA; /* Updated background color */
+            color: white; /* Set default text color to white */
+            padding: 0.75rem 1.5rem; /* Padding */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Specific text colors within header/footer */
+        .header-bar span, .header-bar div {
+             color: white;
+        }
+
+        /* Footer Button Styling */
+        .footer-bar button {
+            background-color: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.5); /* Subtle white border */
+            padding: 0.4rem 0.8rem; /* Adjust padding */
+            font-size: 0.8rem; /* Adjust font size */
+            border-radius: 0.375rem;
+             transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .footer-bar button:hover:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.15); /* Slight white background on hover */
+            border-color: white;
+        }
+         .footer-bar button:disabled {
+             opacity: 0.5;
+             cursor: not-allowed;
+             border-color: rgba(255, 255, 255, 0.3);
+         }
+         /* Keep primary button distinct */
+         .footer-bar button#next-button {
+             background-color: #ffffff; /* White background */
+             color: #006DAA; /* Blue text */
+             border: 1px solid white;
+             font-weight: 500;
+         }
+         .footer-bar button#next-button:hover:not(:disabled) {
+             background-color: #f0f0f0; /* Slightly off-white on hover */
+         }
+         /* Flag button specific style */
+         #flag-button {
+             background-color: transparent;
+             border: 1px solid white;
+             color: white;
+             transition: background-color 0.2s ease, color 0.2s ease; /* Add transition */
+         }
+         #flag-button:hover {
+             background-color: white;
+             color: #006DAA;
+         }
+         /* Style for when a question IS flagged */
+          #flag-button.flagged {
+             background-color: #facc15; /* Yellow-400 */
+             border-color: #facc15;
+             color: #422006; /* Dark brown text for contrast */
+          }
+          #flag-button.flagged:hover {
+             background-color: #f59e0b; /* Amber-500 */
+             border-color: #f59e0b;
+          }
+
+        /* Main Content Area - Single Column Layout */
+        .main-content-area {
+            flex-grow: 1; /* Take remaining vertical space */
+            display: flex;
+            flex-direction: column; /* Stack premises and questions */
+            overflow-y: auto; /* Allow scrolling for the whole area */
+            padding: 1rem 1.5rem; /* Padding */
+        }
+
+        /* Premises Section */
+        .premises-section {
+            margin-bottom: 1.5rem; /* Space below premises */
+            padding: 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            background-color: #f9fafb;
+            flex-shrink: 0; /* Prevent premises from shrinking too much */
+        }
+        .premises-section h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Statements Section Wrapper (NEW) */
+        .statements-wrapper {
+            flex-grow: 1; /* Allow this section to take remaining space */
+            display: flex; /* Use flexbox for side-by-side layout */
+            gap: 1.5rem; /* Gap between statements and draggable options */
+            overflow: hidden; /* Prevent internal overflow issues */
+        }
+
+
+        /* Statements Section (List on the Left) */
+        .statements-section {
+             flex-grow: 1; /* Allow statements list to take available space */
+             display: flex;
+             flex-direction: column;
+             overflow-y: auto; /* Allow scrolling only for statements list */
+             padding-right: 0.5rem; /* Padding before options */
+        }
+        .statements-section h4 {
+            margin-bottom: 0.25rem;
+             position: sticky; /* Make header sticky */
+             top: 0;
+             background-color: white; /* Background to cover scrolling content */
+             z-index: 10;
+             padding-bottom: 0.25rem;
+        }
+        .statements-section p.instructions {
+             margin-bottom: 1rem;
+             position: sticky;
+             top: 2rem; /* Adjust based on h4 height */
+             background-color: white;
+             z-index: 10;
+             padding-bottom: 0.5rem;
+        }
+
+        /* Styling for individual statement rows */
+        .statement-row {
+            display: flex;
+            align-items: center; /* Vertically align items */
+            gap: 1rem; /* Space between text and answer box */
+            margin-bottom: 0.75rem;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            background-color: #ffffff;
+            border: 1px solid #d1d5db;
+            transition: border-color 0.2s ease, background-color 0.2s ease; /* Add transition */
+        }
+
+        /* Style when dragging over the statement row */
+        .statement-row.drag-over {
+            border-color: #3b82f6; /* Solid blue border */
+            background-color: #eff6ff; /* Lighter blue background */
+        }
+
+        /* Styling for statement text */
+        .statement-text {
+            flex-grow: 1; /* Take available space */
+            font-size: 0.9rem;
+            color: #374151;
+            padding: 0.25rem; /* Add slight padding */
+            pointer-events: none; /* Prevent text from interfering with drop */
+        }
+
+        /* Styling for the answer box (visual indicator within the row) */
+        .statement-answer-box {
+            flex-shrink: 0; /* Prevent shrinking */
+            width: 6rem; /* Wider box */
+            height: 2.5rem; /* Taller box */
+            border: 2px solid transparent; /* Initially transparent border */
+            border-radius: 0.375rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #6b7280; /* Default text color */
+            background-color: #f3f4f6; /* Light grey background */
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+            pointer-events: none; /* Prevent box from interfering with row drop */
+        }
+
+        /* Style for answered boxes */
+        .statement-answer-box.answered-yes {
+            background-color: #dcfce7; /* Green-100 */
+            border: 2px solid #22c55e; /* Green-500 */
+            color: #15803d; /* Green-700 */
+        }
+        .statement-answer-box.answered-no {
+            background-color: #fee2e2; /* Red-100 */
+            border: 2px solid #ef4444; /* Red-500 */
+            color: #b91c1c; /* Red-700 */
+        }
+
+        /* Styling for the draggable Yes/No options sidebar (NEW) */
+        #draggable-options-sidebar {
+            flex-shrink: 0; /* Prevent shrinking */
+            width: 8rem; /* Fixed width for the sidebar */
+            padding-top: 4rem; /* Align roughly with start of statements */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem; /* Space between Yes and No */
+        }
+
+        /* Styling for draggable Yes/No elements */
+        .draggable-option {
+            padding: 0.6rem 1.5rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: grab; /* Indicate draggable */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.1s ease;
+            text-align: center;
+            width: 80%; /* Make buttons fill sidebar width */
+        }
+        .draggable-option:active {
+             cursor: grabbing;
+             transform: scale(0.95);
+        }
+        .draggable-option-yes {
+            background-color: #86efac; /* Green-300 */
+            border: 1px solid #22c55e; /* Green-500 */
+            color: #14532d; /* Green-900 */
+        }
+        .draggable-option-no {
+            background-color: #fca5a5; /* Red-300 */
+            border: 1px solid #ef4444; /* Red-500 */
+            color: #7f1d1d; /* Red-900 */
+        }
+
+        /* Style for navigator buttons */
+        .nav-answered { background-color: #a7f3d0; }
+        .nav-current { border: 2px solid #3b82f6 !important; font-weight: bold; }
+        .nav-flagged, .review-flagged { border: 2px solid #f59e0b !important; position: relative; }
+
+        /* Modal Styles */
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
+        .modal-content { background-color: #fefefe; margin: auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 600px; border-radius: 0.5rem; }
+        .modal.flex { display: flex; }
+
+        /* General Button Styling (outside footer) */
+        button, .button {
+            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+            border-radius: 0.375rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+        }
+        button:active, .button:active { transform: scale(0.98); }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .primary-button { background-color: #3b82f6; color: white; border: 1px solid transparent; }
+        .primary-button:hover:not(:disabled) { background-color: #2563eb; }
+        .secondary-button { background-color: white; color: #374151; border: 1px solid #d1d5db; }
+        .secondary-button:hover:not(:disabled) { background-color: #f9fafb; }
+        .danger-button { background-color: #ef4444; color: white; border: 1px solid transparent; }
+        .danger-button:hover:not(:disabled) { background-color: #dc2626; }
+        .subtle-button { background-color: #f3f4f6; color: #374151; border: 1px solid transparent; }
+        .subtle-button:hover:not(:disabled) { background-color: #e5e7eb; }
+
+        /* --- Result Styling --- */
+       .correct-answer { background-color: #dcfce7; border-left: 4px solid #22c55e; }
+       .partially-correct-answer { background-color: #fef9c3; border-left: 4px solid #eab308; }
+       .incorrect-answer { background-color: #fee2e2; border-left: 4px solid #ef4444; }
+       .result-item-clickable { cursor: pointer; transition: background-color 0.2s ease-in-out; border: 1px solid #e5e7eb; border-radius: 0.5rem; margin-bottom: 0.5rem; padding: 0.75rem; }
+       .result-item-clickable:hover { background-color: #f0f0f0; }
+       .correct-indicator-text { color: #16a34a; font-weight: 600;}
+       .incorrect-indicator-text { color: #dc2626; font-weight: 600;}
+       .result-statement { font-size: 0.8rem; margin-left: 1rem; margin-bottom: 0.25rem; padding-left: 0.5rem; border-left: 2px solid #e5e7eb; }
+       .result-statement.correct { border-left-color: #22c55e; }
+       .result-statement.incorrect { border-left-color: #ef4444; }
+       /* --- END Result Styling --- */
+
+        /* Style for explanation box */
+        .explanation-box { background-color: #fef3c7; border: 1px solid #fcd34d; padding: 0.75rem; margin-top: 1rem; border-radius: 0.375rem; font-size: 0.875rem; color: #78350f; }
+
+        /* Review Grid Button Styles */
+        .review-grid-button { padding: 0.5rem 0.25rem; border: 1px solid #d1d5db; border-radius: 0.375rem; text-align: center; transition: background-color 0.2s ease, border-color 0.2s ease; font-size: 0.875rem; line-height: 1.25rem; cursor: pointer; }
+        .review-grid-button-answered { background-color: #dcfce7; border-color: #86efac; color: #15803d; }
+        .review-grid-button-unanswered { background-color: #f3f4f6; border-color: #d1d5db; color: #4b5563; }
+         .review-grid-button:hover { filter: brightness(95%); }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            #app-container { height: auto; margin: 0.5rem; }
+            .main-content-area { padding: 0.75rem; }
+            .premises-section { padding: 0.75rem; }
+            .statements-wrapper { flex-direction: column; gap: 1rem; } /* Stack statements and options */
+            .statements-section { padding-right: 0; overflow-y: visible; } /* Remove padding, disable scroll */
+            #draggable-options-sidebar {
+                width: 100%;
+                padding-top: 0;
+                flex-direction: row; /* Options side-by-side */
+                justify-content: space-around; /* Space out options */
+                padding: 0.75rem 0;
+                border-top: 1px solid #e5e7eb; /* Add separator */
+            }
+            .draggable-option { width: 40%; padding: 0.5rem 1rem; font-size: 0.85rem;}
+
+            .statement-row { gap: 0.5rem; padding: 0.4rem; }
+            .statement-text { font-size: 0.85rem; }
+            .statement-answer-box { width: 5rem; height: 2.2rem; font-size: 0.8rem; }
+
+            .header-bar, .footer-bar { padding: 0.5rem 1rem; }
+            .header-bar span, .footer-bar button { font-size: 0.8rem; }
+            button, .button { padding: 0.4rem 0.8rem; }
+            .footer-bar button { padding: 0.3rem 0.6rem; font-size: 0.75rem; }
+            .grid-cols-5 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            #review-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+            .review-grid-button { font-size: 0.8rem; }
+        }
+         @media (max-width: 480px) {
+             .main-content-area { padding: 0.5rem; }
+             .grid-cols-5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+             #review-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+             .header-bar span, .footer-bar button { font-size: 0.75rem; }
+             button, .button { padding: 0.3rem 0.6rem; }
+             .footer-bar button { padding: 0.25rem 0.5rem; font-size: 0.7rem; }
+             .statement-row { flex-direction: column; align-items: stretch; gap: 0.4rem; } /* Stack text and box */
+             .statement-answer-box { width: auto; } /* Full width */
+             #draggable-options-sidebar { gap: 0.5rem; }
+             .draggable-option { width: 45%; padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+             .review-grid-button { font-size: 0.75rem; }
+         }
+
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    </head>
+<body>
+
+    <div id="app-container">
+
+        <div id="setup-screen" class="p-6 md:p-8 flex flex-col justify-center items-center h-full">
+             <div class="text-center mb-6">
+                 <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
+                      alt="MedwithPurpose Logo"
+                      class="mx-auto h-20 w-auto mb-4"
+                      onerror="this.style.display='none'; this.onerror=null;">
+                 <h1 class="text-2xl md:text-3xl font-bold text-blue-600">UCAT Decision Making Practice</h1>
+                 <p class="text-gray-600 mt-2">Practice the UCAT Decision Making section.</p>
+                  <p class="text-sm text-gray-500 mt-4">
+                       This section contains <strong id="setup-question-count">5 questions</strong>, each with 5 statements. Maximum score is <strong id="setup-max-score">10 points</strong>.
+                  </p>
+             </div>
+             <div class="space-y-4 w-full max-w-md">
+                 <div>
+                     <label for="name" class="block text-sm font-medium text-gray-700">Name:</label>
+                     <input type="text" id="name" name="name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your name">
+                 </div>
+                 <div>
+                     <label for="goal" class="block text-sm font-medium text-gray-700">Goal (Score out of 10):</label>
+                     <input type="number" id="goal" name="goal" min="0" max="10" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., 8">
+                 </div>
+                 <div>
+                     <label for="focus-area" class="block text-sm font-medium text-gray-700">Area of Focus / Intention For Practice:</label>
+                     <input type="text" id="focus-area" name="focus-area" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., Syllogisms, Logic Puzzles">
+                 </div>
+             </div>
+             <div class="mt-8 text-center">
+                 <button id="start-button" class="primary-button text-lg px-8 py-3">
+                     Start Practice
+                 </button>
+             </div>
+        </div>
+
+        <div id="exam-screen" class="hidden flex flex-col h-full">
+            <div class="header-bar">
+                <span id="exam-title" class="font-semibold">Decision Making</span>
+                <div class="flex items-center space-x-4">
+                     <span class="text-sm">Question <span id="question-number-info">1</span> of 5</span>
+                     <button id="flag-button" class="text-sm font-medium border border-white rounded px-2 py-1 transition-colors duration-150">
+                          Flag for Review
+                     </button>
+                </div>
+            </div>
+
+            <div class="main-content-area">
+                <div class="premises-section">
+                    <h3 class="text-lg font-semibold">Premises</h3>
+                    <div id="premises-text" class="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+                        </div>
+                </div>
+
+                <div class="statements-wrapper">
+                    <div class="statements-section">
+                        <h4 class="text-md font-semibold">Statements (Question <span id="question-number">1</span>)</h4>
+                        <p class="text-xs text-gray-500 instructions">Drag 'Yes' or 'No' onto the statement row.</p>
+                        <div id="statements-list">
+                            </div>
+                    </div> <div id="draggable-options-sidebar">
+                        <div id="draggable-yes" class="draggable-option draggable-option-yes" draggable="true">Yes</div>
+                        <div id="draggable-no" class="draggable-option draggable-option-no" draggable="true">No</div>
+                     </div>
+                </div> <div id="review-explanation-container" class="mt-4"></div>
+
+            </div> <div class="footer-bar">
+                 <button id="back-to-results-button" class="hidden mr-auto">← Back to Results</button>
+                 <button id="end-exam-button-footer">End Practice</button>
+                 <div class="flex items-center space-x-2 ml-auto">
+                     <button id="prev-button" disabled>← Previous (Alt+P)</button>
+                     <button id="navigator-button">Navigator</button>
+                     <button id="next-button">Next (Alt+N) →</button>
+                 </div>
+            </div>
+        </div>
+
+        <div id="review-screen" class="hidden p-6 md:p-8 flex flex-col items-center h-full overflow-y-auto">
+             <div class="w-full max-w-3xl mb-4 flex justify-between items-center">
+                 <h2 class="text-2xl font-bold text-blue-600">Review Your Answers</h2>
+                 <button id="filter-flagged-button" class="secondary-button text-sm">Show Flagged Only</button>
+             </div>
+             <p class="text-center text-gray-600 mb-6">Click on a question number to review it. Green indicates answered, Yellow border indicates flagged.</p>
+            <div id="review-grid" class="grid grid-cols-5 gap-3 mb-6 w-full max-w-xl"> </div>
+            <div class="mt-auto pt-6">
+                <button id="end-exam-button" class="danger-button text-lg px-8 py-3">
+                    End Practice & See Results
+                </button>
+            </div>
+        </div>
+
+        <div id="results-screen" class="hidden p-6 md:p-8 flex flex-col h-full">
+             <div class="text-center mb-6 flex-shrink-0">
+                 <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
+                      alt="MedwithPurpose Logo"
+                      class="mx-auto h-16 w-auto mb-4"
+                      onerror="this.style.display='none'; this.onerror=null;">
+                  <h2 class="text-2xl md:text-3xl font-bold text-blue-600">Practice Results</h2>
+             </div>
+            <div class="bg-blue-50 p-4 rounded-lg mb-6 text-center flex-shrink-0">
+                 <p class="text-lg font-semibold">Your Score: <span id="score" class="text-blue-700">0</span> / <span id="total-score-possible">10</span> Points</p>
+                 <p class="text-gray-600">Time Taken: <span id="time-taken">N/A</span></p> </div>
+            <h3 class="text-xl font-semibold mb-2 flex-shrink-0">Detailed Results:</h3>
+            <p class="text-sm text-gray-500 mb-4 flex-shrink-0">Click on a question below to review it.</p>
+            <div id="results-details" class="space-y-3 overflow-y-auto flex-grow pr-2">
+                </div>
+            <div class="mt-6 flex-shrink-0 border-t pt-4">
+                 <div class="mb-4">
+                     <label for="focus-rating" class="block text-md font-semibold text-gray-700 mb-1">My focus out of 5 (1 very low, 5 very high):</label>
+                     <input type="number" id="focus-rating" name="focus-rating" min="1" max="5" class="mt-1 block w-20 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="1-5">
+                 </div>
+                 <div>
+                     <label for="reflection-text" class="block text-md font-semibold text-gray-700 mb-1">Main takeaway from this practice:</label>
+                     <textarea id="reflection-text" name="reflection-text" rows="3" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Reflect on your performance, strategies, or areas for improvement..."></textarea>
+                 </div>
+            </div>
+             <div class="mt-6 text-center flex-shrink-0 flex justify-center space-x-4">
+                <button onclick="window.location.reload()" class="secondary-button px-6 py-2">
+                    Try Again
+                </button>
+                <button id="download-pdf-button" class="primary-button px-6 py-2">
+                    Download Results PDF
+                </button>
+            </div>
+        </div>
+
+        <div id="navigator-modal" class="modal">
+            <div class="modal-content bg-white p-6 rounded-lg shadow-xl">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800">Question Navigator</h3>
+                    <button id="close-modal-button" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+                </div>
+                 <p class="text-sm text-gray-600 mb-4">Click a number to jump. Green: answered, Yellow border: flagged.</p>
+                <div id="navigator-grid" class="grid grid-cols-5 gap-3">
+                    </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- Data ---
+        const premisesData = [
+            "All teachers are educators.\nSome educators are writers.\nNo teacher is a writer.",
+            "Not all the participants at the conference were speakers.\nAll the speakers at the conference were professionals.\nSome speakers at the conference were not panelists.",
+            "In Amanda's house, the plates are ceramic, glass, or metal.\nAmanda never uses a glass plate, but everyone else in the house uses a metal plate.",
+            "In a forest, the trees are either Oaks, Pines, or Maples.\nAll Oaks are tall.\nNo Pines are tall.\nBoth Pines and Maples have broad leaves.",
+            "In a city's park, there are areas designated for various activities such as walking, jogging, and cycling.\nSome areas are exclusively for walking.\nAll jogging areas permit walking, but not all walking areas permit jogging.\nThere are also some areas where cycling is not allowed, but jogging is permitted."
+        ];
+
+        const questionsData = [
+            // Added placeholder explanations
+            { premiseIndex: 0, statements: ["All writers are educators.","Some educators are not teachers.","Some writers are not teachers.","Some writers are educators.","No educator is a teacher."], correctAnswers: ['N', 'Y', 'Y', 'Y', 'N'], explanation: "Explanation for Q1: Based on the premises, we know the relationship between teachers, educators, and writers. Evaluate each conclusion against these established relationships." },
+            { premiseIndex: 1, statements: ["At least one panelist at the conference was a professional.","At least one professional at the conference was both a speaker and a panelist.","All the professionals at the conference were either speakers or panelists.","Not all professionals at the conference who were speakers were panelists.","All the panelists at the conference who were speakers were professionals."], correctAnswers: ['Y', 'Y', 'N', 'Y', 'Y'], explanation: "Explanation for Q2: Consider the overlaps and distinctions between participants, speakers, professionals, and panelists as defined by the premises." },
+            { premiseIndex: 2, statements: ["Someone in the house uses a glass plate.","Amanda uses a ceramic plate.","A person using a glass plate cannot be Amanda.","Someone in the house does not use a glass plate.","At least one person in the house uses a ceramic plate and a metal plate."], correctAnswers: ['N', 'Y', 'Y', 'Y', 'N'], explanation: "Explanation for Q3: Focus on Amanda's specific plate usage and the usage patterns of 'everyone else' regarding the available plate types." },
+            { premiseIndex: 3, statements: ["If a tree is an Oak, it has broad leaves.","No Pine is an Oak.","If a tree is a Pine, it is not tall.","No Maples are Oaks.","If a tree is a Pine but not an Oak, it has broad leaves."], correctAnswers: ['N', 'Y', 'Y', 'N', 'Y'], explanation: "Explanation for Q4: Map the properties (tall, broad leaves) to the tree types (Oaks, Pines, Maples) according to the premises." },
+            { premiseIndex: 4, statements: ["Some areas in the park are designated only for walking.","Some areas that permit jogging do not permit walking.","All areas that permit jogging also permit walking.","Some areas that permit cycling do not permit jogging.","All walking areas permit jogging."], correctAnswers: ['Y', 'N', 'Y', 'N', 'N'], explanation: "Explanation for Q5: Analyze the permissions (walking, jogging, cycling) for different types of areas within the park based on the rules provided." }
+        ];
+
+        // --- State ---
+        let currentQuestionIndex = 0;
+        let userAnswers = Array(questionsData.length).fill(null).map(() => Array(5).fill(null));
+        let examStartTime;
+        let examEndTime;
+        let userName = '';
+        let userGoal = '';
+        let userFocusArea = '';
+        let isReviewingFromResults = false;
+        let flaggedQuestions = new Array(questionsData.length).fill(false);
+        let isFilteringFlagged = false;
+        let currentlyDisplayedPremiseIndex = -1;
+
+        // --- Elements ---
+        const appContainer = document.getElementById('app-container');
+        const setupScreen = document.getElementById('setup-screen');
+        const examScreen = document.getElementById('exam-screen');
+        const reviewScreen = document.getElementById('review-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const navigatorModal = document.getElementById('navigator-modal');
+        const startButton = document.getElementById('start-button');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const navigatorButton = document.getElementById('navigator-button');
+        const closeModalButton = document.getElementById('close-modal-button');
+        const endExamButton = document.getElementById('end-exam-button');
+        const endExamButtonFooter = document.getElementById('end-exam-button-footer');
+        const backToResultsButton = document.getElementById('back-to-results-button');
+        const flagButton = document.getElementById('flag-button');
+        const premisesTextEl = document.getElementById('premises-text');
+        const questionNumberEl = document.getElementById('question-number');
+        const questionNumberInfoEl = document.getElementById('question-number-info');
+        const statementsListContainer = document.getElementById('statements-list');
+        const draggableYes = document.getElementById('draggable-yes'); // Draggable Yes
+        const draggableNo = document.getElementById('draggable-no');   // Draggable No
+        const reviewGrid = document.getElementById('review-grid');
+        const navigatorGrid = document.getElementById('navigator-grid');
+        const scoreEl = document.getElementById('score');
+        const totalScorePossibleEl = document.getElementById('total-score-possible');
+        const timeTakenEl = document.getElementById('time-taken');
+        const resultsDetails = document.getElementById('results-details');
+        const nameInput = document.getElementById('name');
+        const goalInput = document.getElementById('goal');
+        const focusAreaInput = document.getElementById('focus-area');
+        const examTitleEl = document.getElementById('exam-title');
+        const filterFlaggedButton = document.getElementById('filter-flagged-button');
+        const setupQuestionCountEl = document.getElementById('setup-question-count');
+        const setupMaxScoreEl = document.getElementById('setup-max-score');
+        const reviewExplanationContainer = document.getElementById('review-explanation-container');
+        const reflectionText = document.getElementById('reflection-text');
+        const downloadPdfButton = document.getElementById('download-pdf-button');
+        const focusRatingInput = document.getElementById('focus-rating');
+
+        // --- Functions ---
+
+        function formatTimeDifference(milliseconds) {
+            if (!milliseconds || milliseconds < 0) return "0 min 00 sec";
+            const totalSeconds = Math.round(milliseconds / 1000);
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${minutes} min ${seconds < 10 ? '0' : ''}${seconds} sec`;
+        }
+
+        function toggleFlag() {
+            if (isReviewingFromResults) return;
+            const index = currentQuestionIndex;
+            flaggedQuestions[index] = !flaggedQuestions[index];
+            updateFlagButtonAppearance();
+            updateNavigatorButtons();
+        }
+
+        function updateFlagButtonAppearance() {
+            const isFlagged = flaggedQuestions[currentQuestionIndex];
+            flagButton.textContent = isFlagged ? 'Unflag' : 'Flag for Review';
+            flagButton.classList.toggle('flagged', isFlagged);
+        }
+
+        /** Loads a question (premises and statements) */
+        function loadQuestion(index, reviewMode = false) {
+            if (index < 0 || index >= questionsData.length) return;
+
+            const question = questionsData[index];
+            const newPremiseIndex = question.premiseIndex;
+            const mainContentArea = document.querySelector('.main-content-area'); // Get scrollable area
+
+            // Load premises
+            if (newPremiseIndex !== currentlyDisplayedPremiseIndex || reviewMode) {
+                premisesTextEl.innerHTML = premisesData[newPremiseIndex].replace(/\n/g, '<br><br>');
+                currentlyDisplayedPremiseIndex = newPremiseIndex;
+            }
+
+            currentQuestionIndex = index;
+            isReviewingFromResults = reviewMode;
+
+            questionNumberEl.textContent = index + 1;
+            questionNumberInfoEl.textContent = `${index + 1} of ${questionsData.length}`;
+            if (mainContentArea) mainContentArea.scrollTop = 0; // Scroll main area to top
+
+            statementsListContainer.innerHTML = ''; // Clear previous statements
+            reviewExplanationContainer.innerHTML = ''; // Clear previous explanation
+
+            question.statements.forEach((statementText, statementIndex) => {
+                const statementRow = document.createElement('div');
+                statementRow.classList.add('statement-row');
+                statementRow.dataset.qIndex = index; // Store indices on the row
+                statementRow.dataset.sIndex = statementIndex;
+
+                const textBox = document.createElement('div');
+                textBox.classList.add('statement-text');
+                textBox.textContent = `${statementIndex + 1}. ${statementText}`;
+                statementRow.appendChild(textBox);
+
+                const answerBox = document.createElement('div');
+                answerBox.classList.add('statement-answer-box');
+                answerBox.id = `q${index}-s${statementIndex}-answerbox`; // Unique ID
+                // No need for data attributes on answerBox if drop target is the row
+                statementRow.appendChild(answerBox);
+
+                // Set initial state of the answer box
+                const currentAnswer = userAnswers[index] ? userAnswers[index][statementIndex] : null;
+                updateAnswerBox(answerBox, currentAnswer);
+
+                // Add drag/drop event listeners to the ROW only if not in review mode
+                if (!reviewMode) {
+                    statementRow.addEventListener('dragover', handleDragOver);
+                    statementRow.addEventListener('dragleave', handleDragLeave);
+                    statementRow.addEventListener('drop', handleDrop);
+                } else {
+                     // Add visual cues for correct/incorrect in review mode
+                    const correctAnswer = question.correctAnswers[statementIndex];
+                    if (currentAnswer && currentAnswer !== correctAnswer) {
+                        answerBox.classList.add('border-red-500', 'border-2'); // Highlight border if incorrect
+                    } else if (currentAnswer && currentAnswer === correctAnswer) {
+                         answerBox.classList.add('border-green-500', 'border-2'); // Highlight border if correct
+                    }
+                }
+
+                statementsListContainer.appendChild(statementRow);
+            });
+
+            // Display explanation if in review mode
+            if (reviewMode && question.explanation) {
+                 const explanationDiv = document.createElement('div');
+                 explanationDiv.classList.add('explanation-box');
+                 explanationDiv.innerHTML = `<strong class="font-semibold">Explanation:</strong> ${question.explanation}`;
+                 reviewExplanationContainer.appendChild(explanationDiv);
+            }
+
+
+            // Update navigation buttons
+            prevButton.disabled = index === 0;
+            if (!reviewMode && index === questionsData.length - 1) {
+                 nextButton.textContent = 'Finish & Review';
+                 nextButton.disabled = false;
+            } else if (!reviewMode) {
+                 nextButton.textContent = 'Next (Alt+N) →';
+                 nextButton.disabled = false;
+            } else { // In review mode
+                 nextButton.disabled = index === questionsData.length - 1;
+                 if (!nextButton.disabled) nextButton.textContent = 'Next →';
+            }
+
+            updateFlagButtonAppearance();
+
+            // Adjust UI elements based on mode
+            if (reviewMode) {
+                backToResultsButton.classList.remove('hidden');
+                endExamButtonFooter.classList.add('hidden');
+                examTitleEl.textContent = "Reviewing Question";
+                flagButton.disabled = true;
+                draggableYes.setAttribute('draggable', 'false'); // Disable dragging in review
+                draggableNo.setAttribute('draggable', 'false');
+                draggableYes.style.cursor = 'default';
+                draggableNo.style.cursor = 'default';
+                 document.getElementById('draggable-options-sidebar').style.display = 'none'; // Hide draggable options in review
+            } else {
+                backToResultsButton.classList.add('hidden');
+                endExamButtonFooter.classList.remove('hidden');
+                examTitleEl.textContent = "Decision Making";
+                flagButton.disabled = false;
+                draggableYes.setAttribute('draggable', 'true'); // Enable dragging
+                draggableNo.setAttribute('draggable', 'true');
+                draggableYes.style.cursor = 'grab';
+                draggableNo.style.cursor = 'grab';
+                 document.getElementById('draggable-options-sidebar').style.display = 'flex'; // Show draggable options
+            }
+
+            updateNavigatorHighlight();
+        }
+
+
+        /** Updates the visual state of an answer box */
+        function updateAnswerBox(answerBoxElement, answer) {
+            answerBoxElement.classList.remove('answered-yes', 'answered-no', 'border-red-500', 'border-green-500', 'border-2'); // Clear previous styles
+            answerBoxElement.textContent = ''; // Clear text
+            if (answer === 'Y') {
+                answerBoxElement.classList.add('answered-yes');
+                answerBoxElement.textContent = 'Yes';
+            } else if (answer === 'N') {
+                answerBoxElement.classList.add('answered-no');
+                answerBoxElement.textContent = 'No';
+            } else {
+                // Optional: Add placeholder text if needed
+                 answerBoxElement.textContent = '...'; // Placeholder for empty
+            }
+        }
+
+        // --- Drag and Drop Handlers ---
+
+        function handleDragStart(event) {
+            // Ensure the event target is the draggable element itself
+            if (!event.target.classList.contains('draggable-option')) return;
+
+            const value = event.target.id === 'draggable-yes' ? 'Y' : 'N';
+            event.dataTransfer.setData('text/plain', value);
+            event.dataTransfer.effectAllowed = 'copy';
+             event.target.style.opacity = '0.7';
+        }
+
+        function handleDragEnd(event) {
+             // Ensure the event target is the draggable element itself
+            if (!event.target.classList.contains('draggable-option')) return;
+             event.target.style.opacity = '1';
+        }
+
+        function handleDragOver(event) {
+            // Allow drop only on statement rows
+            const targetRow = event.target.closest('.statement-row');
+            if (targetRow && !isReviewingFromResults) {
+                event.preventDefault();
+                event.dataTransfer.dropEffect = 'copy';
+                targetRow.classList.add('drag-over'); // Add visual feedback to the row
+            }
+        }
+
+        function handleDragLeave(event) {
+             // Remove visual feedback from the row
+            const targetRow = event.target.closest('.statement-row');
+            if (targetRow) {
+                targetRow.classList.remove('drag-over');
+            }
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            const targetRow = event.target.closest('.statement-row');
+
+            if (!targetRow || isReviewingFromResults) return; // Ensure drop is on a row and not in review
+
+            targetRow.classList.remove('drag-over'); // Remove visual feedback
+
+            const droppedValue = event.dataTransfer.getData('text/plain');
+            const questionIndex = parseInt(targetRow.dataset.qIndex, 10);
+            const statementIndex = parseInt(targetRow.dataset.sIndex, 10);
+
+            if (questionIndex !== currentQuestionIndex) return; // Ensure drop is on current question
+
+            // Store the answer
+            if (!userAnswers[questionIndex]) {
+                userAnswers[questionIndex] = Array(5).fill(null);
+            }
+            userAnswers[questionIndex][statementIndex] = droppedValue;
+
+            // Update the target answer box visually within the row
+            const answerBox = targetRow.querySelector('.statement-answer-box');
+            if (answerBox) {
+                updateAnswerBox(answerBox, droppedValue);
+            }
+
+            // Check if all statements for this question are answered
+            const allAnswered = userAnswers[questionIndex].every(ans => ans !== null);
+            updateNavigatorButtons(allAnswered);
+        }
+
+        // Add drag listeners to draggable options
+        draggableYes.addEventListener('dragstart', handleDragStart);
+        draggableNo.addEventListener('dragstart', handleDragStart);
+        draggableYes.addEventListener('dragend', handleDragEnd); // Restore style on drag end
+        draggableNo.addEventListener('dragend', handleDragEnd);
+
+
+        function showNextQuestion() {
+            if (isReviewingFromResults) {
+                if (currentQuestionIndex < questionsData.length - 1) {
+                    loadQuestion(currentQuestionIndex + 1, true);
+                }
+            } else {
+                if (currentQuestionIndex === questionsData.length - 1) {
+                    showReviewScreen();
+                } else if (currentQuestionIndex < questionsData.length - 1) {
+                    loadQuestion(currentQuestionIndex + 1);
+                }
+            }
+        }
+
+        function showPrevQuestion() {
+             if (isReviewingFromResults) {
+                 if (currentQuestionIndex > 0) {
+                     loadQuestion(currentQuestionIndex - 1, true);
+                 }
+             }
+             else if (currentQuestionIndex > 0) {
+                loadQuestion(currentQuestionIndex - 1);
+            }
+        }
+
+        function showSetupScreen() {
+            setupScreen.classList.remove('hidden');
+            examScreen.classList.add('hidden');
+            reviewScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            appContainer.classList.remove('flex', 'flex-col');
+            currentlyDisplayedPremiseIndex = -1;
+            if (setupQuestionCountEl) setupQuestionCountEl.textContent = questionsData.length;
+            if (setupMaxScoreEl) setupMaxScoreEl.textContent = questionsData.length * 2;
+        }
+
+        function showExamScreen() {
+            setupScreen.classList.add('hidden');
+            examScreen.classList.remove('hidden');
+            examScreen.classList.add('flex');
+            reviewScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            appContainer.classList.add('flex', 'flex-col');
+            currentlyDisplayedPremiseIndex = -1;
+            examStartTime = new Date();
+        }
+
+        function showReviewScreen(filterFlagged = false) {
+            examScreen.classList.add('hidden');
+            reviewScreen.classList.remove('hidden');
+            reviewScreen.classList.add('flex');
+            resultsScreen.classList.add('hidden');
+            setupScreen.classList.add('hidden');
+            appContainer.classList.add('flex', 'flex-col');
+
+            reviewGrid.innerHTML = '';
+            questionsData.forEach((_, index) => {
+                 if (filterFlagged && !flaggedQuestions[index]) {
+                     return;
+                 }
+
+                const button = document.createElement('button');
+                button.textContent = index + 1;
+                button.className = 'review-grid-button';
+
+                const isAnswered = userAnswers[index] && userAnswers[index].some(ans => ans !== null);
+
+                if (isAnswered) {
+                    button.classList.add('review-grid-button-answered');
+                } else {
+                     button.classList.add('review-grid-button-unanswered');
+                }
+
+                if (flaggedQuestions[index]) {
+                    button.classList.add('review-flagged');
+                }
+
+                button.onclick = () => {
+                    reviewScreen.classList.add('hidden');
+                    reviewScreen.classList.remove('flex');
+                    showExamScreen();
+                    loadQuestion(index); // Load in normal mode for review
+                };
+                reviewGrid.appendChild(button);
+            });
+
+             filterFlaggedButton.textContent = filterFlagged ? 'Show All Questions' : 'Show Flagged Only';
+        }
+
+        function populateNavigator() {
+            navigatorGrid.innerHTML = '';
+            questionsData.forEach((_, index) => {
+                const button = document.createElement('button');
+                button.textContent = index + 1;
+                button.classList.add('py-2', 'px-1', 'border', 'border-gray-300', 'rounded-md', 'text-center', 'transition', 'duration-150', 'ease-in-out', 'text-sm', 'hover:bg-gray-100');
+                button.dataset.questionIndex = index;
+
+                const isAnswered = userAnswers[index] && userAnswers[index].some(ans => ans !== null);
+                if (isAnswered) button.classList.add('nav-answered');
+                if (index === currentQuestionIndex) button.classList.add('nav-current');
+                if (flaggedQuestions[index]) button.classList.add('nav-flagged');
+
+                button.onclick = () => {
+                    navigatorModal.classList.remove('flex');
+                    navigatorModal.classList.add('hidden');
+                    const targetIndex = parseInt(button.dataset.questionIndex, 10);
+                    loadQuestion(targetIndex, isReviewingFromResults);
+                };
+                navigatorGrid.appendChild(button);
+            });
+        }
+
+        function updateNavigatorButtons(questionFullyAnswered = false) {
+            if (!navigatorGrid) return;
+            const buttons = navigatorGrid.querySelectorAll('button');
+            buttons.forEach(button => {
+                const index = parseInt(button.dataset.questionIndex, 10);
+                button.classList.remove('nav-answered', 'nav-current', 'nav-flagged');
+
+                const isAnswered = userAnswers[index] && userAnswers[index].some(ans => ans !== null);
+                if (isAnswered) button.classList.add('nav-answered');
+
+                if (index === currentQuestionIndex) button.classList.add('nav-current');
+                if (flaggedQuestions[index]) button.classList.add('nav-flagged');
+            });
+        }
+
+         function updateNavigatorHighlight() {
+             if (!navigatorGrid) return;
+             const buttons = navigatorGrid.querySelectorAll('button');
+             buttons.forEach(button => {
+                 const index = parseInt(button.dataset.questionIndex, 10);
+                 button.classList.remove('nav-current');
+                 if (index === currentQuestionIndex) button.classList.add('nav-current');
+             });
+         }
+
+        function showResultsScreen() {
+            examEndTime = new Date();
+
+            examScreen.classList.add('hidden');
+            reviewScreen.classList.add('hidden');
+            reviewScreen.classList.remove('flex');
+            resultsScreen.classList.remove('hidden');
+            resultsScreen.classList.add('flex');
+            setupScreen.classList.add('hidden');
+            appContainer.classList.add('flex', 'flex-col');
+
+            let totalScore = 0;
+            resultsDetails.innerHTML = '';
+
+            questionsData.forEach((qData, index) => {
+                const userAnsArray = userAnswers[index] || Array(5).fill(null);
+                const correctAnsArray = qData.correctAnswers;
+                let correctStatements = 0;
+
+                userAnsArray.forEach((userAns, statementIndex) => {
+                    if (userAns !== null && userAns === correctAnsArray[statementIndex]) {
+                        correctStatements++;
+                    }
+                });
+
+                let points = 0;
+                if (correctStatements === 5) {
+                    points = 2;
+                } else if (correctStatements === 4) {
+                    points = 1;
+                }
+                totalScore += points;
+
+                const resultDiv = document.createElement('div');
+                resultDiv.classList.add('result-item-clickable', 'p-4', 'rounded-lg', 'mb-3');
+
+                if (points === 2) {
+                    resultDiv.classList.add('correct-answer');
+                } else if (points === 1) {
+                    resultDiv.classList.add('partially-correct-answer');
+                } else {
+                    resultDiv.classList.add('incorrect-answer');
+                }
+
+                resultDiv.dataset.index = index;
+                resultDiv.title = `Click to review Question ${index + 1}`;
+
+                let statementsHtml = '<div class="mt-2 space-y-1">';
+                qData.statements.forEach((stmtText, stmtIndex) => {
+                    const userAns = userAnsArray[stmtIndex];
+                    const correctAns = correctAnsArray[stmtIndex];
+                    const isStmtCorrect = userAns === correctAns;
+                    const correctnessClass = isStmtCorrect ? 'correct' : 'incorrect';
+                    const correctnessIndicator = isStmtCorrect ? '<span class="text-green-600">(Correct)</span>' : '<span class="text-red-600">(Incorrect)</span>';
+
+                    statementsHtml += `
+                        <div class="result-statement ${correctnessClass}">
+                            <p>${stmtIndex + 1}. ${stmtText}</p>
+                            <p class="text-xs ml-2">Your Answer: <strong>${userAns || 'N/A'}</strong> | Correct: <strong>${correctAns}</strong> ${userAns ? correctnessIndicator : ''}</p>
+                        </div>`;
+                });
+                statementsHtml += '</div>';
+
+                resultDiv.innerHTML = `
+                    <div class="flex justify-between items-start mb-1">
+                        <p class="font-semibold">Question ${index + 1} ${flaggedQuestions[index] ? '<span class="text-xs text-amber-600">(Flagged)</span>' : ''}</p>
+                        <p class="text-sm font-medium">Points: ${points} / 2</p>
+                    </div>
+                    <p class="text-xs text-gray-600 mb-2">(${correctStatements} / 5 statements correct)</p>
+                    ${statementsHtml}
+                `;
+
+                resultDiv.addEventListener('click', (event) => {
+                    if (!event.target.closest('details')) { // Prevent triggering review when clicking details
+                        revisitQuestionFromResults(index);
+                    }
+                });
+                resultsDetails.appendChild(resultDiv);
+            });
+
+            scoreEl.textContent = totalScore;
+            totalScorePossibleEl.textContent = questionsData.length * 2;
+            const timeDiff = examEndTime - examStartTime;
+            timeTakenEl.textContent = formatTimeDifference(timeDiff);
+        }
+
+
+        function revisitQuestionFromResults(index) {
+            resultsScreen.classList.add('hidden');
+            resultsScreen.classList.remove('flex');
+            showExamScreen();
+            loadQuestion(index, true); // Load in review mode
+        }
+
+        function endExamAndShowResults() {
+            showResultsScreen();
+        }
+         function handleEndExamFooterClick() {
+             showReviewScreen();
+         }
+
+        // --- PDF Generation Function ---
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const reflection = reflectionText.value.trim();
+            const focusRating = focusRatingInput.value;
+            const finalScore = scoreEl.textContent;
+            const totalPossible = totalScorePossibleEl.textContent;
+            const timeTaken = timeTakenEl.textContent;
+
+            let y = 15; // Initial Y position
+            const lineHeight = 7;
+            const pageHeight = doc.internal.pageSize.height;
+            const margin = 15;
+            const contentWidth = doc.internal.pageSize.width - margin * 2;
+
+            // Title
+            doc.setFontSize(18);
+            doc.text("UCAT Decision Making Results", margin, y);
+            y += lineHeight * 1.5;
+
+            // Summary
+            doc.setFontSize(12);
+            doc.text(`Name: ${userName || 'N/A'}`, margin, y); y += lineHeight;
+            doc.text(`Goal: ${userGoal || 'N/A'} / ${totalPossible} points`, margin, y); y += lineHeight;
+            doc.text(`Focus Area: ${userFocusArea || 'N/A'}`, margin, y); y += lineHeight;
+            doc.text(`Final Score: ${finalScore} / ${totalPossible} points`, margin, y); y += lineHeight;
+            doc.text(`Time Taken: ${timeTaken}`, margin, y); y += lineHeight * 1.5;
+
+            // Focus Rating
+            doc.setFontSize(14); doc.text("Focus Rating (1-5):", margin, y); y += lineHeight;
+            doc.setFontSize(10); doc.text(focusRating || 'N/A', margin, y); y += lineHeight * 1.5;
+
+            // Reflection
+            doc.setFontSize(14); doc.text("Main Takeaway:", margin, y); y += lineHeight;
+            doc.setFontSize(10);
+            const reflectionLines = doc.splitTextToSize(reflection || 'No reflection provided.', contentWidth);
+            doc.text(reflectionLines, margin, y);
+            y += reflectionLines.length * (lineHeight * 0.7) + lineHeight;
+
+            // Detailed Results Header
+            doc.setFontSize(14); doc.text("Detailed Results:", margin, y); y += lineHeight * 1.5;
+
+            // Loop through questions
+            questionsData.forEach((qData, index) => {
+                 if (y + lineHeight * 12 > pageHeight - margin) { // Adjusted estimate for space with explanation
+                     doc.addPage(); y = margin;
+                 }
+
+                const userAnsArray = userAnswers[index] || Array(5).fill(null);
+                const correctAnsArray = qData.correctAnswers;
+                let correctStatements = 0;
+                userAnsArray.forEach((userAns, stmtIndex) => { if (userAns !== null && userAns === correctAnsArray[stmtIndex]) correctStatements++; });
+                let points = (correctStatements === 5) ? 2 : ((correctStatements === 4) ? 1 : 0);
+
+                doc.setFontSize(12); doc.text(`Question ${index + 1} (Points: ${points}/2)`, margin, y); y += lineHeight * 0.8;
+                doc.setFontSize(9); doc.text(`(${correctStatements}/5 statements correct) ${flaggedQuestions[index] ? '(Flagged)' : ''}`, margin, y); y += lineHeight * 1.2;
+
+                // Premises
+                doc.setFontSize(10); doc.setFont(undefined, 'bold'); doc.text("Premises:", margin, y); y += lineHeight * 0.8;
+                doc.setFont(undefined, 'normal'); doc.setFontSize(9);
+                const premiseLines = doc.splitTextToSize(premisesData[qData.premiseIndex], contentWidth);
+                doc.text(premiseLines, margin, y); y += premiseLines.length * (lineHeight * 0.7) + lineHeight*0.5;
+
+                // Statements
+                doc.setFontSize(10); doc.setFont(undefined, 'bold'); doc.text("Statements:", margin, y); y += lineHeight * 0.8;
+                doc.setFont(undefined, 'normal'); doc.setFontSize(9);
+
+                qData.statements.forEach((stmtText, stmtIndex) => {
+                    if (y + lineHeight * 2 > pageHeight - margin) { doc.addPage(); y = margin; doc.setFontSize(9); }
+                    const userAns = userAnsArray[stmtIndex];
+                    const correctAns = correctAnsArray[stmtIndex];
+                    const isStmtCorrect = userAns === correctAns;
+                    const status = isStmtCorrect ? "Correct" : (userAns ? "Incorrect" : "Not Answered");
+                    const statementLine1 = `${stmtIndex + 1}. ${stmtText}`;
+                    const statementLine2 = `   Your: ${userAns || 'N/A'} | Correct: ${correctAns} | Status: ${status}`;
+                    const lines1 = doc.splitTextToSize(statementLine1, contentWidth - 5); doc.text(lines1, margin + 5, y); y += lines1.length * (lineHeight * 0.7);
+                    const lines2 = doc.splitTextToSize(statementLine2, contentWidth - 5); doc.text(lines2, margin + 5, y); y += lines2.length * (lineHeight * 0.7) + lineHeight * 0.3;
+                });
+
+                 // Explanation (if available)
+                 if (qData.explanation) {
+                     if (y + lineHeight * 3 > pageHeight - margin) { doc.addPage(); y = margin; } // Check space for explanation header + text
+                     doc.setFontSize(10); doc.setFont(undefined, 'bold'); doc.text("Explanation:", margin, y); y += lineHeight * 0.8;
+                     doc.setFont(undefined, 'normal'); doc.setFontSize(9);
+                     const explanationLines = doc.splitTextToSize(qData.explanation, contentWidth);
+                     doc.text(explanationLines, margin, y);
+                     y += explanationLines.length * (lineHeight * 0.7);
+                 }
+
+                 y += lineHeight; // Extra space after each question block
+            });
+
+            doc.save(`ucat_dm_results_${userName || 'user'}.pdf`);
+        }
+
+
+        // --- Event Listeners ---
+        startButton.addEventListener('click', () => {
+            userName = nameInput.value.trim();
+            userGoal = goalInput.value.trim();
+            userFocusArea = focusAreaInput.value.trim();
+            userAnswers = Array(questionsData.length).fill(null).map(() => Array(5).fill(null));
+            flaggedQuestions = new Array(questionsData.length).fill(false);
+            currentQuestionIndex = 0;
+            isReviewingFromResults = false;
+            isFilteringFlagged = false;
+            currentlyDisplayedPremiseIndex = -1;
+            showExamScreen();
+            loadQuestion(0);
+            populateNavigator();
+        });
+
+        nextButton.addEventListener('click', showNextQuestion);
+        prevButton.addEventListener('click', showPrevQuestion);
+        endExamButton.addEventListener('click', endExamAndShowResults);
+        endExamButtonFooter.addEventListener('click', handleEndExamFooterClick);
+        backToResultsButton.addEventListener('click', () => { isReviewingFromResults = false; showResultsScreen(); });
+        navigatorButton.addEventListener('click', () => { updateNavigatorButtons(); navigatorModal.classList.remove('hidden'); navigatorModal.classList.add('flex'); });
+        closeModalButton.addEventListener('click', () => { navigatorModal.classList.remove('flex'); navigatorModal.classList.add('hidden'); });
+        navigatorModal.addEventListener('click', (event) => { if (event.target === navigatorModal) closeModalButton.click(); });
+        flagButton.addEventListener('click', toggleFlag);
+        filterFlaggedButton.addEventListener('click', () => { isFilteringFlagged = !isFilteringFlagged; showReviewScreen(isFilteringFlagged); });
+        downloadPdfButton.addEventListener('click', generatePDF);
+
+        // Keyboard shortcuts (Removed Y/N and 1-5 shortcuts as they conflict with D&D)
+        function handleKeyboardShortcuts(e) {
+             const isExamVisible = !examScreen.classList.contains('hidden');
+             const isModalVisible = navigatorModal.classList.contains('flex');
+             const isInputFocused = document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA');
+
+             if (isModalVisible || isInputFocused) return;
+             if (!isExamVisible) return;
+
+             const altOrOption = e.altKey;
+             const code = e.code.toLowerCase();
+
+             if (altOrOption) {
+                 switch (code) {
+                     case 'keyn': e.preventDefault(); if (!nextButton.disabled) nextButton.click(); break;
+                     case 'keyp': e.preventDefault(); if (!prevButton.disabled) prevButton.click(); break;
+                     case 'keyf': e.preventDefault(); if (!isReviewingFromResults && !flagButton.disabled) flagButton.click(); break;
+                 }
+             }
+        }
+        document.addEventListener('keydown', handleKeyboardShortcuts);
+
+        // --- Initial Load ---
+        showSetupScreen();
+
+    </script>
+</body>
+</html>
