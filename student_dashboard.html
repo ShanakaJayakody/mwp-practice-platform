@@ -1457,20 +1457,24 @@
             if (user) {
                 // User is signed in
                 studentDisplayNameSpan.textContent = user.displayName || user.email || 'Student';
-                
-                // Store user info in localStorage
                 localStorage.setItem('qrStudentName', user.displayName || user.email || '');
-                
-                // Fade out auth section and fade in dashboard
-                authSection.style.opacity = "0";
+
+                // Check if this is a login event on student_dashboard.html
+                const justLoggedInOnThisPage = !authSection.classList.contains('hidden') && window.location.pathname.includes('student_dashboard.html');
+
+                if (justLoggedInOnThisPage) {
+                    // Redirect to home.html after successful login
+                    window.location.href = 'home.html';
+                    return; // Stop further processing on this page to prevent flicker
+                }
+
+                // Logic for users already logged in or landing on student_dashboard.html not via fresh login on this page
+                authSection.style.opacity = "0"; // Start fade out of auth if it was somehow visible
                 setTimeout(() => {
                     authSection.classList.add('hidden');
                     dashboardWrapper.classList.remove('hidden');
                     dashboardWrapper.style.opacity = "0";
-                    
-                    // Trigger reflow
-                    void dashboardWrapper.offsetWidth;
-                    
+                    void dashboardWrapper.offsetWidth; // Trigger reflow
                     dashboardWrapper.style.opacity = "1";
                     dashboardWrapper.style.transition = "opacity 0.5s ease-in-out";
                     

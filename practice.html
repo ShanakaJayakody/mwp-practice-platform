@@ -8,10 +8,21 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            --color-primary: #3b82f6;
+            --color-primary: #3b82f6; /* Blue - VR */
             --color-primary-dark: #2563eb;
             --color-primary-light: #93c5fd;
             --color-primary-bg: #eff6ff;
+            
+            --color-dm: #6366f1; /* Indigo - DM */
+            --color-dm-dark: #4f46e5;
+            --color-dm-light: #a5b4fc;
+            --color-dm-bg: #eef2ff;
+
+            --color-qr: #10b981; /* Green - QR */
+            --color-qr-dark: #059669;
+            --color-qr-light: #6ee7b7;
+            --color-qr-bg: #f0fdf4;
+
             --color-success: #10b981;
             --color-warning: #f59e0b;
             --color-danger: #ef4444;
@@ -219,6 +230,17 @@
             box-shadow: var(--shadow-sm);
         }
 
+        /* Specific active colors for left nav tabs */
+        .left-nav-tab[data-target="vr-content"].active {
+            background-color: var(--color-primary);
+        }
+        .left-nav-tab[data-target="dm-content"].active {
+            background-color: var(--color-dm);
+        }
+        .left-nav-tab[data-target="qr-content"].active {
+            background-color: var(--color-qr);
+        }
+
         .practice-main-content {
             flex-grow: 1;
             background-color: #ffffff;
@@ -239,6 +261,23 @@
         @keyframes fadeInContent {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Section specific header colors */
+        #vr-content h2 {
+            color: var(--color-primary-dark);
+            border-bottom: 2px solid var(--color-primary-light);
+            padding-bottom: 0.5rem; margin-bottom: 1.5rem;
+        }
+        #dm-content h2 {
+            color: var(--color-dm-dark);
+            border-bottom: 2px solid var(--color-dm-light);
+            padding-bottom: 0.5rem; margin-bottom: 1.5rem;
+        }
+        #qr-content h2 {
+            color: var(--color-qr-dark);
+            border-bottom: 2px solid var(--color-qr-light);
+            padding-bottom: 0.5rem; margin-bottom: 1.5rem;
         }
 
         .subsection-card {
@@ -451,10 +490,8 @@
                 dashboardWrapper.classList.remove('hidden');
                 authRedirectMessage.classList.add('hidden');
             } else {
-                dashboardWrapper.classList.add('hidden');
-                authRedirectMessage.classList.remove('hidden');
-                // Optional: Redirect to login after a delay
-                // setTimeout(() => { window.location.href = 'student_dashboard.html'; }, 3000);
+                // User is not logged in, redirect to student_dashboard.html (login page)
+                window.location.href = 'student_dashboard.html';
             }
         });
 

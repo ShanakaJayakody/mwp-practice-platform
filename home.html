@@ -659,6 +659,7 @@
         const homeContentDiv = document.getElementById('home-content');
         const authMessageContainer = document.getElementById('auth-message-container');
         const dashboardWrapper = document.getElementById('dashboard-wrapper');
+        const authRedirectMessage = document.getElementById('auth-redirect-message');
 
         const prevMonthBtn = document.getElementById('prev-month-btn');
         const nextMonthBtn = document.getElementById('next-month-btn');
@@ -689,9 +690,8 @@
                 renderCalendars();
 
             } else {
-                dashboardWrapper.classList.add('hidden');
-                authMessageContainer.classList.remove('hidden');
-                homeContentDiv.classList.add('hidden');
+                // User is not logged in, redirect to student_dashboard.html (login page)
+                window.location.href = "student_dashboard.html";
             }
         });
 
