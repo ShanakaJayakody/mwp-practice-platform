@@ -1027,8 +1027,9 @@
             examScreen.classList.add('flex');
             reviewScreen.classList.add('hidden');
             resultsScreen.classList.add('hidden');
-            appContainer.classList.add('flex', 'flex-col');
+            // appContainer.classList.add('flex', 'flex-col'); // Not strictly necessary based on CSS
             currentlyDisplayedPremiseIndex = -1;
+            // examStartTime = new Date(); // MOVED TO startTimer()
             if (timerDisplay) timerDisplay.classList.remove('hidden');
             if (document.getElementById('draggable-options-sidebar')) {
                  document.getElementById('draggable-options-sidebar').style.display = 'flex';
@@ -1036,15 +1037,54 @@
             appContainer.scrollTop = 0;
         }
 
-        function showReviewScreen(filterFlagged = false) { 
-            recordQuestionTime(); 
-            stopTimer(); 
+        function showReviewScreen(filterFlagged = false) {
+            recordQuestionTime(); // Record time for the current question before showing review screen
+            currentQuestionStartTime = null; // Stop question timer
+            lastQuestionIndexForTiming = -1;
+            stopTimer(); // Stop the main exam timer
+
             examScreen.classList.add('hidden');
             reviewScreen.classList.remove('hidden');
+            reviewScreen.classList.add('flex'); // Make sure review screen is displayed as flex
             resultsScreen.classList.add('hidden');
-            populateReviewGrid(); 
-            filterFlaggedButton.textContent = filterFlagged ? "Show All Questions" : "Show Flagged Only";
-            appContainer.scrollTop = 0;
+            setupScreen.classList.add('hidden');
+            // appContainer.classList.add('flex', 'flex-col'); // Ensure container has flex-col if needed for layout
+
+            reviewGrid.innerHTML = ''; // Clear previous review buttons
+            questionsData.forEach((_, index) => {
+                 if (filterFlagged && !flaggedQuestions[index]) {
+                     return; // Skip if filtering flagged and this one isn't flagged
+                 }
+
+                const button = document.createElement('button');
+                button.textContent = index + 1;
+                button.className = 'review-grid-button'; // Use specific class for review grid
+
+                const isAnswered = userAnswers[index] && userAnswers[index].some(ans => ans !== null);
+
+                if (isAnswered) {
+                    button.classList.add('review-grid-button-answered');
+                } else {
+                     button.classList.add('review-grid-button-unanswered');
+                }
+
+                if (flaggedQuestions[index]) {
+                    button.classList.add('review-flagged'); // 'review-flagged' is from DM sylls 1
+                }
+
+                button.onclick = () => {
+                    reviewScreen.classList.add('hidden');
+                    reviewScreen.classList.remove('flex'); // Hide review screen
+                    showExamScreen(); // Show exam screen
+                    loadQuestion(index); // Load the selected question in normal mode
+                };
+                reviewGrid.appendChild(button);
+            });
+
+            if (filterFlaggedButton) { // Ensure button exists
+                 filterFlaggedButton.textContent = filterFlagged ? 'Show All Questions' : 'Show Flagged Only';
+            }
+            appContainer.scrollTop = 0; // Scroll to top of app container
         }
 
         function populateNavigator() {

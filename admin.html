@@ -432,21 +432,26 @@
         let currentSortOrder = 'desc'; // Default sort order: descending
         const specificAdminUid = "CPQ9CqEuY0Z1n2Yso0NPGN2j9z73"; // Replace with your actual Admin UID
 
-        // --- Authentication ---
+        // --- Authentication Logic ---
         auth.onAuthStateChanged(user => {
             if (user) {
-                console.log("User logged in: ", user.uid);
-                if (user.uid === specificAdminUid) {
-                    loginContainer.classList.add('hidden');
-                    adminPanel.classList.remove('hidden');
-                    fetchPerformanceData();
-                } else {
-                    console.warn("Logged in user is not the designated admin.");
-                    displayLoginMessage("Access denied. This account is not authorized.");
-                    adminPanel.classList.add('hidden');
-                    loginContainer.classList.remove('hidden');
-                    auth.signOut(); // Automatically sign out non-admin users
+                console.log("Auth state changed: User is signed in.", user.uid);
+                // ADMIN UID CHECK
+                if (user.uid !== specificAdminUid) {
+                    console.warn("Unauthorized access attempt by UID:", user.uid);
+                    if(loginMessage) loginMessage.textContent = "You are not authorized to view this data.";
+                    if(adminUserEmailSpan) adminUserEmailSpan.textContent = 'Not Authorized';
+                    if(loginContainer) loginContainer.classList.remove('hidden');
+                    if(adminPanel) adminPanel.classList.add('hidden');
+                    auth.signOut(); // Optional: sign out non-admin
+                    return;
                 }
+                // END ADMIN UID CHECK
+
+                if(adminUserEmailSpan) adminUserEmailSpan.textContent = `Logged in as: ${user.email || user.displayName || 'Admin'}`;
+                loginContainer.classList.add('hidden');
+                adminPanel.classList.remove('hidden');
+                fetchPerformanceData();
             } else {
                 console.log("User logged out or not logged in.");
                 adminPanel.classList.add('hidden');
@@ -492,20 +497,21 @@
         });
 
         // --- Data Fetching and Display ---
-        function fetchPerformanceData() {
+        async function fetchPerformanceData() {
             if (!auth.currentUser) {
-                console.warn("User not logged in. Aborting data fetch.");
-                displayLoginMessage("Please log in to view performance data.");
+                console.log("FetchPerformanceData called, but no user is logged in.");
+                performanceTableBody.innerHTML = '<p class="text-center text-gray-500">Please log in to view data.</p>';
                 return;
             }
-            // Admin UID Check already performed in onAuthStateChanged, but double check for direct calls if any
+            // ADMIN UID CHECK for fetchPerformanceData
             if (auth.currentUser.uid !== specificAdminUid) {
                 console.warn("Unauthorized data fetch attempt by UID:", auth.currentUser.uid);
-                displayLoginMessage("You are not authorized to view this data.");
+                performanceTableBody.innerHTML = '<p class="text-center text-red-500">You are not authorized to view this data.</p>';
                 return;
             }
+            // END ADMIN UID CHECK
 
-            console.log("Fetching performance data...");
+            console.log("Attempting to fetch performance data (user authenticated)...");
             const performanceCollection = db.collection("performanceSubmissions")
                                           .orderBy("submissionTimestamp", "desc"); // Sort by newest first
 
@@ -571,48 +577,106 @@
             }
         }
 
-        function displayResults(dataToDisplay) {
-            performanceTableBody.innerHTML = ''; // Clear existing rows
-            noResultsMessage.classList.toggle('hidden', dataToDisplay.length > 0);
+        function displayResults(data) {
+            if (!performanceTableBody) { console.error('performanceTableBody not found'); return; }
+            if (data.length === 0) {
+                performanceTableBody.innerHTML = "<p class=\"text-center text-gray-600\">No matching records found.</p>";
+                if (noResultsMessage) noResultsMessage.textContent = "Showing 0 results";
+                return;
+            }
+            
+            let tableHTML = `
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'submissionTimestamp' ? 'sorted-' + currentSortOrder : ''}" 
+                                    data-sort="submissionTimestamp">Timestamp</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'studentName' ? 'sorted-' + currentSortOrder : ''}" 
+                                    data-sort="studentName">Student Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'userId' ? 'sorted-' + currentSortOrder : ''}" 
+                                    data-sort="userId">User ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'examName' ? 'sorted-' + currentSortOrder : ''}" 
+                                    data-sort="examName">Exam Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'score' ? 'sorted-' + currentSortOrder : ''}" 
+                                    data-sort="score">Score</th>
+                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'timeTaken' ? 'sorted-' + currentSortOrder : ''}" 
+                                    data-sort="timeTaken">Time Taken</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'focusRating' ? 'sorted-' + currentSortOrder : ''}" 
+                                    data-sort="focusRating">Focus (1-5)</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Details</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+            `;
 
-            // Update exam filter based on the actual data being displayed *if* no specific exam is already selected
-            // if (!examNameFilter.value) { 
-            //    const uniqueExamNames = new Set(dataToDisplay.map(item => item.examName));
-            //    updateExamFilterOptions(uniqueExamNames);
-            // }
+            data.forEach((item, index) => {
+                const submissionDate = item.submissionTimestamp && item.submissionTimestamp.toDate ? item.submissionTimestamp.toDate().toLocaleString() : (item.submissionTimestamp ? new Date(item.submissionTimestamp).toLocaleString() : 'N/A');
+                const scoreDisplay = item.score !== undefined ? `${item.score} / ${item.totalPossibleScore || item.totalQuestions || 'N/A'}` : 'N/A';
 
-            dataToDisplay.forEach(item => {
-                const row = performanceTableBody.insertRow();
-                row.insertCell().textContent = item.studentName || 'N/A';
-                row.insertCell().textContent = item.userId || 'N/A';
-                row.insertCell().textContent = item.examName || 'N/A';
-                row.insertCell().textContent = `${item.score !== undefined ? item.score : 'N/A'}/${item.totalPossibleScore !== undefined ? item.totalPossibleScore : 'N/A'}`;
-                row.insertCell().textContent = item.timeTaken || 'N/A';
-                row.insertCell().textContent = item.focusRating || 'N/A';
-                const date = item.submissionTimestamp && item.submissionTimestamp.toDate ? item.submissionTimestamp.toDate().toLocaleString() : 'N/A';
-                row.insertCell().textContent = date;
+                tableHTML += `
+                    <tr id="submission-row-${index}">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${submissionDate}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium">${item.studentName || 'N/A'}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${item.userId || 'N/A'}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${item.examName || 'N/A'}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${scoreDisplay}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${item.timeTaken || 'N/A'}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${item.focusRating || 'N/A'}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            <button class="text-blue-600 hover:text-blue-800 font-medium view-details-btn" data-item-id="${item.id}">View</button>
+                        </td>
+                    </tr>
+                `;
+            });
 
-                const actionsCell = row.insertCell();
-                const viewButton = document.createElement('button');
-                viewButton.textContent = 'View Details';
-                viewButton.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white', 'text-xs', 'font-bold', 'py-1', 'px-2', 'rounded');
-                viewButton.onclick = () => showDetailsModal(item);
-                actionsCell.appendChild(viewButton);
+            tableHTML += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            performanceTableBody.innerHTML = tableHTML;
+
+            // Add event listeners to new "View Details" buttons
+            document.querySelectorAll('.view-details-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const itemId = this.dataset.itemId;
+                    const itemToShow = filteredData.find(d => d.id === itemId); // Use filteredData here
+                    if (itemToShow) {
+                        showDetailsModal(itemToShow);
+                    } else {
+                        console.error("Could not find item with ID:", itemId, "in filteredData");
+                         const allDataItem = allPerformanceData.find(d => d.id === itemId);
+                         if(allDataItem) {
+                            console.log("Found in allPerformanceData, showing that instead.");
+                            showDetailsModal(allDataItem);
+                         } else {
+                            alert("Details for this item could not be loaded.");
+                         }
+                    }
+                });
+            });
+
+            // Re-attach sort listeners to headers
+            document.querySelectorAll('th.sortable').forEach(th => {
+                th.addEventListener('click', () => {
+                    sortData(th.dataset.sort);
+                });
             });
         }
 
-        // --- Modal Functions ---
+        // --- Modal Functions NEW ---
         function showDetailsModal(item) {
             if (!item) return;
             modalContent.innerHTML = ''; // Clear previous content
 
             let contentHtml = `
-                <h4 class="text-lg font-semibold mb-2">${item.examName} - ${item.studentName || 'N/A'}</h4>
+                <h4 class="text-lg font-semibold mb-2">${item.examName || 'N/A'} - ${item.studentName || 'N/A'}</h4>
                 <div class="grid grid-cols-2 gap-x-4 gap-y-2 mb-3">
                     <p><strong>User ID:</strong> ${item.userId || 'N/A'}</p>
                     <p><strong>Score:</strong> ${item.score !== undefined ? item.score : 'N/A'} / ${item.totalPossibleScore !== undefined ? item.totalPossibleScore : 'N/A'}</p>
                     <p><strong>Time Taken:</strong> ${item.timeTaken || 'N/A'}</p>
-                    <p><strong>Date:</strong> ${item.submissionTimestamp && item.submissionTimestamp.toDate ? item.submissionTimestamp.toDate().toLocaleString() : 'N/A'}</p>
+                    <p><strong>Date:</strong> ${item.submissionTimestamp && item.submissionTimestamp.toDate ? item.submissionTimestamp.toDate().toLocaleString() : (item.submissionTimestamp ? new Date(item.submissionTimestamp).toLocaleString() : 'N/A')}</p>
                     <p><strong>Goal:</strong> ${item.goal || 'N/A'}</p>
                     <p><strong>Focus Area:</strong> ${item.focusArea || 'N/A'}</p>
                     <p><strong>Focus Rating:</strong> ${item.focusRating || 'N/A'}</p>
@@ -651,7 +715,7 @@
                     }
                     contentHtml += `</ul>`;
                     if (q.explanation) {
-                         contentHtml += `<p class="text-xs mt-1 text-gray-700 bg-yellow-50 p-1 rounded"><strong>Explanation:</strong> ${q.explanation}</p>`;
+                         contentHtml += `<p class="text-xs mt-1 text-gray-700 bg-yellow-50 p-1 rounded"><strong>Explanation:</strong> ${q.explanation || 'N/A'}</p>`;
                     }
                     contentHtml += `</div>`;
                 });
@@ -659,17 +723,22 @@
             }
 
             modalContent.innerHTML = contentHtml;
-            detailsModal.classList.remove('hidden');
+            if (detailsModal) detailsModal.classList.remove('hidden');
         }
 
-        closeModalButton.addEventListener('click', () => {
-            detailsModal.classList.add('hidden');
-        });
-        detailsModal.addEventListener('click', (event) => { // Close modal if clicked outside
-            if (event.target === detailsModal) {
-                detailsModal.classList.add('hidden');
-            }
-        });
+        if (closeModalButton) {
+            closeModalButton.addEventListener('click', () => {
+                if (detailsModal) detailsModal.classList.add('hidden');
+            });
+        }
+        if (detailsModal) {
+            detailsModal.addEventListener('click', (event) => { // Close modal if clicked outside
+                if (event.target === detailsModal) {
+                    detailsModal.classList.add('hidden');
+                }
+            });
+        }
+        // END MODAL FUNCTIONS NEW
 
         // --- CSV Export ---
         function exportToCSV() {
