@@ -300,18 +300,20 @@
             margin-bottom: 1.5rem;
             border: 1px solid var(--color-border);
         }
+        /* Default subsection card h4 - will be overridden by section specific styles */
         .subsection-card h4 {
             font-size: 1.25rem;
             font-weight: 600;
-            color: var(--color-primary-dark);
+            color: var(--color-primary-dark); /* Default, overridden below */
             margin-bottom: 1rem;
         }
         .subsection-card p {
             color: var(--color-text-secondary);
             margin-bottom: 1rem;
         }
+        /* Default subsection card button - will be overridden by section specific styles */
         .subsection-card .btn-view {
-            background-color: var(--color-primary);
+            background-color: var(--color-primary); /* Default, overridden below */
             color: white;
             padding: 0.6rem 1.2rem;
             border-radius: var(--radius-sm);
@@ -321,7 +323,40 @@
             display: inline-block;
         }
         .subsection-card .btn-view:hover {
+            background-color: var(--color-primary-dark); /* Default, overridden below */
+        }
+
+        /* VR Section: Subsection Card Styles */
+        #vr-content .subsection-card h4 {
+            color: var(--color-primary-dark);
+        }
+        #vr-content .subsection-card .btn-view {
+            background-color: var(--color-primary);
+        }
+        #vr-content .subsection-card .btn-view:hover {
             background-color: var(--color-primary-dark);
+        }
+
+        /* DM Section: Subsection Card Styles */
+        #dm-content .subsection-card h4 {
+            color: var(--color-dm-dark);
+        }
+        #dm-content .subsection-card .btn-view {
+            background-color: var(--color-dm);
+        }
+        #dm-content .subsection-card .btn-view:hover {
+            background-color: var(--color-dm-dark);
+        }
+
+        /* QR Section: Subsection Card Styles */
+        #qr-content .subsection-card h4 {
+            color: var(--color-qr-dark);
+        }
+        #qr-content .subsection-card .btn-view {
+            background-color: var(--color-qr);
+        }
+        #qr-content .subsection-card .btn-view:hover {
+            background-color: var(--color-qr-dark);
         }
 
         .hidden {
