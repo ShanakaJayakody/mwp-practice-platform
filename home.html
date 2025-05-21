@@ -56,23 +56,17 @@
             overflow-x: hidden;
         }
 
-        /* New Menu Bar Box Style */
-        .menu-bar-boxed-container {
-            background-color: #ffffff;
-            border-radius: 18px; /* Pronounced rounded corners like the image */
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); /* Soft, slightly spread shadow */
-            margin: 1.5rem auto; /* Space around and center */
-            max-width: 1320px; /* Control width, adjust as needed */
-            overflow: hidden; /* Clip content to rounded corners */
-        }
-
-        /* Dashboard Header */
         .dashboard-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 1rem 1.5rem;
-            background-color: #ffffff; /* Retain white background */
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--color-border);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 40;
         }
 
         .dashboard-header .logo-small {
@@ -84,12 +78,16 @@
             transform: scale(1.03);
         }
 
-        /* Main Navigation */
         .main-nav {
             display: flex;
             justify-content: center;
-            background-color: #ffffff; /* Retain white background */
+            background-color: #ffffff;
             padding: 0.25rem 0;
+            border-bottom: 1px solid var(--color-border);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 61px;
+            z-index: 30;
         }
 
         .nav-tab {
@@ -98,24 +96,24 @@
             cursor: pointer;
             font-weight: 500;
             color: var(--color-text-secondary);
-            border-bottom: 2px solid transparent; /* Keep for spacing */
+            border-bottom: 2px solid transparent;
             transition: color var(--transition), background-color var(--transition), border-color var(--transition);
             border-radius: var(--radius-sm) var(--radius-sm) 0 0;
             position: relative;
             user-select: none;
-            text-decoration: none; /* For anchor tags */
+            text-decoration: none;
         }
         
         .nav-tab::after {
             content: '';
             position: absolute;
             left: 0;
-            bottom: -2px; /* Aligns with the original border-bottom space */
+            bottom: -2px;
             width: 100%;
             height: 2px;
             background-color: var(--color-primary);
             transform: scaleX(0);
-            transform-origin: center; /* Underline grows from the center */
+            transform-origin: center;
             transition: transform 0.3s ease-out;
         }
 
@@ -125,7 +123,7 @@
         }
         
         .nav-tab:hover::after {
-            transform: scaleX(1); /* Show underline on hover */
+            transform: scaleX(1);
         }
 
         .nav-tab.active {
@@ -134,7 +132,7 @@
         }
         
         .nav-tab.active::after {
-            transform: scaleX(1); /* Ensure active tab also has the underline */
+            transform: scaleX(1);
         }
 
         .nav-tab-disabled {
@@ -152,7 +150,6 @@
             border-radius: 1rem;
         }
 
-        /* Dropdown for Tests Tab */
         .tests-dropdown-container {
             position: relative;
         }
@@ -263,8 +260,8 @@
         }
 
         .dashboard-content-area {
-            padding: 1.5rem; /* Adjusted padding */
-            text-align: left; /* Changed from center */
+            padding: 1.5rem;
+            text-align: left;
             flex-grow: 1;
             background-color: var(--color-bg);
             overflow-y: auto;
@@ -283,7 +280,6 @@
         #home-content .bg-green-500 { background-color: var(--color-success); }
         #home-content .hover\:bg-green-600:hover { background-color: #059669; }
 
-        /* Styles for Setup Your Prep Section */
         .setup-prep-card, .activity-calendar-card {
             background-color: white;
             padding: 1.5rem;
@@ -334,7 +330,6 @@
             color: var(--color-success);
         }
 
-        /* Styles for Activity Calendar */
         .calendar-header {
             display: flex;
             justify-content: space-between;
@@ -352,12 +347,12 @@
             color: var(--color-primary-dark);
         }
         .calendar-grid-container {
-            display: flex; /* For side-by-side months */
+            display: flex;
             gap: 1.5rem;
-            overflow-x: auto; /* If more than 2 months are shown on small screens */
+            overflow-x: auto;
         }
         .calendar-month {
-            flex-shrink: 0; /* Prevent shrinking if container is too small */
+            flex-shrink: 0;
         }
         .calendar-month-label {
             font-size: 1rem;
@@ -395,11 +390,11 @@
             border-color: var(--color-primary-dark);
         }
         .calendar-day.practice-some {
-            background-color: #a7f3d0; /* Light green */
+            background-color: #a7f3d0;
             border-color: #6ee7b7;
         }
         .calendar-day.practice-lots {
-            background-color: #34d399; /* Darker green */
+            background-color: #34d399;
             border-color: #10b981;
         }
         .calendar-legend {
@@ -420,10 +415,9 @@
             border-radius: 3px;
         }
 
-
         @media (max-width: 768px) {
             .dashboard-content-area {
-                padding: 1rem; /* Further adjust padding */
+                padding: 1rem;
             }
             .nav-tab {
                 padding: 0.75rem 1rem;
@@ -458,10 +452,10 @@
                 font-size: 0.75rem;
             }
             .grid-cols-1.md\:grid-cols-3 {
-                 grid-template-columns: 1fr; /* Stack cards on small screens */
+                 grid-template-columns: 1fr;
             }
             .calendar-grid-container {
-                 flex-direction: column; /* Stack months vertically */
+                 flex-direction: column;
             }
             .calendar-month {
                 width: 100%;
@@ -489,53 +483,47 @@
         </div>
     </div>
 
-    <div id="dashboard-wrapper" class="dashboard-wrapper hidden"> <!-- Initially hidden -->
-        <!-- New Boxed Menu Bar Container -->
-        <div class="menu-bar-boxed-container">
-            <!-- Header -->
-            <div class="dashboard-header">
-                <a href="home.html">
-                    <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="logo-small" onerror="this.style.display='none'; this.onerror=null;">
+    <div id="dashboard-wrapper" class="dashboard-wrapper hidden">
+        <div class="dashboard-header">
+            <a href="home.html">
+                <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="logo-small" onerror="this.style.display='none'; this.onerror=null;">
+            </a>
+            <div class="flex items-center">
+                <span class="welcome-user mr-4">Welcome, <span id="student-display-name" class="font-semibold">Student</span></span>
+                <a href="settings.html" aria-label="Account Settings" class="mr-4 settings-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
                 </a>
-                <div class="flex items-center">
-                    <span class="welcome-user mr-4">Welcome, <span id="student-display-name" class="font-semibold">Student</span></span>
-                    <a href="settings.html" aria-label="Account Settings" class="mr-4 settings-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                    </a>
-                    <button id="logout-button" class="btn-logout" aria-label="Logout">
-                        <span>Logout</span>
-                    </button>
+                <button id="logout-button" class="btn-logout" aria-label="Logout">
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+
+        <nav class="main-nav" role="navigation" aria-label="Main Navigation">
+            <a href="home.html" id="nav-home" class="nav-tab active" role="button">Home</a>
+            <div id="nav-practice" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
+                <span>Practice</span> <span class="coming-soon-inline">Coming Soon</span>
+            </div>
+            <div class="tests-dropdown-container">
+                <div id="nav-tests" class="nav-tab" role="button" aria-haspopup="true">Tests</div>
+                <div class="tests-dropdown-content" role="menu">
+                    <a href="#" id="nav-tests-exams" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Full Exams <span class="coming-soon-inline">Coming Soon</span></a>
+                    <a href="#" id="nav-tests-vr" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Verbal Reasoning <span class="coming-soon-inline">Coming Soon</span></a>
+                    <a href="#" id="nav-tests-dm" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Decision Making <span class="coming-soon-inline">Coming Soon</span></a>
+                    <a href="student_dashboard.html#qr" id="nav-tests-qr" class="dropdown-item" role="menuitem">Quantitative Reasoning</a>
+                    <a href="#" id="nav-tests-sjt" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Situational Judgement <span class="coming-soon-inline">Coming Soon</span></a>
                 </div>
             </div>
+            <a href="focus_groups.html" id="nav-focus-groups" class="nav-tab" role="button">Focus Groups</a>
+            <a href="student_dashboard.html#results" id="nav-results" class="nav-tab" role="button">Results</a>
+            <div id="nav-skills" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
+                <span>Skills</span> <span class="coming-soon-inline">Coming Soon</span>
+            </div>
+        </nav>
 
-            <!-- Main Navigation -->
-            <nav class="main-nav" role="navigation" aria-label="Main Navigation">
-                <a href="home.html" id="nav-home" class="nav-tab active" role="button">Home</a>
-                <div id="nav-practice" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
-                    <span>Practice</span> <span class="coming-soon-inline">Coming Soon</span>
-                </div>
-                <div class="tests-dropdown-container">
-                    <div id="nav-tests" class="nav-tab" role="button" aria-haspopup="true">Tests</div>
-                    <div class="tests-dropdown-content" role="menu">
-                        <a href="#" id="nav-tests-exams" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Full Exams <span class="coming-soon-inline">Coming Soon</span></a>
-                        <a href="#" id="nav-tests-vr" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Verbal Reasoning <span class="coming-soon-inline">Coming Soon</span></a>
-                        <a href="#" id="nav-tests-dm" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Decision Making <span class="coming-soon-inline">Coming Soon</span></a>
-                        <a href="student_dashboard.html#qr" id="nav-tests-qr" class="dropdown-item" role="menuitem">Quantitative Reasoning</a>
-                        <a href="#" id="nav-tests-sjt" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Situational Judgement <span class="coming-soon-inline">Coming Soon</span></a>
-                    </div>
-                </div>
-                <a href="focus_groups.html" id="nav-focus-groups" class="nav-tab" role="button">Focus Groups</a>
-                <a href="student_dashboard.html#results" id="nav-results" class="nav-tab" role="button">Results</a>
-                <div id="nav-skills" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
-                    <span>Skills</span> <span class="coming-soon-inline">Coming Soon</span>
-                </div>
-            </nav>
-        </div> <!-- End of New Boxed Menu Bar Container -->
-
-        <!-- Content Area for Home -->
         <main id="dashboard-content-area" class="dashboard-content-area">
              <div id="auth-message-container" class="auth-message-container hidden">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-red-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -553,9 +541,7 @@
                         <p class="text-lg text-gray-500 mt-1">Ready to ace the UCAT? Here's your personalized dashboard.</p>
                     </div>
 
-                    <!-- Grid for new sections -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                        <!-- Setup Your Prep Card -->
                         <div class="lg:col-span-1 setup-prep-card">
                             <h2>Setup Your Prep</h2>
                             <div class="input-group">
@@ -575,7 +561,6 @@
                             </div>
                         </div>
 
-                        <!-- Activity Calendar Card -->
                         <div class="lg:col-span-2 activity-calendar-card">
                             <div class="calendar-header">
                                 <h2>Activity Calendar</h2>
@@ -586,12 +571,10 @@
                                 </div>
                             </div>
                             <div id="calendar-grid-container" class="calendar-grid-container">
-                                <!-- Calendar for current month -->
                                 <div class="calendar-month" id="current-calendar-month">
                                      <div class="calendar-month-label" id="current-month-label"></div>
                                      <div class="calendar-grid" id="current-month-grid"></div>
                                 </div>
-                                <!-- Calendar for next month -->
                                 <div class="calendar-month" id="next-calendar-month">
                                      <div class="calendar-month-label" id="next-month-label"></div>
                                      <div class="calendar-grid" id="next-month-grid"></div>
@@ -610,7 +593,6 @@
                         </div>
                     </div>
 
-                    <!-- Existing Cards: Activities, Score, Time -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
                         <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center">
                             <svg class="w-12 h-12 text-blue-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
@@ -657,11 +639,10 @@
     </div>
 
     <script>
-        console.log("Executing JavaScript from home.html -- TOP OF SCRIPT"); // Diagnostic log
+        console.log("Executing JavaScript from home.html -- TOP OF SCRIPT");
 
-        // --- Firebase Configuration ---
         const firebaseConfig = {
-            apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns", // Replace with your actual API key
+            apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
             authDomain: "mwp-qr-test-page.firebaseapp.com",
             projectId: "mwp-qr-test-page",
             storageBucket: "mwp-qr-test-page.appspot.com",
@@ -674,16 +655,14 @@
             if (!firebase.apps.length) {
                 firebase.initializeApp(firebaseConfig);
             }
-            const db = firebase.firestore(); // Initialize Firestore
+            const db = firebase.firestore();
             console.log("Firebase and Firestore initialized successfully for home.html");
         } catch (error) {
             console.error("Firebase initialization error for home.html:", error);
-            // alert("There was an error connecting to the service. Please try again later.");
         }
 
-        // --- DOM Elements ---
         const studentDisplayNameSpan = document.getElementById('student-display-name');
-        const homeStudentNameDisplay = document.getElementById('home-student-name-display'); // Changed ID for clarity
+        const homeStudentNameDisplay = document.getElementById('home-student-name-display');
         const userNameInput = document.getElementById('user-name');
         const examDateInput = document.getElementById('exam-date');
         const daysRemainingSpan = document.getElementById('days-remaining');
@@ -693,7 +672,6 @@
         const authMessageContainer = document.getElementById('auth-message-container');
         const dashboardWrapper = document.getElementById('dashboard-wrapper');
 
-        // Activity Calendar Elements
         const prevMonthBtn = document.getElementById('prev-month-btn');
         const nextMonthBtn = document.getElementById('next-month-btn');
         const currentMonthYearSpan = document.getElementById('current-month-year');
@@ -703,25 +681,24 @@
         const nextMonthLabel = document.getElementById('next-month-label');
 
         let currentCalendarDate = new Date();
-        let performanceData = []; // To store fetched performance submissions
+        let performanceData = [];
 
-        // --- Authentication Logic ---
         firebase.auth().onAuthStateChanged(async user => {
             if (user) {
                 const displayName = user.displayName || user.email || 'Student';
                 studentDisplayNameSpan.textContent = displayName;
-                homeStudentNameDisplay.textContent = displayName; // Update welcome message
-                userNameInput.value = displayName; // Pre-fill name input
+                homeStudentNameDisplay.textContent = displayName;
+                userNameInput.value = displayName;
                 
                 dashboardWrapper.classList.remove('hidden');
                 authMessageContainer.classList.add('hidden');
                 homeContentDiv.classList.remove('hidden');
 
                 await loadUserPreferences(user);
-                await loadPerformanceData(user); // Load performance data first
-                loadHomeData(user); // Original summary cards
-                updateConsistencyScore(); // Calculate consistency based on loaded data
-                renderCalendars(); // Render calendars after data is loaded
+                await loadPerformanceData(user);
+                loadHomeData(user);
+                updateConsistencyScore();
+                renderCalendars();
 
             } else {
                 dashboardWrapper.classList.add('hidden');
@@ -741,7 +718,6 @@
             }
         });
 
-        // --- User Preferences (Exam Date) ---
         async function loadUserPreferences(currentUser) {
             if (!currentUser) return;
             const userPrefRef = db.collection('userPreferences').doc(currentUser.uid);
@@ -754,11 +730,11 @@
                         updateDaysRemaining(data.examDate);
                     }
                 } else {
-                    updateDaysRemaining(); // No date set, clear or show default
+                    updateDaysRemaining();
                 }
             } catch (error) {
                 console.error("Error loading user preferences:", error);
-                updateDaysRemaining(); // Error, clear or show default
+                updateDaysRemaining();
             }
         }
 
@@ -775,7 +751,6 @@
                     console.error("Error saving exam date:", error);
                 }
             } else {
-                // Clear date if input is emptied
                 try {
                     await db.collection('userPreferences').doc(currentUser.uid).update({ examDate: firebase.firestore.FieldValue.delete() });
                     updateDaysRemaining();
@@ -787,9 +762,9 @@
 
         function updateDaysRemaining(selectedDateStr) {
             if (selectedDateStr) {
-                const examDate = new Date(selectedDateStr + "T00:00:00"); // Ensure it's parsed as local time at start of day
+                const examDate = new Date(selectedDateStr + "T00:00:00");
                 const today = new Date();
-                today.setHours(0,0,0,0); // Compare date parts only
+                today.setHours(0,0,0,0);
 
                 if (examDate < today) {
                     daysRemainingSpan.textContent = "Date has passed";
@@ -807,10 +782,9 @@
             }
         }
 
-        // --- Performance Data & Consistency ---
         async function loadPerformanceData(currentUser) {
             if (!currentUser) return;
-            performanceData = []; // Reset before loading
+            performanceData = [];
             const userEmail = currentUser.email;
             const userName = currentUser.displayName || userEmail;
             const seenIds = new Set();
@@ -851,7 +825,6 @@
             consistencyScoreP.textContent = `${practiceDays.size} Day(s) Completed`;
         }
 
-        // --- Original Home Page Data Loading (Summary Cards) ---
         async function loadHomeData(currentUser) {
             if (!currentUser) return;
             const homeTotalActivities = document.getElementById('home-total-activities');
@@ -862,7 +835,6 @@
             homeAverageScore.textContent = '0%';
             homeTimePracticed.textContent = '0h 0m';
 
-            // Uses performanceData already loaded by loadPerformanceData
             if (performanceData.length > 0) {
                 homeTotalActivities.textContent = performanceData.length;
                 let totalScoreSum = 0;
@@ -896,22 +868,19 @@
             }
         }
 
-        // --- Activity Calendar Logic ---
         function renderCalendars() {
             const today = new Date();
-            // Display current month and next month side-by-side
-            renderMonth(currentCalendarDate, currentMonthGrid, currentMonthLabel, 0); // 0 for current month view
+            renderMonth(currentCalendarDate, currentMonthGrid, currentMonthLabel, 0);
             
             let nextMonthDate = new Date(currentCalendarDate);
             nextMonthDate.setMonth(currentCalendarDate.getMonth() + 1);
-            renderMonth(nextMonthDate, nextMonthGrid, nextMonthLabel, 1); // 1 for next month view
+            renderMonth(nextMonthDate, nextMonthGrid, nextMonthLabel, 1);
 
-            // Update main calendar header (shows current month of the left calendar)
             currentMonthYearSpan.textContent = currentCalendarDate.toLocaleDateString('default', { month: 'long', year: 'numeric' });
         }
 
         function renderMonth(dateToRender, gridElement, labelElement, monthOffset) {
-            gridElement.innerHTML = ''; // Clear previous grid
+            gridElement.innerHTML = '';
             const month = dateToRender.getMonth();
             const year = dateToRender.getFullYear();
 
@@ -921,7 +890,6 @@
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             const dayHeaders = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
-            // Add day headers
             dayHeaders.forEach(header => {
                 const dayLabel = document.createElement('div');
                 dayLabel.className = 'calendar-day-label';
@@ -929,7 +897,6 @@
                 gridElement.appendChild(dayLabel);
             });
 
-            // Adjust for Monday start (getDay() is 0 for Sunday)
             const startOffset = (firstDayOfMonth === 0) ? 6 : firstDayOfMonth - 1;
 
             for (let i = 0; i < startOffset; i++) {
@@ -952,10 +919,9 @@
                     dayCell.classList.add('today');
                 }
 
-                // Check for practice activity
                 const activityCount = getActivityCountForDate(cellDate);
                 if (activityCount > 0) {
-                    if (activityCount >= 2) { // Example: 2 or more activities = "Lots of practice"
+                    if (activityCount >= 2) {
                         dayCell.classList.add('practice-lots');
                     } else {
                         dayCell.classList.add('practice-some');
@@ -990,7 +956,6 @@
         });
 
         
-        // --- Navigation Event Listeners for Home Page ---
         document.getElementById('home-view-all-tests-btn').addEventListener('click', () => {
             window.location.href = "student_dashboard.html#qr-tests-content";
         });
@@ -1008,7 +973,6 @@
                     homeContentDiv.classList.add('hidden');
                  } else {
                     homeContentDiv.classList.remove('hidden');
-                    // Data loading and rendering are now handled in the main onAuthStateChanged listener
                  }
             });
         });
