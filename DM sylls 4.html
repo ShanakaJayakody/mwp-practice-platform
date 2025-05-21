@@ -479,6 +479,7 @@
         <div id="exam-screen" class="hidden flex flex-col h-full">
             <div class="header-bar">
                 <span id="exam-title" class="font-semibold">Decision Making</span>
+                <div id="timer" class="font-semibold">06:00</div>
                 <div class="flex items-center space-x-4">
                      <span class="text-sm">Question <span id="question-number-info">1</span> of 5</span>
                      <button id="flag-button" class="text-sm font-medium border border-white rounded px-2 py-1 transition-colors duration-150">
@@ -622,6 +623,11 @@
         let currentQuestionStartTime;
         let lastQuestionIndexForTiming = -1;
 
+        // Timer variables
+        const totalTimeAllowedInSeconds = 360; // 6 minutes
+        let timeLeft = totalTimeAllowedInSeconds;
+        let timerInterval = null;
+
         // --- Elements ---
         const appContainer = document.getElementById('app-container');
         const setupScreen = document.getElementById('setup-screen');
@@ -661,8 +667,58 @@
         const reflectionText = document.getElementById('reflection-text');
         const downloadPdfButton = document.getElementById('download-pdf-button');
         const focusRatingInput = document.getElementById('focus-rating');
+        const timerDisplay = document.getElementById('timer'); 
 
         // --- Functions ---
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            const formattedMinutes = String(minutes).padStart(2, '0');
+            const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+            return `${formattedMinutes}:${formattedSeconds}`;
+        }
+
+        function updateTimerDisplay() {
+            if (timerDisplay) {
+                timerDisplay.textContent = formatTime(timeLeft);
+            }
+            if (timeLeft <= 0) { 
+                if (resultsScreen.classList.contains('hidden')) {
+                    endExamDueToTimeUp();
+                }
+            }
+            timeLeft--; 
+        }
+
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timeLeft = totalTimeAllowedInSeconds;
+            examStartTime = new Date(); 
+            if (timerDisplay) timerDisplay.textContent = formatTime(timeLeft); 
+            timerInterval = setInterval(updateTimerDisplay, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        function endExamDueToTimeUp() {
+            stopTimer();
+            if (!resultsScreen.classList.contains('hidden')) return; 
+            
+            alert("Time's up! The practice will now end.");
+            recordQuestionTime(); 
+            examEndTime = new Date(); 
+            
+            examScreen.classList.add('hidden');
+            reviewScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            if (timerDisplay) timerDisplay.classList.add('hidden');
+            appContainer.scrollTop = 0;
+            showResultsScreen(); 
+        }
 
         function formatTimeDifference(milliseconds) {
             if (!milliseconds || milliseconds < 0) return "0 min 00 sec";
@@ -938,53 +994,22 @@
             resultsScreen.classList.add('hidden');
             appContainer.classList.add('flex', 'flex-col');
             currentlyDisplayedPremiseIndex = -1;
-            examStartTime = new Date();
+            if (timerDisplay) timerDisplay.classList.remove('hidden');
+            if (document.getElementById('draggable-options-sidebar')) {
+                 document.getElementById('draggable-options-sidebar').style.display = 'flex';
+            }
+            appContainer.scrollTop = 0;
         }
 
-        function showReviewScreen(filterFlagged = false) {
-            recordQuestionTime();
-            currentQuestionStartTime = null;
-            lastQuestionIndexForTiming = -1;
-
+        function showReviewScreen(filterFlagged = false) { 
+            recordQuestionTime(); 
+            stopTimer(); 
             examScreen.classList.add('hidden');
             reviewScreen.classList.remove('hidden');
-            reviewScreen.classList.add('flex');
             resultsScreen.classList.add('hidden');
-            setupScreen.classList.add('hidden');
-            appContainer.classList.add('flex', 'flex-col');
-
-            reviewGrid.innerHTML = '';
-            questionsData.forEach((_, index) => {
-                 if (filterFlagged && !flaggedQuestions[index]) {
-                     return;
-                 }
-
-                const button = document.createElement('button');
-                button.textContent = index + 1;
-                button.className = 'review-grid-button';
-
-                const isAnswered = userAnswers[index] && userAnswers[index].some(ans => ans !== null);
-
-                if (isAnswered) {
-                    button.classList.add('review-grid-button-answered');
-                } else {
-                     button.classList.add('review-grid-button-unanswered');
-                }
-
-                if (flaggedQuestions[index]) {
-                    button.classList.add('review-flagged');
-                }
-
-                button.onclick = () => {
-                    reviewScreen.classList.add('hidden');
-                    reviewScreen.classList.remove('flex');
-                    showExamScreen();
-                    loadQuestion(index); // Load in normal mode for review
-                };
-                reviewGrid.appendChild(button);
-            });
-
-             filterFlaggedButton.textContent = filterFlagged ? 'Show All Questions' : 'Show Flagged Only';
+            populateReviewGrid(); 
+            filterFlaggedButton.textContent = filterFlagged ? "Show All Questions" : "Show Flagged Only";
+            appContainer.scrollTop = 0;
         }
 
         function populateNavigator() {
@@ -1135,10 +1160,15 @@
         }
 
         function endExamAndShowResults() {
-            recordQuestionTime();
-            currentQuestionStartTime = null;
-            lastQuestionIndexForTiming = -1;
+            recordQuestionTime(); 
+            stopTimer(); 
+            examEndTime = new Date();
             showResultsScreen();
+            reviewScreen.classList.add('hidden'); 
+            examScreen.classList.add('hidden'); 
+            resultsScreen.classList.remove('hidden'); 
+            if (timerDisplay) timerDisplay.classList.add('hidden'); 
+            appContainer.scrollTop = 0;
         }
          function handleEndExamFooterClick() {
              showReviewScreen();
@@ -1244,20 +1274,29 @@
         // --- Event Listeners ---
         startButton.addEventListener('click', () => {
             userName = nameInput.value.trim();
-            userGoal = goalInput.value.trim();
+            userGoal = goalInput.value.trim(); 
             userFocusArea = focusAreaInput.value.trim();
+            if (!userName) { 
+                alert("Please enter your name.");
+                nameInput.focus();
+                return;
+            }
+            
+            currentQuestionIndex = 0;
             userAnswers = Array(questionsData.length).fill(null).map(() => Array(5).fill(null));
             flaggedQuestions = new Array(questionsData.length).fill(false);
-            questionTimings = new Array(questionsData.length).fill(0);
-            currentQuestionIndex = 0;
+            questionTimings = new Array(questionsData.length).fill(0); 
+            currentQuestionStartTime = null;
+            lastQuestionIndexForTiming = -1;
             isReviewingFromResults = false;
             isFilteringFlagged = false;
-            currentlyDisplayedPremiseIndex = -1;
-            lastQuestionIndexForTiming = -1;
-            currentQuestionStartTime = null;
-            showExamScreen();
-            loadQuestion(0);
-            populateNavigator();
+            examEndTime = null; 
+
+            showExamScreen(); 
+            loadQuestion(0); 
+            populateNavigator(); 
+            updateNavigatorButtons(); 
+            startTimer(); 
         });
 
         nextButton.addEventListener('click', showNextQuestion);

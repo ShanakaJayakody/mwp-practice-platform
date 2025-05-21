@@ -478,6 +478,7 @@
         <div id="exam-screen" class="hidden flex flex-col h-full">
             <div class="header-bar">
                 <span id="exam-title" class="font-semibold">Decision Making</span>
+                <div id="timer" class="font-semibold">06:00</div>
                 <div class="flex items-center space-x-4">
                      <span class="text-sm">Question <span id="question-number-info">1</span> of 5</span>
                      <button id="flag-button" class="text-sm font-medium border border-white rounded px-2 py-1 transition-colors duration-150">
@@ -621,6 +622,11 @@
         let currentQuestionStartTime;
         let lastQuestionIndexForTiming = -1;
 
+        // Timer variables
+        const totalTimeAllowedInSeconds = 360; // 6 minutes
+        let timeLeft = totalTimeAllowedInSeconds;
+        let timerInterval = null;
+
         // --- Elements ---
         const appContainer = document.getElementById('app-container');
         const setupScreen = document.getElementById('setup-screen');
@@ -660,6 +666,7 @@
         const reflectionText = document.getElementById('reflection-text');
         const downloadPdfButton = document.getElementById('download-pdf-button');
         const focusRatingInput = document.getElementById('focus-rating');
+        const timerDisplay = document.getElementById('timer');
 
         // --- Functions ---
 
@@ -936,15 +943,21 @@
             examScreen.classList.add('flex');
             reviewScreen.classList.add('hidden');
             resultsScreen.classList.add('hidden');
-            appContainer.classList.add('flex', 'flex-col');
+            // appContainer.classList.add('flex', 'flex-col'); // Not strictly necessary based on CSS
             currentlyDisplayedPremiseIndex = -1;
-            examStartTime = new Date();
+            // examStartTime = new Date(); // REMOVED FROM HERE
+            if (timerDisplay) timerDisplay.classList.remove('hidden');
+            if (document.getElementById('draggable-options-sidebar')) {
+                 document.getElementById('draggable-options-sidebar').style.display = 'flex';
+            }
+            appContainer.scrollTop = 0;
         }
 
         function showReviewScreen(filterFlagged = false) {
             recordQuestionTime(); // Record time for the current question before showing review screen
-            currentQuestionStartTime = null; // Stop timer
+            currentQuestionStartTime = null; // Stop question timer
             lastQuestionIndexForTiming = -1;
+            stopTimer(); // Stop the main exam timer
 
             examScreen.classList.add('hidden');
             reviewScreen.classList.remove('hidden');
@@ -1114,12 +1127,13 @@
 
         function endExamAndShowResults() {
             recordQuestionTime(); // Record time for the current question before showing results
-            currentQuestionStartTime = null; // Stop timer
+            currentQuestionStartTime = null; // Stop question timer
             lastQuestionIndexForTiming = -1;
+            stopTimer(); // Stop the main exam timer
             showResultsScreen();
         }
          function handleEndExamFooterClick() {
-             showReviewScreen();
+            showReviewScreen();
          }
 
         // --- PDF Generation Function ---
@@ -1224,18 +1238,27 @@
             userName = nameInput.value.trim();
             userGoal = goalInput.value.trim();
             userFocusArea = focusAreaInput.value.trim();
+            // ADDING userName validation for robustness, though not strictly part of this step's goal.
+            if (!userName) {
+                alert("Please enter your name.");
+                nameInput.focus();
+                return;
+            }
             userAnswers = Array(questionsData.length).fill(null).map(() => Array(5).fill(null));
             flaggedQuestions = new Array(questionsData.length).fill(false);
-            questionTimings = new Array(questionsData.length).fill(0); // Reset timings
+            questionTimings = new Array(questionsData.length).fill(0);
             currentQuestionIndex = 0;
             isReviewingFromResults = false;
             isFilteringFlagged = false;
-            currentlyDisplayedPremiseIndex = -1;
-            lastQuestionIndexForTiming = -1; // Reset timing helper
-            currentQuestionStartTime = null; // Reset start time
+            // currentlyDisplayedPremiseIndex = -1; // Reset in showExamScreen
+            lastQuestionIndexForTiming = -1; 
+            currentQuestionStartTime = null; 
+            examEndTime = null; // Reset exam end time
+
             showExamScreen();
             loadQuestion(0);
             populateNavigator();
+            startTimer(); 
         });
 
         nextButton.addEventListener('click', showNextQuestion);
@@ -1271,6 +1294,51 @@
              }
         }
         document.addEventListener('keydown', handleKeyboardShortcuts);
+
+        // --- Timer Functions ---
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            const formattedMinutes = String(minutes).padStart(2, '0');
+            const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+            return `${formattedMinutes}:${formattedSeconds}`;
+        }
+
+        function updateTimerDisplay() {
+            if (timerDisplay) { // timerDisplay should be defined globally by now
+                timerDisplay.textContent = formatTime(timeLeft);
+            }
+            // Correction: timeLeft should be decremented *before* checking if it's <= 0 for the last tick
+            if (timeLeft < 0) { // Check if time actually ran out
+                endExamDueToTimeUp();
+                return; // Stop further execution if time is up
+            }
+             if (timeLeft === 0 && timerDisplay) { // Ensure last 00:00 is displayed
+                timerDisplay.textContent = formatTime(timeLeft);
+            }
+            timeLeft--;
+        }
+
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timeLeft = totalTimeAllowedInSeconds;
+            examStartTime = new Date(); // ADDED HERE
+            if (timerDisplay) timerDisplay.textContent = formatTime(timeLeft); // Initial display update
+            timerInterval = setInterval(updateTimerDisplay, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        function endExamDueToTimeUp() {
+            stopTimer();
+            if (!resultsScreen.classList.contains('hidden')) return; // Prevent multiple alerts/ends if already on results
+            alert("Time's up! The practice will now end.");
+            endExamAndShowResults();
+        }
+        // End Timer Functions
 
         // --- Initial Load ---
         showSetupScreen();
