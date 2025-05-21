@@ -711,9 +711,9 @@
         <!-- Main Navigation -->
         <nav class="main-nav" role="navigation" aria-label="Main Navigation">
             <a href="home.html" id="nav-home" class="nav-tab" role="button">Home</a>
-            <a href="practice.html" id="nav-practice-new" class="nav-tab" role="button">Practice</a>
-            <a href="focus_groups.html" id="nav-focus-groups" class="nav-tab" role="button">Focus Groups</a>
-            <a href="#results" id="nav-results" class="nav-tab" role="button">Results</a>
+            <a href="practice.html" id="nav-practice-main" class="nav-tab" role="button">Practice</a>
+            <div id="nav-focus-groups" class="nav-tab" role="button">Focus Groups</div>
+            <div id="nav-results" class="nav-tab" role="button">Results</div>
             <div id="nav-skills" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
                 <span>Skills</span> <span class="coming-soon-inline">Coming Soon</span>
             </div>
@@ -884,11 +884,11 @@
                                     <select id="results-filter" class="text-sm border border-gray-300 rounded px-2 py-1">
                                         <option value="all">All Tests</option>
                                         <option value="QR Test 1">QR Test 1</option>
-                                        <!-- <option value="QR Test 2">QR Test 2</option> -->
-                                        <!-- <option value="QR Test 3">QR Test 3</option> -->
-                                        <!-- <option value="QR Test 4">QR Test 4</option> -->
-                                        <!-- <option value="QR Test 5">QR Test 5</option> -->
-                                        <!-- <option value="QR Test 6">QR Test 6</option> -->
+                                        <option value="QR Test 2">QR Test 2</option>
+                                        <option value="QR Test 3">QR Test 3</option>
+                                        <option value="QR Test 4">QR Test 4</option>
+                                        <option value="QR Test 5">QR Test 5</option>
+                                        <option value="QR Test 6">QR Test 6</option>
                                         <option value="VR Focus Group 16">VR Focus Group 16</option>
                                     </select>
                                     <select id="results-sort" class="text-sm border border-gray-300 rounded px-2 py-1">
@@ -1045,13 +1045,13 @@
 
         // --- Firebase Configuration ---
         const firebaseConfig = {
-            apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
-            authDomain: "mwp-qr-test-page.firebaseapp.com",
-            projectId: "mwp-qr-test-page",
-            storageBucket: "mwp-qr-test-page.appspot.com",
-            messagingSenderId: "309084045110",
-            appId: "1:309084045110:web:b09ca0fdff84b094963d97",
-            measurementId: "G-4M3ED641M9"
+          apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
+          authDomain: "mwp-qr-test-page.firebaseapp.com",
+          projectId: "mwp-qr-test-page",
+          storageBucket: "mwp-qr-test-page.appspot.com",
+          messagingSenderId: "309084045110",
+          appId: "1:309084045110:web:b09ca0fdff84b094963d97",
+          measurementId: "G-4M3ED641M9"
         };
 
         // Initialize Firebase with better error handling
@@ -1097,15 +1097,16 @@
         const logoutButton = document.getElementById('logout-button');
 
         // Navigation elements
-        const navHome = document.getElementById('nav-home');
-        const navPracticeNew = document.getElementById('nav-practice-new');
-        const navFocusGroups = document.getElementById('nav-focus-groups');
         const navResults = document.getElementById('nav-results');
         const navSkills = document.getElementById('nav-skills');
-        
 
         // Content area elements
         const qrTestsContent = document.getElementById('qr-tests-content');
+        const resultsContent = document.getElementById('results-content');
+        const comingSoonContent = document.getElementById('coming-soon-content');
+        const defaultDashboardMessage = document.getElementById('default-dashboard-message');
+        const allNavTabs = document.querySelectorAll('.nav-tab');
+        const dashboardContentArea = document.getElementById('dashboard-content-area');
 
         // --- UI Helpers ---
         // Set loading state for buttons
@@ -1427,18 +1428,11 @@
         }
 
         // --- Navigation Event Listeners ---
-        navPracticeNew.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent default link behavior
-            window.location.href = 'practice.html'; // Navigate to practice.html
-        });
-
-        navHome.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = 'home.html';
-        });
+        // Event listeners for navPractice, navTests, navTestsQR, navTestsExams, navTestsVR, navTestsDM, navTestsSJT are removed as the elements are removed.
         
-        navFocusGroups.addEventListener('click', (e) => {
-            e.preventDefault();
+        // Focus Groups tab navigation
+        const navFocusGroups = document.getElementById('nav-focus-groups');
+        navFocusGroups.addEventListener('click', () => {
             window.location.href = 'focus_groups.html';
         });
         
@@ -1456,7 +1450,7 @@
         });
 
         // --- Keyboard Accessibility ---
-        // Handle keyboard navigation for dropdown - REMOVED as Tests dropdown is removed
+        // Handle keyboard navigation for dropdown (Removed as navTests is removed)
 
         // Auth State Change Listener with improved transitions
         firebase.auth().onAuthStateChanged(user => {
@@ -1481,25 +1475,11 @@
                     dashboardWrapper.style.transition = "opacity 0.5s ease-in-out";
                     
                     // Show default content
-                    showContent('results'); // Or 'home' if that's preferred after login
-                    // Determine active tab based on current page or default to results/home
-                    const currentPath = window.location.pathname.split("/").pop();
-                    if (currentPath === "student_dashboard.html" || currentPath === "") {
-                         if (window.location.hash === '#results') {
-                            setActiveTab(navResults);
-                            showContent('results');
-                            loadUserResults();
-                        } else if (window.location.hash === '#qr') {
-                            setActiveTab(navPracticeNew); // Or a more specific tab if Practice page has sub-navigation
-                            showContent('qr');
-                        } else {
-                            // Default to results if no hash or unknown hash
-                            setActiveTab(navResults);
-                            showContent('results');
-                            loadUserResults();
-                        }
-                    }
-                   
+                    showContent('results');
+                    setActiveTab(navResults);
+                    
+                    // Load results data
+                    loadUserResults();
                 }, 300);
             } else {
                 // User is signed out
@@ -1545,30 +1525,12 @@
 
         // Initialize content to default
         document.addEventListener('DOMContentLoaded', () => {
-            // Set initial state based on URL hash or default
-            const hash = window.location.hash;
-            if (hash === '#results') {
-                showContent('results');
-                setActiveTab(navResults);
-                if (firebase.auth().currentUser) {
-                    loadUserResults();
-                }
-            } else if (hash === '#qr') {
-                showContent('qr');
-                // Assuming 'Practice' tab should be active for 'qr' content.
-                // If 'qr' content is now part of practice.html, this logic might need to change
-                // or be removed if student_dashboard.html no longer directly shows 'qr' content.
-                // For now, let's assume qrTestsContent is still part of student_dashboard for direct links.
-                const associatedPracticeTab = document.getElementById('nav-practice-new');
-                setActiveTab(associatedPracticeTab);
-
-            } else {
-                 // Default to results if no specific hash or unhandled hash
-                showContent('results');
-                setActiveTab(navResults);
-                 if (firebase.auth().currentUser) {
-                    loadUserResults();
-                }
+            // Set initial state
+            showContent('results');
+            
+            // Load user results if on results tab
+            if (firebase.auth().currentUser) {
+                loadUserResults();
             }
             
             // Add handling for Enter key on inputs
@@ -1591,39 +1553,6 @@
             signupPasswordInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') signupButton.click();
             });
-
-            // Update navigation links based on current page
-            const currentPage = window.location.pathname.split("/").pop();
-            if (currentPage === 'student_dashboard.html') {
-                // No specific active tab by default, handled by hash or initial load.
-                // Navigating to other pages will set their respective active tabs.
-            } else if (currentPage === 'home.html') {
-                setActiveTab(document.getElementById('nav-home'));
-            } else if (currentPage === 'focus_groups.html') {
-                setActiveTab(document.getElementById('nav-focus-groups'));
-            } // Add practice.html case later
-            
-
-            // Event listener for home tab
-            const homeButton = document.getElementById('home-view-all-tests-btn');
-            if(homeButton) {
-                homeButton.addEventListener('click', () => {
-                    // Navigate to where tests are now listed, likely practice.html or student_dashboard.html#qr
-                    // For now, let's assume student_dashboard.html and it will show QR tests
-                    window.location.href = "student_dashboard.html#qr"; 
-                });
-            }
-
-            // Ensure navResults click behavior is correct
-            if(navResults) {
-                navResults.addEventListener('click', (e) => {
-                    e.preventDefault(); // Prevent default if it's an anchor link
-                    showContent('results');
-                    setActiveTab(navResults);
-                    loadUserResults();
-                    window.location.hash = 'results'; // Update hash for bookmarking/linking
-                });
-            }
         });
 
         // --- Results Tab Functions ---
@@ -1792,11 +1721,8 @@
             
             // Add click handlers for buttons
             document.getElementById('go-to-tests-button').addEventListener('click', () => {
-                // This should now navigate to practice.html or the relevant section within it
-                // For now, let's point to where QR tests are currently (student_dashboard.html#qr)
-                // This will be updated once practice.html is structured.
-                window.location.href = 'student_dashboard.html#qr';
-                // setActiveTab(navPracticeNew); // This would be the new practice tab
+                showContent('qr');
+                setActiveTab(navTests);
             });
             
             document.getElementById('back-to-results-list').addEventListener('click', () => {
@@ -2298,23 +2224,17 @@
             
             // Store the return page information
             localStorage.setItem('returnToResultsPage', 'true');
-            localStorage.setItem('returnToResultsPageUrl', 'student_dashboard.html#results');
-
-
+            
             // Determine which test to redirect to based on the exam name
-            let testUrl = '';
-            if (result.examName && result.examName.toLowerCase().includes('qr test 1')) {
-                testUrl = 'QR Test 1.html';
-            } else if (result.examName && result.examName.toLowerCase().includes('vr focus group 16')) {
-                testUrl = 'VR focus group16.html';
+            let testUrl = 'QR Test 1.html';
+            if (result.examName === 'QR Test 2') {
+                testUrl = 'QR Test 2.html';
+            } else if (result.examName === 'QR Test 3') {
+                testUrl = 'QR Test 3.html';
             }
-            // Add other test/focus group URLs here as they become available for review
-
-            if (testUrl) {
-                window.location.href = `${testUrl}?review=${result.id}`;
-            } else {
-                alert("Review for this test type is not yet available.");
-            }
+            
+            // Redirect to the QR Test with a query parameter
+            window.location.href = `${testUrl}?review=${result.id}`;
         }
     </script>
 </body>

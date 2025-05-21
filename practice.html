@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice - UCAT Platform</title>
+    <link rel="icon" href="https://ik.imagekit.io/mwp/2.svg?updatedAt=1745982956185" type="image/svg+xml">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --color-primary: #3b82f6;
+            --color-primary-dark: #2563eb;
+            --color-primary-light: #93c5fd;
+            --color-primary-bg: #eff6ff;
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-danger: #ef4444;
+            --color-text: #1f2937;
+            --color-text-secondary: #4b5563;
+            --color-text-tertiary: #6b7280;
+            --color-bg: #f9fafb;
+            --color-bg-secondary: #f3f4f6;
+            --color-border: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius-sm: 0.375rem;
+            --radius: 0.5rem;
+            --radius-md: 0.75rem;
+            --transition: 220ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .dashboard-wrapper { /* Renamed from practice-wrapper for consistency */
+            background-color: #ffffff;
+            width: 100%;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header and Main Nav styles copied from student_dashboard.html for consistency */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--color-border);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 40;
+        }
+
+        .dashboard-header .logo-small {
+            max-width: 132px;
+            transition: all var(--transition);
+        }
+
+        .dashboard-header .logo-small:hover {
+            transform: scale(1.03);
+        }
+        
+        .welcome-user {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            display: flex;
+            align-items: center;
+        }
+
+        .welcome-user::before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: var(--color-success);
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .btn-logout {
+            background-color: var(--color-danger);
+            color: white;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            border-radius: var(--radius);
+            transition: all var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-logout:hover {
+            background-color: #dc2626;
+            box-shadow: var(--shadow);
+        }
+
+        .main-nav {
+            display: flex;
+            justify-content: center;
+            background-color: #ffffff;
+            padding: 0.25rem 0;
+            border-bottom: 1px solid var(--color-border);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 61px; /* Height of header */
+            z-index: 30;
+        }
+
+        .nav-tab {
+            padding: 0.875rem 1.5rem;
+            margin: 0 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            border-bottom: 2px solid transparent;
+            transition: color var(--transition), background-color var(--transition);
+            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+            position: relative;
+            user-select: none;
+            text-decoration: none;
+        }
+
+        .nav-tab::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 100%;
+            height: 2px;
+            background-color: var(--color-primary);
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 0.3s ease-out;
+        }
+
+        .nav-tab:hover {
+            color: var(--color-primary);
+            background-color: var(--color-primary-bg);
+        }
+
+        .nav-tab:hover::after, .nav-tab.active::after {
+            transform: scaleX(1);
+        }
+
+        .nav-tab.active {
+            color: var(--color-primary);
+            background-color: var(--color-primary-bg);
+        }
+        
+        .nav-tab-disabled {
+            color: var(--color-text-tertiary);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .nav-tab-disabled .coming-soon-inline {
+            font-size: 0.65rem;
+            color: var(--color-text-tertiary);
+            margin-left: 4px;
+            background-color: var(--color-bg-secondary);
+            padding: 0.1rem 0.4rem;
+            border-radius: 1rem;
+        }
+
+        .practice-content-wrapper {
+            display: flex;
+            flex-grow: 1;
+            padding: 1.5rem;
+            gap: 1.5rem;
+        }
+
+        .left-nav-menu {
+            width: 240px; /* Fixed width for the left navigation */
+            flex-shrink: 0;
+            background-color: #ffffff;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow);
+            padding: 1rem;
+        }
+
+        .left-nav-menu h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .left-nav-tab {
+            display: block;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: var(--radius-sm);
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .left-nav-tab:hover {
+            background-color: var(--color-primary-bg);
+            color: var(--color-primary-dark);
+        }
+
+        .left-nav-tab.active {
+            background-color: var(--color-primary);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .practice-main-content {
+            flex-grow: 1;
+            background-color: #ffffff;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+        }
+        
+        .section-content {
+            display: none; /* Hidden by default */
+        }
+
+        .section-content.active {
+            display: block; /* Shown when active */
+            animation: fadeInContent 0.5s ease-out;
+        }
+
+        @keyframes fadeInContent {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .subsection-card {
+            background-color: var(--color-bg-secondary);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--color-border);
+        }
+        .subsection-card h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-primary-dark);
+            margin-bottom: 1rem;
+        }
+        .subsection-card p {
+            color: var(--color-text-secondary);
+            margin-bottom: 1rem;
+        }
+        .subsection-card .btn-view {
+            background-color: var(--color-primary);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color var(--transition);
+            display: inline-block;
+        }
+        .subsection-card .btn-view:hover {
+            background-color: var(--color-primary-dark);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .practice-content-wrapper {
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+            }
+            .left-nav-menu {
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+            .main-nav {
+                overflow-x: auto;
+                justify-content: flex-start;
+            }
+        }
+
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div id="auth-redirect-message" class="fixed inset-0 bg-gray-100 flex items-center justify-center z-50 hidden">
+        <!-- ... (Auth redirect message content - can be copied from home.html or student_dashboard.html if needed) ... -->
+         <div class="auth-container bg-white p-8 rounded-lg shadow-xl max-w-md w-full text-center">
+            <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="mx-auto h-12 w-auto mb-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-3">Access Denied</h2>
+            <p class="text-gray-600 mb-6">You need to be logged in to view this page.</p>
+            <a href="student_dashboard.html" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
+                Go to Login
+            </a>
+        </div>
+    </div>
+
+    <div id="dashboard-wrapper" class="dashboard-wrapper hidden">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <a href="home.html">
+                <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="logo-small" onerror="this.style.display='none'; this.onerror=null;">
+            </a>
+            <div class="flex items-center">
+                <span class="welcome-user mr-4">Welcome, <span id="student-display-name" class="font-semibold">Student</span></span>
+                 <a href="settings.html" aria-label="Account Settings" class="mr-4 settings-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </a>
+                <button id="logout-button" class="btn-logout" aria-label="Logout">
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Navigation -->
+        <nav class="main-nav" role="navigation" aria-label="Main Navigation">
+            <a href="home.html" id="nav-home" class="nav-tab" role="button">Home</a>
+            <a href="practice.html" id="nav-practice-main" class="nav-tab active" role="button">Practice</a>
+            <a href="focus_groups.html" id="nav-focus-groups" class="nav-tab" role="button">Focus Groups</a>
+            <a href="student_dashboard.html#results" id="nav-results" class="nav-tab" role="button">Results</a>
+            <div id="nav-skills" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
+                <span>Skills</span> <span class="coming-soon-inline">Coming Soon</span>
+            </div>
+        </nav>
+
+        <!-- Practice Content Area -->
+        <div class="practice-content-wrapper">
+            <aside class="left-nav-menu">
+                <h3>Sections</h3>
+                <a href="#" class="left-nav-tab active" data-target="vr-content">Verbal Reasoning</a>
+                <a href="#" class="left-nav-tab" data-target="dm-content">Decision Making</a>
+                <a href="#" class="left-nav-tab" data-target="qr-content">Quantitative Reasoning</a>
+                <!-- More sections can be added here -->
+            </aside>
+
+            <main class="practice-main-content">
+                <!-- Verbal Reasoning Content -->
+                <section id="vr-content" class="section-content active">
+                    <h2>Verbal Reasoning</h2>
+                    <div class="subsection-card">
+                        <h4>Practice VR Questions</h4>
+                        <p>Hone your skills with a variety of VR passages and questions.</p>
+                        <a href="#" class="btn-view">Start Practice</a>
+                    </div>
+                    <div class="subsection-card">
+                        <h4>VR Timed Tests</h4>
+                        <p>Simulate exam conditions with full VR timed sections.</p>
+                        <a href="#" class="btn-view">View Tests</a>
+                    </div>
+                    <div class="subsection-card">
+                        <h4>VR Class Worksheets</h4>
+                        <p>Access worksheets and materials from VR focused classes.</p>
+                        <a href="#" class="btn-view">View Worksheets</a>
+                    </div>
+                </section>
+
+                <!-- Decision Making Content -->
+                <section id="dm-content" class="section-content">
+                    <h2>Decision Making</h2>
+                     <div class="subsection-card">
+                        <h4>Practice DM Questions</h4>
+                        <p>Work through syllogisms, logical puzzles, and other DM question types.</p>
+                        <a href="#" class="btn-view">Start Practice</a>
+                    </div>
+                    <div class="subsection-card">
+                        <h4>DM Timed Tests</h4>
+                        <p>Challenge yourself with timed Decision Making sections.</p>
+                        <a href="#" class="btn-view">View Tests</a>
+                    </div>
+                    <div class="subsection-card">
+                        <h4>DM Class Worksheets</h4>
+                        <p>Review materials from Decision Making classes.</p>
+                        <a href="#" class="btn-view">View Worksheets</a>
+                    </div>
+                </section>
+
+                <!-- Quantitative Reasoning Content -->
+                <section id="qr-content" class="section-content">
+                    <h2>Quantitative Reasoning</h2>
+                    <div class="subsection-card">
+                        <h4>Practice QR Drills</h4>
+                        <p>Improve your speed and accuracy with targeted QR drills.</p>
+                        <a href="QR Test 1.html" class="btn-view">Go to QR Test 1</a>
+                         <a href="#" class="btn-view ml-2">More Drills</a>
+                    </div>
+                    <div class="subsection-card">
+                        <h4>QR Timed Tests</h4>
+                        <p>Take full Quantitative Reasoning timed sections.</p>
+                        <a href="student_dashboard.html#qr" class="btn-view">View Tests</a>
+                    </div>
+                    <div class="subsection-card">
+                        <h4>QR Class Worksheets</h4>
+                        <p>Access worksheets and problem sets from QR classes.</p>
+                        <a href="#" class="btn-view">View Worksheets</a>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Firebase Configuration (copy from student_dashboard.html or home.html if not already linked via a separate JS file)
+        const firebaseConfig = {
+          apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
+          authDomain: "mwp-qr-test-page.firebaseapp.com",
+          projectId: "mwp-qr-test-page",
+          storageBucket: "mwp-qr-test-page.appspot.com",
+          messagingSenderId: "309084045110",
+          appId: "1:309084045110:web:b09ca0fdff84b094963d97",
+          measurementId: "G-4M3ED641M9"
+        };
+
+        try {
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+            const db = firebase.firestore(); // eslint-disable-line no-unused-vars
+            console.log("Firebase initialized successfully for practice.html");
+        } catch (error) {
+            console.error("Firebase initialization error for practice.html:", error);
+        }
+        
+        const studentDisplayNameSpan = document.getElementById('student-display-name');
+        const logoutButton = document.getElementById('logout-button');
+        const dashboardWrapper = document.getElementById('dashboard-wrapper');
+        const authRedirectMessage = document.getElementById('auth-redirect-message');
+
+        // --- Authentication State Change ---
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                studentDisplayNameSpan.textContent = user.displayName || user.email || 'Student';
+                dashboardWrapper.classList.remove('hidden');
+                authRedirectMessage.classList.add('hidden');
+            } else {
+                dashboardWrapper.classList.add('hidden');
+                authRedirectMessage.classList.remove('hidden');
+                // Optional: Redirect to login after a delay
+                // setTimeout(() => { window.location.href = 'student_dashboard.html'; }, 3000);
+            }
+        });
+
+        // --- Logout ---
+        logoutButton.addEventListener('click', () => {
+            if (confirm("Are you sure you want to log out?")) {
+                firebase.auth().signOut()
+                    .then(() => {
+                        console.log("Logged out successfully");
+                        window.location.href = 'student_dashboard.html'; // Redirect to login/dashboard
+                    })
+                    .catch((error) => {
+                        console.error("Logout error:", error);
+                        alert("There was an error logging out. Please try again.");
+                    });
+            }
+        });
+        
+        // --- Left Navigation Tab Switching ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const leftNavTabs = document.querySelectorAll('.left-nav-tab');
+            const sectionContents = document.querySelectorAll('.section-content');
+            const navPracticeMain = document.getElementById('nav-practice-main');
+
+            if(navPracticeMain) {
+                 navPracticeMain.classList.add('active');
+            }
+
+            function showSection(targetId) {
+                sectionContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                leftNavTabs.forEach(tab => {
+                    tab.classList.remove('active');
+                });
+
+                const targetContent = document.getElementById(targetId);
+                const activeTab = document.querySelector(`.left-nav-tab[data-target="${targetId}"]`);
+
+                if (targetContent) {
+                    targetContent.classList.add('active');
+                }
+                if (activeTab) {
+                    activeTab.classList.add('active');
+                }
+            }
+
+            leftNavTabs.forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = tab.dataset.target;
+                    showSection(targetId);
+                });
+            });
+
+            // Show the first section by default (Verbal Reasoning)
+            if (leftNavTabs.length > 0) {
+                 showSection('vr-content');
+            }
+        });
+    </script>
+</body>
+</html> 
