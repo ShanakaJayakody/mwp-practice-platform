@@ -504,19 +504,7 @@
 
         <nav class="main-nav" role="navigation" aria-label="Main Navigation">
             <a href="home.html" id="nav-home" class="nav-tab active" role="button">Home</a>
-            <div id="nav-practice" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
-                <span>Practice</span> <span class="coming-soon-inline">Coming Soon</span>
-            </div>
-            <div class="tests-dropdown-container">
-                <div id="nav-tests" class="nav-tab" role="button" aria-haspopup="true">Tests</div>
-                <div class="tests-dropdown-content" role="menu">
-                    <a href="#" id="nav-tests-exams" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Full Exams <span class="coming-soon-inline">Coming Soon</span></a>
-                    <a href="#" id="nav-tests-vr" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Verbal Reasoning <span class="coming-soon-inline">Coming Soon</span></a>
-                    <a href="#" id="nav-tests-dm" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Decision Making <span class="coming-soon-inline">Coming Soon</span></a>
-                    <a href="student_dashboard.html#qr" id="nav-tests-qr" class="dropdown-item" role="menuitem">Quantitative Reasoning</a>
-                    <a href="#" id="nav-tests-sjt" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Situational Judgement <span class="coming-soon-inline">Coming Soon</span></a>
-                </div>
-            </div>
+            <a href="practice.html" id="nav-practice-new" class="nav-tab" role="button">Practice</a>
             <a href="focus_groups.html" id="nav-focus-groups" class="nav-tab" role="button">Focus Groups</a>
             <a href="student_dashboard.html#results" id="nav-results" class="nav-tab" role="button">Results</a>
             <div id="nav-skills" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
@@ -957,7 +945,7 @@
 
         
         document.getElementById('home-view-all-tests-btn').addEventListener('click', () => {
-            window.location.href = "student_dashboard.html#qr-tests-content";
+            window.location.href = "practice.html";
         });
 
         document.addEventListener('DOMContentLoaded', () => {
