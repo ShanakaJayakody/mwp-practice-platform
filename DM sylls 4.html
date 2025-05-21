@@ -6,6 +6,10 @@
     <title>UCAT DM Practice - MedwithPurpose</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <style>
         /* Custom styles for better UI/UX */
         html, body {
@@ -590,6 +594,41 @@
     </div>
 
     <script>
+        // --- Firebase Configuration ---
+        const firebaseConfig = {
+          apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
+          authDomain: "mwp-qr-test-page.firebaseapp.com",
+          projectId: "mwp-qr-test-page",
+          storageBucket: "mwp-qr-test-page.appspot.com",
+          messagingSenderId: "309084045110",
+          appId: "1:309084045110:web:b09ca0fdff84b094963d97",
+          measurementId: "G-4M3ED641M9"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        let currentUserId = null;
+
+        auth.onAuthStateChanged((user) => {
+          if (user) {
+            currentUserId = user.uid;
+            console.log("Anonymous user signed in with UID:", currentUserId);
+          } else {
+            currentUserId = null;
+            console.log("User signed out.");
+            auth.signInAnonymously().catch((error) => {
+                console.error("Error signing in anonymously on auth state change:", error);
+            });
+          }
+        });
+        if (!auth.currentUser) {
+            auth.signInAnonymously().catch((error) => {
+                console.error("Error signing in anonymously on load:", error);
+            });
+        }
+
         // --- Data ---
         const premisesData = [
             "Most research papers in the journal are peer-reviewed.\nAll peer-reviewed papers include a methods section.",
@@ -706,18 +745,12 @@
 
         function endExamDueToTimeUp() {
             stopTimer();
-            if (!resultsScreen.classList.contains('hidden')) return; 
-            
+            if (!resultsScreen.classList.contains('hidden')) return;
             alert("Time's up! The practice will now end.");
-            recordQuestionTime(); 
-            examEndTime = new Date(); 
-            
-            examScreen.classList.add('hidden');
-            reviewScreen.classList.add('hidden');
-            resultsScreen.classList.remove('hidden');
-            if (timerDisplay) timerDisplay.classList.add('hidden');
-            appContainer.scrollTop = 0;
-            showResultsScreen(); 
+            recordQuestionTime();
+            examEndTime = new Date();
+            saveResultsToFirebase();
+            showResultsScreen();
         }
 
         function formatTimeDifference(milliseconds) {
@@ -1163,6 +1196,7 @@
             recordQuestionTime(); 
             stopTimer(); 
             examEndTime = new Date();
+            saveResultsToFirebase();
             showResultsScreen();
             reviewScreen.classList.add('hidden'); 
             examScreen.classList.add('hidden'); 
@@ -1270,6 +1304,72 @@
             doc.save(`ucat_dm_results_${userName || 'user'}.pdf`);
         }
 
+        // --- NEW FUNCTION TO SAVE RESULTS TO FIREBASE ---
+        function saveResultsToFirebase() {
+            if (!db) {
+                console.error("Firestore (db) is not initialized.");
+                return;
+            }
+
+            const worksheetName = "DM Syllogisms Worksheet 4"; // UPDATED FOR THIS FILE
+            const totalScore = parseInt(scoreEl.textContent, 10);
+            const totalPossible = parseInt(totalScorePossibleEl.textContent, 10);
+            const timeTakenString = timeTakenEl.textContent;
+            const reflection = reflectionText.value.trim();
+            const focusRatingVal = focusRatingInput.value;
+
+            const detailedAnswers = questionsData.map((qData, index) => {
+                const userAnsArray = userAnswers[index] || Array(5).fill(null);
+                const correctAnsArray = qData.correctAnswers;
+                let correctStatements = 0;
+                userAnsArray.forEach((userAns, stmtIndex) => {
+                    if (userAns === correctAnsArray[stmtIndex]) {
+                        correctStatements++;
+                    }
+                });
+                let points = 0;
+                if (correctStatements === 5) points = 2;
+                else if (correctStatements === 4) points = 1;
+
+                return {
+                    questionIndex: index,
+                    premise: premisesData[qData.premiseIndex],
+                    statements: qData.statements,
+                    userAnswers: userAnsArray,
+                    correctAnswers: correctAnsArray,
+                    explanation: qData.explanation || "",
+                    points: points,
+                    timeTakenMs: questionTimings[index] || 0,
+                    isFlagged: flaggedQuestions[index] || false
+                };
+            });
+
+            const performanceData = {
+                studentName: userName || (currentUserId ? 'Anonymous User' : 'Unknown User'),
+                userId: currentUserId || null,
+                studentEmail: null,
+                examName: worksheetName,
+                score: totalScore,
+                totalPossibleScore: totalPossible,
+                timeTaken: timeTakenString,
+                goal: userGoal || '',
+                focusArea: userFocusArea || '',
+                focusRating: focusRatingVal || '',
+                reflection: reflection || '',
+                questions: detailedAnswers,
+                submissionTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                userAgent: navigator.userAgent
+            };
+
+            db.collection("performanceSubmissions").add(performanceData)
+                .then((docRef) => {
+                    console.log("Results saved to Firestore with ID: ", docRef.id);
+                })
+                .catch((error) => {
+                    console.error("Error saving results to Firebase: ", error);
+                });
+        }
+        // --- END OF SAVE RESULTS FUNCTION ---
 
         // --- Event Listeners ---
         startButton.addEventListener('click', () => {
