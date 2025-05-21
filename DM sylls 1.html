@@ -469,6 +469,9 @@
                  <button id="start-button" class="primary-button text-lg px-8 py-3">
                      Start Practice
                  </button>
+                 <button onclick="window.location.href = 'student_dashboard.html';" class="secondary-button text-md px-6 py-2 mt-4">
+                     Return to Dashboard
+                 </button>
              </div>
         </div>
 
@@ -561,6 +564,9 @@
                 <button onclick="window.location.href = 'practice.html#dm-content';" class="secondary-button px-6 py-2">
                     Back to DM Worksheets
                 </button>
+                <button onclick="window.location.href = 'student_dashboard.html';" class="secondary-button px-6 py-2">
+                    Return to Dashboard
+                </button>
                 <button id="download-pdf-button" class="primary-button px-6 py-2">
                     Download Results PDF
                 </button>
@@ -611,6 +617,9 @@
         let flaggedQuestions = new Array(questionsData.length).fill(false);
         let isFilteringFlagged = false;
         let currentlyDisplayedPremiseIndex = -1;
+        let questionTimings = new Array(questionsData.length).fill(0);
+        let currentQuestionStartTime;
+        let lastQuestionIndexForTiming = -1;
 
         // --- Elements ---
         const appContainer = document.getElementById('app-container');
@@ -676,9 +685,22 @@
             flagButton.classList.toggle('flagged', isFlagged);
         }
 
+        function recordQuestionTime() {
+            if (currentQuestionStartTime && lastQuestionIndexForTiming !== -1 && lastQuestionIndexForTiming < questionsData.length && !isReviewingFromResults) {
+                const timeSpent = new Date().getTime() - currentQuestionStartTime;
+                questionTimings[lastQuestionIndexForTiming] += timeSpent; // Accumulate time if revisited before finishing
+            }
+        }
+
         /** Loads a question (premises and statements) */
         function loadQuestion(index, reviewMode = false) {
             if (index < 0 || index >= questionsData.length) return;
+
+            if (!reviewMode) {
+                recordQuestionTime(); // Record time for the question we are leaving
+                currentQuestionStartTime = new Date().getTime(); // Start timer for the new question
+                lastQuestionIndexForTiming = index; // Update the last question index for timing
+            }
 
             const question = questionsData[index];
             const newPremiseIndex = question.premiseIndex;
@@ -920,6 +942,10 @@
         }
 
         function showReviewScreen(filterFlagged = false) {
+            recordQuestionTime(); // Record time for the current question before showing review screen
+            currentQuestionStartTime = null; // Stop timer
+            lastQuestionIndexForTiming = -1;
+
             examScreen.classList.add('hidden');
             reviewScreen.classList.remove('hidden');
             reviewScreen.classList.add('flex');
@@ -927,12 +953,43 @@
             setupScreen.classList.add('hidden');
             appContainer.classList.add('flex', 'flex-col');
 
-            reviewGrid.innerHTML = '';
+            reviewGrid.innerHTML = ''; // Clear previous review buttons
             questionsData.forEach((_, index) => {
                  if (filterFlagged && !flaggedQuestions[index]) {
                      return;
                  }
 
+                const button = document.createElement('button');
+                button.textContent = index + 1;
+                button.className = 'review-grid-button'; // Use specific class for review grid
+
+                const isAnswered = userAnswers[index] && userAnswers[index].some(ans => ans !== null);
+
+                if (isAnswered) {
+                    button.classList.add('review-grid-button-answered');
+                } else {
+                     button.classList.add('review-grid-button-unanswered');
+                }
+
+                if (flaggedQuestions[index]) {
+                    button.classList.add('review-flagged');
+                }
+
+                button.onclick = () => {
+                    reviewScreen.classList.add('hidden');
+                    reviewScreen.classList.remove('flex');
+                    showExamScreen();
+                    loadQuestion(index); // Load in normal mode for review from review screen
+                };
+                reviewGrid.appendChild(button);
+            });
+
+             filterFlaggedButton.textContent = filterFlagged ? 'Show All Questions' : 'Show Flagged Only';
+        }
+
+        function populateNavigator() {
+            navigatorGrid.innerHTML = '';
+            questionsData.forEach((_, index) => {
                 const button = document.createElement('button');
                 button.textContent = index + 1;
                 button.className = 'review-grid-button';
@@ -955,66 +1012,18 @@
                     showExamScreen();
                     loadQuestion(index); // Load in normal mode for review
                 };
-                reviewGrid.appendChild(button);
-            });
-
-             filterFlaggedButton.textContent = filterFlagged ? 'Show All Questions' : 'Show Flagged Only';
-        }
-
-        function populateNavigator() {
-            navigatorGrid.innerHTML = '';
-            questionsData.forEach((_, index) => {
-                const button = document.createElement('button');
-                button.textContent = index + 1;
-                button.classList.add('py-2', 'px-1', 'border', 'border-gray-300', 'rounded-md', 'text-center', 'transition', 'duration-150', 'ease-in-out', 'text-sm', 'hover:bg-gray-100');
-                button.dataset.questionIndex = index;
-
-                const isAnswered = userAnswers[index] && userAnswers[index].some(ans => ans !== null);
-                if (isAnswered) button.classList.add('nav-answered');
-                if (index === currentQuestionIndex) button.classList.add('nav-current');
-                if (flaggedQuestions[index]) button.classList.add('nav-flagged');
-
-                button.onclick = () => {
-                    navigatorModal.classList.remove('flex');
-                    navigatorModal.classList.add('hidden');
-                    const targetIndex = parseInt(button.dataset.questionIndex, 10);
-                    loadQuestion(targetIndex, isReviewingFromResults);
-                };
                 navigatorGrid.appendChild(button);
             });
         }
 
-        function updateNavigatorButtons(questionFullyAnswered = false) {
-            if (!navigatorGrid) return;
-            const buttons = navigatorGrid.querySelectorAll('button');
-            buttons.forEach(button => {
-                const index = parseInt(button.dataset.questionIndex, 10);
-                button.classList.remove('nav-answered', 'nav-current', 'nav-flagged');
-
-                const isAnswered = userAnswers[index] && userAnswers[index].some(ans => ans !== null);
-                if (isAnswered) button.classList.add('nav-answered');
-
-                if (index === currentQuestionIndex) button.classList.add('nav-current');
-                if (flaggedQuestions[index]) button.classList.add('nav-flagged');
-            });
-        }
-
-         function updateNavigatorHighlight() {
-             if (!navigatorGrid) return;
-             const buttons = navigatorGrid.querySelectorAll('button');
-             buttons.forEach(button => {
-                 const index = parseInt(button.dataset.questionIndex, 10);
-                 button.classList.remove('nav-current');
-                 if (index === currentQuestionIndex) button.classList.add('nav-current');
-             });
-         }
-
         function showResultsScreen() {
             examEndTime = new Date();
+            // Note: Time for the *last question viewed before clicking "End Practice & See Results"*
+            // is recorded either in showReviewScreen (if they went there first)
+            // or in endExamAndShowResults (if they clicked end from the exam screen directly).
 
             examScreen.classList.add('hidden');
             reviewScreen.classList.add('hidden');
-            reviewScreen.classList.remove('flex');
             resultsScreen.classList.remove('hidden');
             resultsScreen.classList.add('flex');
             setupScreen.classList.add('hidden');
@@ -1082,7 +1091,6 @@
             timeTakenEl.textContent = formatTimeDifference(timeDiff);
         }
 
-
         function revisitQuestionFromResults(index) {
             resultsScreen.classList.add('hidden');
             resultsScreen.classList.remove('flex');
@@ -1091,6 +1099,9 @@
         }
 
         function endExamAndShowResults() {
+            recordQuestionTime(); // Record time for the current question before showing results
+            currentQuestionStartTime = null; // Stop timer
+            lastQuestionIndexForTiming = -1;
             showResultsScreen();
         }
          function handleEndExamFooterClick() {
@@ -1201,10 +1212,13 @@
             userFocusArea = focusAreaInput.value.trim();
             userAnswers = Array(questionsData.length).fill(null).map(() => Array(5).fill(null));
             flaggedQuestions = new Array(questionsData.length).fill(false);
+            questionTimings = new Array(questionsData.length).fill(0); // Reset timings
             currentQuestionIndex = 0;
             isReviewingFromResults = false;
             isFilteringFlagged = false;
             currentlyDisplayedPremiseIndex = -1;
+            lastQuestionIndexForTiming = -1; // Reset timing helper
+            currentQuestionStartTime = null; // Reset start time
             showExamScreen();
             loadQuestion(0);
             populateNavigator();
