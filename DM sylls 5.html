@@ -1031,15 +1031,51 @@
             appContainer.scrollTop = 0;
         }
 
-        function showReviewScreen(filterFlagged = false) { 
-            recordQuestionTime(); 
-            stopTimer(); 
+        function showReviewScreen(filterFlagged = false) {
+            recordQuestionTime(); // Record time for the current question before showing review screen
+            currentQuestionStartTime = null; // Stop question timer
+            lastQuestionIndexForTiming = -1;
+            stopTimer(); // Stop the main exam timer
+
             examScreen.classList.add('hidden');
             reviewScreen.classList.remove('hidden');
+            reviewScreen.classList.add('flex');
             resultsScreen.classList.add('hidden');
-            populateReviewGrid(); 
-            filterFlaggedButton.textContent = filterFlagged ? "Show All Questions" : "Show Flagged Only";
-            appContainer.scrollTop = 0;
+            setupScreen.classList.add('hidden');
+            appContainer.classList.add('flex', 'flex-col');
+
+            reviewGrid.innerHTML = ''; // Clear previous review buttons
+            questionsData.forEach((_, index) => {
+                 if (filterFlagged && !flaggedQuestions[index]) {
+                     return;
+                 }
+
+                const button = document.createElement('button');
+                button.textContent = index + 1;
+                button.className = 'review-grid-button'; // Use specific class for review grid
+
+                const isAnswered = userAnswers[index] && userAnswers[index].some(ans => ans !== null);
+
+                if (isAnswered) {
+                    button.classList.add('review-grid-button-answered');
+                } else {
+                     button.classList.add('review-grid-button-unanswered');
+                }
+
+                if (flaggedQuestions[index]) {
+                    button.classList.add('review-flagged');
+                }
+
+                button.onclick = () => {
+                    reviewScreen.classList.add('hidden');
+                    reviewScreen.classList.remove('flex');
+                    showExamScreen();
+                    loadQuestion(index); // Load in normal mode for review from review screen
+                };
+                reviewGrid.appendChild(button);
+            });
+
+             filterFlaggedButton.textContent = filterFlagged ? 'Show All Questions' : 'Show Flagged Only';
         }
 
         function populateNavigator() {
