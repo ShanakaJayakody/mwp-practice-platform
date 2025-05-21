@@ -484,6 +484,69 @@
         }
         /* End of Focus Groups specific styles */
 
+        /* DM Sub-topic and Worksheet Styles */
+        .dm-subtopic-item {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            margin-bottom: 0.25rem;
+            border-radius: var(--radius-sm);
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition);
+            border: 1px solid var(--color-border);
+            background-color: var(--color-bg);
+        }
+        .dm-subtopic-item:hover:not(.disabled) {
+            background-color: var(--color-dm-bg);
+            color: var(--color-dm-dark);
+            border-color: var(--color-dm-light);
+        }
+        .dm-subtopic-item.active {
+            background-color: var(--color-dm);
+            color: white;
+            border-color: var(--color-dm-dark);
+        }
+        .dm-subtopic-item.disabled {
+            color: var(--color-text-tertiary);
+            background-color: var(--color-bg-secondary);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .coming-soon-inline-small {
+            font-size: 0.6rem;
+            color: var(--color-text-tertiary);
+            margin-left: 4px;
+            background-color: var(--color-border);
+            padding: 0.05rem 0.3rem;
+            border-radius: 0.75rem;
+        }
+        .dm-worksheets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+        }
+        .dm-worksheet-link {
+            display: block;
+            padding: 0.75rem;
+            background-color: var(--color-dm-bg);
+            color: var(--color-dm-dark);
+            border-radius: var(--radius-sm);
+            text-align: center;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.2s ease, transform 0.1s ease, border-color 0.2s ease;
+            border: 1px solid var(--color-dm-light);
+        }
+        .dm-worksheet-link:hover {
+            background-color: var(--color-dm-light);
+            color: var(--color-dm-dark);
+            transform: translateY(-2px);
+            border-color: var(--color-dm);
+        }
+        /* End of DM Sub-topic Styles */
+
     </style>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -577,10 +640,29 @@
                         <p>Challenge yourself with timed Decision Making sections.</p>
                         <a href="#" class="btn-view">View Tests</a>
                     </div>
-                    <div class="subsection-card">
+                    <div class="subsection-card" id="dm-class-worksheets-card">
                         <h4>DM Class Worksheets</h4>
                         <p>Review materials from Decision Making classes.</p>
-                        <a href="#" class="btn-view">View Worksheets</a>
+                        <button id="dm-select-topic-btn" class="btn-view">Select Topic</button>
+                        
+                        <div id="dm-subtopic-selection" class="hidden mt-4">
+                            <h5 class="text-md font-semibold mb-2" style="color: var(--color-dm-dark);">Select a Worksheet Topic:</h5>
+                            <a href="#" class="dm-subtopic-item active" data-subtopic="syllogisms">Syllogisms</a>
+                            <a href="#" class="dm-subtopic-item disabled" data-subtopic="logic-puzzles">Logic Puzzles <span class="coming-soon-inline-small">(Soon)</span></a>
+                            <a href="#" class="dm-subtopic-item disabled" data-subtopic="eval-arguments">Evaluating Arguments <span class="coming-soon-inline-small">(Soon)</span></a>
+                            <a href="#" class="dm-subtopic-item disabled" data-subtopic="interp-data">Interpreting Info (Data) <span class="coming-soon-inline-small">(Soon)</span></a>
+                            <a href="#" class="dm-subtopic-item disabled" data-subtopic="interp-narrative">Interpreting Info (Narrative) <span class="coming-soon-inline-small">(Soon)</span></a>
+                            <a href="#" class="dm-subtopic-item disabled" data-subtopic="venn">Venn Diagrams <span class="coming-soon-inline-small">(Soon)</span></a>
+                            <a href="#" class="dm-subtopic-item disabled" data-subtopic="probability">Probability <span class="coming-soon-inline-small">(Soon)</span></a>
+                        </div>
+
+                        <div id="dm-worksheet-display" class="hidden mt-4">
+                            <h5 id="dm-worksheet-list-title" class="text-md font-semibold mb-2" style="color: var(--color-dm-dark);">Worksheets:</h5>
+                            <div id="dm-worksheets-grid" class="dm-worksheets-grid">
+                                <!-- Worksheet links will be populated here -->
+                            </div>
+                            <button id="dm-back-to-topics-btn" class="btn-view mt-3" style="background-color: var(--color-dm);">Back to Topics</button>
+                        </div>
                     </div>
                 </section>
 
@@ -817,8 +899,64 @@
             const hash = window.location.hash;
             if (hash === '#focus-groups-content') {
                 showSection('focus-groups-content');
-                // Optionally, activate a default sub-section within focus groups, e.g., VR
-                // if (selectVRCardFg) selectVRCardFg.click(); 
+            }
+
+            // --- DM Class Worksheets Logic ---
+            const dmSelectTopicBtn = document.getElementById('dm-select-topic-btn');
+            const dmSubtopicSelectionDiv = document.getElementById('dm-subtopic-selection');
+            const dmWorksheetDisplayDiv = document.getElementById('dm-worksheet-display');
+            const dmWorksheetListTitle = document.getElementById('dm-worksheet-list-title');
+            const dmWorksheetsGrid = document.getElementById('dm-worksheets-grid');
+            const dmBackToTopicsBtn = document.getElementById('dm-back-to-topics-btn');
+            const dmSubtopicItems = document.querySelectorAll('.dm-subtopic-item');
+
+            if (dmSelectTopicBtn) {
+                dmSelectTopicBtn.addEventListener('click', () => {
+                    dmSubtopicSelectionDiv.classList.remove('hidden');
+                    dmSelectTopicBtn.classList.add('hidden'); 
+                });
+            }
+
+            dmSubtopicItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (item.classList.contains('disabled')) return;
+
+                    dmSubtopicItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+
+                    const subtopicName = item.textContent.replace(/<span.*<\/span>/, '').trim(); // Get name without soon badge
+                    dmWorksheetListTitle.textContent = `${subtopicName} Worksheets:`;
+                    
+                    populateDmWorksheets(subtopicName);
+
+                    dmSubtopicSelectionDiv.classList.add('hidden');
+                    dmWorksheetDisplayDiv.classList.remove('hidden');
+                });
+            });
+
+            if (dmBackToTopicsBtn) {
+                dmBackToTopicsBtn.addEventListener('click', () => {
+                    dmWorksheetDisplayDiv.classList.add('hidden');
+                    dmSubtopicSelectionDiv.classList.remove('hidden');
+                    // dmSelectTopicBtn.classList.remove('hidden'); // Or keep it hidden, show subtopics directly
+                });
+            }
+
+            function populateDmWorksheets(subtopicName) {
+                if (!dmWorksheetsGrid) return;
+                dmWorksheetsGrid.innerHTML = ''; // Clear previous worksheets
+                for (let i = 1; i <= 5; i++) {
+                    const worksheetLink = document.createElement('a');
+                    worksheetLink.href = '#'; // Placeholder link
+                    worksheetLink.classList.add('dm-worksheet-link');
+                    worksheetLink.textContent = `${subtopicName} Worksheet ${i}`;
+                    worksheetLink.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        alert(`${subtopicName} Worksheet ${i} selected (content coming soon).`);
+                    });
+                    dmWorksheetsGrid.appendChild(worksheetLink);
+                }
             }
 
         });
