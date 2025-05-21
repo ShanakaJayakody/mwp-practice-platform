@@ -712,8 +712,7 @@
         <nav class="main-nav" role="navigation" aria-label="Main Navigation">
             <a href="home.html" id="nav-home" class="nav-tab" role="button">Home</a>
             <a href="practice.html" id="nav-practice-main" class="nav-tab" role="button">Practice</a>
-            <div id="nav-focus-groups" class="nav-tab" role="button">Focus Groups</div>
-            <div id="nav-results" class="nav-tab" role="button">Results</div>
+            <a href="student_dashboard.html#results" id="nav-results" class="nav-tab" role="button">Results</a>
             <div id="nav-skills" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
                 <span>Skills</span> <span class="coming-soon-inline">Coming Soon</span>
             </div>
@@ -1430,11 +1429,13 @@
         // --- Navigation Event Listeners ---
         // Event listeners for navPractice, navTests, navTestsQR, navTestsExams, navTestsVR, navTestsDM, navTestsSJT are removed as the elements are removed.
         
-        // Focus Groups tab navigation
-        const navFocusGroups = document.getElementById('nav-focus-groups');
-        navFocusGroups.addEventListener('click', () => {
-            window.location.href = 'focus_groups.html';
-        });
+        // Focus Groups tab navigation (Element and listener removed as tab is removed)
+        // const navFocusGroups = document.getElementById('nav-focus-groups');
+        // if (navFocusGroups) { 
+        //     navFocusGroups.addEventListener('click', () => {
+        //         window.location.href = 'focus_groups.html'; 
+        //     });
+        // }
         
         navResults.addEventListener('click', () => {
             showContent('results');
