@@ -1046,6 +1046,7 @@
 
                 let points = 0;
                 let pointsClass = 'incorrect-0pts';
+
                 if (correctStatements === 5) {
                     points = 2;
                     pointsClass = 'correct-2pts';
@@ -1055,11 +1056,23 @@
                 }
                 totalScore += points;
 
+                const timeForQuestionMs = questionTimings[index] || 0;
+                const timeForQuestionSec = Math.round(timeForQuestionMs / 1000);
+
                 const resultItem = document.createElement('div');
-                resultItem.classList.add('result-summary-item', 'relative'); // Added relative for tooltip positioning
-                if (flaggedQuestions[index]) {
-                    resultItem.classList.add('flagged-result');
+                resultItem.classList.add('result-summary-item', 'relative');
+                if (correctStatements === 5) {
+                    resultItem.style.backgroundColor = '#dcfce7';
+                    resultItem.style.borderColor = '#22c55e';
+                } else if (correctStatements === 4) {
+                    resultItem.style.backgroundColor = '#fef3c7';
+                    resultItem.style.borderColor = '#f59e0b';
+                } else {
+                    resultItem.style.backgroundColor = '#fee2e2';
+                    resultItem.style.borderColor = '#ef4444';
                 }
+                resultItem.style.borderWidth = '1px';
+                resultItem.style.borderStyle = 'solid';
                 resultItem.dataset.index = index;
                 resultItem.title = `Click to review Question ${index + 1}`;
 
@@ -1076,6 +1089,7 @@
                     <p class="result-summary-points ${pointsClass}">${points}pt</p>
                     <p class="result-summary-qnum">Q${index + 1} ${flaggedQuestions[index] ? '&#128681;' : ''}</p> 
                     <p class="result-summary-statements">(${correctStatements}/5 correct)</p>
+                    <p class="text-xs text-gray-500 mt-1">Time: ${timeForQuestionSec}s</p>
                     ${statementsTooltipHtml}
                 `;
 

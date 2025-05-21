@@ -618,6 +618,9 @@
         let flaggedQuestions = new Array(questionsData.length).fill(false);
         let isFilteringFlagged = false;
         let currentlyDisplayedPremiseIndex = -1;
+        let questionTimings = new Array(questionsData.length).fill(0);
+        let currentQuestionStartTime;
+        let lastQuestionIndexForTiming = -1;
 
         // --- Elements ---
         const appContainer = document.getElementById('app-container');
@@ -683,9 +686,22 @@
             flagButton.classList.toggle('flagged', isFlagged);
         }
 
+        function recordQuestionTime() {
+            if (currentQuestionStartTime && lastQuestionIndexForTiming !== -1 && lastQuestionIndexForTiming < questionsData.length && !isReviewingFromResults) {
+                const timeSpent = new Date().getTime() - currentQuestionStartTime;
+                questionTimings[lastQuestionIndexForTiming] += timeSpent;
+            }
+        }
+
         /** Loads a question (premises and statements) */
         function loadQuestion(index, reviewMode = false) {
             if (index < 0 || index >= questionsData.length) return;
+
+            if (!reviewMode) {
+                recordQuestionTime();
+                currentQuestionStartTime = new Date().getTime();
+                lastQuestionIndexForTiming = index;
+            }
 
             const question = questionsData[index];
             const newPremiseIndex = question.premiseIndex;
@@ -1043,6 +1059,7 @@
 
                 let points = 0;
                 let pointsClass = 'incorrect-0pts';
+
                 if (correctStatements === 5) {
                     points = 2;
                     pointsClass = 'correct-2pts';
@@ -1052,8 +1069,24 @@
                 }
                 totalScore += points;
 
+                const timeForQuestionMs = questionTimings[index] || 0;
+                const timeForQuestionSec = Math.round(timeForQuestionMs / 1000);
+
                 const resultItem = document.createElement('div');
-                resultItem.classList.add('result-summary-item', 'relative'); // Added relative for tooltip positioning
+                resultItem.classList.add('result-summary-item', 'relative');
+                if (correctStatements === 5) {
+                    resultItem.style.backgroundColor = '#dcfce7'; // green-100
+                    resultItem.style.borderColor = '#22c55e'; // green-500
+                } else if (correctStatements === 4) {
+                    resultItem.style.backgroundColor = '#fef3c7'; // yellow-100 (for orange effect)
+                    resultItem.style.borderColor = '#f59e0b'; // amber-500 (orange)
+                } else {
+                    resultItem.style.backgroundColor = '#fee2e2'; // red-100
+                    resultItem.style.borderColor = '#ef4444'; // red-500
+                }
+                resultItem.style.borderWidth = '1px';
+                resultItem.style.borderStyle = 'solid';
+
                 if (flaggedQuestions[index]) {
                     resultItem.classList.add('flagged-result');
                 }
@@ -1073,6 +1106,7 @@
                     <p class="result-summary-points ${pointsClass}">${points}pt</p>
                     <p class="result-summary-qnum">Q${index + 1} ${flaggedQuestions[index] ? '&#128681;' : ''}</p> 
                     <p class="result-summary-statements">(${correctStatements}/5 correct)</p>
+                    <p class="text-xs text-gray-500 mt-1">Time: ${timeForQuestionSec}s</p>
                     ${statementsTooltipHtml}
                 `;
 
@@ -1087,4 +1121,24 @@
             const timeDiff = examEndTime - examStartTime;
             timeTakenEl.textContent = formatTimeDifference(timeDiff);
         }
+
+        startButton.addEventListener('click', () => {
+            userName = nameInput.value.trim();
+            userGoal = goalInput.value.trim();
+            userFocusArea = focusAreaInput.value.trim();
+            userAnswers = Array(questionsData.length).fill(null).map(() => Array(5).fill(null));
+            flaggedQuestions = new Array(questionsData.length).fill(false);
+            questionTimings = new Array(questionsData.length).fill(0); // Reset timings
+            currentQuestionIndex = 0;
+            isReviewingFromResults = false;
+            isFilteringFlagged = false;
+            currentlyDisplayedPremiseIndex = -1;
+            lastQuestionIndexForTiming = -1; // Reset timing helper
+            currentQuestionStartTime = null; // Reset start time
+            showExamScreen();
+            loadQuestion(0);
+            populateNavigator();
+        });
+
+        nextButton.addEventListener('click', showNextQuestion);
 
