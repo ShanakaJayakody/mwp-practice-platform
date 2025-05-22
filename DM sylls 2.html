@@ -799,7 +799,7 @@
         const calcButtons = document.querySelectorAll('.calc-button');
         const calcMemoryIndicator = document.getElementById('calc-memory-indicator');
 
-        // --- Calculator variables ---
+        // --- Calculator variables (from DM sylls 2 more complex version) ---
         let calcCurrentInput = '0';
         let calcPreviousInput = '';
         let calcOperator = null;
@@ -809,53 +809,57 @@
 
         // --- Functions ---
 
-        // --- Calculator Functions (Copied from DM Sylls 1) ---
+        // --- Calculator Functions (Adapted from DM Sylls 2 more complex version) ---
         function toggleCalculator() {
-            const isVisible = calculatorUI.classList.toggle('visible');
-            calculatorToggleButton.classList.toggle('active', isVisible);
+            // Use classList.toggle with .show class as defined in CSS
+            const isVisible = calculatorUI.classList.toggle('show'); 
+            // calculatorToggleButton.classList.toggle('active', isVisible); // Optional: if an 'active' class is styled
         }
 
         function updateCalcDisplay() {
+            if (!calcDisplay) return;
             if (calcCurrentInput === 'Error') {
-                calcDisplay.textContent = 'Error';
-            } else if (calcCurrentInput.length > 12) {
+                calcDisplay.value = 'Error';
+            } else if (calcCurrentInput.length > 10) { // Max 10 digits before exponent
                 try {
                     const num = parseFloat(calcCurrentInput);
                     if (isFinite(num)) {
-                        calcDisplay.textContent = num.toExponential(6);
+                        calcDisplay.value = num.toExponential(5); // 5 decimal places in exponent
                     } else {
-                        calcDisplay.textContent = 'Error';
+                        calcDisplay.value = 'Error';
                     }
                 } catch (e) {
-                    calcDisplay.textContent = calcCurrentInput.substring(0, 12);
+                    // Fallback for very long non-numeric strings if they somehow get here
+                    calcDisplay.value = calcCurrentInput.substring(0, 10);
                 }
             } else {
-                calcDisplay.textContent = calcCurrentInput;
+                calcDisplay.value = calcCurrentInput;
             }
-            if (calcMemory !== 0) {
-                calcMemoryIndicator.style.display = 'block';
-            } else {
-                calcMemoryIndicator.style.display = 'none';
+            if (calcMemoryIndicator) {
+                calcMemoryIndicator.style.visibility = calcMemory !== 0 ? 'visible' : 'hidden';
             }
         }
 
-        function clearCalculator() {
+        function clearCalculator(clearMemory = false) {
             calcCurrentInput = '0';
             calcPreviousInput = '';
             calcOperator = null;
             calcShouldResetDisplay = false;
+            if (clearMemory) {
+                calcMemory = 0;
+            }
             calcMrcPressedOnce = false; 
             updateCalcDisplay();
         }
         
         function inputDigit(digit) {
-            if (calcCurrentInput === 'Error') calcCurrentInput = '0';
+            if (calcCurrentInput === 'Error') calcCurrentInput = '0'; // Reset on new input after error
             if (calcShouldResetDisplay) {
                 calcCurrentInput = digit;
                 calcShouldResetDisplay = false;
             } else {
-                if (calcCurrentInput.includes('.') && calcCurrentInput.split('.')[1].length >= 8) return;
-                if (!calcCurrentInput.includes('.') && calcCurrentInput.length >= 10 && calcCurrentInput !== '0') return;
+                // Limit overall length, more nuanced check for decimal places needed if very specific
+                if (calcCurrentInput.length >= 10 && calcCurrentInput !== '0') return; 
                 calcCurrentInput = calcCurrentInput === '0' ? digit : calcCurrentInput + digit;
             }
             updateCalcDisplay();
@@ -874,22 +878,23 @@
             calcMrcPressedOnce = false;
         }
 
-        function handleOperator(nextOperator) {
+        function handleCalcOperator(nextOperator) {
             if (calcCurrentInput === 'Error') return;
             const inputValue = parseFloat(calcCurrentInput);
+
             if (calcOperator && !calcShouldResetDisplay) { 
-                calculate();
-                if (calcCurrentInput === 'Error') return;
+                performCalculation(); // Perform existing operation before setting new one
+                if (calcCurrentInput === 'Error') return; // Stop if calculation caused error
                 calcPreviousInput = calcCurrentInput; 
             } else {
-                calcPreviousInput = calcCurrentInput;
+                calcPreviousInput = calcCurrentInput; // Store current input as previous
             }
             calcOperator = nextOperator;
-            calcShouldResetDisplay = true;
+            calcShouldResetDisplay = true; // Next digit input should reset display
             calcMrcPressedOnce = false;
         }
 
-        function calculate() {
+        function performCalculation() {
             if (!calcOperator || calcPreviousInput === '' || calcCurrentInput === 'Error') return;
             const prev = parseFloat(calcPreviousInput);
             const current = parseFloat(calcCurrentInput);
@@ -898,720 +903,69 @@
                 updateCalcDisplay();
                 return;
             }
-            let result = 0;
+
+            let result;
             switch (calcOperator) {
                 case '+': result = prev + current; break;
                 case '-': result = prev - current; break;
                 case '*': result = prev * current; break;
                 case '/': 
                     if (current === 0) {
-                        result = 'Error';
-                    } else {
-                        result = prev / current;
+                        calcCurrentInput = 'Error'; // Division by zero
+                        updateCalcDisplay();
+                        return;
                     }
+                    result = prev / current; 
                     break;
                 default: return;
             }
-            if (result === 'Error') {
-                calcCurrentInput = 'Error';
+            // Basic check for excessively large/small numbers or precision issues
+            if (Math.abs(result) > 1e10 || (Math.abs(result) < 1e-8 && result !== 0) ) {
+                 calcCurrentInput = result.toExponential(5);
+            } else if (result.toString().includes('.') && result.toString().split('.')[1].length > 8) {
+                calcCurrentInput = parseFloat(result.toFixed(8)).toString();
             } else {
-                if (!isFinite(result)) {
-                    calcCurrentInput = 'Error';
-                } else {
-                    try {
-                        if (Math.abs(result) > 1e10) {
-                            let resultStr = result.toExponential(6);
-                            calcCurrentInput = resultStr;
-                        } else if (Math.abs(result) < 1e-6 && result !== 0) {
-                            let resultStr = result.toExponential(6);
-                            calcCurrentInput = resultStr;
-                        } else {
-                            let resultStr = parseFloat(result.toPrecision(10)).toString();
-                            calcCurrentInput = resultStr;
-                        }
-                    } catch (e) {
-                        calcCurrentInput = String(result);
-                    }
-                    if (calcCurrentInput === 'NaN' || calcCurrentInput === 'Infinity' || calcCurrentInput === '-Infinity') {
-                        calcCurrentInput = 'Error';
-                    }
-                }
+                calcCurrentInput = result.toString();
             }
+            
+            calcOperator = null; // Reset operator after calculation
+            // calcShouldResetDisplay = true; // Display will show result, next op or digit will modify/reset
             updateCalcDisplay();
-            calcOperator = null;
-            calcShouldResetDisplay = true;
-            calcMrcPressedOnce = false;
-        }
-
-        function handleSpecialFunction(action) {
-            if (calcCurrentInput === 'Error' && action !== 'clear') return;
-            const num = parseFloat(calcCurrentInput);
-            switch(action) {
-                case 'negate':
-                    if (calcCurrentInput === '0') return;
-                    calcCurrentInput = calcCurrentInput.startsWith('-') ? 
-                        calcCurrentInput.substring(1) : 
-                        '-' + calcCurrentInput;
-                    break;
-                case 'sqrt':
-                    if (num < 0) {
-                        calcCurrentInput = 'Error';
-                    } else {
-                        const result = Math.sqrt(num);
-                        calcCurrentInput = result.toString();
-                    }
-                    break;
-                case 'percent':
-                    if (calcPreviousInput && calcOperator) {
-                        const prev = parseFloat(calcPreviousInput);
-                        calcCurrentInput = (num * prev / 100).toString();
-                    } else {
-                        calcCurrentInput = (num / 100).toString();
-                    }
-                    break;
-                case 'backspace':
-                    if (calcCurrentInput.length === 1 || 
-                        (calcCurrentInput.length === 2 && calcCurrentInput.startsWith('-'))) {
-                        calcCurrentInput = '0';
-                    } else {
-                        calcCurrentInput = calcCurrentInput.slice(0, -1);
-                    }
-                    break;
-                case 'clear':
-                    clearCalculator();
-                    return;
-            }
-            updateCalcDisplay();
-            calcShouldResetDisplay = false;
-            calcMrcPressedOnce = false;
         }
 
         function handleMemory(action) {
-            if (calcCurrentInput === 'Error' && action !== 'mrc') return;
-            const num = parseFloat(calcCurrentInput);
-            switch(action) {
+            const currentValue = parseFloat(calcCurrentInput);
+            if (calcCurrentInput === 'Error' && action !== 'mrc' && action !== 'clear-memory') return;
+
+            switch (action) {
                 case 'm+':
-                    calcMemory += num;
-                    calcShouldResetDisplay = true;
+                    if (!isNaN(currentValue)) calcMemory += currentValue;
+                    calcShouldResetDisplay = true; // After M+, new number input clears display
                     break;
                 case 'm-':
-                    calcMemory -= num;
-                    calcShouldResetDisplay = true;
+                    if (!isNaN(currentValue)) calcMemory -= currentValue;
+                    calcShouldResetDisplay = true; // After M-, new number input clears display
                     break;
                 case 'mrc':
-                    if (!calcMrcPressedOnce) {
-                        calcCurrentInput = calcMemory.toString();
-                        calcMrcPressedOnce = true;
-                    } else {
+                    if (calcMrcPressedOnce) { // Second press: clear memory
                         calcMemory = 0;
                         calcMrcPressedOnce = false;
+                    } else { // First press: recall memory
+                        calcCurrentInput = calcMemory.toString();
+                        calcMrcPressedOnce = true;
+                        // calcShouldResetDisplay = true; // Allow user to operate on recalled number
                     }
                     break;
             }
             updateCalcDisplay();
         }
 
-        let isDragging = false;
-        let dragOffsetX = 0;
-        let dragOffsetY = 0;
-
-        function makeDraggable(element, handle) {
-            handle.onmousedown = function(event) {
-                event.preventDefault();
-                isDragging = true;
-                element.style.cursor = 'grabbing';
-                const rect = element.getBoundingClientRect();
-                dragOffsetX = event.clientX - rect.left;
-                dragOffsetY = event.clientY - rect.top;
-                document.addEventListener('mousemove', handleMouseMove);
-                document.addEventListener('mouseup', () => {
-                    isDragging = false;
-                    element.style.cursor = 'grab';
-                    document.removeEventListener('mousemove', handleMouseMove);
-                }, { once: true });
-            };
+        function makeCalculatorDraggable() {
+            // ... existing code ...
         }
 
-        function handleMouseMove(e) {
-            if (!isDragging) return;
-            const x = e.clientX - dragOffsetX;
-            const y = e.clientY - dragOffsetY;
-            const container = appContainer.getBoundingClientRect();
-            const calculator = calculatorUI.getBoundingClientRect();
-            const maxX = container.width - calculator.width;
-            const maxY = container.height - calculator.height;
-            const boundedX = Math.max(0, Math.min(maxX, x - container.left));
-            const boundedY = Math.max(0, Math.min(maxY, y - container.top));
-            calculatorUI.style.left = `${boundedX}px`;
-            calculatorUI.style.top = `${boundedY}px`;
-            calculatorUI.style.transform = 'none';
-        }
-        // --- END Calculator Functions ---
-
-        // REPLACE/ENSURE TIMER FUNCTIONS
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-            const formattedMinutes = String(minutes).padStart(2, '0');
-            const formattedSeconds = String(remainingSeconds).padStart(2, '0');
-            return `${formattedMinutes}:${formattedSeconds}`;
-        }
-
-        function updateTimerDisplay() {
-            if (timerDisplay) {
-                timerDisplay.textContent = formatTime(timeLeft);
-            }
-            if (timeLeft <= 0) { 
-                if (resultsScreen.classList.contains('hidden')) {
-                    endExamDueToTimeUp();
-                }
-            }
-            timeLeft--; 
-        }
-
-        function startTimer() {
-            if (timerInterval) clearInterval(timerInterval);
-            timeLeft = totalTimeAllowedInSeconds;
-            examStartTime = new Date(); 
-            if (timerDisplay) timerDisplay.textContent = formatTime(timeLeft); 
-            timerInterval = setInterval(updateTimerDisplay, 1000);
-        }
-
-        function stopTimer() {
-            clearInterval(timerInterval);
-            timerInterval = null;
-        }
-
-        function endExamDueToTimeUp() {
-            stopTimer();
-            if (!resultsScreen.classList.contains('hidden')) return;
-            alert("Time's up! The practice will now end.");
-            recordQuestionTime();
-            examEndTime = new Date();
-            saveResultsToFirebase();
-            showResultsScreen();
-        }
-        // END OF TIMER FUNCTIONS
-
-        function formatTimeDifference(milliseconds) {
-            if (!milliseconds || milliseconds < 0) return "0 min 00 sec";
-            const totalSeconds = Math.round(milliseconds / 1000);
-            const minutes = Math.floor(totalSeconds / 60);
-            const seconds = totalSeconds % 60;
-            return `${minutes} min ${seconds < 10 ? '0' : ''}${seconds} sec`;
-        }
-
-        function toggleFlag() {
-            if (isReviewingFromResults) return;
-            const index = currentQuestionIndex;
-            flaggedQuestions[index] = !flaggedQuestions[index];
-            updateFlagButtonAppearance();
-            updateNavigatorButtons();
-        }
-
-        function updateFlagButtonAppearance() {
-            const isFlagged = flaggedQuestions[currentQuestionIndex];
-            flagButton.textContent = isFlagged ? 'Unflag' : 'Flag for Review';
-            flagButton.classList.toggle('flagged', isFlagged);
-        }
-
-        function recordQuestionTime() {
-            if (currentQuestionStartTime && lastQuestionIndexForTiming !== -1 && lastQuestionIndexForTiming < questionsData.length && !isReviewingFromResults) {
-                const timeSpent = new Date().getTime() - currentQuestionStartTime;
-                questionTimings[lastQuestionIndexForTiming] += timeSpent;
-            }
-        }
-
-        /** Loads a question (premises and statements) */
-        function loadQuestion(index, reviewMode = false) {
-            if (index < 0 || index >= questionsData.length) return;
-
-            if (!reviewMode) {
-                recordQuestionTime();
-                currentQuestionStartTime = new Date().getTime();
-                lastQuestionIndexForTiming = index;
-            }
-
-            const question = questionsData[index];
-            const newPremiseIndex = question.premiseIndex;
-            const mainContentArea = document.querySelector('.main-content-area'); 
-
-            // Load premises
-            if (newPremiseIndex !== currentlyDisplayedPremiseIndex || reviewMode) {
-                premisesTextEl.innerHTML = premisesData[newPremiseIndex].replace(/\n/g, '<br><br>');
-                currentlyDisplayedPremiseIndex = newPremiseIndex;
-            }
-
-            currentQuestionIndex = index;
-            isReviewingFromResults = reviewMode; // Ensure this state is set
-
-            questionNumberEl.textContent = index + 1;
-            questionNumberInfoEl.textContent = `${index + 1} of ${questionsData.length}`;
-            if (mainContentArea) mainContentArea.scrollTop = 0; 
-
-            statementsListContainer.innerHTML = ''; 
-            reviewExplanationContainer.innerHTML = ''; 
-
-            question.statements.forEach((statementText, statementIndex) => {
-                const statementRow = document.createElement('div');
-                statementRow.classList.add('statement-row');
-                statementRow.dataset.qIndex = index; 
-                statementRow.dataset.sIndex = statementIndex;
-
-                const textBox = document.createElement('div');
-                textBox.classList.add('statement-text');
-                textBox.textContent = `${statementIndex + 1}. ${statementText}`;
-                statementRow.appendChild(textBox);
-
-                const answerBox = document.createElement('div');
-                answerBox.classList.add('statement-answer-box');
-                answerBox.id = `q${index}-s${statementIndex}-answerbox`; 
-                statementRow.appendChild(answerBox);
-
-                const currentAnswerForStatement = userAnswers[index] ? userAnswers[index][statementIndex] : null;
-                updateAnswerBox(answerBox, currentAnswerForStatement); // Pass the specific answer for this statement
-
-                if (!reviewMode) {
-                    statementRow.addEventListener('dragover', handleDragOver);
-                    statementRow.addEventListener('dragleave', handleDragLeave);
-                    statementRow.addEventListener('drop', handleDrop);
-                } else {
-                    const correctAnswer = question.correctAnswers[statementIndex];
-                    answerBox.classList.remove('answered-yes', 'answered-no'); // Clear normal answer styles
-                    if (currentAnswerForStatement === correctAnswer) {
-                        answerBox.classList.add('answered-yes'); // Show correct as green
-                        answerBox.textContent = currentAnswerForStatement === 'Y' ? 'Yes (Correct)' : 'No (Correct)';
-                    } else {
-                        answerBox.classList.add('answered-no'); // Show incorrect as red
-                        answerBox.textContent = currentAnswerForStatement === 'Y' ? `Yes (Incorrect, Ans: ${correctAnswer})` : (currentAnswerForStatement === 'N' ? `No (Incorrect, Ans: ${correctAnswer})` : `N/A (Ans: ${correctAnswer})`);
-                    }
-                }
-                statementsListContainer.appendChild(statementRow);
-            });
-
-            if (reviewMode && question.explanation) {
-                 const explanationDiv = document.createElement('div');
-                 explanationDiv.classList.add('explanation-box', 'mt-3'); // Added margin-top for spacing
-                 explanationDiv.innerHTML = `<strong class="font-semibold">Explanation:</strong> ${question.explanation}`;
-                 reviewExplanationContainer.appendChild(explanationDiv);
-            }
-
-            prevButton.disabled = index === 0;
-            if (reviewMode) {
-                nextButton.textContent = 'Next →';
-                nextButton.disabled = index === questionsData.length - 1;
-                backToResultsButton.classList.remove('hidden');
-                endExamButtonFooter.classList.add('hidden');
-                examTitleEl.textContent = "Reviewing Question";
-                flagButton.disabled = true;
-                flagButton.classList.remove('flagged'); // Ensure flag isn't stuck visually
-                if(flaggedQuestions[index]) flagButton.classList.add('flagged'); // Re-apply if it was flagged
-                
-                draggableYes.setAttribute('draggable', 'false'); 
-                draggableNo.setAttribute('draggable', 'false');
-                draggableYes.style.cursor = 'default';
-                draggableNo.style.cursor = 'default';
-                 document.getElementById('draggable-options-sidebar').style.display = 'none'; 
-            } else {
-                if (index === questionsData.length - 1) {
-                    nextButton.textContent = 'Finish & Review';
-                } else {
-                    nextButton.textContent = 'Next (Alt+N) →';
-                }
-                nextButton.disabled = false; // Generally enabled unless specific conditions met later
-                backToResultsButton.classList.add('hidden');
-                endExamButtonFooter.classList.remove('hidden');
-                examTitleEl.textContent = "Decision Making";
-                flagButton.disabled = false;
-                draggableYes.setAttribute('draggable', 'true'); 
-                draggableNo.setAttribute('draggable', 'true');
-                draggableYes.style.cursor = 'grab';
-                draggableNo.style.cursor = 'grab';
-                document.getElementById('draggable-options-sidebar').style.display = 'flex'; 
-            }
-            updateFlagButtonAppearance(); // Call this after reviewMode logic might change flag state
-            updateNavigatorHighlight();
-        }
-
-        /** Updates the visual state of an answer box */
-        function updateAnswerBox(answerBoxElement, answer) {
-            answerBoxElement.classList.remove('answered-yes', 'answered-no', 'border-red-500', 'border-green-500', 'border-2'); // Clear previous styles
-            answerBoxElement.textContent = ''; // Clear text
-            if (answer === 'Y') {
-                answerBoxElement.classList.add('answered-yes');
-                answerBoxElement.textContent = 'Yes';
-            } else if (answer === 'N') {
-                answerBoxElement.classList.add('answered-no');
-                answerBoxElement.textContent = 'No';
-            } else {
-                // Optional: Add placeholder text if needed
-                 answerBoxElement.textContent = '...'; // Placeholder for empty
-            }
-        }
-
-        // --- Drag and Drop Handlers ---
-
-        function handleDragStart(event) {
-            // Ensure the event target is the draggable element itself
-            if (!event.target.classList.contains('draggable-option')) return;
-
-            const value = event.target.id === 'draggable-yes' ? 'Y' : 'N';
-            event.dataTransfer.setData('text/plain', value);
-            event.dataTransfer.effectAllowed = 'copy';
-             event.target.style.opacity = '0.7';
-        }
-
-        function handleDragEnd(event) {
-             // Ensure the event target is the draggable element itself
-            if (!event.target.classList.contains('draggable-option')) return;
-             event.target.style.opacity = '1';
-        }
-
-        function handleDragOver(event) {
-            // Allow drop only on statement rows
-            const targetRow = event.target.closest('.statement-row');
-            if (targetRow && !isReviewingFromResults) {
-                event.preventDefault();
-                event.dataTransfer.dropEffect = 'copy';
-                targetRow.classList.add('drag-over'); // Add visual feedback to the row
-            }
-        }
-
-        function handleDragLeave(event) {
-             // Remove visual feedback from the row
-            const targetRow = event.target.closest('.statement-row');
-            if (targetRow) {
-                targetRow.classList.remove('drag-over');
-            }
-        }
-
-        function handleDrop(event) {
-            event.preventDefault();
-            const targetRow = event.target.closest('.statement-row');
-
-            if (!targetRow || isReviewingFromResults) return; // Ensure drop is on a row and not in review
-
-            targetRow.classList.remove('drag-over'); // Remove visual feedback
-
-            const droppedValue = event.dataTransfer.getData('text/plain');
-            const questionIndex = parseInt(targetRow.dataset.qIndex, 10);
-            const statementIndex = parseInt(targetRow.dataset.sIndex, 10);
-
-            if (questionIndex !== currentQuestionIndex) return; // Ensure drop is on current question
-
-            // Store the answer
-            if (!userAnswers[questionIndex]) {
-                userAnswers[questionIndex] = Array(5).fill(null);
-            }
-            userAnswers[questionIndex][statementIndex] = droppedValue;
-
-            // Update the target answer box visually within the row
-            const answerBox = targetRow.querySelector('.statement-answer-box');
-            if (answerBox) {
-                updateAnswerBox(answerBox, droppedValue);
-            }
-
-            // Check if all statements for this question are answered
-            const allAnswered = userAnswers[questionIndex].every(ans => ans !== null);
-            updateNavigatorButtons(allAnswered);
-        }
-
-        // Add drag listeners to draggable options
-        draggableYes.addEventListener('dragstart', handleDragStart);
-        draggableNo.addEventListener('dragstart', handleDragStart);
-        draggableYes.addEventListener('dragend', handleDragEnd); // Restore style on drag end
-        draggableNo.addEventListener('dragend', handleDragEnd);
-
-
-        function showNextQuestion() {
-            // Hide calculator if it's open
-            if (calculatorUI.classList.contains('visible')) {
-                toggleCalculator();
-            }
-            
-            if (isReviewingFromResults) {
-                if (currentQuestionIndex < questionsData.length - 1) {
-                    loadQuestion(currentQuestionIndex + 1, true);
-                }
-            } else {
-                if (currentQuestionIndex === questionsData.length - 1) {
-                    showReviewScreen();
-                } else if (currentQuestionIndex < questionsData.length - 1) {
-                    loadQuestion(currentQuestionIndex + 1);
-                }
-            }
-        }
-
-        function showPrevQuestion() {
-            // Hide calculator if it's open
-            if (calculatorUI.classList.contains('visible')) {
-                toggleCalculator();
-            }
-
-             if (isReviewingFromResults) {
-                 if (currentQuestionIndex > 0) {
-                     loadQuestion(currentQuestionIndex - 1, true);
-                 }
-             }
-             else if (currentQuestionIndex > 0) {
-                loadQuestion(currentQuestionIndex - 1);
-            }
-        }
-
-        function showSetupScreen() {
-            setupScreen.classList.remove('hidden');
-            examScreen.classList.add('hidden');
-            reviewScreen.classList.add('hidden');
-            resultsScreen.classList.add('hidden');
-            appContainer.classList.remove('flex', 'flex-col');
-            currentlyDisplayedPremiseIndex = -1;
-            if (setupQuestionCountEl) setupQuestionCountEl.textContent = questionsData.length;
-            if (setupMaxScoreEl) setupMaxScoreEl.textContent = questionsData.length * 2;
-        }
-
-        function showExamScreen() {
-            setupScreen.classList.add('hidden');
-            examScreen.classList.remove('hidden');
-            examScreen.classList.add('flex');
-            reviewScreen.classList.add('hidden');
-            resultsScreen.classList.add('hidden');
-            // appContainer.classList.add('flex', 'flex-col'); // Not strictly necessary based on CSS
-            currentlyDisplayedPremiseIndex = -1;
-            // examStartTime = new Date(); // MOVED TO startTimer()
-            if (timerDisplay) timerDisplay.classList.remove('hidden');
-            if (document.getElementById('draggable-options-sidebar')) {
-                 document.getElementById('draggable-options-sidebar').style.display = 'flex';
-            }
-            appContainer.scrollTop = 0;
-        }
-
-        function showReviewScreen(filterFlagged = false) {
-            recordQuestionTime(); 
-            currentQuestionStartTime = null; 
-            lastQuestionIndexForTiming = -1;
-            stopTimer(); 
-
-            // Hide calculator if it's visible
-            if (calculatorUI.classList.contains('visible')) {
-                toggleCalculator();
-            }
-
-            examScreen.classList.add('hidden');
-            reviewScreen.classList.remove('hidden');
-            reviewScreen.classList.add('flex'); // Make sure review screen is displayed as flex
-            resultsScreen.classList.add('hidden');
-            setupScreen.classList.add('hidden');
-            // appContainer.classList.add('flex', 'flex-col'); // Ensure container has flex-col if needed for layout
-
-            reviewGrid.innerHTML = ''; // Clear previous review buttons
-            questionsData.forEach((_, index) => {
-                 if (filterFlagged && !flaggedQuestions[index]) {
-                     return; // Skip if filtering flagged and this one isn't flagged
-                 }
-
-                const button = document.createElement('button');
-                button.textContent = index + 1;
-                button.className = 'review-grid-button'; // Use specific class for review grid
-
-                const isAnswered = userAnswers[index] && userAnswers[index].some(ans => ans !== null);
-
-                if (isAnswered) {
-                    button.classList.add('review-grid-button-answered');
-                } else {
-                     button.classList.add('review-grid-button-unanswered');
-                }
-
-                if (flaggedQuestions[index]) {
-                    button.classList.add('review-flagged'); // 'review-flagged' is from DM sylls 1
-                }
-
-                button.onclick = () => {
-                    reviewScreen.classList.add('hidden');
-                    reviewScreen.classList.remove('flex'); // Hide review screen
-                    showExamScreen(); // Show exam screen
-                    loadQuestion(index); // Load the selected question in normal mode
-                };
-                reviewGrid.appendChild(button);
-            });
-
-            if (filterFlaggedButton) { // Ensure button exists
-                 filterFlaggedButton.textContent = filterFlagged ? 'Show All Questions' : 'Show Flagged Only';
-            }
-            appContainer.scrollTop = 0; // Scroll to top of app container
-        }
-
-        function populateNavigator() {
-            navigatorGrid.innerHTML = '';
-            questionsData.forEach((_, index) => {
-                const button = document.createElement('button');
-                button.textContent = index + 1;
-                // Using review-grid-button for consistent styling as in DM Sylls 1 for navigator
-                button.className = 'review-grid-button'; 
-
-                const isAnswered = userAnswers[index] && userAnswers[index].some(ans => ans !== null);
-
-                if (isAnswered) {
-                    button.classList.add('review-grid-button-answered');
-                } else {
-                     button.classList.add('review-grid-button-unanswered');
-                }
-
-                if (flaggedQuestions[index]) {
-                    button.classList.add('review-flagged'); 
-                }
-                
-                button.onclick = () => {
-                    navigatorModal.classList.remove('flex');
-                    navigatorModal.classList.add('hidden');
-                    if (calculatorUI.classList.contains('visible')) { // Close calculator if open
-                        toggleCalculator();
-                    }
-                    loadQuestion(index, isReviewingFromResults); // Pass reviewMode state
-                };
-                navigatorGrid.appendChild(button);
-            });
-        }
-
-        function updateNavigatorButtons(questionFullyAnswered = false) {
-            if (!navigatorGrid) return;
-            const buttons = navigatorGrid.querySelectorAll('button');
-            buttons.forEach(button => {
-                const index = parseInt(button.textContent, 10) - 1; // Assuming button text is 1-based index
-                button.classList.remove('review-grid-button-answered', 'review-grid-button-unanswered', 'nav-current', 'review-flagged');
-
-                const isAnswered = userAnswers[index] && userAnswers[index].some(ans => ans !== null);
-                if (isAnswered) {
-                    button.classList.add('review-grid-button-answered');
-                } else {
-                    button.classList.add('review-grid-button-unanswered');
-                }
-
-                if (index === currentQuestionIndex && !isReviewingFromResults) { // Current only in exam mode
-                    button.classList.add('nav-current'); // nav-current for current, ensure this style is defined or adapted
-                }
-                if (flaggedQuestions[index]) {
-                    button.classList.add('review-flagged');
-                }
-            });
-        }
-
-         function updateNavigatorHighlight() {
-             const buttons = navigatorGrid.querySelectorAll('button');
-             buttons.forEach((button) => {
-                 const index = parseInt(button.textContent, 10) - 1;
-                 button.classList.remove('nav-current');
-                 if (index === currentQuestionIndex && !isReviewingFromResults) { 
-                     button.classList.add('nav-current');
-                 }
-             });
-         }
-
-        function showResultsScreen() {
-            examEndTime = new Date();
-
-            examScreen.classList.add('hidden');
-            reviewScreen.classList.add('hidden');
-            reviewScreen.classList.remove('flex');
-            resultsScreen.classList.remove('hidden');
-            resultsScreen.classList.add('flex');
-            setupScreen.classList.add('hidden');
-            appContainer.classList.add('flex', 'flex-col');
-
-            let totalScore = 0;
-            const resultsOverviewGrid = document.getElementById('results-overview-grid');
-            resultsOverviewGrid.innerHTML = ''; // Clear previous results
-
-            questionsData.forEach((qData, index) => {
-                const userAnsArray = userAnswers[index] || Array(5).fill(null);
-                const correctAnsArray = qData.correctAnswers;
-                let correctStatements = 0;
-
-                userAnsArray.forEach((userAns, stmtIndex) => {
-                    if (userAns !== null && userAns === correctAnsArray[stmtIndex]) {
-                        correctStatements++;
-                    }
-                });
-
-                let points = 0;
-                let pointsClass = 'incorrect-0pts';
-
-                if (correctStatements === 5) {
-                    points = 2;
-                    pointsClass = 'correct-2pts';
-                } else if (correctStatements === 4) {
-                    points = 1;
-                    pointsClass = 'correct-1pt';
-                }
-                totalScore += points;
-
-                const timeForQuestionMs = questionTimings[index] || 0;
-                const timeForQuestionSec = Math.round(timeForQuestionMs / 1000);
-
-                const resultItem = document.createElement('div');
-                resultItem.classList.add('result-summary-item', 'relative');
-                if (correctStatements === 5) {
-                    resultItem.style.backgroundColor = '#dcfce7'; // green-100
-                    resultItem.style.borderColor = '#22c55e'; // green-500
-                } else if (correctStatements === 4) {
-                    resultItem.style.backgroundColor = '#fef3c7'; // yellow-100 (for orange effect)
-                    resultItem.style.borderColor = '#f59e0b'; // amber-500 (orange)
-                } else {
-                    resultItem.style.backgroundColor = '#fee2e2'; // red-100
-                    resultItem.style.borderColor = '#ef4444'; // red-500
-                }
-                resultItem.style.borderWidth = '1px';
-                resultItem.style.borderStyle = 'solid';
-
-                if (flaggedQuestions[index]) {
-                    resultItem.classList.add('flagged-result');
-                }
-                resultItem.dataset.index = index;
-                resultItem.title = `Click to review Question ${index + 1}`;
-
-                let statementsTooltipHtml = '<div class="tooltip-text">';
-                qData.statements.forEach((stmtText, stmtIndex) => {
-                    const userAns = userAnsArray[stmtIndex];
-                    const correctAns = correctAnsArray[stmtIndex];
-                    const isStmtCorrect = userAns === correctAns;
-                    statementsTooltipHtml += `<p class='${isStmtCorrect ? "text-green-300" : (userAns ? "text-red-300" : "text-gray-400")}'>${stmtIndex + 1}. Your: ${userAns || '-'} | Ans: ${correctAns}</p>`;
-                });
-                statementsTooltipHtml += '</div>';
-
-                resultItem.innerHTML = `
-                    <p class="result-summary-points ${pointsClass}">${points}pt</p>
-                    <p class="result-summary-qnum">Q${index + 1} ${flaggedQuestions[index] ? '&#128681;' : ''}</p> 
-                    <p class="result-summary-statements">(${correctStatements}/5 correct)</p>
-                    <p class="text-xs text-gray-500 mt-1">Time: ${timeForQuestionSec}s</p>
-                    ${statementsTooltipHtml}
-                `;
-
-                resultItem.addEventListener('click', () => {
-                    revisitQuestionFromResults(index);
-                });
-                resultsOverviewGrid.appendChild(resultItem);
-            });
-
-            scoreEl.textContent = totalScore;
-            totalScorePossibleEl.textContent = questionsData.length * 2;
-            const timeDiff = examEndTime - examStartTime;
-            timeTakenEl.textContent = formatTimeDifference(timeDiff);
-        }
-
-        function endExamAndShowResults() {
-            recordQuestionTime(); 
-            stopTimer(); 
-            examEndTime = new Date();
-            saveResultsToFirebase();
-            showResultsScreen();
-            reviewScreen.classList.add('hidden'); 
-            examScreen.classList.add('hidden'); 
-            resultsScreen.classList.remove('hidden'); 
-            if (timerDisplay) timerDisplay.classList.add('hidden'); 
-            appContainer.scrollTop = 0;
-        }
-
+        // --- Event Listeners ---
         startButton.addEventListener('click', () => {
-            // userName = nameInput.value.trim(); // Ensure this is commented out or removed
             userGoal = goalInput.value.trim();
             userFocusArea = focusAreaInput.value.trim();
 
@@ -1645,6 +999,9 @@
             populateNavigator(); // Populate navigator on start
             // updateNavigatorButtons(); // Initial update for navigator, populateNavigator should handle this
             startTimer(); 
+            makeCalculatorDraggable(); // Initialize draggable calculator
+            // Initialize calculator display
+            clearCalculator(true); // Clear display and memory on start
         });
 
         nextButton.addEventListener('click', showNextQuestion);
@@ -1672,16 +1029,42 @@
             button.addEventListener('click', () => {
                 const value = button.dataset.calcValue;
                 const action = button.dataset.calcAction;
-                if (value !== undefined) { 
-                    if (value === '.') { inputDecimal(); } 
-                    else { inputDigit(value); }
-                } else if (action) { 
-                    // Corrected logic for operators to use 'value' from dataset for +,-,*,/
-                    if (['+', '-', '*', '/'].includes(button.dataset.calcValue)) { handleOperator(button.dataset.calcValue); } 
-                    else if (action === 'equals') { calculate(); } 
-                    else if (action === 'clear') { clearCalculator(); } 
-                    else if (['m+', 'm-', 'mrc'].includes(action)) { handleMemory(action); } 
-                    else if (['sqrt', 'percent', 'negate', 'backspace'].includes(action)) { handleSpecialFunction(action); }
+
+                if (value) { // Digit or decimal
+                    if (value === '.') {
+                        inputDecimal();
+                    } else {
+                        inputDigit(value);
+                    }
+                } else if (action) { // Operator or special function
+                    switch (action) {
+                        case 'clear': // This is ON/C
+                            if (calcMrcPressedOnce && calcCurrentInput === calcMemory.toString()) { // If MRC was just pressed and display shows memory
+                                 clearCalculator(false); // Clear display, keep memory
+                            } else if (calcCurrentInput !== '0') { // If display is not 0, clear current input (CE)
+                                 calcCurrentInput = '0';
+                                 updateCalcDisplay();
+                                 calcShouldResetDisplay = false; // Allow further input on 0
+                            } else { // If display is 0, clear all (C), including memory potentially
+                                 clearCalculator(true); // Full clear including memory
+                            }
+                            calcMrcPressedOnce = false; // Reset MRC flag on any clear operation
+                            break;
+                        case 'equals':
+                            performCalculation();
+                            calcShouldResetDisplay = true; // Next number starts new calculation
+                            break;
+                        case 'm+':
+                        case 'm-':
+                        case 'mrc':
+                            handleMemory(action);
+                            break;
+                        // Operators (+, -, *, /) are handled by their data-calc-value and class 'operator'
+                    }
+                } 
+                // Handle direct operator buttons if any are not covered by calc-value approach
+                if (button.classList.contains('operator') && value) { // e.g. <button class="operator" data-calc-value="+">+</button>
+                     handleCalcOperator(value);
                 }
             });
         });
@@ -1702,8 +1085,8 @@
                  if (e.key >= '0' && e.key <= '9') { e.preventDefault(); inputDigit(e.key); return; }
                  if (e.key === '.') { e.preventDefault(); inputDecimal(); return; }
                  // Corrected to check e.key directly for operators
-                 if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') { e.preventDefault(); handleOperator(e.key); return; } 
-                 if (e.key === 'Enter' || e.key === '=') { e.preventDefault(); calculate(); return; }
+                 if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') { e.preventDefault(); handleCalcOperator(e.key); return; } 
+                 if (e.key === 'Enter' || e.key === '=') { e.preventDefault(); performCalculation(); return; }
                  if (e.key === 'Escape') { e.preventDefault(); toggleCalculator(); return; }
                  if (e.key === 'Backspace') { e.preventDefault(); handleSpecialFunction('backspace'); return; }
              }
@@ -1885,6 +1268,31 @@
                 });
         }
         // --- END OF SAVE RESULTS FUNCTION ---
+
+        function handleEndExamFooterClick() {
+            showReviewScreen();
+        }
+
+        // --- PDF Generation Function ---
+        function generatePDF() {
+            const doc = new jsPDF();
+            doc.setFontSize(16);
+            doc.text("UCAT Decision Making Practice Results", 14, 10);
+            doc.setFontSize(12);
+            doc.text(`Date: ${new Date().toLocaleString()}`, 14, 20);
+            doc.setFontSize(12);
+            doc.text(`Total Score: ${scoreEl.textContent} / ${totalScorePossibleEl.textContent}`, 14, 30);
+            doc.setFontSize(12);
+            doc.text(`Time Taken: ${timeTakenEl.textContent}`, 14, 40);
+            doc.setFontSize(12);
+            doc.text(`Focus Rating: ${focusRatingInput.value}`, 14, 50);
+            doc.setFontSize(12);
+            doc.text(`Reflection: ${reflectionText.value.trim()}`, 14, 60);
+
+            // Add more details as needed
+
+            doc.save("UCAT_Decision_Making_Practice_Results.pdf");
+        }
 
     </script>
 
