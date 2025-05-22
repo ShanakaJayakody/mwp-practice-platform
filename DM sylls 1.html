@@ -1311,7 +1311,9 @@
                 document.getElementById('draggable-options-sidebar').style.display = 'flex'; 
             }
             updateFlagButtonAppearance(); // Call this after reviewMode logic might change flag state
-            updateNavigatorHighlight();
+            if (!reviewMode) { // Only update navigator highlight if not in review mode from dashboard
+                updateNavigatorHighlight();
+            }
         }
 
 
