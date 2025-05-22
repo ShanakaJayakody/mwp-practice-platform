@@ -587,7 +587,7 @@
         /* Welcome Message Styling & Animation */
         .animated-welcome-text {
             position: relative;
-            animation: slideInFromLeft 0.8s ease-out forwards;
+            /* animation: slideInFromLeft 0.8s ease-out forwards; */ /* Applied by JS */
             opacity: 0; /* Initial state for animation */
             white-space: nowrap; /* Prevent wrapping during animation */
             display: inline-block; /* Ensure it behaves like a block for animation but flows okay if text wraps on smaller screens */
@@ -1535,10 +1535,13 @@
                     contentToShow = homeContent;
                     // Reset and re-trigger animation for welcome text if it exists
                     if (animatedWelcomeText) {
-                        animatedWelcomeText.style.animation = 'none';
+                        animatedWelcomeText.style.animation = 'none'; // Remove any existing animation
+                        animatedWelcomeText.style.opacity = '0'; // Reset to initial state
+                        animatedWelcomeText.style.transform = 'translateX(-60px)'; // Reset to initial position
                         animatedWelcomeText.offsetHeight; /* trigger reflow */
-                        animatedWelcomeText.style.animation = null; 
                         animatedWelcomeText.style.animation = 'slideInFromLeft 0.8s ease-out forwards';
+                        animatedWelcomeText.style.opacity = ''; // Let animation control opacity
+                        animatedWelcomeText.style.transform = ''; // Let animation control transform
                     }
                 } else if (contentId === 'qr') {
                     contentToShow = qrTestsContent;
