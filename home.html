@@ -638,11 +638,13 @@
             measurementId: "G-4M3ED641M9"
         };
 
+        let db; // Declare db in a wider scope
+
         try {
             if (!firebase.apps.length) {
                 firebase.initializeApp(firebaseConfig);
             }
-            const db = firebase.firestore();
+            db = firebase.firestore(); // Assign the Firestore instance
             console.log("Firebase and Firestore initialized successfully for home.html");
         } catch (error) {
             console.error("Firebase initialization error for home.html:", error);
