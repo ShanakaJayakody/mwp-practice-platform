@@ -1189,6 +1189,28 @@
           measurementId: "G-4M3ED641M9"
         };
 
+        // Declare db in global scope
+        let db;
+        
+        // Variable to store all user results
+        let allUserResults = [];
+        
+        // Default sort and filter options
+        let currentSortOption = 'date-desc';
+        let currentFilterOption = 'all';
+        
+        // Helper function to determine section from exam name
+        function getSectionFromExamName(examName) {
+            if (!examName) return '';
+            const lowerName = examName.toLowerCase();
+            if (lowerName.includes('qr') || lowerName.includes('quantitative')) return 'qr';
+            if (lowerName.includes('dm') || lowerName.includes('decision making') || lowerName.includes('syllogisms')) return 'dm';
+            if (lowerName.includes('vr') || lowerName.includes('verbal reasoning')) return 'vr';
+            if (lowerName.includes('ar') || lowerName.includes('abstract reasoning')) return 'ar';
+            if (lowerName.includes('sjt') || lowerName.includes('situational judgement')) return 'sjt';
+            return '';
+        }
+        
         // Initialize Firebase with better error handling
         try {
             // Check if Firebase is already initialized
@@ -1196,7 +1218,7 @@
                 firebase.initializeApp(firebaseConfig);
             }
             // Explicitly initialize Firestore
-            const db = firebase.firestore();
+            db = firebase.firestore();
             console.log("Firebase and Firestore initialized successfully");
         } catch (error) {
             console.error("Firebase initialization error:", error);
