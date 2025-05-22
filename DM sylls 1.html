@@ -468,13 +468,13 @@
                 <h1 class="text-2xl md:text-3xl font-bold text-blue-600">Decision Making Syllogisms Worksheet 1</h1>
                 <p class="text-gray-600 mt-2">Prepare for the UCAT DM section.</p>
                  <p class="text-sm text-gray-500 mt-4">
-                     This section contains <strong>5 questions</strong> with 5 statements each. Maximum score is <strong>25 points</strong>. You have <strong>6 minutes</strong> to complete it.
+                     This section contains <strong>5 questions</strong> with 5 statements each. Maximum score is <strong>10 points</strong> (2 points per question). You have <strong>6 minutes</strong> to complete it.
                  </p>
             </div>
             <div class="space-y-4 w-full max-w-md">
                 <div>
-                    <label for="goal" class="block text-sm font-medium text-gray-700">Goal (Score out of 25):</label>
-                    <input type="number" id="goal" name="goal" min="0" max="25" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., 20">
+                    <label for="goal" class="block text-sm font-medium text-gray-700">Goal (Score out of 10):</label>
+                    <input type="number" id="goal" name="goal" min="0" max="10" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., 8">
                 </div>
                 <div>
                     <label for="focus-area" class="block text-sm font-medium text-gray-700">Area of Focus / Intention For Practice:</label>
@@ -1163,10 +1163,10 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
             if (setupQuestionCountEl) setupQuestionCountEl.textContent = "5"; // Change to 5 questions
             if (setupTimeLimitEl) setupTimeLimitEl.textContent = `6 minutes`; // Change to 6 minutes
             if (goalInput) {
-                goalInput.max = 25; // Change max goal to 25
+                goalInput.max = 10; // Change max goal to 10
                 goalInput.value = userGoal;
                 const goalLabel = document.querySelector('label[for="goal"]');
-                if (goalLabel) goalLabel.textContent = `Goal (Score out of 25):`; // Change label
+                if (goalLabel) goalLabel.textContent = `Goal (Score out of 10):`; // Change label
             }
             if (focusAreaInput) {
                 focusAreaInput.value = userFocusArea;
@@ -1296,73 +1296,92 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
             appContainer.classList.add('flex', 'flex-col');
 
             let totalScore = 0;
-            let totalStatements = 0;
             resultsDetailsGrid.innerHTML = ''; 
 
+            // Add partially-correct-box style if not already defined
+            if (!document.getElementById('partially-correct-style')) {
+                const style = document.createElement('style');
+                style.id = 'partially-correct-style';
+                style.textContent = `
+                    .partially-correct-box { 
+                        background-color: #fb923c; /* Orange color */
+                        border: 2px solid #ea580c;
+                        color: white; 
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
             questions.forEach((qData, index) => {
-                // Create a section for each question
-                const questionHeader = document.createElement('div');
-                questionHeader.className = 'col-span-full text-lg font-semibold mt-4 mb-2';
-                questionHeader.textContent = `Question ${index + 1}`;
-                resultsDetailsGrid.appendChild(questionHeader);
-                
-                // Add results for each statement
+                // Count correct answers for this question
+                let correctCount = 0;
                 qData.statements.forEach((statement, statementIndex) => {
-                    totalStatements++;
                     const userAnswer = userAnswers[index] && userAnswers[index][statementIndex] ? userAnswers[index][statementIndex] : null;
                     const correctAnswer = qData.correctAnswers[statementIndex];
-                    const isCorrect = userAnswer === correctAnswer;
-                    if (isCorrect) totalScore++;
-
-                    const timeSpentMs = questionTimes[index] || 0;
-                    const timeSpentSec = Math.round(timeSpentMs / 1000);
-
-                    const summaryItem = document.createElement('div');
-                    summaryItem.classList.add('result-summary-item');
-
-                    const summaryBox = document.createElement('div');
-                    summaryBox.classList.add('result-summary-box');
-                    if (userAnswer === null || userAnswer === undefined) {
-                        summaryBox.classList.add('not-answered-box');
-                    } else {
-                        summaryBox.classList.add(isCorrect ? 'correct-box' : 'incorrect-box');
+                    if (userAnswer === correctAnswer) {
+                        correctCount++;
                     }
-                    summaryBox.dataset.index = index;
-                    summaryBox.dataset.statementIndex = statementIndex;
-                    summaryBox.title = `Click to review Question ${index + 1}, Statement ${statementIndex + 1}`;
-
-                    // Show answer instead of time in the summary box
-                    const answerDisplay = document.createElement('span');
-                    answerDisplay.classList.add('time-display-in-box');
-                    answerDisplay.textContent = userAnswer || "—";
-                    summaryBox.appendChild(answerDisplay);
-
-                    const numberLabel = document.createElement('div');
-                    numberLabel.classList.add('question-number-label');
-                    numberLabel.textContent = `Q${index + 1}.${statementIndex + 1}`;
-
-                    summaryBox.addEventListener('click', () => {
-                        revisitQuestionFromResults(index);
-                    });
-
-                    summaryItem.appendChild(summaryBox);
-                    summaryItem.appendChild(numberLabel);
-                    resultsDetailsGrid.appendChild(summaryItem);
                 });
+                
+                // Apply scoring rules
+                let questionScore = 0;
+                let boxClass = '';
+                
+                if (correctCount === 5) {
+                    questionScore = 2;
+                    boxClass = 'correct-box';
+                } else if (correctCount === 4) {
+                    questionScore = 1;
+                    boxClass = 'partially-correct-box';
+                } else {
+                    questionScore = 0;
+                    boxClass = 'incorrect-box';
+                }
+                
+                totalScore += questionScore;
+
+                const timeSpentMs = questionTimes[index] || 0;
+                const timeSpentSec = Math.round(timeSpentMs / 1000);
+
+                const summaryItem = document.createElement('div');
+                summaryItem.classList.add('result-summary-item');
+
+                const summaryBox = document.createElement('div');
+                summaryBox.classList.add('result-summary-box', boxClass);
+                summaryBox.dataset.index = index;
+                summaryBox.title = `Click to review Question ${index + 1}`;
+
+                // Show score instead of time in the summary box
+                const scoreDisplay = document.createElement('span');
+                scoreDisplay.classList.add('time-display-in-box');
+                scoreDisplay.textContent = `${correctCount}/5`;
+                summaryBox.appendChild(scoreDisplay);
+
+                const numberLabel = document.createElement('div');
+                numberLabel.classList.add('question-number-label');
+                numberLabel.textContent = `Q${index + 1}`;
+
+                summaryBox.addEventListener('click', () => {
+                    revisitQuestionFromResults(index);
+                });
+
+                summaryItem.appendChild(summaryBox);
+                summaryItem.appendChild(numberLabel);
+                resultsDetailsGrid.appendChild(summaryItem);
             });
 
             scoreEl.textContent = totalScore;
             const timeDiff = practiceSessionEndTime - practiceSessionStartTime;
             timeTakenEl.textContent = formatTimeDifference(timeDiff);
             
-            // Update total score possible on results screen
+            // Update total score possible on results screen (10 points maximum: 5 questions × 2 points)
             const totalScorePossibleEl = document.getElementById('total-score-possible');
             if (totalScorePossibleEl) {
-                totalScorePossibleEl.textContent = totalStatements.toString();
+                totalScorePossibleEl.textContent = "10";
             } else {
                 const scoreDisplayParent = scoreEl.parentElement;
-                if (scoreDisplayParent && !scoreDisplayParent.textContent.includes(` / ${totalStatements}`)) {
-                     scoreDisplayParent.innerHTML = `Your Score: <span id="score" class="text-blue-700">${totalScore}</span> / ${totalStatements} Points`;
+                if (scoreDisplayParent) {
+                     scoreDisplayParent.innerHTML = `Your Score: <span id="score" class="text-blue-700">${totalScore}</span> / 10 Points`;
                 }
             }
             
@@ -1420,13 +1439,24 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
             questions.forEach((qData, index) => {
                 if (!userAnswers[index]) return;
                 
-                // Check each statement in the question
+                // Count correct answers for this question
+                let correctCount = 0;
                 qData.correctAnswers.forEach((correctAnswer, statementIndex) => {
                     const userAnswer = userAnswers[index][statementIndex];
                     if (userAnswer === correctAnswer) {
-                        score++;
+                        correctCount++;
                     }
                 });
+                
+                // Apply scoring rules:
+                // 5/5 correct = 2 points
+                // 4/5 correct = 1 point
+                // 3 or fewer correct = 0 points
+                if (correctCount === 5) {
+                    score += 2;
+                } else if (correctCount === 4) {
+                    score += 1;
+                }
             });
             return score;
         }
