@@ -1800,237 +1800,104 @@
         }
 
         // Function to load user results from Firebase
-        function loadUserResults() {
-            console.log("Loading user results...");
-            
-            const resultsLoading = document.getElementById('results-loading');
-            const resultsError = document.getElementById('results-error');
-            const resultsEmpty = document.getElementById('results-empty');
-            const resultsSummary = document.getElementById('results-summary');
-            const resultDetail = document.getElementById('result-detail');
-            
-            // Show loading, hide other sections
-            resultsLoading.classList.remove('hidden');
-            resultsError.classList.add('hidden');
-            resultsEmpty.classList.add('hidden');
-            resultsSummary.classList.add('hidden');
-            resultDetail.classList.add('hidden');
-            
-            // Check authentication
-            if (!firebase.auth().currentUser) {
-                console.log("No user logged in, cannot load results");
+        async function loadUserResults(userIdToLoad) {
+            if (!db) {
+                console.error("Firestore (db) is not initialized. Cannot load results.");
                 resultsLoading.classList.add('hidden');
                 resultsError.classList.remove('hidden');
+                resultsSummary.classList.add('hidden');
+                resultsEmpty.classList.add('hidden');
                 return;
             }
-            
+            console.log("[Dashboard] Loading results for userId:", userIdToLoad);
+            resultsLoading.classList.remove('hidden');
+            resultsError.classList.add('hidden');
+            resultsSummary.classList.add('hidden');
+            resultsEmpty.classList.add('hidden');
+
             try {
-                // Check if Firestore is available and retry if needed
-                const maxRetries = 3;
-                let retryCount = 0;
-                
-                function attemptFirestoreConnection() {
-                    if (retryCount >= maxRetries) {
-                        console.error("Max retries reached for Firestore connection");
-                        resultsLoading.classList.add('hidden');
-                        resultsError.classList.remove('hidden');
-                        return;
+                const querySnapshot = await db.collection("performanceSubmissions")
+                                          .where("userId", "==", userIdToLoad)
+                                          .orderBy("submissionTimestamp", "desc")
+                                          .get();
+
+                console.log(`[Dashboard] Found ${querySnapshot.size} results for user.`);
+
+                if (querySnapshot.empty) {
+                    resultsLoading.classList.add('hidden');
+                    resultsEmpty.classList.remove('hidden');
+                    return;
+                }
+
+                let allResults = [];
+                querySnapshot.forEach(doc => {
+                    const docData = doc.data();
+                    const docId = doc.id;
+                    console.log("[Dashboard] Processing docId:", docId, "Data:", JSON.parse(JSON.stringify(docData)));
+
+                    let score = parseFloat(docData.score);
+                    let totalPossible = parseFloat(docData.totalPossibleScore);
+                    const examName = docData.examName || 'Unknown Test';
+                    const section = getSectionFromExamName(examName);
+
+                    // DM score recalculation logic if score is 0 but questions exist
+                    if (section === 'dm' && score === 0 && docData.questions && docData.questions.length > 0) {
+                        console.log(`[Dashboard] DM Test (${examName}, id: ${docId}) has 0 score, recalculating from questions array.`);
+                        let recalculatedScore = 0;
+                        docData.questions.forEach(q => {
+                            if (q.points) recalculatedScore += q.points; 
+                        });
+                        score = recalculatedScore;
+                        // totalPossible for DM is usually questions.length * 2, ensure this is reflected
+                        // If totalPossibleScore is missing or 0, derive it for DM.
+                        if (!totalPossible || totalPossible === 0) {
+                            totalPossible = docData.questions.length * 2;
+                            console.log(`[Dashboard] DM Test (${examName}, id: ${docId}) totalPossibleScore was missing/0, set to: ${totalPossible}`);
+                        }
+                        console.log(`[Dashboard] DM Test (${examName}, id: ${docId}) recalculated score: ${score}/${totalPossible}`);
+                    } else if (section === 'dm') {
+                        console.log(`[Dashboard] DM Test (${examName}, id: ${docId}) score: ${score}, totalPossible: ${totalPossible}`);
+                         // Ensure totalPossible is correct for DM even if score isn't 0
+                        if ((!totalPossible || totalPossible === 0) && docData.questions && docData.questions.length > 0) {
+                            totalPossible = docData.questions.length * 2;
+                             console.log(`[Dashboard] DM Test (${examName}, id: ${docId}) totalPossibleScore was missing/0 (score was not 0), set to: ${totalPossible}`);
+                        }
+                    }
+
+                    // Fallback for totalPossible if still not set (e.g. for older QR/VR data)
+                    if (isNaN(totalPossible) || totalPossible === 0) {
+                        if (docData.totalQuestions) { // Older format might have totalQuestions
+                            totalPossible = parseFloat(docData.totalQuestions);
+                        } else if (docData.questions && docData.questions.length > 0 && section !== 'dm') {
+                            // For non-DM, if questions array exists, assume 1 point per question if totalPossibleScore is missing
+                            totalPossible = docData.questions.length;
+                        }
                     }
                     
-                    if (!firebase.firestore) {
-                        console.error(`Firestore is not initialized, retrying... (${retryCount + 1}/${maxRetries})`);
-                        retryCount++;
-                        // Wait a bit before retrying
-                        setTimeout(attemptFirestoreConnection, 1000);
-                        return;
-                    }
-                    
-                    // Firestore is available, proceed with fetching data
-                    fetchUserResults();
-                }
-                
-                function fetchUserResults() {
-                    const db = firebase.firestore();
-                    const currentUser = firebase.auth().currentUser;
-                    const currentUserId = currentUser.uid;
+                    const percentage = (totalPossible > 0 && !isNaN(score)) ? (score / totalPossible) * 100 : 0;
 
-                    console.log("Fetching results for user ID:", currentUserId);
+                    allResults.push({
+                        id: docId, // Store the document ID
+                        ...docData,
+                        score: !isNaN(score) ? score : 0, // Ensure score is a number
+                        totalPossibleScore: !isNaN(totalPossible) ? totalPossible : 0, // Ensure totalPossibleScore is a number
+                        percentage: percentage,
+                        submissionTimestamp: docData.submissionTimestamp ? docData.submissionTimestamp.toDate() : new Date(0) // Convert to Date object
+                    });
+                });
 
-                    let query = db.collection("performanceSubmissions")
-                                  .where("userId", "==", currentUserId)
-                                  .orderBy("submissionTimestamp", "desc");
+                allUserResults = allResults; // Store all results globally for filtering/sorting
+                console.log("[Dashboard] All processed results:", JSON.parse(JSON.stringify(allUserResults)));
+                updateResultsSummary(allUserResults);
+                populateResultsIntoSections(allUserResults, currentSortOption, currentFilterOption);
+                resultsLoading.classList.add('hidden');
+                resultsSummary.classList.remove('hidden');
 
-                    query.get()
-                      .then((querySnapshot) => {
-                          console.log("Query snapshot received based on userId.");
-                          resultsLoading.classList.add('hidden');
-                          
-                          const results = [];
-                          querySnapshot.forEach((doc) => {
-                              const data = doc.data();
-                              results.push({
-                                  id: doc.id,
-                                  ...data,
-                                  // Ensure date is a Date object, handle potential Firestore Timestamp
-                                  date: data.submissionTimestamp && data.submissionTimestamp.toDate ? data.submissionTimestamp.toDate() : new Date(data.submissionTimestamp || Date.now())
-                              });
-                          });
-                          
-                          console.log(`Found ${results.length} results for userId ${currentUserId}`);
-                          
-                          // Add debug logging to see the actual scores
-                          results.forEach(result => {
-                              // Force to number type to handle possible string scores
-                              result.score = typeof result.score === 'string' ? parseInt(result.score) || 0 : (result.score || 0);
-                              
-                              // Also ensure the correct format for totalPossibleScore/totalQuestions
-                              if (result.totalPossibleScore) {
-                                  result.totalPossibleScore = typeof result.totalPossibleScore === 'string' 
-                                      ? parseInt(result.totalPossibleScore) || 0 
-                                      : (result.totalPossibleScore || 0);
-                              }
-                              
-                              if (result.totalQuestions) {
-                                  result.totalQuestions = typeof result.totalQuestions === 'string' 
-                                      ? parseInt(result.totalQuestions) || 0 
-                                      : (result.totalQuestions || 0);
-                              }
-
-                              // If it's a DM test and score is 0, try to calculate from questions array
-                              const examNameLower = result.examName ? result.examName.toLowerCase() : '';
-                              if ((examNameLower.includes('dm') || examNameLower.includes('decision making') || examNameLower.includes('syllogisms')) && result.score === 0 && result.questions && Array.isArray(result.questions)) {
-                                  let calculatedScore = 0;
-                                  let calculatedTotalPossible = 0;
-                                  result.questions.forEach(q => {
-                                      if (q.points !== undefined) {
-                                          calculatedScore += (typeof q.points === 'string' ? parseInt(q.points) : q.points) || 0;
-                                      }
-                                      // Assuming each question item implies a certain number of possible points, e.g., 2 for syllogisms
-                                      // Or if totalPossibleScore is already set for the main result, use that as a fallback for items.
-                                      // For syllogisms, each question might have 2 possible points if it has statements.
-                                      if (q.statements && Array.isArray(q.statements)) {
-                                          calculatedTotalPossible += 2; // Common for syllogisms
-                                      } else {
-                                          calculatedTotalPossible += result.totalPossibleScore ? (result.totalPossibleScore / result.questions.length) : 1; // Fallback
-                                      }
-                                  });
-                                  result.score = calculatedScore;
-                                  // Update totalPossibleScore if it wasn't set or seems incorrect for DM
-                                  if (!result.totalPossibleScore || result.totalPossibleScore === 0) {
-                                     result.totalPossibleScore = calculatedTotalPossible;
-                                  }
-                                  console.log(`DM Result ${result.id}: Recalculated score=${result.score}, totalPossible=${result.totalPossibleScore}`);
-                              }
-                              
-                              const totalPossible = parseInt(result.totalPossibleScore || result.totalQuestions);
-                              const percentage = !isNaN(result.score) && !isNaN(totalPossible) && totalPossible > 0 ? 
-                                  (result.score / totalPossible) * 100 : 0;
-                              console.log(`Result ${result.id}: Score=${result.score}, TotalPossible=${totalPossible}, Percentage=${percentage.toFixed(1)}%`);
-                          });
-                          
-                          if (results.length > 0) {
-                              updateResultsSummary(results); // Keep overall summary
-                              populateResultsIntoSections(results); // New function to populate accordions
-                              resultsSummary.classList.remove('hidden');
-                              resultDetail.classList.add('hidden'); // Explicitly hide detail view
-                              
-                              const resultsFilter = document.getElementById('results-filter');
-                              const resultsSort = document.getElementById('results-sort');
-                              
-                              // Remove old listeners to prevent multiple attachments if loadUserResults is called again
-                              resultsFilter.replaceWith(resultsFilter.cloneNode(true));
-                              resultsSort.replaceWith(resultsSort.cloneNode(true));
-                              
-                              // Re-add event listeners to the new cloned elements
-                              document.getElementById('results-filter').addEventListener('change', () => {
-                                  populateResultsIntoSections(results); // Re-populate sections on filter change
-                              });
-                              document.getElementById('results-sort').addEventListener('change', () => {
-                                  populateResultsIntoSections(results); // Re-populate sections on sort change
-                              });
-                              
-                              loadChartJSIfNeeded(() => {
-                                  renderProgressChart(results); // Overall progress chart
-                              });
-                              
-                              // Call openDefaultSection to make sure at least one section is open
-                              const openDefaultSection = () => {
-                                  // First try to find which section has the most results
-                                  const qrCount = document.querySelectorAll('#results-table-body-qr tr').length;
-                                  const dmCount = document.querySelectorAll('#results-table-body-dm tr').length;
-                                  const vrCount = document.querySelectorAll('#results-table-body-vr tr').length;
-                                  
-                                  console.log(`Result counts: QR=${qrCount}, DM=${dmCount}, VR=${vrCount}`);
-                                  
-                                  // Open the section with the most results
-                                  if (qrCount >= dmCount && qrCount >= vrCount && qrCount > 0) {
-                                      openAccordionByCategory('Quantitative');
-                                  } else if (dmCount >= qrCount && dmCount >= vrCount && dmCount > 0) {
-                                      openAccordionByCategory('Decision');
-                                  } else if (vrCount > 0) {
-                                      openAccordionByCategory('Verbal');
-                                  }
-                              };
-                              
-                              const openAccordionByCategory = (category) => {
-                                  const headers = document.querySelectorAll('.section-accordion-header');
-                                  headers.forEach(header => {
-                                      if (header.textContent.includes(category)) {
-                                          const content = header.nextElementSibling;
-                                          if (content && content.classList.contains('hidden')) {
-                                              content.classList.remove('hidden');
-                                              const icon = header.querySelector('svg');
-                                              if (icon) icon.classList.add('rotate-180');
-                                              console.log(`Opening ${category} section`);
-                                          }
-                                      }
-                                  });
-                              };
-                              
-                              // Give time for the DOM to update
-                              setTimeout(openDefaultSection, 300);
-                          } else {
-                              console.log("No results found for this user ID.");
-                              resultsEmpty.classList.remove('hidden');
-                              // Hide all section-specific "no results" messages too initially
-                              document.querySelectorAll('[id^="no-results-"]').forEach(p => p.classList.add('hidden'));
-                          }
-                      })
-                      .catch((error) => {
-                          console.error("Error fetching results by userId:", error);
-                          // Fallback or further error handling can be added here if needed
-                          resultsLoading.classList.add('hidden');
-                          resultsError.classList.remove('hidden');
-                      });
-                }
-                
-                // Start the first attempt
-                attemptFirestoreConnection();
-                
             } catch (error) {
-                console.error("Error in loadUserResults:", error);
+                console.error("[Dashboard] Error loading results: ", error);
                 resultsLoading.classList.add('hidden');
                 resultsError.classList.remove('hidden');
             }
-            
-            // Add click handlers for buttons
-            document.getElementById('go-to-tests-button').addEventListener('click', () => {
-                showContent('qr');
-                setActiveTab(navTests);
-            });
-            
-            document.getElementById('back-to-results-list').addEventListener('click', () => {
-                resultDetail.classList.add('hidden');
-                resultsSummary.classList.remove('hidden');
-            });
-            
-            document.getElementById('results-retry-button').addEventListener('click', loadUserResults);
-            
-            // Add event listener for the refresh button
-            document.getElementById('refresh-results-button')?.addEventListener('click', () => {
-                console.log("Refreshing results...");
-                loadUserResults();
-            });
         }
         
         // Function to update results summary section

@@ -345,42 +345,70 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            background-color: #fff;
-            border: 1px solid #e5e7eb; /* Tailwind gray-200 */
-            border-radius: 0.5rem; /* Tailwind rounded-lg */
-            padding: 0.75rem; /* Tailwind p-3 */
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Subtle shadow */
+            /* background-color: #fff; */ /* Removed */
+            /* border: 1px solid #e5e7eb; */ /* Removed */
+            border-radius: 0.5rem; /* Kept for potential hover effects on item */
+            /* padding: 0.75rem; */ /* Removed, grid gap will space items */
+            transition: transform 0.2s ease; /* Kept for hover effect */
+            /* box-shadow: 0 2px 4px rgba(0,0,0,0.05); */ /* Removed */
             cursor: pointer;
         }
         .result-summary-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transform: translateY(-2px); /* Keep hover effect on item */
         }
-        .result-summary-item.flagged-result {
-            border-left-width: 4px;
-            border-left-color: #f59e0b; /* Tailwind amber-500 */
+
+        /* NEW STYLES FOR SQUARE RESULT BOXES */
+        .result-summary-box {
+            width: 72px; 
+            height: 72px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.375rem; /* Tailwind rounded-md */
+            font-weight: 600;
+            color: white;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 0.35rem; /* Space between box and label below */
         }
-        .result-summary-points {
-            font-size: 1.125rem; /* Tailwind text-lg */
-            font-weight: 600; /* Tailwind font-semibold */
-            margin-bottom: 0.25rem;
+        .result-summary-box:hover { /* Optional: if hover on box itself is desired */
+             /* transform: scale(1.05); */
         }
-        .result-summary-points.correct-2pts { color: #16a34a; } /* Tailwind green-600 */
-        .result-summary-points.correct-1pt { color: #ca8a04; } /* Tailwind yellow-600 */
-        .result-summary-points.incorrect-0pts { color: #dc2626; } /* Tailwind red-600 */
+        .time-in-box {
+            font-size: 1.25rem; /* Tailwind text-xl, for the seconds */
+            line-height: 1;
+        }
+        .time-in-box-suffix { /* For the 's' character */
+            font-size: 0.8rem;
+            line-height: 1;
+            margin-top: 2px;
+        }
+
+        /* Color classes for the box */
+        .result-box-correct-2pts { background-color: #22c55e; border: 2px solid #16a34a; } /* Green */
+        .result-box-correct-1pt { background-color: #f59e0b; border: 2px solid #d97706; } /* Amber/Yellow */
+        .result-box-incorrect-0pts { background-color: #ef4444; border: 2px solid #dc2626; } /* Red */
         
-        .result-summary-qnum {
+        .result-box-flagged { /* Add this class if question was flagged */
+            outline: 3px solid #facc15; /* Tailwind yellow-400 */
+            outline-offset: 2px; /* Adjust spacing of the outline */
+        }
+
+        .question-num-label-below {
             font-size: 0.875rem; /* Tailwind text-sm */
             color: #4b5563; /* Tailwind gray-600 */
-            margin-bottom: 0.5rem;
+            font-weight: 500;
         }
-        .result-summary-statements {
-            font-size: 0.75rem; /* Tailwind text-xs */
-            color: #6b7280; /* Tailwind gray-500 */
-            line-height: 1.2;
-        }
-         /* Tooltip for statement summary on hover (simple version) */
+        /* Remove or comment out old conflicting styles if they existed */
+        /* .result-summary-item.flagged-result { ... } */
+        /* .result-summary-points { ... } */
+        /* .result-summary-points.correct-2pts { ... } */
+        /* .result-summary-points.correct-1pt { ... } */
+        /* .result-summary-points.incorrect-0pts { ... } */
+        /* .result-summary-qnum { ... } */
+        /* .result-summary-statements { ... } */
+         /* Tooltip for statement summary on hover (simple version) - KEEPING THIS for now, might be useful if user wants to see detailed text on hover of the item */
         .result-summary-item .tooltip-text {
             visibility: hidden;
             width: 180px;
@@ -1558,6 +1586,8 @@
             // Note: Time for the *last question viewed before clicking "End Practice & See Results"*
             // is recorded either in showReviewScreen (if they went there first)
             // or in endExamAndShowResults (if they clicked end from the exam screen directly).
+            recordQuestionTime(); // Ensure time for the very last question is recorded
+            stopTimer(); // Stop the main exam timer
 
             examScreen.classList.add('hidden');
             reviewScreen.classList.add('hidden');
@@ -1582,14 +1612,14 @@
                 });
 
                 let points = 0;
-                let pointsClass = 'incorrect-0pts';
+                let pointsClass = 'result-box-incorrect-0pts'; // Default to incorrect style for the box
 
                 if (correctStatements === 5) {
                     points = 2;
-                    pointsClass = 'correct-2pts';
+                    pointsClass = 'result-box-correct-2pts'; // Correct box style
                 } else if (correctStatements === 4) {
                     points = 1;
-                    pointsClass = 'correct-1pt';
+                    pointsClass = 'result-box-correct-1pt'; // Partially correct box style
                 }
                 totalScore += points;
 
@@ -1597,38 +1627,43 @@
                 const timeForQuestionSec = Math.round(timeForQuestionMs / 1000);
 
                 const resultItem = document.createElement('div');
-                resultItem.classList.add('result-summary-item', 'relative');
-                if (correctStatements === 5) {
-                    resultItem.style.backgroundColor = '#dcfce7';
-                    resultItem.style.borderColor = '#22c55e';
-                } else if (correctStatements === 4) {
-                    resultItem.style.backgroundColor = '#fef3c7';
-                    resultItem.style.borderColor = '#f59e0b';
-                } else {
-                    resultItem.style.backgroundColor = '#fee2e2';
-                    resultItem.style.borderColor = '#ef4444';
-                }
-                resultItem.style.borderWidth = '1px';
-                resultItem.style.borderStyle = 'solid';
+                resultItem.classList.add('result-summary-item');
                 resultItem.dataset.index = index;
-                resultItem.title = `Click to review Question ${index + 1}`;
+                resultItem.title = `Click to review Question ${index + 1}. Score: ${points} (${correctStatements}/5 correct). Time: ${timeForQuestionSec}s`;
 
+                const summaryBox = document.createElement('div');
+                summaryBox.classList.add('result-summary-box', pointsClass);
+                if (flaggedQuestions[index]) {
+                    summaryBox.classList.add('result-box-flagged');
+                }
+
+                const timeDisplay = document.createElement('span');
+                timeDisplay.classList.add('time-in-box');
+                timeDisplay.textContent = `${timeForQuestionSec}`;
+                
+                const timeSuffix = document.createElement('span');
+                timeSuffix.classList.add('time-in-box-suffix');
+                timeSuffix.textContent = 's';
+                
+                summaryBox.appendChild(timeDisplay);
+                summaryBox.appendChild(timeSuffix);
+
+                const numberLabel = document.createElement('div');
+                numberLabel.classList.add('question-num-label-below');
+                numberLabel.textContent = `Q${index + 1}`;
+
+                // Tooltip for detailed statement summary (optional, kept from previous)
                 let statementsTooltipHtml = '<div class="tooltip-text">';
+                statementsTooltipHtml += `<p class="font-semibold mb-1">Q${index+1} - Score: ${points} (${correctStatements}/5)</p>`;
                 qData.statements.forEach((stmtText, stmtIndex) => {
                     const userAns = userAnsArray[stmtIndex];
                     const correctAns = correctAnsArray[stmtIndex];
                     const isStmtCorrect = userAns === correctAns;
-                    statementsTooltipHtml += `<p class=\'${isStmtCorrect ? "text-green-300" : (userAns ? "text-red-300" : "text-gray-400")}\'>${stmtIndex + 1}. Your: ${userAns || '-'} | Ans: ${correctAns}</p>`;
+                    statementsTooltipHtml += `<p class='${isStmtCorrect ? "text-green-300" : (userAns ? "text-red-300" : "text-gray-400")}'>${stmtIndex + 1}. Your: ${userAns || '-'}<br>&nbsp;&nbsp;&nbsp;Ans: ${correctAns}</p>`;
                 });
                 statementsTooltipHtml += '</div>';
+                resultItem.innerHTML = summaryBox.outerHTML + numberLabel.outerHTML + statementsTooltipHtml; // Combine box, label, and tooltip
 
-                resultItem.innerHTML = `
-                    <p class="result-summary-points ${pointsClass}">${points}pt</p>
-                    <p class="result-summary-qnum">Q${index + 1} ${flaggedQuestions[index] ? '&#128681;' : ''}</p> 
-                    <p class="result-summary-statements">(${correctStatements}/5 correct)</p>
-                    <p class="text-xs text-gray-500 mt-1">Time: ${timeForQuestionSec}s</p>
-                    ${statementsTooltipHtml}
-                `;
 
                 resultItem.addEventListener('click', () => {
                     revisitQuestionFromResults(index);
@@ -1638,7 +1673,7 @@
 
             scoreEl.textContent = totalScore;
             totalScorePossibleEl.textContent = questionsData.length * 2;
-            const timeDiff = examEndTime - examStartTime;
+            const timeDiff = examEndTime - examStartTime; // Make sure examStartTime is set when exam begins
             timeTakenEl.textContent = formatTimeDifference(timeDiff);
         }
 
@@ -1765,15 +1800,13 @@
 
         // --- NEW FUNCTION TO SAVE RESULTS TO FIREBASE ---
         function saveResultsToFirebase() {
+            console.log("[DM Sylls 1] Attempting to save results to Firebase.");
+            console.log("[DM Sylls 1] Current User ID:", currentUserId, "User Name:", userName);
+
             if (!db) {
-                console.error("Firestore (db) is not initialized.");
+                console.error("[DM Sylls 1] Firestore (db) is not initialized. Cannot save results.");
                 return;
             }
-            // We will proceed even if currentUserId is null for now, relying on userName
-            // if (!currentUserId && !userName) { 
-            //     console.warn("No user identifier (anonymous UID or name) available. Skipping Firestore save.");
-            //     return;
-            // }
 
             const worksheetName = "DM Syllogisms Worksheet 1"; 
             const totalScore = parseInt(scoreEl.textContent, 10);
@@ -1811,7 +1844,7 @@
             const performanceData = {
                 studentName: userName || (currentUserId ? 'Anonymous User' : 'Unknown User'), 
                 userId: currentUserId || null, 
-                studentEmail: null, 
+                studentEmail: null, // DM test does not collect email
                 examName: worksheetName,
                 score: totalScore,
                 totalPossibleScore: totalPossible,
@@ -1822,15 +1855,18 @@
                 reflection: reflection || '',
                 questions: detailedAnswers, 
                 submissionTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                userAgent: navigator.userAgent
+                userAgent: navigator.userAgent,
+                testType: 'DM' // Explicitly add testType
             };
+
+            console.log("[DM Sylls 1] Performance Data to be saved:", JSON.parse(JSON.stringify(performanceData))); // Deep copy for logging
 
             db.collection("performanceSubmissions").add(performanceData)
                 .then((docRef) => {
-                    console.log("Results saved to Firestore with ID: ", docRef.id);
+                    console.log("[DM Sylls 1] Results saved to Firestore with ID: ", docRef.id);
                 })
                 .catch((error) => {
-                    console.error("Error saving results to Firebase: ", error);
+                    console.error("[DM Sylls 1] Error saving results to Firebase: ", error);
                 });
         }
         // --- END OF SAVE RESULTS FUNCTION ---
