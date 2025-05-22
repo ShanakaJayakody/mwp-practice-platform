@@ -1694,17 +1694,55 @@
 
                     content.classList.toggle('hidden');
                     icon.classList.toggle('rotate-180', !isOpen);
-                    // Optional: Close other sections when one is opened
-                    // if (!isOpen) {
-                    //     accordionHeaders.forEach(otherHeader => {
-                    //         if (otherHeader !== header && !otherHeader.closest('.opacity-60')) {
-                    //             otherHeader.nextElementSibling.classList.add('hidden');
-                    //             otherHeader.querySelector('svg').classList.remove('rotate-180');
-                    //         }
-                    //     });
-                    // }
                 });
             });
+            
+            // Make sure at least one section is open initially
+            function openDefaultSection() {
+                // Check if we have QR results
+                const qrCount = document.querySelectorAll('#results-table-body-qr tr').length;
+                if (qrCount > 0) {
+                    openAccordionByPrefix('Quantitative');
+                    return;
+                }
+                
+                // Check if we have DM results
+                const dmCount = document.querySelectorAll('#results-table-body-dm tr').length;
+                if (dmCount > 0) {
+                    openAccordionByPrefix('Decision');
+                    return;
+                }
+                
+                // Check if we have VR results
+                const vrCount = document.querySelectorAll('#results-table-body-vr tr').length;
+                if (vrCount > 0) {
+                    openAccordionByPrefix('Verbal');
+                    return;
+                }
+                
+                // If no specific results, open the first non-disabled accordion
+                const firstHeader = Array.from(accordionHeaders).find(h => !h.closest('.opacity-60'));
+                if (firstHeader) {
+                    const content = firstHeader.nextElementSibling;
+                    const icon = firstHeader.querySelector('svg');
+                    content.classList.remove('hidden');
+                    if (icon) icon.classList.add('rotate-180');
+                }
+            }
+            
+            function openAccordionByPrefix(prefix) {
+                accordionHeaders.forEach(header => {
+                    if (header.textContent.includes(prefix)) {
+                        const content = header.nextElementSibling;
+                        const icon = header.querySelector('svg');
+                        content.classList.remove('hidden');
+                        if (icon) icon.classList.add('rotate-180');
+                    }
+                });
+            }
+            
+            // Open default section when results are loaded
+            setTimeout(openDefaultSection, 500);
         }
 
         // Function to load user results from Firebase
@@ -1788,10 +1826,25 @@
                           
                           // Add debug logging to see the actual scores
                           results.forEach(result => {
-                              const score = parseInt(result.score);
+                              // Force to number type to handle possible string scores
+                              result.score = typeof result.score === 'string' ? parseInt(result.score) || 0 : (result.score || 0);
+                              
+                              // Also ensure the correct format for totalPossibleScore/totalQuestions
+                              if (result.totalPossibleScore) {
+                                  result.totalPossibleScore = typeof result.totalPossibleScore === 'string' 
+                                      ? parseInt(result.totalPossibleScore) || 0 
+                                      : (result.totalPossibleScore || 0);
+                              }
+                              
+                              if (result.totalQuestions) {
+                                  result.totalQuestions = typeof result.totalQuestions === 'string' 
+                                      ? parseInt(result.totalQuestions) || 0 
+                                      : (result.totalQuestions || 0);
+                              }
+                              
                               const totalPossible = parseInt(result.totalPossibleScore || result.totalQuestions);
-                              const percentage = !isNaN(score) && !isNaN(totalPossible) && totalPossible > 0 ? 
-                                  (score / totalPossible) * 100 : 0;
+                              const percentage = !isNaN(result.score) && !isNaN(totalPossible) && totalPossible > 0 ? 
+                                  (result.score / totalPossible) * 100 : 0;
                               console.log(`Result ${result.id}: Score=${result.score}, TotalPossible=${totalPossible}, Percentage=${percentage.toFixed(1)}%`);
                           });
                           
@@ -1818,6 +1871,43 @@
                               loadChartJSIfNeeded(() => {
                                   renderProgressChart(results); // Overall progress chart
                               });
+                              
+                              // Call openDefaultSection to make sure at least one section is open
+                              const openDefaultSection = () => {
+                                  // First try to find which section has the most results
+                                  const qrCount = document.querySelectorAll('#results-table-body-qr tr').length;
+                                  const dmCount = document.querySelectorAll('#results-table-body-dm tr').length;
+                                  const vrCount = document.querySelectorAll('#results-table-body-vr tr').length;
+                                  
+                                  console.log(`Result counts: QR=${qrCount}, DM=${dmCount}, VR=${vrCount}`);
+                                  
+                                  // Open the section with the most results
+                                  if (qrCount >= dmCount && qrCount >= vrCount && qrCount > 0) {
+                                      openAccordionByCategory('Quantitative');
+                                  } else if (dmCount >= qrCount && dmCount >= vrCount && dmCount > 0) {
+                                      openAccordionByCategory('Decision');
+                                  } else if (vrCount > 0) {
+                                      openAccordionByCategory('Verbal');
+                                  }
+                              };
+                              
+                              const openAccordionByCategory = (category) => {
+                                  const headers = document.querySelectorAll('.section-accordion-header');
+                                  headers.forEach(header => {
+                                      if (header.textContent.includes(category)) {
+                                          const content = header.nextElementSibling;
+                                          if (content && content.classList.contains('hidden')) {
+                                              content.classList.remove('hidden');
+                                              const icon = header.querySelector('svg');
+                                              if (icon) icon.classList.add('rotate-180');
+                                              console.log(`Opening ${category} section`);
+                                          }
+                                      }
+                                  });
+                              };
+                              
+                              // Give time for the DOM to update
+                              setTimeout(openDefaultSection, 300);
                           } else {
                               console.log("No results found for this user ID.");
                               resultsEmpty.classList.remove('hidden');
@@ -1880,16 +1970,14 @@
             let totalMinutes = 0;
             
             results.forEach(result => {
-                // Process score
+                // Process score - no need to parse again as we've already normalized in the results array
                 try {
-                    const score = parseInt(result.score);
-                    // Handle both totalQuestions and totalPossibleScore formats
-                    const totalPossible = parseInt(result.totalPossibleScore || result.totalQuestions);
-                    
-                    if (!isNaN(score) && !isNaN(totalPossible) && totalPossible > 0) {
-                        const percentage = (score / totalPossible) * 100;
+                    const totalPossible = result.totalPossibleScore || result.totalQuestions || 0;
+                    if (totalPossible > 0) {
+                        const percentage = (result.score / totalPossible) * 100;
                         totalScore += percentage;
                         maxScore = Math.max(maxScore, percentage);
+                        console.log(`Adding to avg: ${percentage.toFixed(1)}% (${result.score}/${totalPossible})`);
                     }
                 } catch (e) {
                     console.warn("Error processing score:", e);
@@ -1911,6 +1999,8 @@
             
             const avgScore = numTests > 0 ? totalScore / numTests : 0;
             const totalHours = totalMinutes / 60;
+            
+            console.log(`Summary stats: Tests=${numTests}, AvgScore=${avgScore.toFixed(1)}%, MaxScore=${maxScore.toFixed(1)}%, Hours=${totalHours.toFixed(1)}`);
             
             // Update summary display
             testsCompleted.textContent = numTests;
@@ -1939,12 +2029,17 @@
                     case 'date-asc':
                         return dateA - dateB;
                     case 'score-desc':
-                        const scoreA_val = parseInt(a.score) / parseInt(a.totalPossibleScore || a.totalQuestions || 1) || 0;
-                        const scoreB_val = parseInt(b.score) / parseInt(b.totalPossibleScore || b.totalQuestions || 1) || 0;
+                        // Score values have been normalized to numbers in results array
+                        const scoreA_total = a.totalPossibleScore || a.totalQuestions || 1;
+                        const scoreB_total = b.totalPossibleScore || b.totalQuestions || 1;
+                        const scoreA_val = scoreA_total > 0 ? a.score / scoreA_total : 0;
+                        const scoreB_val = scoreB_total > 0 ? b.score / scoreB_total : 0;
                         return scoreB_val - scoreA_val;
                     case 'score-asc':
-                        const scoreC_val = parseInt(a.score) / parseInt(a.totalPossibleScore || a.totalQuestions || 1) || 0;
-                        const scoreD_val = parseInt(b.score) / parseInt(b.totalPossibleScore || b.totalQuestions || 1) || 0;
+                        const scoreC_total = a.totalPossibleScore || a.totalQuestions || 1;
+                        const scoreD_total = b.totalPossibleScore || b.totalQuestions || 1;
+                        const scoreC_val = scoreC_total > 0 ? a.score / scoreC_total : 0;
+                        const scoreD_val = scoreD_total > 0 ? b.score / scoreD_total : 0;
                         return scoreC_val - scoreD_val;
                     case 'date-desc':
                     default:
@@ -1960,18 +2055,41 @@
                 // sjt: []  // Situational Judgement - Placeholder for future
             };
 
+            // Categorize results by section with better debugging
             processedResults.forEach(result => {
                 const examName = result.examName ? result.examName.toLowerCase() : '';
+                let sectionAssigned = false;
+                
                 if (examName.includes('qr') || examName.includes('quantitative')) {
                     resultsBySection.qr.push(result);
-                } else if (examName.includes('dm') || examName.includes('decision making') || examName.includes('syllogisms')) {
+                    sectionAssigned = true;
+                    console.log(`Assigning result ${result.id} to QR section. Score: ${result.score}`);
+                } 
+                
+                if (examName.includes('dm') || examName.includes('decision making') || examName.includes('syllogisms')) {
                     resultsBySection.dm.push(result);
-                } else if (examName.includes('vr') || examName.includes('verbal reasoning')) {
+                    sectionAssigned = true;
+                    console.log(`Assigning result ${result.id} to DM section. Score: ${result.score}`);
+                } 
+                
+                if (examName.includes('vr') || examName.includes('verbal reasoning')) {
                     resultsBySection.vr.push(result);
-                } // Add else if for ar and sjt when implemented
+                    sectionAssigned = true;
+                    console.log(`Assigning result ${result.id} to VR section. Score: ${result.score}`);
+                }
+                
+                if (!sectionAssigned) {
+                    console.warn(`Result ${result.id} with examName "${result.examName}" couldn't be categorized`);
+                }
             });
 
             const sections = ['qr', 'dm', 'vr'];
+            console.log("Section counts:", {
+                qr: resultsBySection.qr.length,
+                dm: resultsBySection.dm.length,
+                vr: resultsBySection.vr.length
+            });
+            
             sections.forEach(sectionKey => {
                 const tableBody = document.getElementById(`results-table-body-${sectionKey}`);
                 const noResultsP = document.getElementById(`no-results-${sectionKey}`);
@@ -1994,7 +2112,7 @@
 
                         row.innerHTML = `
                             <td class="px-4 py-3 whitespace-nowrap text-sm">${formattedDate}</td>
-                            <td class="px-4 py-3 text-sm">${result.examName}</td>
+                            <td class="px-4 py-3 text-sm">${result.examName || 'Unknown Test'}</td>
                             <td class="px-4 py-3 font-medium text-sm">${scoreDisplay}</td>
                             <td class="px-4 py-3 text-sm">${result.timeTaken || '-'}</td>
                             <td class="px-4 py-3 text-sm">${result.focusRating || '-'}/5</td>
@@ -2005,6 +2123,23 @@
                             </td>
                         `;
                         tableBody.appendChild(row);
+                    });
+                    
+                    // Make sure the section accordion is open and visible
+                    let accordionHeaders = document.querySelectorAll('.section-accordion-header');
+                    accordionHeaders.forEach(header => {
+                        const headerText = header.textContent.toLowerCase();
+                        if (headerText.includes(sectionKey.toLowerCase())) {
+                            const content = header.nextElementSibling;
+                            const icon = header.querySelector('svg');
+                            
+                            // Open the accordion section if it contains results
+                            if (content && content.classList.contains('hidden')) {
+                                content.classList.remove('hidden');
+                                if (icon) icon.classList.add('rotate-180');
+                                console.log(`Opening ${sectionKey} accordion section`);
+                            }
+                        }
                     });
                 } else {
                     noResultsP.classList.remove('hidden');
@@ -2030,8 +2165,10 @@
             resultsSummary.classList.add('hidden');
             resultDetail.classList.remove('hidden');
             
+            console.log("Showing detail for result:", result);
+            
             // Update detail view with result data
-            document.getElementById('detail-test-name').textContent = result.examName;
+            document.getElementById('detail-test-name').textContent = result.examName || 'Unknown Test';
             document.getElementById('detail-test-date').textContent = result.date.toLocaleDateString() + ' at ' + result.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             const totalPossible = result.totalPossibleScore || result.totalQuestions || '-';
             document.getElementById('detail-score').textContent = `${result.score}/${totalPossible}`;
@@ -2045,6 +2182,7 @@
             
             // Check if the result has the 'questions' array (used by DM syllogisms)
             if (result.questions && Array.isArray(result.questions)) {
+                console.log("Populating questions array format for DM syllogisms");
                 result.questions.forEach((questionDetail, index) => {
                     const questionNumber = index + 1;
                     let points = questionDetail.points !== undefined ? questionDetail.points : 'N/A';
@@ -2075,8 +2213,9 @@
                     `;
                     tableBody.appendChild(row);
                 });
-            // Fallback for older QR Test structure (if necessary)
+            // Fallback for older QR Test structure
             } else if (result.answers && Array.isArray(result.answers)) { 
+                console.log("Populating answers array format for QR tests");
                 result.answers.forEach((answer, index) => {
                     const questionNumber = index + 1;
                     let correctAnswer = '?';
@@ -2113,6 +2252,7 @@
                     tableBody.appendChild(row);
                 });
             } else {
+                console.log("No detailed question data found in result:", result);
                 tableBody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-gray-500">No detailed question data available for this submission.</td></tr>';
             }
             
