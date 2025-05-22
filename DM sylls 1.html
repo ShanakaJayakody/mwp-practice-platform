@@ -1413,7 +1413,7 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
                 examName: "DM Syllogisms Worksheet 1", // Updated examName
                 score: calculateScore(), // New function to calculate score
                 totalQuestions: questions.length, // Should be 5
-                totalPossibleScore: 5, // Explicitly add total possible score
+                totalPossibleScore: 10, // Explicitly add total possible score (2 points per question)
                 timeTaken: formatTimeDifference(practiceSessionEndTime - practiceSessionStartTime),
                 answers: userAnswers,
                 questionTimes: questionTimes,
@@ -1638,7 +1638,7 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
                         examName: "DM Syllogisms Worksheet 1", // Updated examName
                         score: scoreEl.textContent,
                         totalQuestions: totalQuestionsResultsEl.textContent, // Should be 5
-                        totalPossibleScore: 5, // Explicitly add total possible score
+                        totalPossibleScore: 10, // Explicitly add total possible score (2 points per question)
                         timeTaken: timeTakenEl.textContent,
                         answers: userAnswers,
                         questionTimes: questionTimes,
