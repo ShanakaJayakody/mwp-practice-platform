@@ -37,6 +37,7 @@
             border-radius: 0.375rem; /* Slightly rounded corners */
             margin: 1rem; /* Add some margin */
             overflow: hidden; /* Prevent content overflow from container */
+            position: relative; /* For calculator positioning */
         }
         /* Header and Footer */
         .header-bar, .footer-bar {
@@ -47,6 +48,39 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+
+        /* Secondary toolbar styling */
+        .secondary-toolbar {
+            flex-shrink: 0;
+            background-color: #007BBD;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #005A8C;
+            z-index: 19;
+        }
+
+        /* Buttons in secondary toolbar */
+        .secondary-toolbar-button {
+            background-color: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 0.3rem 0.7rem;
+            font-size: 0.8rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            margin-left: 0.5rem; /* Spacing between buttons */
+        }
+        .secondary-toolbar-button:hover:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: white;
+        }
+        .secondary-toolbar-button.active { /* For calculator button when active */
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: white;
         }
 
         /* Specific text colors within header/footer */
@@ -390,6 +424,91 @@
         .review-grid-button-unanswered { background-color: #f3f4f6; border-color: #d1d5db; color: #4b5563; }
          .review-grid-button:hover { filter: brightness(95%); }
 
+        /* Calculator Styles */
+        #calculator-ui {
+            display: none; 
+            position: absolute;
+            top: 100px; 
+            left: 50%;
+            width: 225px; 
+            background-color: #007BBD; 
+            border: 2px solid #005A8C; 
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            padding: 12px; 
+            z-index: 1000; 
+            cursor: grab; 
+        }
+        #calculator-ui.visible { display: block; }
+        .calculator-header {
+            display: flex; justify-content: space-between; align-items: center;
+            color: white; margin-bottom: 8px; font-size: 0.8rem; padding: 0 3px;
+        }
+        .calculator-header .title { font-weight: 600; }
+        .calculator-header .close-calc-btn {
+            background: none; border: none; color: white; font-size: 1.1rem; cursor: pointer;
+        }
+        .calculator-decorative-text {
+            color: rgba(255, 255, 255, 0.7); 
+            font-size: 0.6rem;
+            text-align: center;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        #calc-display-container {
+            background-color: #E2E8F0; border: 2px inset #A0AEC0; 
+            border-radius: 4px; padding: 4px 6px; 
+            margin-bottom: 12px; text-align: right; min-height: 36px; 
+            display: flex; align-items: center; justify-content: flex-end;
+            position: relative; /* For memory indicator */
+        }
+        #calc-memory-indicator {
+            position: absolute;
+            left: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4A5568; /* Darker color for M */
+            font-weight: bold;
+            font-size: 0.9rem; /* Slightly smaller M */
+            display: none; /* Hidden by default */
+        }
+        #calc-display {
+            font-family: 'Courier New', Courier, monospace; font-size: 1.6rem; 
+            color: #2D3748; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%;
+        }
+        .calc-buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px; 
+        }
+        .calc-button {
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 4px;
+            padding: 10px 0; 
+            font-size: 0.9rem; 
+            font-weight: 500; cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .calc-button:active { transform: scale(0.95); }
+
+        .calc-button-num {
+            background-color: #FFFFFF; 
+            color: #1A202C; 
+        }
+        .calc-button-num:hover { background-color: #F7FAFC; }
+
+        .calc-button-red {
+            background-color: #C53030; 
+            color: white;
+            border-color: #9B2C2C; 
+        }
+        .calc-button-red:hover { background-color: #E53E3E; }
+        
+        .calc-button.equals { 
+            grid-row: span 2; /* Make equals button span two rows */
+        }
 
         /* Responsive adjustments */
         @media (max-width: 768px) {
@@ -412,19 +531,22 @@
             .statement-text { font-size: 0.85rem; }
             .statement-answer-box { width: 5rem; height: 2.2rem; font-size: 0.8rem; }
 
-            .header-bar, .footer-bar { padding: 0.5rem 1rem; }
-            .header-bar span, .footer-bar button { font-size: 0.8rem; }
+            .header-bar, .footer-bar, .secondary-toolbar { padding: 0.5rem 1rem; }
+            .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: 0.8rem; }
             button, .button { padding: 0.4rem 0.8rem; }
             .footer-bar button { padding: 0.3rem 0.6rem; font-size: 0.75rem; }
             .grid-cols-5 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
             #review-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
             .review-grid-button { font-size: 0.8rem; }
+            #calculator-ui { width: 210px; top: 90px; padding: 10px;} 
+            .calc-button { padding: 8px 0; font-size: 0.8rem;}
+            #calc-display { font-size: 1.4rem; }
         }
          @media (max-width: 480px) {
              .main-content-area { padding: 0.5rem; }
              .grid-cols-5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
              #review-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-             .header-bar span, .footer-bar button { font-size: 0.75rem; }
+             .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: 0.75rem; }
              button, .button { padding: 0.3rem 0.6rem; }
              .footer-bar button { padding: 0.25rem 0.5rem; font-size: 0.7rem; }
              .statement-row { flex-direction: column; align-items: stretch; gap: 0.4rem; } /* Stack text and box */
@@ -432,6 +554,9 @@
              #draggable-options-sidebar { gap: 0.5rem; }
              .draggable-option { width: 45%; padding: 0.4rem 0.8rem; font-size: 0.8rem; }
              .review-grid-button { font-size: 0.75rem; }
+             #calculator-ui { width: 90%; max-width: 200px; top: 85px; padding: 8px; } 
+             .calc-button { padding: 7px 0; font-size: 0.75rem;}
+             #calc-display { font-size: 1.3rem; }
          }
 
     </style>
@@ -1007,19 +1132,24 @@
         let dragOffsetX = 0;
         let dragOffsetY = 0;
 
-        calculatorDragHeader.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            const rect = calculatorUI.getBoundingClientRect();
-            dragOffsetX = e.clientX - rect.left;
-            dragOffsetY = e.clientY - rect.top;
-            
-            // Add event listeners for dragging
-            document.addEventListener('mousemove', handleMouseMove);
-            document.addEventListener('mouseup', () => {
-                isDragging = false;
-                document.removeEventListener('mousemove', handleMouseMove);
-            }, { once: true });
-        });
+        function makeDraggable(element, handle) {
+            handle.onmousedown = function(event) {
+                event.preventDefault();
+                isDragging = true;
+                element.style.cursor = 'grabbing';
+                const rect = element.getBoundingClientRect();
+                dragOffsetX = event.clientX - rect.left;
+                dragOffsetY = event.clientY - rect.top;
+                
+                // Add event listeners for dragging
+                document.addEventListener('mousemove', handleMouseMove);
+                document.addEventListener('mouseup', () => {
+                    isDragging = false;
+                    element.style.cursor = 'grab';
+                    document.removeEventListener('mousemove', handleMouseMove);
+                }, { once: true });
+            };
+        }
 
         function handleMouseMove(e) {
             if (!isDragging) return;
@@ -1752,6 +1882,7 @@
         // Calculator event listeners
         calculatorToggleButton.addEventListener('click', toggleCalculator);
         closeCalculatorButton.addEventListener('click', toggleCalculator);
+        makeDraggable(calculatorUI, calculatorDragHeader);
 
         // Add calculator button click handlers
         calcButtons.forEach(button => {
@@ -1780,9 +1911,44 @@
              const isExamVisible = !examScreen.classList.contains('hidden');
              const isModalVisible = navigatorModal.classList.contains('flex');
              const isInputFocused = document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA');
+             const isCalcVisible = calculatorUI.classList.contains('visible');
 
              if (isModalVisible || isInputFocused) return;
              if (!isExamVisible) return;
+
+             // Handle calculator keyboard shortcuts when calculator is visible
+             if (isCalcVisible && !isInputFocused) {
+                 if (e.key >= '0' && e.key <= '9') { 
+                     e.preventDefault(); 
+                     inputDigit(e.key); 
+                     return; 
+                 }
+                 if (e.key === '.') { 
+                     e.preventDefault(); 
+                     inputDecimal(); 
+                     return; 
+                 }
+                 if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') { 
+                     e.preventDefault(); 
+                     handleOperator(e.key); 
+                     return; 
+                 }
+                 if (e.key === 'Enter' || e.key === '=') { 
+                     e.preventDefault(); 
+                     calculate(); 
+                     return; 
+                 }
+                 if (e.key === 'Escape') { 
+                     e.preventDefault(); 
+                     toggleCalculator(); 
+                     return; 
+                 }
+                 if (e.key === 'Backspace') { 
+                     e.preventDefault(); 
+                     handleSpecialFunction('backspace'); 
+                     return; 
+                 }
+             }
 
              const altOrOption = e.altKey;
              const code = e.code.toLowerCase();
