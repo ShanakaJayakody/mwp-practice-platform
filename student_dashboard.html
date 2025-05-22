@@ -906,14 +906,14 @@
                         </div>
                         
                         <!-- Filter and Sort Controls -->
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800">Recent Tests</h3>
-                            <div class="flex gap-2">
-                                <select id="results-filter" class="text-sm border border-gray-300 rounded px-2 py-1">
-                                    <option value="all">All Tests</option>
-                                    <option value="QR Test 1">QR Test 1</option>
-                                    <option value="QR Test 2">QR Test 2</option>
-                                    <option value="QR Test 3">QR Test 3</option>
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Recent Tests</h3>
+                                <div class="flex gap-2">
+                                    <select id="results-filter" class="text-sm border border-gray-300 rounded px-2 py-1">
+                                        <option value="all">All Tests</option>
+                                        <option value="QR Test 1">QR Test 1</option>
+                                        <option value="QR Test 2">QR Test 2</option>
+                                        <option value="QR Test 3">QR Test 3</option>
                                     <option value="QR Test 4">QR Test 4</option>
                                     <option value="QR Test 5">QR Test 5</option>
                                     <option value="QR Test 6">QR Test 6</option>
@@ -923,19 +923,19 @@
                                     <option value="DM Syllogisms Worksheet 3">DM Syllogisms Worksheet 3</option>
                                     <option value="DM Syllogisms Worksheet 4">DM Syllogisms Worksheet 4</option>
                                     <option value="DM Syllogisms Worksheet 5">DM Syllogisms Worksheet 5</option>
-                                </select>
-                                <select id="results-sort" class="text-sm border border-gray-300 rounded px-2 py-1">
-                                    <option value="date-desc">Newest First</option>
-                                    <option value="date-asc">Oldest First</option>
-                                    <option value="score-desc">Highest Score</option>
-                                    <option value="score-asc">Lowest Score</option>
-                                </select>
+                                    </select>
+                                    <select id="results-sort" class="text-sm border border-gray-300 rounded px-2 py-1">
+                                        <option value="date-desc">Newest First</option>
+                                        <option value="date-asc">Oldest First</option>
+                                        <option value="score-desc">Highest Score</option>
+                                        <option value="score-asc">Lowest Score</option>
+                                    </select>
                                 <button id="refresh-results-button" class="text-sm bg-blue-500 hover:bg-blue-600 text-white rounded px-3 py-1">
                                     Refresh
                                 </button>
+                                </div>
                             </div>
-                        </div>
-
+                            
                         <!-- Accordion Sections for Test Types -->
                         <div id="results-by-section-accordion" class="space-y-3">
 
@@ -946,24 +946,24 @@
                                     <svg class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                 </button>
                                 <div class="section-accordion-content hidden p-4 overflow-x-auto">
-                                    <table class="min-w-full">
-                                        <thead class="bg-gray-50">
-                                            <tr>
-                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Test</th>
-                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
-                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Taken</th>
-                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Focus Rating</th>
-                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                                            </tr>
-                                        </thead>
+                                <table class="min-w-full">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Test</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Taken</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Focus Rating</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                        </tr>
+                                    </thead>
                                         <tbody id="results-table-body-qr" class="bg-white divide-y divide-gray-200">
                                             <!-- QR Results will be populated here -->
-                                        </tbody>
-                                    </table>
+                                    </tbody>
+                                </table>
                                     <p id="no-results-qr" class="text-center text-gray-500 py-4 hidden">No Quantitative Reasoning results found.</p>
-                                </div>
                             </div>
+                        </div>
 
                             <!-- Decision Making Section -->
                             <div class="section-accordion-item border border-gray-200 rounded-md">
@@ -1189,28 +1189,6 @@
           measurementId: "G-4M3ED641M9"
         };
 
-        // Declare db in global scope
-        let db;
-        
-        // Variable to store all user results
-        let allUserResults = [];
-        
-        // Default sort and filter options
-        let currentSortOption = 'date-desc';
-        let currentFilterOption = 'all';
-        
-        // Helper function to determine section from exam name
-        function getSectionFromExamName(examName) {
-            if (!examName) return '';
-            const lowerName = examName.toLowerCase();
-            if (lowerName.includes('qr') || lowerName.includes('quantitative')) return 'qr';
-            if (lowerName.includes('dm') || lowerName.includes('decision making') || lowerName.includes('syllogisms')) return 'dm';
-            if (lowerName.includes('vr') || lowerName.includes('verbal reasoning')) return 'vr';
-            if (lowerName.includes('ar') || lowerName.includes('abstract reasoning')) return 'ar';
-            if (lowerName.includes('sjt') || lowerName.includes('situational judgement')) return 'sjt';
-            return '';
-        }
-        
         // Initialize Firebase with better error handling
         try {
             // Check if Firebase is already initialized
@@ -1218,7 +1196,7 @@
                 firebase.initializeApp(firebaseConfig);
             }
             // Explicitly initialize Firestore
-            db = firebase.firestore();
+            const db = firebase.firestore();
             console.log("Firebase and Firestore initialized successfully");
         } catch (error) {
             console.error("Firebase initialization error:", error);
@@ -1258,24 +1236,12 @@
         const navSkills = document.getElementById('nav-skills');
 
         // Content area elements
-        const homeContent = document.getElementById('home-content'); // Add this line
         const qrTestsContent = document.getElementById('qr-tests-content');
         const resultsContent = document.getElementById('results-content');
         const comingSoonContent = document.getElementById('coming-soon-content');
         const defaultDashboardMessage = document.getElementById('default-dashboard-message');
         const allNavTabs = document.querySelectorAll('.nav-tab');
         const dashboardContentArea = document.getElementById('dashboard-content-area');
-        
-        // Results elements
-        const resultsLoading = document.getElementById('results-loading');
-        const resultsError = document.getElementById('results-error');
-        const resultsSummary = document.getElementById('results-summary');
-        const resultsEmpty = document.getElementById('results-empty');
-        const backToResultsList = document.getElementById('back-to-results-list');
-        const resultDetail = document.getElementById('result-detail');
-        const resultsFilter = document.getElementById('results-filter');
-        const resultsSort = document.getElementById('results-sort');
-        const refreshResultsButton = document.getElementById('refresh-results-button');
 
         // Home content specific elements
         const homeStudentFirstNameSpan = document.getElementById('home-student-first-name');
@@ -1631,7 +1597,7 @@
         navResults.addEventListener('click', () => {
             showContent('results');
             setActiveTab(navResults);
-            loadUserResults(); // This will automatically use current user ID
+            loadUserResults();
         });
         
         navSkills.addEventListener('click', () => {
@@ -1681,7 +1647,7 @@
                     setActiveTab(navResults);
                     
                     // Load results data
-                    loadUserResults(); // This will automatically use current user ID
+                    loadUserResults();
                 }, 300);
             } else {
                 // User is signed out
@@ -1731,11 +1697,11 @@
             // Check if URL hash targets a specific section, otherwise default to home
             const hash = window.location.hash;
             if (hash === '#results') {
-                showContent('results');
+            showContent('results');
                 setActiveTab(navResults);
-                if (firebase.auth().currentUser) {
-                    loadUserResults(); // This will automatically use current user ID
-                }
+            if (firebase.auth().currentUser) {
+                loadUserResults();
+            }
             } else if (hash === '#practice') {
                 showContent('qr'); // Or your main practice content ID
                 setActiveTab(document.getElementById('nav-practice-main'));
@@ -1777,59 +1743,9 @@
                 }
                 window.history.pushState({}, "", "student_dashboard.html#results"); // Update URL for results
             });
-            
-            // Results page specific event listeners
-            if (backToResultsList) {
-                backToResultsList.addEventListener('click', () => {
-                    resultDetail.classList.add('hidden');
-                    resultsSummary.classList.remove('hidden');
-                });
-            }
-            
-            // Results filter and sort handlers
-            if (resultsFilter) {
-                resultsFilter.addEventListener('change', () => {
-                    currentFilterOption = resultsFilter.value;
-                    populateResultsIntoSections(allUserResults);
-                });
-            }
-            
-            if (resultsSort) {
-                resultsSort.addEventListener('change', () => {
-                    currentSortOption = resultsSort.value;
-                    populateResultsIntoSections(allUserResults);
-                });
-            }
-            
-            // Refresh results button
-            if (refreshResultsButton) {
-                refreshResultsButton.addEventListener('click', () => {
-                    if (firebase.auth().currentUser) {
-                        loadUserResults(); // This will automatically use current user ID
-                    }
-                });
-            }
-            
-            // Results error retry button
-            const resultsRetryButton = document.getElementById('results-retry-button');
-            if (resultsRetryButton) {
-                resultsRetryButton.addEventListener('click', () => {
-                    if (firebase.auth().currentUser) {
-                        loadUserResults(); // This will automatically use current user ID
-                    }
-                });
-            }
-            
-            // Go to tests button
-            const goToTestsButton = document.getElementById('go-to-tests-button');
-            if (goToTestsButton) {
-                goToTestsButton.addEventListener('click', () => {
-                    window.location.href = 'QR Test 1.html';
-                });
-            }
-            
-            // No event listener for navSkills as it's disabled for now
 
+            // No event listener for navSkills as it's disabled for now
+            
             // Add handling for Enter key on inputs
             loginEmailInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') loginPasswordInput.focus();
@@ -1893,21 +1809,6 @@
                 resultsEmpty.classList.add('hidden');
                 return;
             }
-            
-            // Get current user ID if none provided
-            const currentUser = firebase.auth().currentUser;
-            if (!userIdToLoad && currentUser) {
-                userIdToLoad = currentUser.uid;
-                console.log("[Dashboard] Using current user ID:", userIdToLoad, "Email:", currentUser.email);
-            } else if (!userIdToLoad) {
-                console.error("[Dashboard] No user ID available and no current user!");
-                resultsLoading.classList.add('hidden');
-                resultsError.classList.remove('hidden');
-                resultsSummary.classList.add('hidden');
-                resultsEmpty.classList.add('hidden');
-                return;
-            }
-            
             console.log("[Dashboard] Loading results for userId:", userIdToLoad);
             resultsLoading.classList.remove('hidden');
             resultsError.classList.add('hidden');
@@ -1915,65 +1816,19 @@
             resultsEmpty.classList.add('hidden');
 
             try {
-                // First check if user is admin
-                let isAdmin = false;
-                
-                if (currentUser) {
-                    const userDoc = await db.collection("users").doc(currentUser.uid).get();
-                    if (userDoc.exists) {
-                        const userData = userDoc.data();
-                        isAdmin = userData.isAdmin === true;
-                        console.log("[Dashboard] User document exists, isAdmin from Firestore:", isAdmin);
-                    } else {
-                        console.log("[Dashboard] User document does not exist in Firestore");
-                    }
-                    
-                    // For testing/development: specific email addresses as admins
-                    const adminEmails = ['admin@medwithpurpose.com', 'shanak@medwithpurpose.com']; 
-                    const emailCheck = adminEmails.includes(currentUser.email?.toLowerCase());
-                    console.log("[Dashboard] Admin email check:", currentUser.email, "Result:", emailCheck);
-                    
-                    if (emailCheck) {
-                        isAdmin = true;
-                        // Also update the user record to include isAdmin flag for future
-                        try {
-                            await db.collection("users").doc(currentUser.uid).set({
-                                isAdmin: true
-                            }, { merge: true });
-                            console.log("[Dashboard] Updated user record with isAdmin flag");
-                        } catch (e) {
-                            console.error("[Dashboard] Failed to update user with isAdmin flag:", e);
-                        }
-                    }
-                }
-                
-                console.log("[Dashboard] User is admin:", isAdmin);
-                
-                let querySnapshot;
-                
-                if (isAdmin) {
-                    // Admin users see all results
-                    querySnapshot = await db.collection("performanceSubmissions")
-                                        .orderBy("submissionTimestamp", "desc")
-                                        .get();
-                    console.log("[Dashboard] Admin user - showing all results");
-                } else {
-                    // Regular users only see their own results
-                    querySnapshot = await db.collection("performanceSubmissions")
-                                        .where("userId", "==", userIdToLoad)
-                                        .orderBy("submissionTimestamp", "desc")
-                                        .get();
-                    console.log("[Dashboard] Regular user - showing only their results");
-                }
+                const querySnapshot = await db.collection("performanceSubmissions")
+                                          .where("userId", "==", userIdToLoad)
+                                          .orderBy("submissionTimestamp", "desc")
+                                          .get();
 
                 console.log(`[Dashboard] Found ${querySnapshot.size} results for user.`);
 
                 if (querySnapshot.empty) {
-                    resultsLoading.classList.add('hidden');
+                        resultsLoading.classList.add('hidden');
                     resultsEmpty.classList.remove('hidden');
-                    return;
-                }
-
+                        return;
+                    }
+                    
                 let allResults = [];
                 querySnapshot.forEach(doc => {
                     const docData = doc.data();
@@ -1998,7 +1853,7 @@
                         if (!totalPossible || totalPossible === 0) {
                             totalPossible = docData.questions.length * 2;
                             console.log(`[Dashboard] DM Test (${examName}, id: ${docId}) totalPossibleScore was missing/0, set to: ${totalPossible}`);
-                        }
+                    }
                         console.log(`[Dashboard] DM Test (${examName}, id: ${docId}) recalculated score: ${score}/${totalPossible}`);
                     } else if (section === 'dm') {
                         console.log(`[Dashboard] DM Test (${examName}, id: ${docId}) score: ${score}, totalPossible: ${totalPossible}`);
@@ -2029,15 +1884,15 @@
                         percentage: percentage,
                         submissionTimestamp: docData.submissionTimestamp ? docData.submissionTimestamp.toDate() : new Date(0) // Convert to Date object
                     });
-                });
-
+                              });
+                              
                 allUserResults = allResults; // Store all results globally for filtering/sorting
                 console.log("[Dashboard] All processed results:", JSON.parse(JSON.stringify(allUserResults)));
                 updateResultsSummary(allUserResults);
                 populateResultsIntoSections(allUserResults, currentSortOption, currentFilterOption);
-                resultsLoading.classList.add('hidden');
+                          resultsLoading.classList.add('hidden');
                 resultsSummary.classList.remove('hidden');
-
+                
             } catch (error) {
                 console.error("[Dashboard] Error loading results: ", error);
                 resultsLoading.classList.add('hidden');
@@ -2139,7 +1994,7 @@
                         return dateB - dateA;
                 }
             });
-
+            
             const resultsBySection = {
                 qr: [],
                 dm: [],
@@ -2195,29 +2050,29 @@
                 if (resultsBySection[sectionKey] && resultsBySection[sectionKey].length > 0) {
                     noResultsP.classList.add('hidden');
                     resultsBySection[sectionKey].forEach(result => {
-                        const row = document.createElement('tr');
-                        row.className = 'hover:bg-gray-50 transition-colors';
-                        
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50 transition-colors';
+                
                         const date = result.date instanceof Date ? result.date : new Date(result.date);
-                        const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
                         const totalPossible = result.totalPossibleScore || result.totalQuestions || '-';
                         const scoreDisplay = `${result.score}/${totalPossible}`;
-
-                        row.innerHTML = `
+                
+                row.innerHTML = `
                             <td class="px-4 py-3 whitespace-nowrap text-sm">${formattedDate}</td>
                             <td class="px-4 py-3 text-sm">${result.examName || 'Unknown Test'}</td>
                             <td class="px-4 py-3 font-medium text-sm">${scoreDisplay}</td>
                             <td class="px-4 py-3 text-sm">${result.timeTaken || '-'}</td>
                             <td class="px-4 py-3 text-sm">${result.focusRating || '-'}/5</td>
                             <td class="px-4 py-3 text-sm">
-                                <button class="text-blue-600 hover:text-blue-800 transition-colors view-detail-button" data-result-id="${result.id}">
-                                    View Details
-                                </button>
-                            </td>
-                        `;
+                        <button class="text-blue-600 hover:text-blue-800 transition-colors view-detail-button" data-result-id="${result.id}">
+                            View Details
+                        </button>
+                    </td>
+                `;
                         tableBody.appendChild(row);
-                    });
-                    
+            });
+            
                     // Make sure the section accordion is open and visible
                     let accordionHeaders = document.querySelectorAll('.section-accordion-header');
                     accordionHeaders.forEach(header => {
@@ -2392,7 +2247,7 @@
                     <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Spent</th>
                 `;
             }
-
+            
             // Generate charts
             loadChartJSIfNeeded(() => {
                 renderPerformanceBreakdownChart(result);
@@ -2690,7 +2545,7 @@
             let targetPage = '';
             const examNameLower = result.examName.toLowerCase().trim(); // Trim whitespace just in case
             console.log(`Normalized examName for routing: '${examNameLower}'`);
-
+            
             // DM Syllogisms Worksheets
             if (examNameLower.startsWith('dm syllogisms worksheet')) {
                 const match = examNameLower.match(/dm syllogisms worksheet (\d+)/);

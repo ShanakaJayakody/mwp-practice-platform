@@ -1194,7 +1194,7 @@
                     console.error("Firestore (db) is not initialized. Cannot load review data.");
                     alert("Error: Could not connect to load review data.");
                     document.getElementById('loading-overlay').style.display = 'none';
-                    showSetupScreen(); 
+        showSetupScreen();
                     localStorage.removeItem('reviewSubmissionId');
                     return;
                 }

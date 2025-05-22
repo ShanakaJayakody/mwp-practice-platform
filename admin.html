@@ -483,7 +483,7 @@
                 .catch(error => {
                     console.error("Login error: ", error);
                     displayLoginMessage(`Login failed: ${error.message}`);
-                });
+        });
         });
 
         logoutButton.addEventListener('click', () => {
@@ -495,7 +495,7 @@
                 updateExamFilterOptions(new Set()); // Clear filters
             });
         });
-
+        
         // --- Data Fetching and Display ---
         async function fetchPerformanceData() {
             if (!auth.currentUser) {
@@ -574,7 +574,7 @@
             // Restore previous selection if still valid
             if (Array.from(uniqueExamNames).includes(currentSelection)) {
                 examNameFilter.value = currentSelection;
-            }
+                }
         }
 
         function displayResults(data) {
@@ -583,8 +583,8 @@
                 performanceTableBody.innerHTML = "<p class=\"text-center text-gray-600\">No matching records found.</p>";
                 if (noResultsMessage) noResultsMessage.textContent = "Showing 0 results";
                 return;
-            }
-            
+                }
+                
             let tableHTML = `
                 <div class="overflow-x-auto">
                     <table class="min-w-full">
@@ -656,7 +656,7 @@
                     }
                 });
             });
-
+            
             // Re-attach sort listeners to headers
             document.querySelectorAll('th.sortable').forEach(th => {
                 th.addEventListener('click', () => {
@@ -712,7 +712,7 @@
                         });
                     } else {
                         contentHtml += '<li>No statements data available.</li>';
-                    }
+                }
                     contentHtml += `</ul>`;
                     if (q.explanation) {
                          contentHtml += `<p class="text-xs mt-1 text-gray-700 bg-yellow-50 p-1 rounded"><strong>Explanation:</strong> ${q.explanation || 'N/A'}</p>`;
@@ -735,7 +735,7 @@
             detailsModal.addEventListener('click', (event) => { // Close modal if clicked outside
                 if (event.target === detailsModal) {
                     detailsModal.classList.add('hidden');
-                }
+        }
             });
         }
         // END MODAL FUNCTIONS NEW
