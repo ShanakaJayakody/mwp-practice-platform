@@ -457,10 +457,6 @@
              </div>
              <div class="space-y-4 w-full max-w-md">
                  <div>
-                     <label for="name" class="block text-sm font-medium text-gray-700">Name:</label>
-                     <input type="text" id="name" name="name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter your name">
-                 </div>
-                 <div>
                      <label for="goal" class="block text-sm font-medium text-gray-700">Goal (Score out of 10):</label>
                      <input type="number" id="goal" name="goal" min="0" max="10" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., 8">
                  </div>
@@ -701,8 +697,6 @@
         const totalScorePossibleEl = document.getElementById('total-score-possible');
         const timeTakenEl = document.getElementById('time-taken');
         const resultsDetails = document.getElementById('results-details');
-        const nameInput = document.getElementById('name');
-        const goalInput = document.getElementById('goal');
         const focusAreaInput = document.getElementById('focus-area');
         const examTitleEl = document.getElementById('exam-title');
         const filterFlaggedButton = document.getElementById('filter-flagged-button');
@@ -713,6 +707,7 @@
         const downloadPdfButton = document.getElementById('download-pdf-button');
         const focusRatingInput = document.getElementById('focus-rating');
         const timerDisplay = document.getElementById('timer');
+        const goalInput = document.getElementById('goal');
 
         // --- Functions ---
 
@@ -1353,15 +1348,24 @@
 
         // --- Event Listeners ---
         startButton.addEventListener('click', () => {
-            userName = nameInput.value.trim();
+            // userName = nameInput.value.trim(); // Ensure this is commented out or removed
             userGoal = goalInput.value.trim();
             userFocusArea = focusAreaInput.value.trim();
-            // ADDING userName validation for robustness, though not strictly part of this step's goal.
-            if (!userName) {
-                alert("Please enter your name.");
-                nameInput.focus();
-                return;
+
+            // Initialize userName based on Firebase auth or default
+            if (currentUserId) {
+                userName = "User " + currentUserId.substring(0, 6); // Example: User abc123
+            } else {
+                userName = "User";
             }
+
+            // Optional: If you still want a goal to be mandatory
+            if (!userGoal) {
+                 alert("Please enter your goal for this session.");
+                 goalInput.focus();
+                 return;
+            }
+
             userAnswers = Array(questionsData.length).fill(null).map(() => Array(5).fill(null));
             flaggedQuestions = new Array(questionsData.length).fill(false);
             questionTimings = new Array(questionsData.length).fill(0);
