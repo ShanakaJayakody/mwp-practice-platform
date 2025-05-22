@@ -404,26 +404,47 @@
          }
 
         /* Statement answer boxes and Yes/No buttons */
+        .statement-row {
+            transition: all 0.2s ease;
+            border-radius: 0.375rem;
+            cursor: pointer;
+        }
+        .statement-row:hover {
+            background-color: #f9fafb;
+        }
+        .statement-row.selected {
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+        }
         .statement-answer-box {
             transition: all 0.2s ease;
             font-weight: 600;
             font-size: 1rem;
             user-select: none;
-        }
-        .statement-answer-box.selected {
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+            background-color: #f5f5f5;
+            color: #4b5563;
         }
         .drag-button {
             cursor: pointer;
             transition: all 0.2s ease;
             user-select: none;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        #yes-button {
+            background-color: #a7f3d0;
+            border-color: #10b981;
+            color: #047857;
         }
         #yes-button:hover {
-            background-color: #dcfce7;
+            background-color: #6ee7b7;
             transform: translateY(-1px);
         }
+        #no-button {
+            background-color: #fca5a5;
+            border-color: #ef4444;
+            color: #b91c1c;
+        }
         #no-button:hover {
-            background-color: #fee2e2;
+            background-color: #f87171;
             transform: translateY(-1px);
         }
         .drag-button[draggable=true] {
@@ -945,8 +966,8 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
 
         function loadQuestion(index, reviewMode = false) {
             if (index < 0 || index >= questions.length) return;
-             if (!isReviewingFromResults && !reviewMode) {
-                 recordTimeSpent(currentQuestionIndex);
+            if (!isReviewingFromResults && !reviewMode) {
+                recordTimeSpent(currentQuestionIndex);
             }
             const question = questions[index];
             const questionContainer = document.querySelector('.question-column');
@@ -967,10 +988,19 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
                 
                 premisesHtml += '</div>';
                 
-                // Create HTML for statements
+                // Create HTML for statements section with Yes/No buttons on the right
                 let statementsHtml = `
                     <h4 class="text-md font-semibold mb-3 bg-white pb-1">Question ${index + 1}</h4>
-                    <h5 class="font-medium mb-2">Conclusions</h5>
+                    <div class="flex justify-between items-center mb-3">
+                        <div>
+                            <h5 class="font-medium mb-2">Conclusions</h5>
+                            <p class="text-sm text-gray-600">Drag 'Yes' or 'No' onto the statement row.</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button id="yes-button" class="drag-button px-6 py-2 bg-green-100 border border-green-500 rounded-md text-green-700 font-medium">Yes</button>
+                            <button id="no-button" class="drag-button px-6 py-2 bg-red-100 border border-red-500 rounded-md text-red-700 font-medium">No</button>
+                        </div>
+                    </div>
                     <div id="statements-container" class="space-y-3"></div>
                     <div id="review-explanation-container"></div>
                 `;
@@ -984,7 +1014,7 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
             questionNumberInfoEl.textContent = `${index + 1} of ${questions.length}`;
             if (questionContainer) questionContainer.scrollTop = 0;
             
-            // Add the statements with Yes/No options
+            // Add the statements with answer boxes
             const statementsContainer = document.getElementById('statements-container');
             if (statementsContainer) {
                 statementsContainer.innerHTML = '';
@@ -992,15 +1022,16 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
                 question.statements.forEach((statement, i) => {
                     const statementId = `q${index}_statement${i}`;
                     const rowDiv = document.createElement('div');
-                    rowDiv.className = 'flex items-center mb-3 border border-gray-200 rounded-md p-3 bg-white';
+                    rowDiv.className = 'statement-row flex items-center mb-3 border border-gray-200 rounded-md p-3 bg-white';
+                    rowDiv.dataset.statementIndex = i;
                     rowDiv.innerHTML = `
-                        <div class="flex-grow">
+                        <div class="flex-grow statement-text">
                             <span class="font-medium">${i + 1}.</span> ${statement}
                         </div>
                         <div class="flex-shrink-0 ml-4 relative">
                             <div class="statement-answer-box w-16 h-10 border border-gray-300 rounded flex items-center justify-center bg-gray-50" 
                                  data-statement-index="${i}">
-                                ${userAnswers[index] && userAnswers[index][i] ? userAnswers[index][i] : ''}
+                                ${userAnswers[index] && userAnswers[index][i] ? userAnswers[index][i] : '...'}
                             </div>
                         </div>
                     `;
@@ -1029,17 +1060,8 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
                     }
                 });
                 
-                // Add Yes/No buttons if not in review mode
+                // Add drag and drop functionality if not in review mode
                 if (!reviewMode) {
-                    const yesNoContainer = document.createElement('div');
-                    yesNoContainer.className = 'mt-6 flex space-x-4 justify-center';
-                    yesNoContainer.innerHTML = `
-                        <button id="yes-button" class="drag-button px-6 py-2 bg-green-100 border border-green-500 rounded-md text-green-700 font-medium">Yes</button>
-                        <button id="no-button" class="drag-button px-6 py-2 bg-red-100 border border-red-500 rounded-md text-red-700 font-medium">No</button>
-                    `;
-                    statementsContainer.appendChild(yesNoContainer);
-                    
-                    // Add drag and drop functionality
                     initDragAndDrop();
                 }
             }
@@ -2293,7 +2315,7 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
         function initDragAndDrop() {
             const yesButton = document.getElementById('yes-button');
             const noButton = document.getElementById('no-button');
-            const answerBoxes = document.querySelectorAll('.statement-answer-box');
+            const statementRows = document.querySelectorAll('.statement-row');
             
             if (!yesButton || !noButton) return;
             
@@ -2315,13 +2337,15 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
                 
                 // Click functionality as alternative to drag
                 button.addEventListener('click', function() {
-                    const selectedBox = document.querySelector('.statement-answer-box.selected');
-                    if (selectedBox) {
-                        selectedBox.textContent = this.textContent;
-                        selectedBox.classList.remove('selected', 'border-blue-500', 'bg-blue-50');
+                    const selectedRow = document.querySelector('.statement-row.selected');
+                    if (selectedRow) {
+                        const statementIndex = parseInt(selectedRow.dataset.statementIndex);
+                        const answerBox = selectedRow.querySelector('.statement-answer-box');
+                        
+                        answerBox.textContent = this.textContent;
+                        selectedRow.classList.remove('selected', 'border-blue-500', 'bg-blue-50');
                         
                         // Update userAnswers array
-                        const statementIndex = parseInt(selectedBox.dataset.statementIndex);
                         if (!userAnswers[currentQuestionIndex]) {
                             userAnswers[currentQuestionIndex] = [];
                         }
@@ -2332,33 +2356,34 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
                 });
             });
             
-            // Make answer boxes droppable
-            answerBoxes.forEach(box => {
-                box.addEventListener('click', function() {
+            // Make entire statement rows droppable
+            statementRows.forEach(row => {
+                row.addEventListener('click', function() {
                     // Clear any previous selections
-                    document.querySelectorAll('.statement-answer-box.selected').forEach(el => {
+                    document.querySelectorAll('.statement-row.selected').forEach(el => {
                         el.classList.remove('selected', 'border-blue-500', 'bg-blue-50');
                     });
                     
-                    // Select this box
+                    // Select this row
                     this.classList.add('selected', 'border-blue-500', 'bg-blue-50');
                 });
                 
-                box.addEventListener('dragover', function(e) {
+                row.addEventListener('dragover', function(e) {
                     e.preventDefault();
                     this.classList.add('border-blue-500', 'bg-blue-50');
                 });
                 
-                box.addEventListener('dragleave', function() {
+                row.addEventListener('dragleave', function() {
                     this.classList.remove('border-blue-500', 'bg-blue-50');
                 });
                 
-                box.addEventListener('drop', function(e) {
+                row.addEventListener('drop', function(e) {
                     e.preventDefault();
                     this.classList.remove('border-blue-500', 'bg-blue-50');
                     
                     const value = e.dataTransfer.getData('text/plain');
-                    this.textContent = value;
+                    const answerBox = this.querySelector('.statement-answer-box');
+                    answerBox.textContent = value;
                     
                     // Update userAnswers array
                     const statementIndex = parseInt(this.dataset.statementIndex);
