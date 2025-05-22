@@ -1236,6 +1236,7 @@
         const navSkills = document.getElementById('nav-skills');
 
         // Content area elements
+        const homeContent = document.getElementById('home-content'); // Add this line
         const qrTestsContent = document.getElementById('qr-tests-content');
         const resultsContent = document.getElementById('results-content');
         const comingSoonContent = document.getElementById('coming-soon-content');
@@ -1597,7 +1598,7 @@
         navResults.addEventListener('click', () => {
             showContent('results');
             setActiveTab(navResults);
-            loadUserResults();
+            loadUserResults(); // This will automatically use current user ID
         });
         
         navSkills.addEventListener('click', () => {
@@ -1647,7 +1648,7 @@
                     setActiveTab(navResults);
                     
                     // Load results data
-                    loadUserResults();
+                    loadUserResults(); // This will automatically use current user ID
                 }, 300);
             } else {
                 // User is signed out
@@ -1700,7 +1701,7 @@
                 showContent('results');
                 setActiveTab(navResults);
                 if (firebase.auth().currentUser) {
-                    loadUserResults();
+                    loadUserResults(); // This will automatically use current user ID
                 }
             } else if (hash === '#practice') {
                 showContent('qr'); // Or your main practice content ID
@@ -1809,6 +1810,13 @@
                 resultsEmpty.classList.add('hidden');
                 return;
             }
+            
+            // Get current user ID if none provided
+            const currentUser = firebase.auth().currentUser;
+            if (!userIdToLoad && currentUser) {
+                userIdToLoad = currentUser.uid;
+            }
+            
             console.log("[Dashboard] Loading results for userId:", userIdToLoad);
             resultsLoading.classList.remove('hidden');
             resultsError.classList.add('hidden');
@@ -1816,10 +1824,41 @@
             resultsEmpty.classList.add('hidden');
 
             try {
-                const querySnapshot = await db.collection("performanceSubmissions")
-                                          .where("userId", "==", userIdToLoad)
-                                          .orderBy("submissionTimestamp", "desc")
-                                          .get();
+                // First check if user is admin
+                let isAdmin = false;
+                
+                if (currentUser) {
+                    const userDoc = await db.collection("users").doc(currentUser.uid).get();
+                    if (userDoc.exists) {
+                        const userData = userDoc.data();
+                        isAdmin = userData.isAdmin === true;
+                    }
+                    
+                    // For testing/development: specific email addresses as admins
+                    const adminEmails = ['admin@medwithpurpose.com', 'shanak@medwithpurpose.com']; 
+                    if (adminEmails.includes(currentUser.email?.toLowerCase())) {
+                        isAdmin = true;
+                    }
+                }
+                
+                console.log("[Dashboard] User is admin:", isAdmin);
+                
+                let querySnapshot;
+                
+                if (isAdmin) {
+                    // Admin users see all results
+                    querySnapshot = await db.collection("performanceSubmissions")
+                                        .orderBy("submissionTimestamp", "desc")
+                                        .get();
+                    console.log("[Dashboard] Admin user - showing all results");
+                } else {
+                    // Regular users only see their own results
+                    querySnapshot = await db.collection("performanceSubmissions")
+                                        .where("userId", "==", userIdToLoad)
+                                        .orderBy("submissionTimestamp", "desc")
+                                        .get();
+                    console.log("[Dashboard] Regular user - showing only their results");
+                }
 
                 console.log(`[Dashboard] Found ${querySnapshot.size} results for user.`);
 
