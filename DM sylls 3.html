@@ -465,7 +465,7 @@
              <div class="text-center mb-6">
                 <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
                      alt="MedwithPurpose Logo" class="mx-auto h-11 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
-                <h1 class="text-2xl md:text-3xl font-bold text-blue-600">Decision Making Syllogisms Worksheet 1</h1>
+                <h1 class="text-2xl md:text-3xl font-bold text-blue-600">Decision Making Syllogisms Worksheet 3</h1>
                 <p class="text-gray-600 mt-2">Prepare for the UCAT DM section.</p>
                  <p class="text-sm text-gray-500 mt-4">
                      This section contains <strong>5 questions</strong> with 5 statements each. Maximum score is <strong>10 points</strong> (2 points per question). You have <strong>6 minutes</strong> to complete it.
@@ -824,67 +824,72 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
         const questions = [
             { 
                 premises: [
-                    "All oranges in the bowl are sweet.",
-                    "This fruit is an orange in the bowl."
+                    "Not all athletes in the team are sprinters.",
+                    "Every sprinter on the team is fit."
                 ],
                 statements: [
-                    "This fruit is sweet.",
-                    "Some sweet fruits in the bowl are oranges.",
-                    "No non-sweet fruits in the bowl are oranges.",
-                    "All sweet fruits in the bowl are oranges.",
-                    "Some fruits in the bowl are not sweet."
+                    "Some fit athletes on the team are sprinters.",
+                    "All fit athletes on the team are sprinters.",
+                    "Some athletes on the team are not fit.",
+                    "Some non-sprinters on the team are fit.",
+                    "No sprinters on the team are unfit."
+                ],
+                correctAnswers: ["N", "N", "N", "N", "Y"]
+            },
+            { 
+                premises: [
+                    "Every recipe that is vegan contains no dairy.",
+                    "Some recipes with no dairy are gluten-free."
+                ],
+                statements: [
+                    "Some vegan recipes are gluten-free.",
+                    "All no-dairy recipes are vegan.",
+                    "Some gluten-free recipes are not vegan.",
+                    "No vegan recipes are gluten-free.",
+                    "Some no-dairy recipes are not vegan."
+                ],
+                correctAnswers: ["N", "N", "N", "N", "N"]
+            },
+            { 
+                premises: [
+                    "All conference talks are either online or in-person.",
+                    "Some online talks have guest speakers."
+                ],
+                statements: [
+                    "Some conference talks with guest speakers are online.",
+                    "All online talks have guest speakers.",
+                    "Some in-person talks have guest speakers.",
+                    "No in-person talks have guest speakers.",
+                    "Some conference talks have no guest speaker."
+                ],
+                correctAnswers: ["N", "N", "N", "N", "N"]
+            },
+            { 
+                premises: [
+                    "Some vehicles on the road are buses.",
+                    "No buses on the road are yellow.",
+                    "Some yellow vehicles on the road are taxis."
+                ],
+                statements: [
+                    "Some vehicles on the road are taxis.",
+                    "Some taxis on the road are buses.",
+                    "No yellow vehicles on the road are buses.",
+                    "Some buses on the road are not yellow.",
+                    "All taxis on the road are yellow."
                 ],
                 correctAnswers: ["Y", "N", "Y", "N", "N"]
             },
             { 
                 premises: [
-                    "No penguin can fly."
+                    "All employees in Department X have security badges.",
+                    "Some employees with security badges have remote access."
                 ],
                 statements: [
-                    "Some penguins can fly.",
-                    "If something can fly, it is not a penguin.",
-                    "All penguins cannot fly.",
-                    "Some creatures that cannot fly are penguins.",
-                    "All creatures that cannot fly are penguins."
-                ],
-                correctAnswers: ["N", "Y", "Y", "N", "N"]
-            },
-            { 
-                premises: [
-                    "Every burger on the menu contains bread."
-                ],
-                statements: [
-                    "Some bread items on the menu are burgers.",
-                    "All bread items on the menu are burgers.",
-                    "Some burgers on the menu do not contain bread.",
-                    "No burgers on the menu lack bread.",
-                    "Some menu items lack bread."
-                ],
-                correctAnswers: ["N", "N", "N", "Y", "N"]
-            },
-            { 
-                premises: [
-                    "Some books in the library are new."
-                ],
-                statements: [
-                    "All books in the library are new.",
-                    "Some books in the library are not new.",
-                    "At least one new item in the library is a book.",
-                    "No new items in the library are books.",
-                    "There is at least one book in the library."
-                ],
-                correctAnswers: ["N", "N", "Y", "N", "Y"]
-            },
-            { 
-                premises: [
-                    "All dogs at the shelter are vaccinated."
-                ],
-                statements: [
-                    "Some vaccinated animals at the shelter are dogs.",
-                    "Some dogs at the shelter are not vaccinated.",
-                    "All vaccinated animals at the shelter are dogs.",
-                    "No dogs at the shelter are unvaccinated.",
-                    "Some animals at the shelter are not vaccinated."
+                    "Some employees in Department X have remote access.",
+                    "All employees with security badges have remote access.",
+                    "Some people with remote access are not employees in Department X.",
+                    "No employees in Department X lack security badges.",
+                    "Some employees in Department X lack remote access."
                 ],
                 correctAnswers: ["N", "N", "N", "Y", "N"]
             }
@@ -1424,7 +1429,7 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
             const performanceData = {
                 studentName: userName || 'Anonymous',
                 studentEmail: userEmail || '', // <--- ADD THIS LINE
-                examName: "DM Syllogisms Worksheet 1", // Updated examName
+                examName: "DM Syllogisms Worksheet 3", // Updated examName
                 score: calculateScore(), // New function to calculate score
                 totalQuestions: questions.length, // Should be 5
                 totalPossibleScore: 10, // Explicitly add total possible score (2 points per question)
@@ -1649,7 +1654,7 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
                         studentName: userName || userDisplayName || 'Anonymous',
                         studentEmail: userEmail || '',
                         userId: userId, // <--- Add userId here
-                        examName: "DM Syllogisms Worksheet 1", // Updated examName
+                        examName: "DM Syllogisms Worksheet 3", // Updated examName
                         score: scoreEl.textContent,
                         totalQuestions: totalQuestionsResultsEl.textContent, // Should be 5
                         totalPossibleScore: 10, // Explicitly add total possible score (2 points per question)
