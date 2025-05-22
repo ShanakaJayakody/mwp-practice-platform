@@ -1265,6 +1265,17 @@
         const defaultDashboardMessage = document.getElementById('default-dashboard-message');
         const allNavTabs = document.querySelectorAll('.nav-tab');
         const dashboardContentArea = document.getElementById('dashboard-content-area');
+        
+        // Results elements
+        const resultsLoading = document.getElementById('results-loading');
+        const resultsError = document.getElementById('results-error');
+        const resultsSummary = document.getElementById('results-summary');
+        const resultsEmpty = document.getElementById('results-empty');
+        const backToResultsList = document.getElementById('back-to-results-list');
+        const resultDetail = document.getElementById('result-detail');
+        const resultsFilter = document.getElementById('results-filter');
+        const resultsSort = document.getElementById('results-sort');
+        const refreshResultsButton = document.getElementById('refresh-results-button');
 
         // Home content specific elements
         const homeStudentFirstNameSpan = document.getElementById('home-student-first-name');
@@ -1766,7 +1777,57 @@
                 }
                 window.history.pushState({}, "", "student_dashboard.html#results"); // Update URL for results
             });
-
+            
+            // Results page specific event listeners
+            if (backToResultsList) {
+                backToResultsList.addEventListener('click', () => {
+                    resultDetail.classList.add('hidden');
+                    resultsSummary.classList.remove('hidden');
+                });
+            }
+            
+            // Results filter and sort handlers
+            if (resultsFilter) {
+                resultsFilter.addEventListener('change', () => {
+                    currentFilterOption = resultsFilter.value;
+                    populateResultsIntoSections(allUserResults);
+                });
+            }
+            
+            if (resultsSort) {
+                resultsSort.addEventListener('change', () => {
+                    currentSortOption = resultsSort.value;
+                    populateResultsIntoSections(allUserResults);
+                });
+            }
+            
+            // Refresh results button
+            if (refreshResultsButton) {
+                refreshResultsButton.addEventListener('click', () => {
+                    if (firebase.auth().currentUser) {
+                        loadUserResults(); // This will automatically use current user ID
+                    }
+                });
+            }
+            
+            // Results error retry button
+            const resultsRetryButton = document.getElementById('results-retry-button');
+            if (resultsRetryButton) {
+                resultsRetryButton.addEventListener('click', () => {
+                    if (firebase.auth().currentUser) {
+                        loadUserResults(); // This will automatically use current user ID
+                    }
+                });
+            }
+            
+            // Go to tests button
+            const goToTestsButton = document.getElementById('go-to-tests-button');
+            if (goToTestsButton) {
+                goToTestsButton.addEventListener('click', () => {
+                    window.location.href = 'QR Test 1.html';
+                });
+            }
+            
             // No event listener for navSkills as it's disabled for now
 
             // Add handling for Enter key on inputs
@@ -1837,6 +1898,14 @@
             const currentUser = firebase.auth().currentUser;
             if (!userIdToLoad && currentUser) {
                 userIdToLoad = currentUser.uid;
+                console.log("[Dashboard] Using current user ID:", userIdToLoad, "Email:", currentUser.email);
+            } else if (!userIdToLoad) {
+                console.error("[Dashboard] No user ID available and no current user!");
+                resultsLoading.classList.add('hidden');
+                resultsError.classList.remove('hidden');
+                resultsSummary.classList.add('hidden');
+                resultsEmpty.classList.add('hidden');
+                return;
             }
             
             console.log("[Dashboard] Loading results for userId:", userIdToLoad);
@@ -1854,12 +1923,27 @@
                     if (userDoc.exists) {
                         const userData = userDoc.data();
                         isAdmin = userData.isAdmin === true;
+                        console.log("[Dashboard] User document exists, isAdmin from Firestore:", isAdmin);
+                    } else {
+                        console.log("[Dashboard] User document does not exist in Firestore");
                     }
                     
                     // For testing/development: specific email addresses as admins
                     const adminEmails = ['admin@medwithpurpose.com', 'shanak@medwithpurpose.com']; 
-                    if (adminEmails.includes(currentUser.email?.toLowerCase())) {
+                    const emailCheck = adminEmails.includes(currentUser.email?.toLowerCase());
+                    console.log("[Dashboard] Admin email check:", currentUser.email, "Result:", emailCheck);
+                    
+                    if (emailCheck) {
                         isAdmin = true;
+                        // Also update the user record to include isAdmin flag for future
+                        try {
+                            await db.collection("users").doc(currentUser.uid).set({
+                                isAdmin: true
+                            }, { merge: true });
+                            console.log("[Dashboard] Updated user record with isAdmin flag");
+                        } catch (e) {
+                            console.error("[Dashboard] Failed to update user with isAdmin flag:", e);
+                        }
                     }
                 }
                 
