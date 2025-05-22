@@ -1531,18 +1531,9 @@
             setTimeout(() => {
                 let contentToShow;
                 
-                if (contentId === 'home') { // Added 'home' case
+                if (contentId === 'home') { 
                     contentToShow = homeContent;
-                    // Reset and re-trigger animation for welcome text if it exists
-                    if (animatedWelcomeText) {
-                        animatedWelcomeText.style.animation = 'none'; // Remove any existing animation
-                        animatedWelcomeText.style.opacity = '0'; // Reset to initial state
-                        animatedWelcomeText.style.transform = 'translateX(-60px)'; // Reset to initial position
-                        animatedWelcomeText.offsetHeight; /* trigger reflow */
-                        animatedWelcomeText.style.animation = 'slideInFromLeft 0.8s ease-out forwards';
-                        animatedWelcomeText.style.opacity = ''; // Let animation control opacity
-                        animatedWelcomeText.style.transform = ''; // Let animation control transform
-                    }
+                    // NOTE: Animation logic for animatedWelcomeText moved lower
                 } else if (contentId === 'qr') {
                     contentToShow = qrTestsContent;
                 } else if (contentId === 'results') {
@@ -1556,11 +1547,25 @@
                 contentToShow.classList.remove('hidden');
                 contentToShow.style.opacity = "0";
                 
-                // Trigger reflow
-                void contentToShow.offsetWidth;
+                void contentToShow.offsetWidth; // Trigger reflow
                 
                 contentToShow.style.opacity = "1";
                 contentToShow.style.transition = "opacity 0.3s ease-in-out";
+
+                // If it's the home content, specifically handle the welcome text animation
+                // This is moved here and delayed to ensure parent container is visible and its animation has finished
+                if (contentId === 'home' && animatedWelcomeText) {
+                    setTimeout(() => {
+                        animatedWelcomeText.style.animation = 'none'; // Remove any existing animation
+                        animatedWelcomeText.style.opacity = '0'; // Reset to initial state (0% of keyframes)
+                        animatedWelcomeText.style.transform = 'translateX(-60px)'; // Reset to initial position (0% of keyframes)
+                        animatedWelcomeText.offsetHeight; /* trigger reflow to apply new styles */
+                        animatedWelcomeText.style.animation = 'slideInFromLeft 0.8s ease-out forwards';
+                        // Clear inline opacity and transform so 'forwards' from animation takes over
+                        animatedWelcomeText.style.opacity = ''; 
+                        animatedWelcomeText.style.transform = '';
+                    }, 300); // Delay to match parent's fade-in duration
+                }
             }, 300);
         }
         
