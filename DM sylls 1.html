@@ -2075,7 +2075,7 @@
                                 localStorage.removeItem('reviewSubmissionId');
                                 return;
                             }
-                            userName = submissionData.studentName || 'Review User'; // Or some indicator
+                            userName = localStorage.getItem('studentNameForReview') || submissionData.studentName || 'Review User'; // Use stored name
                             // examStartTime, examEndTime, questionTimings might not be directly needed for simple review of answers,
                             // but could be displayed if desired.
 

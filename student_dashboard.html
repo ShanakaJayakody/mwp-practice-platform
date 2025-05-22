@@ -2568,51 +2568,69 @@
                 alert("Could not start review session. Essential data is missing.");
                 return;
             }
+            console.log(`Attempting to review questions for result ID: ${result.id}, Exam: ${result.examName}`); // Log entry
 
             localStorage.setItem('reviewSubmissionId', result.id); 
             localStorage.setItem('returnToDashboardResults', 'true');
+            localStorage.setItem('studentNameForReview', result.studentName || 'Review User'); // Store student name for review page
 
             let targetPage = '';
-            const examNameLower = result.examName.toLowerCase();
+            const examNameLower = result.examName.toLowerCase().trim(); // Trim whitespace just in case
+            console.log(`Normalized examName for routing: '${examNameLower}'`);
 
-            if (examNameLower.includes('dm syllogisms worksheet 1')) {
-                targetPage = 'DM sylls 1.html';
-            } else if (examNameLower.includes('dm syllogisms worksheet 2')) {
-                targetPage = 'DM sylls 2.html';
-            } else if (examNameLower.includes('dm syllogisms worksheet 3')) {
-                targetPage = 'DM sylls 3.html';
-            } else if (examNameLower.includes('dm syllogisms worksheet 4')) {
-                targetPage = 'DM sylls 4.html';
-            } else if (examNameLower.includes('dm syllogisms worksheet 5')) {
-                targetPage = 'DM sylls 5.html';
-            } else if (examNameLower.includes('vr focus group 16')) {
-                targetPage = 'VR focus group16.html';
-            } else if (examNameLower.startsWith('qr test')) {
+            // DM Syllogisms Worksheets
+            if (examNameLower.startsWith('dm syllogisms worksheet')) {
+                const match = examNameLower.match(/dm syllogisms worksheet (\d+)/);
+                if (match && match[1]) {
+                    targetPage = `DM sylls ${match[1]}.html`;
+                    console.log(`Routing to DM Syllogisms: ${targetPage}`);
+                } else {
+                    console.warn(`Could not extract DM worksheet number from: ${result.examName}`);
+                }
+            } 
+            // Verbal Reasoning Focus Groups
+            else if (examNameLower.startsWith('vr focus group')) {
+                const match = examNameLower.match(/vr focus group (\d+)/);
+                if (match && match[1]) {
+                    targetPage = `VR focus group${match[1]}.html`;
+                    console.log(`Routing to VR Focus Group: ${targetPage}`);
+                }
+                 else {
+                    console.warn(`Could not extract VR focus group number from: ${result.examName}`);
+                }
+            } 
+            // QR Tests
+            else if (examNameLower.startsWith('qr test')) {
                 const match = examNameLower.match(/qr test (\d+)/);
                 if (match && match[1]) {
                     targetPage = `QR Test ${match[1]}.html`;
-                } else {
-                    console.error("Could not determine QR Test number from examName:", result.examName);
-                    alert("Could not determine the correct test page for review.");
-                    localStorage.removeItem('reviewSubmissionId');
-                    localStorage.removeItem('returnToDashboardResults');
-                    return;
+                    console.log(`Routing to QR Test: ${targetPage}`);
                 }
-            } else {
-                console.error("Unknown examName for review:", result.examName);
-                alert("This test type cannot be reviewed at this time.");
+                 else {
+                    console.warn(`Could not extract QR Test number from: ${result.examName}`);
+                }
+            } 
+            // Add other test types here with similar else if blocks
+            // else if (examNameLower.startsWith('another test type prefix')) { ... }
+            
+            else {
+                console.error("Unknown examName for review routing:", result.examName);
+                alert("This test type cannot be reviewed at this time or the name is not recognized.");
                 localStorage.removeItem('reviewSubmissionId');
                 localStorage.removeItem('returnToDashboardResults');
+                localStorage.removeItem('studentNameForReview');
                 return;
             }
 
             if (targetPage) {
+                console.log(`Final target page for review: ${targetPage}#review`);
                 window.location.href = `${targetPage}#review`;
             } else {
-                 console.error("Target page for review could not be determined.");
-                 alert("Error: Could not navigate to the review page.");
+                 console.error("Target page for review could not be determined after checks.");
+                 alert("Error: Could not determine the correct test page for review.");
                  localStorage.removeItem('reviewSubmissionId'); 
                  localStorage.removeItem('returnToDashboardResults');
+                 localStorage.removeItem('studentNameForReview');
             }
         }
     </script>
