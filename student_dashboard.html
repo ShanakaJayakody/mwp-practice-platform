@@ -1696,53 +1696,6 @@
                     icon.classList.toggle('rotate-180', !isOpen);
                 });
             });
-            
-            // Make sure at least one section is open initially
-            function openDefaultSection() {
-                // Check if we have QR results
-                const qrCount = document.querySelectorAll('#results-table-body-qr tr').length;
-                if (qrCount > 0) {
-                    openAccordionByPrefix('Quantitative');
-                    return;
-                }
-                
-                // Check if we have DM results
-                const dmCount = document.querySelectorAll('#results-table-body-dm tr').length;
-                if (dmCount > 0) {
-                    openAccordionByPrefix('Decision');
-                    return;
-                }
-                
-                // Check if we have VR results
-                const vrCount = document.querySelectorAll('#results-table-body-vr tr').length;
-                if (vrCount > 0) {
-                    openAccordionByPrefix('Verbal');
-                    return;
-                }
-                
-                // If no specific results, open the first non-disabled accordion
-                const firstHeader = Array.from(accordionHeaders).find(h => !h.closest('.opacity-60'));
-                if (firstHeader) {
-                    const content = firstHeader.nextElementSibling;
-                    const icon = firstHeader.querySelector('svg');
-                    content.classList.remove('hidden');
-                    if (icon) icon.classList.add('rotate-180');
-                }
-            }
-            
-            function openAccordionByPrefix(prefix) {
-                accordionHeaders.forEach(header => {
-                    if (header.textContent.includes(prefix)) {
-                        const content = header.nextElementSibling;
-                        const icon = header.querySelector('svg');
-                        content.classList.remove('hidden');
-                        if (icon) icon.classList.add('rotate-180');
-                    }
-                });
-            }
-            
-            // Open default section when results are loaded
-            setTimeout(openDefaultSection, 500);
         }
 
         // Function to load user results from Firebase
@@ -1841,6 +1794,32 @@
                                       ? parseInt(result.totalQuestions) || 0 
                                       : (result.totalQuestions || 0);
                               }
+
+                              // If it's a DM test and score is 0, try to calculate from questions array
+                              const examNameLower = result.examName ? result.examName.toLowerCase() : '';
+                              if ((examNameLower.includes('dm') || examNameLower.includes('decision making') || examNameLower.includes('syllogisms')) && result.score === 0 && result.questions && Array.isArray(result.questions)) {
+                                  let calculatedScore = 0;
+                                  let calculatedTotalPossible = 0;
+                                  result.questions.forEach(q => {
+                                      if (q.points !== undefined) {
+                                          calculatedScore += (typeof q.points === 'string' ? parseInt(q.points) : q.points) || 0;
+                                      }
+                                      // Assuming each question item implies a certain number of possible points, e.g., 2 for syllogisms
+                                      // Or if totalPossibleScore is already set for the main result, use that as a fallback for items.
+                                      // For syllogisms, each question might have 2 possible points if it has statements.
+                                      if (q.statements && Array.isArray(q.statements)) {
+                                          calculatedTotalPossible += 2; // Common for syllogisms
+                                      } else {
+                                          calculatedTotalPossible += result.totalPossibleScore ? (result.totalPossibleScore / result.questions.length) : 1; // Fallback
+                                      }
+                                  });
+                                  result.score = calculatedScore;
+                                  // Update totalPossibleScore if it wasn't set or seems incorrect for DM
+                                  if (!result.totalPossibleScore || result.totalPossibleScore === 0) {
+                                     result.totalPossibleScore = calculatedTotalPossible;
+                                  }
+                                  console.log(`DM Result ${result.id}: Recalculated score=${result.score}, totalPossible=${result.totalPossibleScore}`);
+                              }
                               
                               const totalPossible = parseInt(result.totalPossibleScore || result.totalQuestions);
                               const percentage = !isNaN(result.score) && !isNaN(totalPossible) && totalPossible > 0 ? 
@@ -1852,6 +1831,7 @@
                               updateResultsSummary(results); // Keep overall summary
                               populateResultsIntoSections(results); // New function to populate accordions
                               resultsSummary.classList.remove('hidden');
+                              resultDetail.classList.add('hidden'); // Explicitly hide detail view
                               
                               const resultsFilter = document.getElementById('results-filter');
                               const resultsSort = document.getElementById('results-sort');
@@ -2149,6 +2129,7 @@
             document.querySelectorAll('.view-detail-button').forEach(button => {
                 button.addEventListener('click', (e) => {
                     const resultId = e.target.dataset.resultId;
+                    console.log(`View Detail button clicked for resultId: ${resultId}`); // Added log
                     const resultToShow = allResults.find(r => r.id === resultId);
                     if (resultToShow) {
                         showResultDetail(resultToShow);
@@ -2159,6 +2140,7 @@
         
         // Function to show detailed view of a specific result
         function showResultDetail(result) {
+            console.log(`Entering showResultDetail for resultId: ${result.id}`); // Added log
             const resultsSummary = document.getElementById('results-summary');
             const resultDetail = document.getElementById('result-detail');
             
@@ -2170,8 +2152,33 @@
             // Update detail view with result data
             document.getElementById('detail-test-name').textContent = result.examName || 'Unknown Test';
             document.getElementById('detail-test-date').textContent = result.date.toLocaleDateString() + ' at ' + result.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            const totalPossible = result.totalPossibleScore || result.totalQuestions || '-';
-            document.getElementById('detail-score').textContent = `${result.score}/${totalPossible}`;
+            
+            // Calculate score for DM tests if needed for the detail view header
+            let displayScore = result.score;
+            let displayTotalPossible = result.totalPossibleScore || result.totalQuestions || '-';
+            const examNameLower = result.examName ? result.examName.toLowerCase() : '';
+
+            if ((examNameLower.includes('dm') || examNameLower.includes('decision making') || examNameLower.includes('syllogisms')) && result.questions && Array.isArray(result.questions)) {
+                if (result.score === 0 || displayTotalPossible === '-' || displayTotalPossible === 0) { // Recalculate if score is 0 or total is invalid
+                    let calculatedScore = 0;
+                    let calculatedTotalPossible = 0;
+                    result.questions.forEach(q => {
+                        if (q.points !== undefined) {
+                            calculatedScore += (typeof q.points === 'string' ? parseInt(q.points) : q.points) || 0;
+                        }
+                        if (q.statements && Array.isArray(q.statements)) {
+                            calculatedTotalPossible += 2; // Common for syllogisms
+                        } else {
+                            calculatedTotalPossible += 1; // Fallback if not a typical syllogism structure within questions
+                        }
+                    });
+                    displayScore = calculatedScore;
+                    displayTotalPossible = calculatedTotalPossible > 0 ? calculatedTotalPossible : '-';
+                    console.log(`DM Detail View: Recalculated score=${displayScore}, totalPossible=${displayTotalPossible}`);
+                }
+            }
+            
+            document.getElementById('detail-score').textContent = `${displayScore}/${displayTotalPossible}`;
             document.getElementById('detail-time').textContent = result.timeTaken || 'N/A';
             document.getElementById('detail-focus').textContent = `${result.focusRating || '-'}/5`;
             document.getElementById('detail-reflection').textContent = result.reflection || 'No reflection provided.';
