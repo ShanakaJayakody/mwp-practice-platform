@@ -462,6 +462,32 @@
             }
         }
 
+        /* Welcome Message Styling & Animation for home.html */
+        .animated-welcome-text {
+            position: relative;
+            opacity: 0; /* Initial state for animation */
+            white-space: nowrap;
+            display: inline-block;
+        }
+        .animated-welcome-text .welcome-part1 {
+            color: #85C1E9; /* Lighter blue for "Welcome " */
+        }
+        .animated-welcome-text .welcome-part2 {
+            color: #3498DB; /* Vibrant blue for "First Name" */
+        }
+
+        @keyframes slideInFromLeft {
+            0% {
+                transform: translateX(-60px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        /* End Welcome Message Styling & Animation */
+
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -524,7 +550,9 @@
             <div id="home-content" class="p-6 md:p-8 text-gray-700">
                 <div class="max-w-6xl mx-auto">
                     <div class="mb-8 text-left">
-                        <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Welcome back, <span id="home-student-name-display" class="text-blue-600">Student</span>!</h1>
+                        <h1 class="text-3xl md:text-4xl font-bold animated-welcome-text">
+                            <span class="welcome-part1">Welcome </span><span id="home-student-first-name" class="welcome-part2">Student</span>
+                        </h1>
                         <p class="text-lg text-gray-500 mt-1">Ready to ace the UCAT? Here's your personalized dashboard.</p>
                     </div>
 
@@ -651,7 +679,7 @@
         }
 
         const studentDisplayNameSpan = document.getElementById('student-display-name');
-        const homeStudentNameDisplay = document.getElementById('home-student-name-display');
+        const homeStudentFirstNameDisplay = document.getElementById('home-student-first-name');
         const userNameInput = document.getElementById('user-name');
         const examDateInput = document.getElementById('exam-date');
         const daysRemainingSpan = document.getElementById('days-remaining');
@@ -661,6 +689,7 @@
         const authMessageContainer = document.getElementById('auth-message-container');
         const dashboardWrapper = document.getElementById('dashboard-wrapper');
         const authRedirectMessage = document.getElementById('auth-redirect-message');
+        const animatedWelcomeText = document.querySelector('#home-content .animated-welcome-text');
 
         const prevMonthBtn = document.getElementById('prev-month-btn');
         const nextMonthBtn = document.getElementById('next-month-btn');
@@ -676,13 +705,29 @@
         firebase.auth().onAuthStateChanged(async user => {
             if (user) {
                 const displayName = user.displayName || user.email || 'Student';
+                const firstName = displayName.split(' ')[0];
+
                 studentDisplayNameSpan.textContent = displayName;
-                homeStudentNameDisplay.textContent = displayName;
+                if (homeStudentFirstNameDisplay) {
+                    homeStudentFirstNameDisplay.textContent = firstName;
+                }
                 userNameInput.value = displayName;
                 
                 dashboardWrapper.classList.remove('hidden');
                 authMessageContainer.classList.add('hidden');
                 homeContentDiv.classList.remove('hidden');
+
+                if (animatedWelcomeText) {
+                    setTimeout(() => {
+                        animatedWelcomeText.style.animation = 'none';
+                        animatedWelcomeText.style.opacity = '0';
+                        animatedWelcomeText.style.transform = 'translateX(-60px)';
+                        animatedWelcomeText.offsetHeight;
+                        animatedWelcomeText.style.animation = 'slideInFromLeft 0.8s ease-out forwards';
+                        animatedWelcomeText.style.opacity = ''; 
+                        animatedWelcomeText.style.transform = '';
+                    }, 100);
+                }
 
                 await loadUserPreferences(user);
                 await loadPerformanceData(user);
@@ -691,7 +736,6 @@
                 renderCalendars();
 
             } else {
-                // User is not logged in, redirect to student_dashboard.html (login page)
                 window.location.href = "student_dashboard.html";
             }
         });
@@ -958,9 +1002,11 @@
             firebase.auth().onAuthStateChanged(user => {
                  if (!user) {
                     dashboardWrapper.classList.add('hidden');
-                    authMessageContainer.classList.remove('hidden');
                     homeContentDiv.classList.add('hidden');
+                    if (authRedirectMessage) authRedirectMessage.classList.remove('hidden'); 
                  } else {
+                    if (authRedirectMessage) authRedirectMessage.classList.add('hidden');
+                    dashboardWrapper.classList.remove('hidden'); 
                     homeContentDiv.classList.remove('hidden');
                  }
             });
