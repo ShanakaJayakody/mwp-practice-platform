@@ -1444,6 +1444,14 @@
         // --- Initial Load ---
         showSetupScreen();
         updateCalcDisplay(); 
+
+        firebase.firestore().collection("performanceSubmissions")
+          .where("userId", "==", firebase.auth().currentUser.uid)
+          .get()
+          .then(snapshot => {
+            console.log("Raw results data:");
+            snapshot.forEach(doc => console.log(doc.id, doc.data()));
+          });
     </script>
 </body>
 </html>

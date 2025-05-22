@@ -900,6 +900,9 @@
                                     <option value="score-desc">Highest Score</option>
                                     <option value="score-asc">Lowest Score</option>
                                 </select>
+                                <button id="refresh-results-button" class="text-sm bg-blue-500 hover:bg-blue-600 text-white rounded px-3 py-1">
+                                    Refresh
+                                </button>
                             </div>
                         </div>
 
@@ -1783,6 +1786,15 @@
                           
                           console.log(`Found ${results.length} results for userId ${currentUserId}`);
                           
+                          // Add debug logging to see the actual scores
+                          results.forEach(result => {
+                              const score = parseInt(result.score);
+                              const totalPossible = parseInt(result.totalPossibleScore || result.totalQuestions);
+                              const percentage = !isNaN(score) && !isNaN(totalPossible) && totalPossible > 0 ? 
+                                  (score / totalPossible) * 100 : 0;
+                              console.log(`Result ${result.id}: Score=${result.score}, TotalPossible=${totalPossible}, Percentage=${percentage.toFixed(1)}%`);
+                          });
+                          
                           if (results.length > 0) {
                               updateResultsSummary(results); // Keep overall summary
                               populateResultsIntoSections(results); // New function to populate accordions
@@ -1842,6 +1854,12 @@
             });
             
             document.getElementById('results-retry-button').addEventListener('click', loadUserResults);
+            
+            // Add event listener for the refresh button
+            document.getElementById('refresh-results-button')?.addEventListener('click', () => {
+                console.log("Refreshing results...");
+                loadUserResults();
+            });
         }
         
         // Function to update results summary section
@@ -1865,9 +1883,11 @@
                 // Process score
                 try {
                     const score = parseInt(result.score);
-                    const totalQuestions = parseInt(result.totalQuestions);
-                    if (!isNaN(score) && !isNaN(totalQuestions) && totalQuestions > 0) {
-                        const percentage = (score / totalQuestions) * 100;
+                    // Handle both totalQuestions and totalPossibleScore formats
+                    const totalPossible = parseInt(result.totalPossibleScore || result.totalQuestions);
+                    
+                    if (!isNaN(score) && !isNaN(totalPossible) && totalPossible > 0) {
+                        const percentage = (score / totalPossible) * 100;
                         totalScore += percentage;
                         maxScore = Math.max(maxScore, percentage);
                     }
@@ -1919,12 +1939,12 @@
                     case 'date-asc':
                         return dateA - dateB;
                     case 'score-desc':
-                        const scoreA_val = (parseInt(a.score) / parseInt(a.totalPossibleScore || a.totalQuestions || 1)) || 0;
-                        const scoreB_val = (parseInt(b.score) / parseInt(b.totalPossibleScore || b.totalQuestions || 1)) || 0;
+                        const scoreA_val = parseInt(a.score) / parseInt(a.totalPossibleScore || a.totalQuestions || 1) || 0;
+                        const scoreB_val = parseInt(b.score) / parseInt(b.totalPossibleScore || b.totalQuestions || 1) || 0;
                         return scoreB_val - scoreA_val;
                     case 'score-asc':
-                        const scoreC_val = (parseInt(a.score) / parseInt(a.totalPossibleScore || a.totalQuestions || 1)) || 0;
-                        const scoreD_val = (parseInt(b.score) / parseInt(b.totalPossibleScore || b.totalQuestions || 1)) || 0;
+                        const scoreC_val = parseInt(a.score) / parseInt(a.totalPossibleScore || a.totalQuestions || 1) || 0;
+                        const scoreD_val = parseInt(b.score) / parseInt(b.totalPossibleScore || b.totalQuestions || 1) || 0;
                         return scoreC_val - scoreD_val;
                     case 'date-desc':
                     default:
@@ -1969,7 +1989,8 @@
                         
                         const date = result.date instanceof Date ? result.date : new Date(result.date);
                         const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                        const scoreDisplay = `${result.score}/${result.totalPossibleScore || result.totalQuestions || '-'}`;
+                        const totalPossible = result.totalPossibleScore || result.totalQuestions || '-';
+                        const scoreDisplay = `${result.score}/${totalPossible}`;
 
                         row.innerHTML = `
                             <td class="px-4 py-3 whitespace-nowrap text-sm">${formattedDate}</td>
@@ -2012,8 +2033,9 @@
             // Update detail view with result data
             document.getElementById('detail-test-name').textContent = result.examName;
             document.getElementById('detail-test-date').textContent = result.date.toLocaleDateString() + ' at ' + result.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            document.getElementById('detail-score').textContent = `${result.score}/${result.totalQuestions}`;
-            document.getElementById('detail-time').textContent = result.timeTaken;
+            const totalPossible = result.totalPossibleScore || result.totalQuestions || '-';
+            document.getElementById('detail-score').textContent = `${result.score}/${totalPossible}`;
+            document.getElementById('detail-time').textContent = result.timeTaken || 'N/A';
             document.getElementById('detail-focus').textContent = `${result.focusRating || '-'}/5`;
             document.getElementById('detail-reflection').textContent = result.reflection || 'No reflection provided.';
             
