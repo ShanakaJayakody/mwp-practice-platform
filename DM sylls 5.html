@@ -465,7 +465,7 @@
              <div class="text-center mb-6">
                 <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
                      alt="MedwithPurpose Logo" class="mx-auto h-11 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
-                <h1 class="text-2xl md:text-3xl font-bold text-blue-600">Decision Making Syllogisms Worksheet 1</h1>
+                <h1 class="text-2xl md:text-3xl font-bold text-blue-600">Decision Making Syllogisms Worksheet 5</h1>
                 <p class="text-gray-600 mt-2">Prepare for the UCAT DM section.</p>
                  <p class="text-sm text-gray-500 mt-4">
                      This section contains <strong>5 questions</strong> with 5 statements each. Maximum score is <strong>10 points</strong> (2 points per question). You have <strong>6 minutes</strong> to complete it.
@@ -824,69 +824,79 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
         const questions = [
             { 
                 premises: [
-                    "All oranges in the bowl are sweet.",
-                    "This fruit is an orange in the bowl."
+                    "All ships in the harbor fly either a red or a blue flag.",
+                    "Exactly one-third of the red-flag ships also fly a yellow pennant.",
+                    "No blue-flag ships fly a yellow pennant."
                 ],
                 statements: [
-                    "This fruit is sweet.",
-                    "Some sweet fruits in the bowl are oranges.",
-                    "No non-sweet fruits in the bowl are oranges.",
-                    "All sweet fruits in the bowl are oranges.",
-                    "Some fruits in the bowl are not sweet."
+                    "Some ships in the harbor fly both a red flag and a yellow pennant.",
+                    "Every ship with a yellow pennant has a red flag.",
+                    "Two-thirds of red-flag ships have no yellow pennant.",
+                    "No ship with a blue flag has a yellow pennant.",
+                    "At least one ship in the harbor flies a flag that is neither red nor blue."
                 ],
-                correctAnswers: ["Y", "N", "Y", "N", "N"]
+                correctAnswers: ["N", "Y", "Y", "Y", "N"]
             },
             { 
                 premises: [
-                    "No penguin can fly."
+                    "Of the 40 research participants, 22 prefer coffee to tea.",
+                    "All participants who prefer coffee also like chocolate.",
+                    "Exactly 6 participants like chocolate but prefer tea."
                 ],
                 statements: [
-                    "Some penguins can fly.",
-                    "If something can fly, it is not a penguin.",
-                    "All penguins cannot fly.",
-                    "Some creatures that cannot fly are penguins.",
-                    "All creatures that cannot fly are penguins."
+                    "28 participants like chocolate.",
+                    "All participants who like chocolate prefer coffee.",
+                    "12 participants prefer tea and do not like chocolate.",
+                    "More participants like chocolate than dislike it.",
+                    "Fewer than half the participants prefer tea."
                 ],
-                correctAnswers: ["N", "Y", "Y", "N", "N"]
+                correctAnswers: ["Y", "N", "Y", "Y", "Y"]
             },
             { 
                 premises: [
-                    "Every burger on the menu contains bread."
+                    "Every premium account includes cloud storage and priority support.",
+                    "Most accounts with cloud storage also have two-factor authentication (2FA).",
+                    "Exactly 10% of accounts with priority support lack 2FA."
                 ],
                 statements: [
-                    "Some bread items on the menu are burgers.",
-                    "All bread items on the menu are burgers.",
-                    "Some burgers on the menu do not contain bread.",
-                    "No burgers on the menu lack bread.",
-                    "Some menu items lack bread."
+                    "Some premium accounts lack 2FA.",
+                    "All accounts with 2FA have cloud storage.",
+                    "At least most premium accounts have 2FA.",
+                    "No account lacking 2FA has priority support.",
+                    "Some accounts with cloud storage do not have priority support."
                 ],
-                correctAnswers: ["N", "N", "N", "Y", "N"]
+                correctAnswers: ["N", "N", "Y", "N", "N"]
             },
             { 
                 premises: [
-                    "Some books in the library are new."
+                    "In the art auction, every sculpture sold for more than $10 000.",
+                    "Half of the sculptures were made of bronze; the rest were marble.",
+                    "Every marble piece sold for exactly $12 000.",
+                    "No bronze piece sold for less than any marble piece."
                 ],
                 statements: [
-                    "All books in the library are new.",
-                    "Some books in the library are not new.",
-                    "At least one new item in the library is a book.",
-                    "No new items in the library are books.",
-                    "There is at least one book in the library."
+                    "All bronze sculptures sold for more than $12 000.",
+                    "At least one sculpture sold for exactly $12 000.",
+                    "No sculpture sold for less than $10 000.",
+                    "Some sculptures sold for exactly $10 000.",
+                    "Every sculpture sold for at least $12 000."
                 ],
-                correctAnswers: ["N", "N", "Y", "N", "Y"]
+                correctAnswers: ["Y", "Y", "Y", "N", "Y"]
             },
             { 
                 premises: [
-                    "All dogs at the shelter are vaccinated."
+                    "The museum displays paintings, statues, and artifacts only.",
+                    "Exactly 70 pieces are paintings, which is twice the number of statues.",
+                    "All artifacts are made of metal, and they number 10."
                 ],
                 statements: [
-                    "Some vaccinated animals at the shelter are dogs.",
-                    "Some dogs at the shelter are not vaccinated.",
-                    "All vaccinated animals at the shelter are dogs.",
-                    "No dogs at the shelter are unvaccinated.",
-                    "Some animals at the shelter are not vaccinated."
+                    "There are 35 statues in the museum.",
+                    "Less than half of the museum pieces are metal.",
+                    "Exactly 20% of the collection is artifacts.",
+                    "Statues make up one-third of the collection.",
+                    "Paintings constitute more than 60 % of the collection."
                 ],
-                correctAnswers: ["N", "N", "N", "Y", "N"]
+                correctAnswers: ["Y", "N", "N", "N", "Y"]
             }
         ];
 
@@ -1424,7 +1434,7 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
             const performanceData = {
                 studentName: userName || 'Anonymous',
                 studentEmail: userEmail || '', // <--- ADD THIS LINE
-                examName: "DM Syllogisms Worksheet 1", // Updated examName
+                examName: "DM Syllogisms Worksheet 5", // Updated examName
                 score: calculateScore(), // New function to calculate score
                 totalQuestions: questions.length, // Should be 5
                 totalPossibleScore: 10, // Explicitly add total possible score (2 points per question)
@@ -1649,7 +1659,7 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
                         studentName: userName || userDisplayName || 'Anonymous',
                         studentEmail: userEmail || '',
                         userId: userId, // <--- Add userId here
-                        examName: "DM Syllogisms Worksheet 1", // Updated examName
+                        examName: "DM Syllogisms Worksheet 5", // Updated examName
                         score: scoreEl.textContent,
                         totalQuestions: totalQuestionsResultsEl.textContent, // Should be 5
                         totalPossibleScore: 10, // Explicitly add total possible score (2 points per question)
