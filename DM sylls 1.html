@@ -1315,9 +1315,23 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
             questions.forEach((qData, index) => {
                 // Count correct answers for this question
                 let correctCount = 0;
+                
+                // For debugging
+                console.log(`Question ${index + 1} - userAnswers:`, userAnswers[index]);
+                console.log(`Question ${index + 1} - correctAnswers:`, qData.correctAnswers);
+                
                 qData.statements.forEach((statement, statementIndex) => {
-                    const userAnswer = userAnswers[index] && userAnswers[index][statementIndex] ? userAnswers[index][statementIndex] : null;
+                    // In this app, Yes/No answers are stored as "Yes" and "No", but correctAnswers are "Y" and "N"
+                    // We need to convert the user's answer to match the format of correctAnswers
+                    let userAnswer = userAnswers[index] && userAnswers[index][statementIndex] ? userAnswers[index][statementIndex] : null;
                     const correctAnswer = qData.correctAnswers[statementIndex];
+                    
+                    // Convert "Yes"/"No" to "Y"/"N" for comparison
+                    if (userAnswer === "Yes") userAnswer = "Y";
+                    if (userAnswer === "No") userAnswer = "N";
+                    
+                    console.log(`Q${index + 1}.${statementIndex + 1}: User: "${userAnswer}", Correct: "${correctAnswer}", Match: ${userAnswer === correctAnswer}`);
+                    
                     if (userAnswer === correctAnswer) {
                         correctCount++;
                     }
@@ -2379,7 +2393,14 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
                         if (!userAnswers[currentQuestionIndex]) {
                             userAnswers[currentQuestionIndex] = [];
                         }
-                        userAnswers[currentQuestionIndex][statementIndex] = this.textContent;
+                        // Store the answer format expected by the scoring system (Y/N)
+                        if (this.textContent === "Yes") {
+                            userAnswers[currentQuestionIndex][statementIndex] = "Y";
+                        } else if (this.textContent === "No") {
+                            userAnswers[currentQuestionIndex][statementIndex] = "N";
+                        } else {
+                            userAnswers[currentQuestionIndex][statementIndex] = this.textContent;
+                        }
                         
                         updateNavigatorButtons();
                     }
@@ -2420,7 +2441,14 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
                     if (!userAnswers[currentQuestionIndex]) {
                         userAnswers[currentQuestionIndex] = [];
                     }
-                    userAnswers[currentQuestionIndex][statementIndex] = value;
+                    // Convert to Y/N format for consistency with scoring
+                    if (value === "Yes") {
+                        userAnswers[currentQuestionIndex][statementIndex] = "Y";
+                    } else if (value === "No") {
+                        userAnswers[currentQuestionIndex][statementIndex] = "N";
+                    } else {
+                        userAnswers[currentQuestionIndex][statementIndex] = value;
+                    }
                     
                     updateNavigatorButtons();
                 });
