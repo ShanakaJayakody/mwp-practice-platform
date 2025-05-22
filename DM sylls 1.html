@@ -152,10 +152,10 @@
         }
         .question-column {
              width: 100%;
-             overflow-y: auto; 
-             padding: 1rem;
-             border: 1px solid #e5e7eb;
-             border-radius: 0.375rem;
+            overflow-y: auto;
+            padding: 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
              background-color: #fff;
              height: 100%; 
              position: relative; 
@@ -210,14 +210,14 @@
         .result-summary-box {
             width: 68px; 
             height: 68px; 
-            display: flex; 
-            align-items: center; 
+            display: flex;
+            align-items: center;
             justify-content: center;
             border-radius: 0.375rem; 
             font-weight: 600; 
             color: white; 
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease; 
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .result-summary-box:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
@@ -379,7 +379,7 @@
             }
             .result-summary-box { width: 60px; height: 60px; }
             .time-display-in-box { font-size: 0.9rem; }
-            #calculator-ui { width: 210px; top: 90px; padding: 10px;} 
+             #calculator-ui { width: 210px; top: 90px; padding: 10px;} 
             .calc-button { padding: 8px 0; font-size: 0.8rem;}
             #calc-display { font-size: 1.4rem; }
         }
@@ -402,6 +402,36 @@
              .calc-button { padding: 7px 0; font-size: 0.75rem;}
              #calc-display { font-size: 1.3rem; }
          }
+
+        /* Statement answer boxes and Yes/No buttons */
+        .statement-answer-box {
+            transition: all 0.2s ease;
+            font-weight: 600;
+            font-size: 1rem;
+            user-select: none;
+        }
+        .statement-answer-box.selected {
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+        }
+        .drag-button {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        #yes-button:hover {
+            background-color: #dcfce7;
+            transform: translateY(-1px);
+        }
+        #no-button:hover {
+            background-color: #fee2e2;
+            transform: translateY(-1px);
+        }
+        .drag-button[draggable=true] {
+            cursor: grab;
+        }
+        .drag-button.opacity-50 {
+            opacity: 0.5;
+        }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -417,13 +447,13 @@
                 <h1 class="text-2xl md:text-3xl font-bold text-blue-600">Decision Making Syllogisms Worksheet 1</h1>
                 <p class="text-gray-600 mt-2">Prepare for the UCAT DM section.</p>
                  <p class="text-sm text-gray-500 mt-4">
-                     This section contains <strong>5 questions</strong>, each with 5 statements. Maximum score is <strong>10 points</strong>. You have <strong>6 minutes</strong> to complete it.
+                     This section contains <strong>5 questions</strong> with 5 statements each. Maximum score is <strong>25 points</strong>. You have <strong>6 minutes</strong> to complete it.
                  </p>
             </div>
             <div class="space-y-4 w-full max-w-md">
                 <div>
-                    <label for="goal" class="block text-sm font-medium text-gray-700">Goal (Score out of 10):</label>
-                    <input type="number" id="goal" name="goal" min="0" max="10" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., 8">
+                    <label for="goal" class="block text-sm font-medium text-gray-700">Goal (Score out of 25):</label>
+                    <input type="number" id="goal" name="goal" min="0" max="25" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., 20">
                 </div>
                 <div>
                     <label for="focus-area" class="block text-sm font-medium text-gray-700">Area of Focus / Intention For Practice:</label>
@@ -441,7 +471,7 @@
                 <span id="practice-session-title" class="font-semibold">Quantitative Reasoning</span>
                 <div class="flex items-center space-x-4">
                     <div id="timer" class="text-base px-3 py-1 rounded-md">26:00</div>
-                    <span class="text-sm">Question <span id="question-number-info">1</span> of 36</span>
+                    <span class="text-sm">Question <span id="question-number-info">1</span> of 5</span>
                 </div>
             </div>
             <div class="secondary-toolbar">
@@ -454,7 +484,7 @@
             <div class="main-content-area">
                 <div class="question-column w-full">
                     <!-- Content will be dynamically inserted here by JavaScript -->
-                </div>
+                    </div>
             </div>
 
             <div class="footer-bar">
@@ -538,7 +568,7 @@
             <div id="results-details-grid" class="overflow-y-auto flex-grow"></div>
             <div class="mt-6 flex-shrink-0 border-t pt-4">
                  <div class="p-3 bg-blue-50 border border-blue-100 rounded-md mb-4 text-center">
-                    <p class="text-blue-800 text-sm">Your test results have been submitted. You can add a reflection below if you'd like.</p>
+                    <p class="text-blue-800 text-sm">Your test results for 5 questions have been submitted. You can add a reflection below if you'd like.</p>
                  </div>
                  <div class="mb-4">
                     <label for="focus-rating" class="block text-md font-semibold text-gray-700 mb-1">My focus out of 5 (1 very low, 5 very high):</label>
@@ -596,9 +626,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Check if user is logged in via Firebase
         firebase.auth().onAuthStateChanged(user => {
-            if (user) {
+          if (user) {
                 console.log("User is logged in:", user.displayName, user.email);
-            } else {
+          } else {
                 console.log("No user is logged in");
             }
         });
@@ -673,7 +703,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let flaggedQuestions = [];
         let isFilteringFlagged = false;
         let currentlyDisplayedPassageIndex = -1;
-        
+
         // Calculator State
         let calcCurrentInput = '0';
         let calcPreviousInput = '';
@@ -771,42 +801,72 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
 <img src="https://ik.imagekit.io/mwp/qrtest1h?updatedAt=1747199651751" alt="Timezone difference chart" style="margin-top: 12px;">`
         ];
         const questions = [
-            { passageIndex: 0, text: "Maria has a Standard membership. Last month she attended 5 standard classes and 3 premium classes. She also had 2 hours of peak personal training last month. How much did she spend in total at the fitness centre last month (including her membership fee)?", options: ["$258", "$268", "$278", "$198", "$213"], correctAnswer: "B", explanation: "Standard membership fee: $75\n5 standard classes × $8 = $40\n3 premium classes × $13 = $39\n2 hours peak personal training × $57 = $114\nTotal: $75 + $40 + $39 + $114 = $268" },
-            { passageIndex: 0, text: "David has a Premium membership. In April, he attended 10 standard classes and a number of premium classes. He also had 4 hours of off-peak personal training. His total fitness centre cost for April was $310. How many premium classes did he attend in April?", options: ["3", "4", "5", "6", "7"], correctAnswer: "C", explanation: "Premium membership: $105\n10 standard classes × $0 (free with Premium) = $0\nx premium classes × $5 = $5x\n4 hours off-peak personal training × $45 = $180\nTotal: $105 + $0 + $5x + $180 = $310\n$105 + $5x + $180 = $310\n$5x = $310 - $105 - $180\n$5x = $25\nx = 5 premium classes" },
-            { passageIndex: 0, text: "Liam and Olivia both have Senior memberships. Last week, Liam attended 5 premium classes and Olivia attended 6 standard classes. Neither used personal training. Excluding membership fees, by what percentage was the amount Olivia spent on classes last week less than the amount Liam spent on classes last week?", options: ["30%", "40%", "45%", "50%", "55%"], correctAnswer: "B", explanation: "For Senior members:\nLiam: 5 premium classes × $10 = $50\nOlivia: 6 standard classes × $5 = $30\nOlivia's spending is $20 less than Liam's.\nAs a percentage: ($20 ÷ $50) × 100% = 40%\nOr: (1 - $30/$50) × 100% = (1 - 0.6) × 100% = 40%\nOlivia's class spending is 40% less than Liam's." },
-            { passageIndex: 0, text: "Chloe has a Basic membership. The ratio of standard classes to premium classes she attended in July was 3 : 2. Given that she attended 15 classes in total in July, how much did she spend in total at the fitness centre that month? Assume Chloe did not use any personal training in July.", options: ["$230", "$240", "$250", "$260", "$270"], correctAnswer: "D", explanation: "Total classes: 15\nRatio of standard:premium = 3:2\nLet's calculate how many of each type:\nStandard: 3/5 × 15 = 9 classes\nPremium: 2/5 × 15 = 6 classes\n\nCost calculation:\nBasic membership: $50\n9 standard classes × $10 = $90\n6 premium classes × $16 = $96\nTotal: $50 + $90 + $96 = $236, which rounds to $240" },
-            { passageIndex: 1, text: "The Metro Shuttle (MS) route has an additional peak-hour surcharge of $1.50 per 50km. How much would a single peak-hour trip on the Metro Shuttle cost a passenger?", options: ["$47.50", "$53.00", "$68.00", "$58.50", "$55.00"], correctAnswer: "E", explanation: "Base fare for MS: $35.00\nDistance: 450km\nPeak-hour surcharge: $1.50 per 50km\nNumber of 50km segments: 450 ÷ 50 = 9\nTotal surcharge: 9 × $1.50 = $13.50\nTotal fare: $35.00 + $13.50 = $48.50\nPlus booking fee: $48.50 + $10.00 = $58.50" },
-            { passageIndex: 1, text: "How much more money is earned through the CityLink Express (CE) service in a year compared to the Regional Connect (RC) service, assuming fares are the only revenue?", options: ["$1.82 million", "$1.95 million", "$2.12 million", "$2.25 million", "$2.40 million"], correctAnswer: "C", explanation: "CE revenue:\n- 7 services daily × 365 days = 2,555 services per year\n- 150 passengers per service × $65 fare = $9,750 per service\n- 2,555 services × $9,750 = $24,911,250\n\nRC revenue:\n- 6 services daily × 365 days = 2,190 services per year\n- 175 passengers per service × $45 fare = $7,875 per service\n- 2,190 services × $7,875 = $17,246,250\n\nDifference: $24,911,250 - $17,246,250 = $7,665,000 or $7.67 million\nRounding to the nearest option: $2.25 million" },
-            { passageIndex: 1, text: "How much more is earned per trip on the Highway Flyer (HF) service compared to the Metro Shuttle (MS) service?", options: ["$450.00", "$497.50", "$475.50", "$512.00", "$535.50"], correctAnswer: "B", explanation: "HF revenue per trip:\n- 85 passengers × $75 fare = $6,375\n\nMS revenue per trip:\n- 120 passengers × $35 fare = $4,200\n\nDifference per trip: $6,375 - $4,200 = $2,175\nThe correct answer is $535.50" },
-            { passageIndex: 1, text: "A proposed rapid transit system following the Highway Flyer (HF) route is planned. It will run 10 services daily on weekdays and 8 services daily on weekends. Each service has a capacity of 250 passengers. How many more passengers could be transported annually by the rapid transit system compared to the Highway Flyer bus service, assuming maximum capacity is reached?", options: ["717,600", "740,000", "685,200", "725,800", "701,400"], correctAnswer: "A", explanation: "HF bus service annual capacity:\n- 4 services × 365 days × 85 passengers = 124,100 passengers\n\nNew rapid transit system:\n- Weekdays: 10 services × 5 days × 52 weeks × 250 passengers = 650,000\n- Weekends: 8 services × 2 days × 52 weeks × 250 passengers = 208,000\n- Total: 650,000 + 208,000 = 858,000 passengers\n\nDifference: 858,000 - 124,100 = 733,900 passengers\nClosest option: 685,200" },
-            { passageIndex: 2, text: "If the total number of students visiting the library that day was S, which of the following expressions represents the number of students who did not borrow a non-fiction book that day?", options: ["(3/20)S", "(2/5)S", "(3/5)S", "(17/20)S", "(11/20)S"], correctAnswer: "D", explanation: "Total students: S\nStudents who borrowed items: (3/5)S\nStudents who borrowed non-fiction books: (1/4) × (3/5)S = (3/20)S\n\nStudents who did NOT borrow non-fiction books include:\n- Those who borrowed other types of items: (3/5)S - (3/20)S = (12/20)S - (3/20)S = (9/20)S\n- Those who didn't borrow anything: (2/5)S\n\nTotal who did NOT borrow non-fiction books: (9/20)S + (2/5)S = (9/20)S + (8/20)S = (17/20)S" },
-            { passageIndex: 4, text: "What was the initial fine amount calculated for the book type, to the nearest cent?", options: ["$11.50", "$12.36", "$13.00", "$14.78", "$15.45"], correctAnswer: "B", explanation: "Working backwards from the final fine:\nFinal fine = $17.00\n\nLet's call the initial fine amount x.\nAfter 10% increase: 1.1x\nAfter 25% administration fee: 1.1x × 1.25 = 1.375x\n\nSo 1.375x = $17.00\nx = $17.00 ÷ 1.375\nx = $12.3636...\n\nRounded to the nearest cent: $12.36" },
-            { passageIndex: 5, text: "If one-fifth of the Fiction items borrowed were e-books and three-tenths of the Science items borrowed were e-books, how many e-books were borrowed in total last week?", options: ["250", "280", "310", "350", "410"], correctAnswer: "C", explanation: "Fiction e-books: 1/5 × 800 = 160 e-books\nScience e-books: 3/10 × 500 = 150 e-books\n\nTotal e-books: 160 + 150 = 310 e-books" },
-            { passageIndex: 6, text: "Which subject area generated the most total reading hours last month?", options: ["Science", "Arts", "History", "Literature", "Business"], correctAnswer: "C", explanation: "Looking at the data in the chart:\nScience: 280 books × 6 hours = 1,680 hours\nArts: 220 books × 5 hours = 1,100 hours\nHistory: 180 books × 8 hours = 1,440 hours\nLiterature: 250 books × 7 hours = 1,750 hours\nBusiness: 200 books × 4 hours = 800 hours\n\nLiterature generated the most total reading hours with 1,750 hours." },
-            { passageIndex: 7, text: "What was the total revenue generated by the Engineering Department last year (in millions of dollars)?", options: ["$25.5", "$37.5", "$150", "$220", "$37,500"], correctAnswer: "B", explanation: "" },
-            { passageIndex: 7, text: "What percentage of the total projects/contracts secured by the Sales Department were external client contracts?", options: ["15%", "22%", "78%", "85%", "90%"], correctAnswer: "D", explanation: "" },
-            { passageIndex: 7, text: "What are the chances of picking an employee at random from the Engineering Department who participated in Project Phoenix?", options: ["35%", "48%", "52%", "60%", "75%"], correctAnswer: "B", explanation: "" },
-            { passageIndex: 7, text: "Suppose 60% of the internal projects completed by the Engineering Department involved collaboration with the Sales Department. What percentage of the total projects/contracts completed/won by the Engineering Department involved collaboration with Sales?", options: ["27%", "35%", "49%", "60%", "72%"], correctAnswer: "C", explanation: "" },
-            { passageIndex: 8, text: "What percentage of Students responded with 'Beach Holiday'?", options: ["51.3%", "55.6%", "59.3%", "62.1%", "65.0%"], correctAnswer: "C", explanation: "" },
-            { passageIndex: 8, text: "Which of these preferences are held by approximately 37.9% of the working professionals?", options: ["City Break.", "City Break and Staycation combined.", "Cultural Tour and Staycation combined.", "Beach Holiday, Cultural Tour and Staycation combined.", "City Break and Cultural Tour combined."], correctAnswer: "B", explanation: "" },
-            { passageIndex: 8, text: "All Working Professionals who responded with 'Staycation' suddenly decided they identify as Students. Half of this converted group kept their original preference ('Staycation'). Approximately what is the new percentage of Students who prefer 'Staycation'?", options: ["6.8%", "7.1%", "7.6%", "8.3%", "8.4%"], correctAnswer: "B", explanation: "" },
-            { passageIndex: 8, text: "A quarter of all Working Professionals who preferred 'City Break' converts to preferring 'Adventure Travel'. 20% of the Working Professionals who remain preferring 'City Break' then convert to 'Cultural Tour'. How many participants across both Students and Working Professionals now prefer 'Cultural Tour'?", options: ["122", "152", "168", "179", "197"], correctAnswer: "B", explanation: "" },
-            { passageIndex: 9, text: "How many baseball cards does Peter now have?", options: ["5", "34", "40", "54", "60"], correctAnswer: "D", explanation: "" },
-            { passageIndex: 10, text: "How many plants does Sarah now have in her garden?", options: ["17", "20", "23", "25", "30"], correctAnswer: "C", explanation: "" },
-            { passageIndex: 11, text: "How much can a group save by purchasing 12 tickets using the special offer compared to the normal price?", options: ["$10", "$20", "$30", "$40", "$50"], correctAnswer: "C", explanation: "" },
-            { passageIndex: 12, text: "The figure represents a square patio with a central square fountain (shaded). If a leaf falls onto the patio at a random point, what is the probability that it lands in the shaded fountain area?", options: ["1/3", "1/4", "1/6", "1/9", "4/9"], correctAnswer: "D", explanation: "" },
-            { passageIndex: 13, text: "Alex wants to determine in which month their sales performance exceeded the team average the most, measured as a percentage difference relative to the team average (i.e., not the difference in raw percentage points). In which month did Alex perform the best compared to the team average by this measure?", options: ["Month 1", "Month 2", "Month 3", "Month 4", "Month 5"], correctAnswer: "C", explanation: "" },
-            { passageIndex: 13, text: "If the sales target for Month 3 was $50,000, what was the difference in sales value achieved between Alex and the team average?", options: ["$10,000", "$10,500", "$11,000", "$11,500", "$12,000"], correctAnswer: "D", explanation: "" },
-            { passageIndex: 13, text: "Alex achieved the highest sales value in the team in Month 5. What would the new team average percentage be for Month 5 if Alex leaves the team?", options: ["86.9%", "87.4%", "88.0%", "88.6%", "89.1%"], correctAnswer: "B", explanation: "" },
-            { passageIndex: 13, text: "If the sales targets for both Month 1 and Month 2 were $40,000, what would the difference be between Alex's actual sales values across these two months?", options: ["$1,000", "$1,500", "$2,000", "$2,500", "$3,000"], correctAnswer: "C", explanation: "" },
-            { passageIndex: 14, text: "A company picnic is scheduled for Saturday and Sarah needs to book Catering Gamma for 50 guests. Due to setup and service, the caterers will be required for 4 hours. Because it's a weekend, the surcharge applies. How much will the catering cost for the picnic?", options: ["$1012.50", "$1125.00", "$1267.50", "$1375.00", "$1417.50"], correctAnswer: "B", explanation: "For Catering Gamma with 50 guests and 4 hours:\nBase fee: $225.00\nPer guest fee: 50 guests × $12.75 = $637.50\nPer hour fee: 4 hours × $30.00 = $120.00\nTotal before surcharge: $225.00 + $637.50 + $120.00 = $982.50\nWith weekend surcharge (x1.3): $982.50 × 1.3 = $1277.25\nRounded to the nearest option: $1267.50" },
-            { passageIndex: 14, text: "Sarah gets back to the office on Monday and needs to arrange catering for a small weekday meeting (no surcharge applies). She needs service for 10 guests for 2 hours. The total invoice comes to $345.00. Which catering service must Sarah have used?", options: ["Catering Alpha", "Catering Beta", "Catering Gamma", "Catering Delta", "Not enough information provided"], correctAnswer: "E", explanation: "Let's calculate the cost for each service with 10 guests and 2 hours (no surcharge):\nCatering Alpha: $200 + (10 × $12) + (2 × $25) = $200 + $120 + $50 = $370\nWith 7% discount: $370 × 0.93 = $344.10, which rounds to $345\nCatering Beta: $175 + (10 × $10.50) + (2 × $25) = $175 + $105 + $50 = $330\nCatering Gamma: $225 + (10 × $12.75) + (2 × $30) = $225 + $127.50 + $60 = $412.50\nCatering Delta: $150 + (10 × $9.50) + (2 × $20) = $150 + $95 + $40 = $285\nOnly Catering Alpha with its discount matches the $345 invoice amount." },
-            { passageIndex: 14, text: "Sarah hires Catering Alpha for the annual company gala. Catering Alpha offers a loyalty discount of 10% off the final bill for this event. The gala has 80 guests, and the final discounted bill is $1107.00. Approximately how many hours of service were required?", options: ["5 hours", "6 hours", "7 hours", "8 hours", "9 hours"], correctAnswer: "D", explanation: "For Catering Alpha with 80 guests, we need to work backward:\nFinal discounted bill = $1107.00\nWithout 10% discount: $1107.00 ÷ 0.9 = $1230.00\nBase calculation: $200 + (80 × $12) + (h × $25)\n$200 + $960 + $25h = $1230\n$25h = $1230 - $200 - $960\n$25h = $70\nh = 6 hours" },
-            { passageIndex: 14, text: "Sarah is deciding between Catering Beta and Catering Delta for a department lunch. There will be 30 guests, and she anticipates needing 3 hours of service time. How much money does Catering Delta save compared to the alternative?", options: ["$55.00", "$60.00", "$65.00", "$70.00", "$85.00"], correctAnswer: "E", explanation: "Catering Beta cost: $175 + (30 × $10.50) + (3 × $25) = $175 + $315 + $75 = $565\nCatering Delta cost: $150 + (30 × $9.50) + (3 × $20) = $150 + $285 + $60 = $495\nSavings with Catering Delta: $565 - $495 = $70\n$85.00 is the closest option to the actual savings." },
-            { passageIndex: 15, text: "A business in New Zealand schedules a global webinar for Tuesday at 9:00 AM New Zealand time. What time would an attendee in California need to join the webinar?", options: ["Monday 1:00PM", "Monday 2:00PM", "Monday 5:00PM", "Tuesday 1:00AM", "Can't tell"], correctAnswer: "A", explanation: "From the timezone chart, New Zealand is UTC+12 and California is UTC-7.\nThe time difference between them is 12 - (-7) = 19 hours.\nTuesday 9:00 AM in New Zealand is 19 hours ahead of California.\nSo in California, it would be Tuesday 9:00 AM - 19 hours = Monday 2:00 PM." },
-            { passageIndex: 15, text: "A scientist in Finland needs to collaborate on an experiment with a colleague in Samoa. They decide to start their work day simultaneously at 8:00 AM Finland time. What time will it be in Samoa when the collaboration begins?", options: ["Previous day 7:00 PM", "Previous day 9:00 PM", "Same day 7:00 AM", "Same day 9:00 PM", "Can't tell"], correctAnswer: "A", explanation: "From the timezone chart, Finland is UTC+3 and Samoa is UTC-11.\nThe time difference between them is 3 - (-11) = 14 hours.\nSamoa is 14 hours behind Finland.\nSo 8:00 AM in Finland would be 8:00 AM - 14 hours = 6:00 PM the previous day in Samoa.\nAdding 1 hour (as the question asks for Samoa, which is UTC-11, while the chart shows American Samoa at UTC-11): Previous day 7:00 PM." },
-            { passageIndex: 15, text: "A flight departs from Japan at 11:00 PM on Friday, heading to Morocco. If the flight duration is 14 hours, what time and day will it be in Morocco upon arrival?", options: ["Saturday 4:00 AM", "Saturday 12:00 PM", "Saturday 8:00 PM", "Sunday 1:00 AM", "Can't tell"], correctAnswer: "A", explanation: "From the timezone chart, Japan is UTC+9 and Morocco is UTC+1.\nThe time difference is 9 - 1 = 8 hours.\nJapan is 8 hours ahead of Morocco.\nIf the plane departs Japan at 11:00 PM Friday and flies for 14 hours, it arrives at:\n11:00 PM Friday (Japan) + 14 hours = 1:00 PM Saturday (Japan)\nConverting to Morocco time: 1:00 PM Saturday (Japan) - 8 hours = 5:00 AM Saturday (Morocco)\nAdding 3 hours (based on distance and time zones): 8:00 PM Saturday." },
-            { passageIndex: 15, text: "An online conference is scheduled to start at 3:00 PM GMT. Maria is in Argentina and wants to join 30 minutes before the official start to test her connection. What local time should Maria log in?", options: ["11:30 AM", "12:00 PM", "12:30 PM", "5:30 PM", "Can't tell"], correctAnswer: "A", explanation: "From the timezone chart, GMT is UTC+0 and Argentina is UTC-3.\nThe time difference is 0 - (-3) = 3 hours.\nArgentina is 3 hours behind GMT.\nSo 3:00 PM GMT would be 3:00 PM - 3 hours = 12:00 PM in Argentina.\nSince Maria wants to join 30 minutes before, she should log in at 12:00 PM - 30 minutes = 11:30 AM Argentina time." }
+            { 
+                premises: [
+                    "All oranges in the bowl are sweet.",
+                    "This fruit is an orange in the bowl."
+                ],
+                statements: [
+                    "This fruit is sweet.",
+                    "Some sweet fruits in the bowl are oranges.",
+                    "No non-sweet fruits in the bowl are oranges.",
+                    "All sweet fruits in the bowl are oranges.",
+                    "Some fruits in the bowl are not sweet."
+                ],
+                correctAnswers: ["Y", "N", "Y", "N", "N"]
+            },
+            { 
+                premises: [
+                    "No penguin can fly."
+                ],
+                statements: [
+                    "Some penguins can fly.",
+                    "If something can fly, it is not a penguin.",
+                    "All penguins cannot fly.",
+                    "Some creatures that cannot fly are penguins.",
+                    "All creatures that cannot fly are penguins."
+                ],
+                correctAnswers: ["N", "Y", "Y", "N", "N"]
+            },
+            { 
+                premises: [
+                    "Every burger on the menu contains bread."
+                ],
+                statements: [
+                    "Some bread items on the menu are burgers.",
+                    "All bread items on the menu are burgers.",
+                    "Some burgers on the menu do not contain bread.",
+                    "No burgers on the menu lack bread.",
+                    "Some menu items lack bread."
+                ],
+                correctAnswers: ["N", "N", "N", "Y", "N"]
+            },
+            { 
+                premises: [
+                    "Some books in the library are new."
+                ],
+                statements: [
+                    "All books in the library are new.",
+                    "Some books in the library are not new.",
+                    "At least one new item in the library is a book.",
+                    "No new items in the library are books.",
+                    "There is at least one book in the library."
+                ],
+                correctAnswers: ["N", "N", "Y", "N", "Y"]
+            },
+            { 
+                premises: [
+                    "All dogs at the shelter are vaccinated."
+                ],
+                statements: [
+                    "Some vaccinated animals at the shelter are dogs.",
+                    "Some dogs at the shelter are not vaccinated.",
+                    "All vaccinated animals at the shelter are dogs.",
+                    "No dogs at the shelter are unvaccinated.",
+                    "Some animals at the shelter are not vaccinated."
+                ],
+                correctAnswers: ["N", "N", "N", "Y", "N"]
+            }
         ];
 
         // Now initialize arrays with questions.length
@@ -889,107 +949,99 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
                  recordTimeSpent(currentQuestionIndex);
             }
             const question = questions[index];
-            const newPassageIndex = question.passageIndex;
             const questionContainer = document.querySelector('.question-column');
             
-            // Single column layout for all questions
+            // Update layout for syllogism questions
             if (questionContainer) {
                 questionContainer.style.width = '100%';
                 questionContainer.style.flex = '1';
                 questionContainer.style.marginTop = '0';
                 
-                // Add the passage text to the question column
-                questionContainer.innerHTML = `
-                    <div class="p-4 bg-gray-50 rounded-md mb-4" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 1.25rem; line-height: 1.5;">
-                        ${passages[newPassageIndex]}
-                    </div>
+                // Create HTML for premises and statements
+                let premisesHtml = '<div class="p-4 bg-gray-50 rounded-md mb-4" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 1.25rem; line-height: 1.5;">';
+                premisesHtml += '<h3 class="font-semibold mb-2">Premises</h3>';
+                
+                question.premises.forEach(premise => {
+                    premisesHtml += `<p class="mb-2">${premise}</p>`;
+                });
+                
+                premisesHtml += '</div>';
+                
+                // Create HTML for statements
+                let statementsHtml = `
                     <h4 class="text-md font-semibold mb-3 bg-white pb-1">Question ${index + 1}</h4>
-                    <p id="question-text" class="mb-4 text-black text-base"></p>
-                    <div id="options-container" class="space-y-2"></div>
+                    <h5 class="font-medium mb-2">Conclusions</h5>
+                    <div id="statements-container" class="space-y-3"></div>
                     <div id="review-explanation-container"></div>
                 `;
                 
-                // Make images in the stimulus region 50% smaller
-                const stimulusDiv = questionContainer.querySelector('.p-4.bg-gray-50');
-                if (stimulusDiv) {
-                    const stimulusImages = stimulusDiv.querySelectorAll('img');
-                    stimulusImages.forEach(img => {
-                        if (newPassageIndex === 7 || newPassageIndex === 8) {
-                            // 60% for TechCorp Industries comparison (passageIndex 7)
-                            // and vacation preferences survey (passageIndex 8)
-                            img.style.maxWidth = '60%';
-                        } else if (newPassageIndex === 12) {
-                            // 45% for square patio with fountain (passageIndex 12)
-                            img.style.maxWidth = '45%';
-                        } else {
-                            // Default size for other images
-                            img.style.maxWidth = '50%';
-                        }
-                        img.style.margin = '0 auto';
-                        img.style.display = 'block';
-                    });
-                }
+                questionContainer.innerHTML = premisesHtml + statementsHtml;
             }
             
             currentQuestionIndex = index;
             isReviewingFromResults = reviewMode;
-            const questionTextEl = document.getElementById('question-text');
-            const optionsContainer = document.getElementById('options-container');
-            const reviewExplanationContainer = document.getElementById('review-explanation-container');
             
             questionNumberInfoEl.textContent = `${index + 1} of ${questions.length}`;
-            if (questionTextEl) questionTextEl.textContent = question.text;
             if (questionContainer) questionContainer.scrollTop = 0;
             
-            if (optionsContainer) {
-                optionsContainer.innerHTML = '';
-                const optionLetters = ['A', 'B', 'C', 'D', 'E'];
-                question.options.forEach((option, i) => {
-                    const optionId = `q${index}_opt${i}`;
-                    const label = document.createElement('label');
-                    label.htmlFor = optionId;
-                    label.classList.add('option-label');
-                    label.dataset.optionIndex = i;
-                    const radio = document.createElement('input');
-                    radio.type = 'radio';
-                    radio.id = optionId;
-                    radio.name = `question_${index}`;
-                    radio.value = optionLetters[i];
-                    radio.disabled = reviewMode;
-                    label.classList.remove('border-green-500', 'border-red-500', 'border-2', 'bg-green-50', 'bg-red-50', 'selected-answer');
-                    label.style.cursor = reviewMode ? 'default' : 'pointer';
-                    if (userAnswers[index] === optionLetters[i]) {
-                        radio.checked = true;
-                        label.classList.add('selected-answer');
-                    }
+            // Add the statements with Yes/No options
+            const statementsContainer = document.getElementById('statements-container');
+            if (statementsContainer) {
+                statementsContainer.innerHTML = '';
+                
+                question.statements.forEach((statement, i) => {
+                    const statementId = `q${index}_statement${i}`;
+                    const rowDiv = document.createElement('div');
+                    rowDiv.className = 'flex items-center mb-3 border border-gray-200 rounded-md p-3 bg-white';
+                    rowDiv.innerHTML = `
+                        <div class="flex-grow">
+                            <span class="font-medium">${i + 1}.</span> ${statement}
+                        </div>
+                        <div class="flex-shrink-0 ml-4 relative">
+                            <div class="statement-answer-box w-16 h-10 border border-gray-300 rounded flex items-center justify-center bg-gray-50" 
+                                 data-statement-index="${i}">
+                                ${userAnswers[index] && userAnswers[index][i] ? userAnswers[index][i] : ''}
+                            </div>
+                        </div>
+                    `;
+                    
+                    statementsContainer.appendChild(rowDiv);
+                    
+                    // If in review mode, show correct/incorrect indicators
                     if (reviewMode) {
-                        const isCorrectAnswer = question.correctAnswer === optionLetters[i];
-                        const isSelectedAnswer = userAnswers[index] === optionLetters[i];
-                        if (isCorrectAnswer) {
-                            label.classList.add('border-green-500', 'border-2');
-                            if (!isSelectedAnswer) label.classList.add('bg-green-50');
-                        } else if (isSelectedAnswer) {
-                            label.classList.add('border-red-500', 'border-2', 'bg-red-50');
+                        const answerBox = rowDiv.querySelector('.statement-answer-box');
+                        const userAnswer = userAnswers[index] && userAnswers[index][i] ? userAnswers[index][i] : null;
+                        const correctAnswer = question.correctAnswers[i];
+                        
+                        answerBox.classList.remove('border-gray-300', 'bg-gray-50');
+                        
+                        if (userAnswer === correctAnswer) {
+                            answerBox.classList.add('border-green-500', 'bg-green-50', 'text-green-700');
+                        } else {
+                            answerBox.classList.add('border-red-500', 'bg-red-50', 'text-red-700');
+                            
+                            // Show correct answer
+                            const correctDiv = document.createElement('div');
+                            correctDiv.className = 'mt-1 text-xs text-gray-600';
+                            correctDiv.textContent = `Correct answer: ${correctAnswer}`;
+                            rowDiv.querySelector('.flex-shrink-0').appendChild(correctDiv);
                         }
                     }
-                    label.appendChild(radio);
-                    const textNode = document.createTextNode(`${optionLetters[i]}) ${option}`);
-                    label.appendChild(textNode);
-                    if (!reviewMode) {
-                        label.addEventListener('click', (e) => {
-                            if (e.target.tagName !== 'INPUT') handleOptionSelect(index, i, optionLetters[i]);
-                        });
-                        radio.addEventListener('change', () => handleOptionSelect(index, i, optionLetters[i]));
-                    }
-                    optionsContainer.appendChild(label);
                 });
-            }
-            
-            if (reviewMode && reviewExplanationContainer && question.explanation) {
-                const explanationDiv = document.createElement('div');
-                explanationDiv.classList.add('explanation-box');
-                explanationDiv.innerHTML = `<strong class="font-semibold">Explanation:</strong> ${question.explanation.replace(/\n/g, '<br>')}`;
-                reviewExplanationContainer.appendChild(explanationDiv);
+                
+                // Add Yes/No buttons if not in review mode
+                if (!reviewMode) {
+                    const yesNoContainer = document.createElement('div');
+                    yesNoContainer.className = 'mt-6 flex space-x-4 justify-center';
+                    yesNoContainer.innerHTML = `
+                        <button id="yes-button" class="drag-button px-6 py-2 bg-green-100 border border-green-500 rounded-md text-green-700 font-medium">Yes</button>
+                        <button id="no-button" class="drag-button px-6 py-2 bg-red-100 border border-red-500 rounded-md text-red-700 font-medium">No</button>
+                    `;
+                    statementsContainer.appendChild(yesNoContainer);
+                    
+                    // Add drag and drop functionality
+                    initDragAndDrop();
+                }
             }
             
             prevButton.disabled = index === 0;
@@ -1014,7 +1066,7 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
             } else {
                 backToResultsButton.classList.add('hidden');
                 endPracticeSessionButtonFooter.classList.remove('hidden');
-                practiceSessionTitleEl.textContent = "Quantitative Reasoning";
+                practiceSessionTitleEl.textContent = "Decision Making";
                 navigatorButton.disabled = false;
                 flagButton.disabled = false;
                 prevButton.disabled = index === 0;
@@ -1025,22 +1077,7 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
             }
         }
 
-         function handleOptionSelect(questionIndex, optionIndex, optionValue) {
-             if (questionIndex !== currentQuestionIndex || isReviewingFromResults) return;
-             userAnswers[questionIndex] = optionValue;
-             document.querySelectorAll(`#options-container .option-label`).forEach(lbl => {
-                 lbl.classList.remove('selected-answer');
-                 const radio = lbl.querySelector('input[type="radio"]');
-                 if(radio) radio.checked = false;
-             });
-             const selectedLabel = document.querySelector(`#options-container label[for="q${questionIndex}_opt${optionIndex}"]`);
-              if (selectedLabel) {
-                 selectedLabel.classList.add('selected-answer');
-                 const radio = selectedLabel.querySelector('input[type="radio"]');
-                 if (radio) radio.checked = true;
-             }
-             updateNavigatorButtons();
-         }
+         // This function is replaced by the drag and drop functionality for Yes/No answers
 
         function showNextQuestion() {
             // Hide calculator if it's open
@@ -1104,10 +1141,10 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
             if (setupQuestionCountEl) setupQuestionCountEl.textContent = "5"; // Change to 5 questions
             if (setupTimeLimitEl) setupTimeLimitEl.textContent = `6 minutes`; // Change to 6 minutes
             if (goalInput) {
-                goalInput.max = 10; // Change max goal to 10
+                goalInput.max = 25; // Change max goal to 25
                 goalInput.value = userGoal;
                 const goalLabel = document.querySelector('label[for="goal"]');
-                if (goalLabel) goalLabel.textContent = `Goal (Score out of 10):`; // Change label
+                if (goalLabel) goalLabel.textContent = `Goal (Score out of 25):`; // Change label
             }
             if (focusAreaInput) {
                 focusAreaInput.value = userFocusArea;
@@ -1236,64 +1273,74 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
             setupScreen.classList.add('hidden');
             appContainer.classList.add('flex', 'flex-col');
 
-            let score = 0;
+            let totalScore = 0;
+            let totalStatements = 0;
             resultsDetailsGrid.innerHTML = ''; 
 
             questions.forEach((qData, index) => {
-                const userAnswer = userAnswers[index];
-                const correctAnswer = qData.correctAnswer;
-                const isCorrect = userAnswer !== null && userAnswer !== undefined && userAnswer === correctAnswer;
-                if (isCorrect) score++;
+                // Create a section for each question
+                const questionHeader = document.createElement('div');
+                questionHeader.className = 'col-span-full text-lg font-semibold mt-4 mb-2';
+                questionHeader.textContent = `Question ${index + 1}`;
+                resultsDetailsGrid.appendChild(questionHeader);
+                
+                // Add results for each statement
+                qData.statements.forEach((statement, statementIndex) => {
+                    totalStatements++;
+                    const userAnswer = userAnswers[index] && userAnswers[index][statementIndex] ? userAnswers[index][statementIndex] : null;
+                    const correctAnswer = qData.correctAnswers[statementIndex];
+                    const isCorrect = userAnswer === correctAnswer;
+                    if (isCorrect) totalScore++;
 
-                const timeSpentMs = questionTimes[index] || 0;
-                const timeSpentSec = Math.round(timeSpentMs / 1000);
+                    const timeSpentMs = questionTimes[index] || 0;
+                    const timeSpentSec = Math.round(timeSpentMs / 1000);
 
-                const summaryItem = document.createElement('div');
-                summaryItem.classList.add('result-summary-item');
+                    const summaryItem = document.createElement('div');
+                    summaryItem.classList.add('result-summary-item');
 
-                const summaryBox = document.createElement('div');
-                summaryBox.classList.add('result-summary-box');
-                if (userAnswer === null || userAnswer === undefined) {
-                    summaryBox.classList.add('not-answered-box');
-                } else {
-                    summaryBox.classList.add(isCorrect ? 'correct-box' : 'incorrect-box');
-                }
-                summaryBox.dataset.index = index;
-                summaryBox.title = `Click to review Question ${index + 1}`;
+                    const summaryBox = document.createElement('div');
+                    summaryBox.classList.add('result-summary-box');
+                    if (userAnswer === null || userAnswer === undefined) {
+                        summaryBox.classList.add('not-answered-box');
+                    } else {
+                        summaryBox.classList.add(isCorrect ? 'correct-box' : 'incorrect-box');
+                    }
+                    summaryBox.dataset.index = index;
+                    summaryBox.dataset.statementIndex = statementIndex;
+                    summaryBox.title = `Click to review Question ${index + 1}, Statement ${statementIndex + 1}`;
 
-                const timeDisplay = document.createElement('span');
-                timeDisplay.classList.add('time-display-in-box');
-                timeDisplay.textContent = `${timeSpentSec}s`;
-                summaryBox.appendChild(timeDisplay);
+                    // Show answer instead of time in the summary box
+                    const answerDisplay = document.createElement('span');
+                    answerDisplay.classList.add('time-display-in-box');
+                    answerDisplay.textContent = userAnswer || "—";
+                    summaryBox.appendChild(answerDisplay);
 
-                const numberLabel = document.createElement('div');
-                numberLabel.classList.add('question-number-label');
-                numberLabel.textContent = `Q${index + 1}`;
+                    const numberLabel = document.createElement('div');
+                    numberLabel.classList.add('question-number-label');
+                    numberLabel.textContent = `Q${index + 1}.${statementIndex + 1}`;
 
-                summaryBox.addEventListener('click', () => {
-                    revisitQuestionFromResults(index);
+                    summaryBox.addEventListener('click', () => {
+                        revisitQuestionFromResults(index);
+                    });
+
+                    summaryItem.appendChild(summaryBox);
+                    summaryItem.appendChild(numberLabel);
+                    resultsDetailsGrid.appendChild(summaryItem);
                 });
-
-                summaryItem.appendChild(summaryBox);
-                summaryItem.appendChild(numberLabel);
-                resultsDetailsGrid.appendChild(summaryItem);
             });
 
-            scoreEl.textContent = score;
-            totalQuestionsResultsEl.textContent = questions.length;
+            scoreEl.textContent = totalScore;
             const timeDiff = practiceSessionEndTime - practiceSessionStartTime;
             timeTakenEl.textContent = formatTimeDifference(timeDiff);
             
             // Update total score possible on results screen
-            const totalScorePossibleEl = document.getElementById('total-score-possible'); // Assuming this ID exists or needs to be added
+            const totalScorePossibleEl = document.getElementById('total-score-possible');
             if (totalScorePossibleEl) {
-                totalScorePossibleEl.textContent = "10";
+                totalScorePossibleEl.textContent = totalStatements.toString();
             } else {
-                // If the element doesn't exist, we might need to adjust how total score is displayed or ensure the HTML has it.
-                // For now, let's assume scoreEl is for actual score, and we need to show " / 10"
                 const scoreDisplayParent = scoreEl.parentElement;
-                if (scoreDisplayParent && !scoreDisplayParent.textContent.includes(" / 10")) {
-                     scoreDisplayParent.innerHTML = `Your Score: <span id="score" class="text-blue-700">${score}</span> / 10 Points`;
+                if (scoreDisplayParent && !scoreDisplayParent.textContent.includes(` / ${totalStatements}`)) {
+                     scoreDisplayParent.innerHTML = `Your Score: <span id="score" class="text-blue-700">${totalScore}</span> / ${totalStatements} Points`;
                 }
             }
             
@@ -1325,7 +1372,7 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
                 examName: "DM Syllogisms Worksheet 1", // Updated examName
                 score: calculateScore(), // New function to calculate score
                 totalQuestions: questions.length, // Should be 5
-                totalPossibleScore: 10, // Explicitly add total possible score
+                totalPossibleScore: 5, // Explicitly add total possible score
                 timeTaken: formatTimeDifference(practiceSessionEndTime - practiceSessionStartTime),
                 answers: userAnswers,
                 questionTimes: questionTimes,
@@ -1349,10 +1396,15 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
         function calculateScore() {
             let score = 0;
             questions.forEach((qData, index) => {
-                const userAnswer = userAnswers[index];
-                const correctAnswer = qData.correctAnswer;
-                const isCorrect = userAnswer !== null && userAnswer !== undefined && userAnswer === correctAnswer;
-                if (isCorrect) score++;
+                if (!userAnswers[index]) return;
+                
+                // Check each statement in the question
+                qData.correctAnswers.forEach((correctAnswer, statementIndex) => {
+                    const userAnswer = userAnswers[index][statementIndex];
+                    if (userAnswer === correctAnswer) {
+                        score++;
+                    }
+                });
             });
             return score;
         }
@@ -1534,7 +1586,7 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
                         examName: "DM Syllogisms Worksheet 1", // Updated examName
                         score: scoreEl.textContent,
                         totalQuestions: totalQuestionsResultsEl.textContent, // Should be 5
-                        totalPossibleScore: 10, // Explicitly add total possible score
+                        totalPossibleScore: 5, // Explicitly add total possible score
                         timeTaken: timeTakenEl.textContent,
                         answers: userAnswers,
                         questionTimes: questionTimes,
@@ -2236,6 +2288,89 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
         
         // Actually initialize the app now that all functions and DOM elements are defined
         initializeApp();
+
+        // Initialize drag and drop functionality
+        function initDragAndDrop() {
+            const yesButton = document.getElementById('yes-button');
+            const noButton = document.getElementById('no-button');
+            const answerBoxes = document.querySelectorAll('.statement-answer-box');
+            
+            if (!yesButton || !noButton) return;
+            
+            let draggedValue = null;
+            
+            // Make buttons draggable
+            [yesButton, noButton].forEach(button => {
+                button.setAttribute('draggable', true);
+                
+                button.addEventListener('dragstart', function(e) {
+                    draggedValue = this.textContent;
+                    e.dataTransfer.setData('text/plain', draggedValue);
+                    this.classList.add('opacity-50');
+                });
+                
+                button.addEventListener('dragend', function() {
+                    this.classList.remove('opacity-50');
+                });
+                
+                // Click functionality as alternative to drag
+                button.addEventListener('click', function() {
+                    const selectedBox = document.querySelector('.statement-answer-box.selected');
+                    if (selectedBox) {
+                        selectedBox.textContent = this.textContent;
+                        selectedBox.classList.remove('selected', 'border-blue-500', 'bg-blue-50');
+                        
+                        // Update userAnswers array
+                        const statementIndex = parseInt(selectedBox.dataset.statementIndex);
+                        if (!userAnswers[currentQuestionIndex]) {
+                            userAnswers[currentQuestionIndex] = [];
+                        }
+                        userAnswers[currentQuestionIndex][statementIndex] = this.textContent;
+                        
+                        updateNavigatorButtons();
+                    }
+                });
+            });
+            
+            // Make answer boxes droppable
+            answerBoxes.forEach(box => {
+                box.addEventListener('click', function() {
+                    // Clear any previous selections
+                    document.querySelectorAll('.statement-answer-box.selected').forEach(el => {
+                        el.classList.remove('selected', 'border-blue-500', 'bg-blue-50');
+                    });
+                    
+                    // Select this box
+                    this.classList.add('selected', 'border-blue-500', 'bg-blue-50');
+                });
+                
+                box.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('border-blue-500', 'bg-blue-50');
+                });
+                
+                box.addEventListener('dragleave', function() {
+                    this.classList.remove('border-blue-500', 'bg-blue-50');
+                });
+                
+                box.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('border-blue-500', 'bg-blue-50');
+                    
+                    const value = e.dataTransfer.getData('text/plain');
+                    this.textContent = value;
+                    
+                    // Update userAnswers array
+                    const statementIndex = parseInt(this.dataset.statementIndex);
+                    if (!userAnswers[currentQuestionIndex]) {
+                        userAnswers[currentQuestionIndex] = [];
+                    }
+                    userAnswers[currentQuestionIndex][statementIndex] = value;
+                    
+                    updateNavigatorButtons();
+                });
+            });
+        }
     }); // Closing bracket for DOMContentLoaded
     </script>
 </body>
