@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DM Syllogisms Worksheet 2 - MedwithPurpose</title>
+    <link rel="icon" href="https://ik.imagekit.io/mwp/2.svg?updatedAt=1745982956185" type="image/svg+xml">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <style>
         /* Custom styles for better UI/UX */
         html, body {
@@ -23,16 +24,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #f0f2f5; /* Light background */
+            background-color: #f0f2f5; /* Light background like UCAT */
         }
         #app-container {
             display: flex;
             flex-direction: column;
             height: calc(100vh - 2rem); /* Full height minus padding */
             width: 100%;
-            max-width: 1200px; /* Optional: Max width for larger screens */
             background-color: #ffffff;
-            border: 1px solid #d1d5db; /* Border */
+            border: 1px solid #d1d5db; /* Border like UCAT */
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             border-radius: 0.375rem; /* Slightly rounded corners */
             margin: 1rem; /* Add some margin */
@@ -40,29 +40,41 @@
             position: relative; /* For calculator positioning */
         }
         /* Header and Footer */
-        .header-bar, .footer-bar {
-            flex-shrink: 0; /* Prevent shrinking */
+        .header-bar { /* Topmost bar */
+            flex-shrink: 0;
             background-color: #005A8C; /* Slightly darker blue for top bar */
-            color: white; /* Set default text color to white */
-            padding: 0.75rem 1.5rem; /* Padding */
+            color: white;
+            padding: 0.5rem 1.5rem; /* Adjusted padding */
             display: flex;
             justify-content: space-between;
             align-items: center;
+            z-index: 20; /* Ensure it's above the secondary bar if overlapping */
         }
 
-        /* Secondary toolbar styling */
-        .secondary-toolbar {
+        .secondary-toolbar { /* New toolbar for calculator and flag */
             flex-shrink: 0;
-            background-color: #007BBD;
+            background-color: #007BBD; /* Lighter blue for secondary bar */
             color: white;
-            padding: 0.5rem 1.5rem;
+            padding: 0.5rem 1.5rem; /* Consistent padding */
             display: flex;
-            justify-content: space-between;
+            justify-content: space-between; /* Align items */
             align-items: center;
-            border-bottom: 1px solid #005A8C;
+            border-bottom: 1px solid #005A8C; /* Optional: a subtle separator */
             z-index: 19;
         }
 
+        /* Specific text colors within header/footer */
+        .header-bar span, .header-bar div, .secondary-toolbar span, .secondary-toolbar div {
+             color: white;
+        }
+        #timer {
+             background-color: rgba(255, 255, 255, 0.2); 
+             color: white;
+             font-weight: bold;
+             padding: 0.25rem 0.75rem; 
+             border-radius: 0.25rem; 
+        }
+        
         /* Buttons in secondary toolbar */
         .secondary-toolbar-button {
             background-color: transparent;
@@ -83,23 +95,28 @@
             border-color: white;
         }
 
-        /* Specific text colors within header/footer */
-        .header-bar span, .header-bar div {
-             color: white;
-        }
 
-        /* Footer Button Styling */
+         /* Footer Button Styling */
+        .footer-bar {
+            flex-shrink: 0;
+            background-color: #005A8C; /* Match top bar color */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
         .footer-bar button {
             background-color: transparent;
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.5); /* Subtle white border */
-            padding: 0.4rem 0.8rem; /* Adjust padding */
-            font-size: 0.8rem; /* Adjust font size */
+            border: 1px solid rgba(255, 255, 255, 0.5); 
+            padding: 0.4rem 0.8rem; 
+            font-size: 0.8rem; 
             border-radius: 0.375rem;
              transition: background-color 0.2s ease, border-color 0.2s ease;
         }
         .footer-bar button:hover:not(:disabled) {
-            background-color: rgba(255, 255, 255, 0.15); /* Slight white background on hover */
+            background-color: rgba(255, 255, 255, 0.15); 
             border-color: white;
         }
          .footer-bar button:disabled {
@@ -107,209 +124,59 @@
              cursor: not-allowed;
              border-color: rgba(255, 255, 255, 0.3);
          }
-         /* Keep primary button distinct */
          .footer-bar button#next-button {
-             background-color: #ffffff; /* White background */
-             color: #006DAA; /* Blue text */
+             background-color: #ffffff; 
+             color: #006DAA; 
              border: 1px solid white;
              font-weight: 500;
          }
          .footer-bar button#next-button:hover:not(:disabled) {
-             background-color: #f0f0f0; /* Slightly off-white on hover */
+             background-color: #f0f0f0; 
          }
-         /* Flag button specific style */
-         #flag-button {
-             background-color: transparent;
-             border: 1px solid white;
-             color: white;
-             transition: background-color 0.2s ease, color 0.2s ease; /* Add transition */
-         }
-         #flag-button:hover {
-             background-color: white;
-             color: #006DAA;
-         }
-         /* Style for when a question IS flagged */
-          #flag-button.flagged {
-             background-color: #facc15; /* Yellow-400 */
+         #flag-button.flagged {
+             background-color: #facc15; 
              border-color: #facc15;
-             color: #422006; /* Dark brown text for contrast */
+             color: #422006; 
           }
           #flag-button.flagged:hover {
-             background-color: #f59e0b; /* Amber-500 */
+             background-color: #f59e0b; 
              border-color: #f59e0b;
           }
 
-        /* Main Content Area - Single Column Layout */
+        /* Main Content Area */
         .main-content-area {
-            flex-grow: 1; /* Take remaining vertical space */
-            display: flex;
-            flex-direction: column; /* Stack premises and questions */
-            overflow-y: auto; /* Allow scrolling for the whole area */
-            padding: 1rem 1.5rem; /* Padding */
+            flex-grow: 1; 
+            display: block;
+            overflow: hidden; 
+            padding: 1rem; 
         }
-
-        /* Premises Section */
-        .premises-section {
-            margin-bottom: 1.5rem; /* Space below premises */
+        .question-column {
+             width: 100%;
+            overflow-y: auto;
             padding: 1rem;
             border: 1px solid #e5e7eb;
             border-radius: 0.375rem;
-            background-color: #f9fafb;
-            flex-shrink: 0; /* Prevent premises from shrinking too much */
-        }
-        .premises-section h3 {
-            margin-bottom: 0.5rem;
+             background-color: #fff;
+             height: 100%; 
+             position: relative; 
         }
 
-        /* Statements Section Wrapper (NEW) */
-        .statements-wrapper {
-            flex-grow: 1; /* Allow this section to take remaining space */
-            display: flex; /* Use flexbox for side-by-side layout */
-            gap: 1.5rem; /* Gap between statements and draggable options */
-            overflow: hidden; /* Prevent internal overflow issues */
+        .selected-answer {
+            background-color: #bfdbfe !important; 
+            border-color: #3b82f6 !important; 
         }
-
-
-        /* Statements Section (List on the Left) */
-        .statements-section {
-             flex-grow: 1; /* Allow statements list to take available space */
-             display: flex;
-             flex-direction: column;
-             overflow-y: auto; /* Allow scrolling only for statements list */
-             padding-right: 0.5rem; /* Padding before options */
-        }
-        .statements-section h4 {
-            margin-bottom: 0.25rem;
-             position: sticky; /* Make header sticky */
-             top: 0;
-             background-color: white; /* Background to cover scrolling content */
-             z-index: 10;
-             padding-bottom: 0.25rem;
-        }
-        .statements-section p.instructions {
-             margin-bottom: 1rem;
-             position: sticky;
-             top: 2rem; /* Adjust based on h4 height */
-             background-color: white;
-             z-index: 10;
-             padding-bottom: 0.5rem;
-        }
-
-        /* Styling for individual statement rows */
-        .statement-row {
-            display: flex;
-            align-items: center; /* Vertically align items */
-            gap: 1rem; /* Space between text and answer box */
-            margin-bottom: 0.75rem;
-            padding: 0.5rem;
-            border-radius: 0.375rem;
-            background-color: #ffffff;
-            border: 1px solid #d1d5db;
-            transition: border-color 0.2s ease, background-color 0.2s ease; /* Add transition */
-        }
-
-        /* Style when dragging over the statement row */
-        .statement-row.drag-over {
-            border-color: #3b82f6; /* Solid blue border */
-            background-color: #eff6ff; /* Lighter blue background */
-        }
-
-        /* Styling for statement text */
-        .statement-text {
-            flex-grow: 1; /* Take available space */
-            font-size: 0.9rem;
-            color: #374151;
-            padding: 0.25rem; /* Add slight padding */
-            pointer-events: none; /* Prevent text from interfering with drop */
-        }
-
-        /* Styling for the answer box (visual indicator within the row) */
-        .statement-answer-box {
-            flex-shrink: 0; /* Prevent shrinking */
-            width: 6rem; /* Wider box */
-            height: 2.5rem; /* Taller box */
-            border: 2px solid transparent; /* Initially transparent border */
-            border-radius: 0.375rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: #6b7280; /* Default text color */
-            background-color: #f3f4f6; /* Light grey background */
-            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-            pointer-events: none; /* Prevent box from interfering with row drop */
-        }
-
-        /* Style for answered boxes */
-        .statement-answer-box.answered-yes {
-            background-color: #dcfce7; /* Green-100 */
-            border: 2px solid #22c55e; /* Green-500 */
-            color: #15803d; /* Green-700 */
-        }
-        .statement-answer-box.answered-no {
-            background-color: #fee2e2; /* Red-100 */
-            border: 2px solid #ef4444; /* Red-500 */
-            color: #b91c1c; /* Red-700 */
-        }
-
-        /* Styling for the draggable Yes/No options sidebar (NEW) */
-        #draggable-options-sidebar {
-            flex-shrink: 0; /* Prevent shrinking */
-            width: 8rem; /* Fixed width for the sidebar */
-            padding-top: 4rem; /* Align roughly with start of statements */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.5rem; /* Space between Yes and No */
-        }
-
-        /* Styling for draggable Yes/No elements */
-        .draggable-option {
-            padding: 0.6rem 1.5rem;
-            border-radius: 0.375rem;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: grab; /* Indicate draggable */
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: transform 0.1s ease;
-            text-align: center;
-            width: 80%; /* Make buttons fill sidebar width */
-        }
-        .draggable-option:active {
-             cursor: grabbing;
-             transform: scale(0.95);
-        }
-        .draggable-option-yes {
-            background-color: #86efac; /* Green-300 */
-            border: 1px solid #22c55e; /* Green-500 */
-            color: #14532d; /* Green-900 */
-        }
-        .draggable-option-no {
-            background-color: #fca5a5; /* Red-300 */
-            border: 1px solid #ef4444; /* Red-500 */
-            color: #7f1d1d; /* Red-900 */
-        }
-
-        /* Style for navigator buttons */
         .nav-answered { background-color: #a7f3d0; }
         .nav-current { border: 2px solid #3b82f6 !important; font-weight: bold; }
         .nav-flagged, .review-flagged { border: 2px solid #f59e0b !important; position: relative; }
-
-        /* Modal Styles */
+        
         .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
         .modal-content { background-color: #fefefe; margin: auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 600px; border-radius: 0.5rem; }
         .modal.flex { display: flex; }
 
-        /* General Button Styling (outside footer) */
         button, .button {
             transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
-            border-radius: 0.375rem;
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            cursor: pointer;
+            border-radius: 0.375rem; padding: 0.5rem 1rem; font-size: 0.875rem; font-weight: 500;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); cursor: pointer;
         }
         button:active, .button:active { transform: scale(0.98); }
         button:disabled { opacity: 0.6; cursor: not-allowed; }
@@ -320,241 +187,330 @@
         .secondary-button:hover:not(:disabled) { background-color: #f9fafb; }
         .danger-button { background-color: #ef4444; color: white; border: 1px solid transparent; }
         .danger-button:hover:not(:disabled) { background-color: #dc2626; }
-        .subtle-button { background-color: #f3f4f6; color: #374151; border: 1px solid transparent; }
-        .subtle-button:hover:not(:disabled) { background-color: #e5e7eb; }
-
-        /* --- Result Styling --- */
-       .correct-answer { background-color: #dcfce7; border-left: 4px solid #22c55e; }
-       .partially-correct-answer { background-color: #fef9c3; border-left: 4px solid #eab308; }
-       .incorrect-answer { background-color: #fee2e2; border-left: 4px solid #ef4444; }
-       .result-item-clickable { cursor: pointer; transition: background-color 0.2s ease-in-out; border: 1px solid #e5e7eb; border-radius: 0.5rem; margin-bottom: 0.5rem; padding: 0.75rem; }
-       .result-item-clickable:hover { background-color: #f0f0f0; }
-       .correct-indicator-text { color: #16a34a; font-weight: 600;}
-       .incorrect-indicator-text { color: #dc2626; font-weight: 600;}
-       .result-statement { font-size: 0.8rem; margin-left: 1rem; margin-bottom: 0.25rem; padding-left: 0.5rem; border-left: 2px solid #e5e7eb; }
-       .result-statement.correct { border-left-color: #22c55e; }
-       .result-statement.incorrect { border-left-color: #ef4444; }
-       /* --- END Result Styling --- */
-
-        /* --- Results Overview Grid (New) --- */
-        #results-overview-grid {
-            /* Styles for the grid container itself are in Tailwind classes */
-        }
-        .result-summary-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            background-color: #fff;
-            border: 1px solid #e5e7eb; /* Tailwind gray-200 */
-            border-radius: 0.5rem; /* Tailwind rounded-lg */
-            padding: 0.75rem; /* Tailwind p-3 */
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Subtle shadow */
-            cursor: pointer;
-            position: relative; /* Added for tooltip positioning */
-        }
-        .result-summary-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        .result-summary-item.flagged-result {
-            border-left-width: 4px;
-            border-left-color: #f59e0b; /* Tailwind amber-500 */
-        }
-        .result-summary-points {
-            font-size: 1.125rem; /* Tailwind text-lg */
-            font-weight: 600; /* Tailwind font-semibold */
-            margin-bottom: 0.25rem;
-        }
-        .result-summary-points.correct-2pts { color: #16a34a; } /* Tailwind green-600 */
-        .result-summary-points.correct-1pt { color: #ca8a04; } /* Tailwind yellow-600 */
-        .result-summary-points.incorrect-0pts { color: #dc2626; } /* Tailwind red-600 */
         
-        .result-summary-qnum {
-            font-size: 0.875rem; /* Tailwind text-sm */
-            color: #4b5563; /* Tailwind gray-600 */
-            margin-bottom: 0.5rem;
+        .option-label {
+            display: block; padding: 0.75rem 1rem; border: 1px solid #d1d5db; 
+            border-radius: 0.375rem; margin-bottom: 0.5rem; cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            background-color: #ffffff; 
         }
-        .result-summary-statements {
-            font-size: 0.75rem; /* Tailwind text-xs */
-            color: #6b7280; /* Tailwind gray-500 */
-            line-height: 1.2;
-        }
-         /* Tooltip for statement summary on hover (simple version) */
-        .result-summary-item .tooltip-text {
-            visibility: hidden;
-            width: 180px;
-            background-color: #374151; /* Tailwind gray-700 */
-            color: #fff;
-            text-align: left;
-            padding: 8px;
-            border-radius: 6px;
-            position: absolute;
-            z-index: 1;
-            bottom: 110%; /* Position above the item */
-            left: 50%;
-            margin-left: -90px; /* Use half of the width to center */
-            opacity: 0;
-            transition: opacity 0.2s;
-            font-size: 0.75rem;
-            line-height: 1.3;
-        }
-        .result-summary-item:hover .tooltip-text {
-            visibility: visible;
-            opacity: 1;
-        }
-        .result-summary-item .tooltip-text::after { /* Arrow */
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #374151 transparent transparent transparent;
-        }
-        /* --- END Results Overview Grid --- */
+        .option-label:hover:not(.selected-answer) { background-color: #f3f4f6; border-color: #a5b4fc; }
+        input[type="radio"] { display: none; }
 
-        /* Style for explanation box */
-        .explanation-box { background-color: #fef3c7; border: 1px solid #fcd34d; padding: 0.75rem; margin-top: 1rem; border-radius: 0.375rem; font-size: 0.875rem; color: #78350f; }
-
-        /* Review Grid Button Styles */
-        .review-grid-button { padding: 0.5rem 0.25rem; border: 1px solid #d1d5db; border-radius: 0.375rem; text-align: center; transition: background-color 0.2s ease, border-color 0.2s ease; font-size: 0.875rem; line-height: 1.25rem; cursor: pointer; }
+        #results-details-grid {
+            display: grid; 
+            grid-template-columns: repeat(10, 1fr); 
+            gap: 0.75rem; 
+            padding-top: 0.5rem; 
+            max-width: 950px; 
+            margin-left: auto; 
+            margin-right: auto;
+        }
+        .result-summary-item { display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .result-summary-box {
+            width: 68px; 
+            height: 68px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.375rem; 
+            font-weight: 600; 
+            color: white; 
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .result-summary-box:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+        .correct-box { background-color: #22c55e; border: 2px solid #16a34a; }
+        .incorrect-box { background-color: #ef4444; border: 2px solid #dc2626; }
+        .not-answered-box { background-color: #9ca3af; border: 2px solid #6b7280; }
+        .time-display-in-box { font-size: 1rem; }
+        .question-number-label { margin-top: 0.5rem; font-size: 0.875rem; color: #4b5563; font-weight: 500; }
+        
+        .explanation-box {
+             background-color: #fef3c7; border: 1px solid #fcd34d; padding: 0.5rem 0.75rem; 
+             margin-top: 0.75rem; border-radius: 0.375rem; font-size: 0.875rem; color: #78350f; 
+        }
+        .review-grid-button {
+             padding: 0.5rem 0.25rem; border: 1px solid #d1d5db; border-radius: 0.375rem;
+             text-align: center; transition: background-color 0.2s ease, border-color 0.2s ease;
+             font-size: 0.875rem; line-height: 1.25rem; cursor: pointer;
+        }
         .review-grid-button-answered { background-color: #dcfce7; border-color: #86efac; color: #15803d; }
         .review-grid-button-unanswered { background-color: #f3f4f6; border-color: #d1d5db; color: #4b5563; }
-         .review-grid-button:hover { filter: brightness(95%); }
+        .review-grid-button:hover { filter: brightness(95%); }
+
+        /* Calculator Styles */
+        #calculator-ui {
+            display: none; 
+            position: absolute;
+            top: 100px; 
+            left: 50%;
+            width: 225px;
+            background-color: #0077b6; /* Bright blue background matching image */
+            border: 1px solid #005a8c;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            padding: 12px;
+            z-index: 1000; 
+            cursor: grab;
+            transform: translateX(-50%); /* Center horizontally */
+        }
+        #calculator-ui.visible { display: block; }
+        .calculator-header {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            color: white; 
+            margin-bottom: 8px; 
+            font-size: 0.9rem; 
+            padding: 0 3px;
+        }
+        .calculator-header .title { font-weight: 600; }
+        .calculator-header .close-calc-btn {
+            background: none; 
+            border: none; 
+            color: white; 
+            font-size: 1.1rem; 
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .calculator-decorative-text {
+            color: white;
+            font-size: 0.65rem;
+            text-align: center;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        #calc-display-container {
+            background-color: #FFFFFF;
+            border: 1px solid #cccccc; 
+            border-radius: 4px; 
+            padding: 8px 12px;
+            margin-bottom: 12px; 
+            text-align: right; 
+            min-height: 36px;
+            display: flex; 
+            align-items: center; 
+            justify-content: flex-end;
+            position: relative; /* Add position relative to properly position the memory indicator */
+        }
+        #calc-display {
+            font-family: 'Courier New', Courier, monospace; 
+            font-size: 1.6rem;
+            color: #000000; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            white-space: nowrap; 
+            max-width: 100%;
+        }
+        #calc-memory-indicator {
+            position: absolute;
+            left: 6px;
+            top: 4px;
+            color: #2D3748;
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: none;
+        }
+        .calc-buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+        }
+        .calc-button {
+            border: none;
+            border-radius: 4px;
+            padding: 10px 0;
+            font-size: 1rem;
+            font-weight: 500; 
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .calc-button:active { transform: scale(0.95); }
+
+        /* Number buttons (0-9, .) */
+        .calc-button-num {
+            background-color: #FFFFFF;
+            color: #000000;
+        }
+        .calc-button-num:hover { background-color: #F0F0F0; }
+
+        /* Function and Operator buttons (Red background, white text) */
+        .calc-button-red {
+            background-color: #d62828; /* Bright red matching image */
+            color: white;
+        }
+        .calc-button-red:hover { background-color: #e63946; }
+        
+        .calc-button.equals {
+            grid-row: span 1; /* Only span 1 row */
+            grid-column: 4; /* Position in 4th column */
+            grid-row-start: 5; /* Start at row 5, below the + button */
+        }
 
 
-        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            #results-details-grid { 
+                grid-template-columns: repeat(8, 1fr);
+                max-width: 760px;
+            }
+        }
+        
         @media (max-width: 768px) {
             #app-container { height: auto; margin: 0.5rem; }
-            .main-content-area { padding: 0.75rem; }
-            .premises-section { padding: 0.75rem; }
-            .statements-wrapper { flex-direction: column; gap: 1rem; } /* Stack statements and options */
-            .statements-section { padding-right: 0; overflow-y: visible; } /* Remove padding, disable scroll */
-            #draggable-options-sidebar {
-                width: 100%;
-                padding-top: 0;
-                flex-direction: row; /* Options side-by-side */
-                justify-content: space-around; /* Space out options */
-                padding: 0.75rem 0;
-                border-top: 1px solid #e5e7eb; /* Add separator */
-            }
-            .draggable-option { width: 40%; padding: 0.5rem 1rem; font-size: 0.85rem;}
-
-            .statement-row { gap: 0.5rem; padding: 0.4rem; }
-            .statement-text { font-size: 0.85rem; }
-            .statement-answer-box { width: 5rem; height: 2.2rem; font-size: 0.8rem; }
-
-            .header-bar, .footer-bar, .secondary-toolbar { padding: 0.5rem 1rem; }
+            .main-content-area { flex-direction: column; padding: 0.5rem; gap: 0.5rem; }
+            .question-column { flex-basis: auto; width: 100%; height: auto; max-height: 35vh; padding: 0.75rem; }
+            .header-bar, .secondary-toolbar, .footer-bar { padding: 0.5rem 1rem; }
             .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: 0.8rem; }
             button, .button { padding: 0.4rem 0.8rem; }
             .footer-bar button { padding: 0.3rem 0.6rem; font-size: 0.75rem; }
-            .grid-cols-5 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-            #review-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+            #review-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } 
             .review-grid-button { font-size: 0.8rem; }
-            #calculator-ui { width: 210px; top: 90px; padding: 10px;} 
+            #results-details-grid { 
+                grid-template-columns: repeat(5, 1fr); 
+                gap: 0.75rem;
+                max-width: 450px;
+            }
+            .result-summary-box { width: 60px; height: 60px; }
+            .time-display-in-box { font-size: 0.9rem; }
+             #calculator-ui { width: 210px; top: 90px; padding: 10px;} 
             .calc-button { padding: 8px 0; font-size: 0.8rem;}
             #calc-display { font-size: 1.4rem; }
         }
          @media (max-width: 480px) {
-             .main-content-area { padding: 0.5rem; }
-             .grid-cols-5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-             #review-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-             .header-bar span, .footer-bar button { font-size: 0.75rem; }
+             #review-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } 
+             .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: 0.75rem; }
              button, .button { padding: 0.3rem 0.6rem; }
              .footer-bar button { padding: 0.25rem 0.5rem; font-size: 0.7rem; }
-             .statement-row { flex-direction: column; align-items: stretch; gap: 0.4rem; } /* Stack text and box */
-             .statement-answer-box { width: auto; } /* Full width */
-             #draggable-options-sidebar { gap: 0.5rem; }
-             .draggable-option { width: 45%; padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+             .option-label { padding: 0.5rem 0.75rem; font-size: 0.8rem;}
              .review-grid-button { font-size: 0.75rem; }
+             #results-details-grid { 
+                grid-template-columns: repeat(3, 1fr); 
+                gap: 0.5rem;
+                max-width: 220px;
+             }
+             .result-summary-box { width: 50px; height: 50px; }
+             .time-display-in-box { font-size: 0.8rem; }
+             .question-number-label { font-size: 0.8rem; }
              #calculator-ui { width: 90%; max-width: 200px; top: 85px; padding: 8px; } 
              .calc-button { padding: 7px 0; font-size: 0.75rem;}
              #calc-display { font-size: 1.3rem; }
          }
 
+        /* Statement answer boxes and Yes/No buttons */
+        .statement-row {
+            transition: all 0.2s ease;
+            border-radius: 0.375rem;
+            cursor: pointer;
+        }
+        .statement-row:hover {
+            background-color: #f9fafb;
+        }
+        .statement-row.selected {
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+        }
+        .statement-answer-box {
+            transition: all 0.2s ease;
+            font-weight: 600;
+            font-size: 1rem;
+            user-select: none;
+            background-color: #f5f5f5;
+            color: #4b5563;
+        }
+        .drag-button {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        #yes-button {
+            background-color: #a7f3d0;
+            border-color: #10b981;
+            color: #047857;
+        }
+        #yes-button:hover {
+            background-color: #6ee7b7;
+            transform: translateY(-1px);
+        }
+        #no-button {
+            background-color: #fca5a5;
+            border-color: #ef4444;
+            color: #b91c1c;
+        }
+        #no-button:hover {
+            background-color: #f87171;
+            transform: translateY(-1px);
+        }
+        .drag-button[draggable=true] {
+            cursor: grab;
+        }
+        .drag-button.opacity-50 {
+            opacity: 0.5;
+        }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    </head>
+</head> 
 <body>
-
     <div id="app-container">
 
         <div id="setup-screen" class="p-6 md:p-8 flex flex-col justify-center items-center h-full">
              <div class="text-center mb-6">
-                 <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
-                      alt="MedwithPurpose Logo"
-                      class="mx-auto h-20 w-auto mb-4"
-                      onerror="this.style.display='none'; this.onerror=null;">
-                 <h1 class="text-2xl md:text-3xl font-bold text-blue-600">Decision Making Syllogisms Worksheet 2</h1>
-                 <p class="text-gray-600 mt-2">Practice the UCAT Decision Making section.</p>
-                  <p class="text-sm text-gray-500 mt-4">
-                       This section contains <strong id="setup-question-count">5 questions</strong>, each with 5 statements. Maximum score is <strong id="setup-max-score">10 points</strong>.
-                  </p>
-             </div>
-             <div class="space-y-4 w-full max-w-md">
-                 <div>
-                     <label for="goal" class="block text-sm font-medium text-gray-700">Goal (Score out of 10):</label>
-                     <input type="number" id="goal" name="goal" min="0" max="10" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., 8">
-                 </div>
-                 <div>
-                     <label for="focus-area" class="block text-sm font-medium text-gray-700">Area of Focus / Intention For Practice:</label>
-                     <input type="text" id="focus-area" name="focus-area" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., Syllogisms, Logic Puzzles">
-                 </div>
-             </div>
-             <div class="mt-8 text-center">
-                 <button id="start-button" class="primary-button text-lg px-8 py-3">
-                     Start Practice
-                 </button>
-                 <button onclick="window.location.href = 'student_dashboard.html';" class="secondary-button text-md px-6 py-2 mt-4">
-                     Return to Dashboard
-                 </button>
-             </div>
+                <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
+                     alt="MedwithPurpose Logo" class="mx-auto h-11 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
+                <h1 class="text-2xl md:text-3xl font-bold text-blue-600">Decision Making Syllogisms Worksheet 2</h1>
+                <p class="text-gray-600 mt-2">Prepare for the UCAT DM section.</p>
+                 <p class="text-sm text-gray-500 mt-4">
+                     This section contains <strong>5 questions</strong> with 5 statements each. Maximum score is <strong>10 points</strong> (2 points per question). You have <strong>6 minutes</strong> to complete it.
+                 </p>
+            </div>
+            <div class="space-y-4 w-full max-w-md">
+                <div>
+                    <label for="goal" class="block text-sm font-medium text-gray-700">Goal (Score out of 10):</label>
+                    <input type="number" id="goal" name="goal" min="0" max="10" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., 8">
+                </div>
+                <div>
+                    <label for="focus-area" class="block text-sm font-medium text-gray-700">Area of Focus / Intention For Practice:</label>
+                    <input type="text" id="focus-area" name="focus-area" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., Calculations, Speed">
+                </div>
+            </div>
+            <div class="mt-8 text-center space-y-3">
+                <button id="start-button" class="primary-button text-lg px-8 py-3">Begin</button>
+                <button onclick="window.location.href='student_dashboard.html'" class="secondary-button text-lg px-8 py-3">Return to Dashboard</button>
+            </div>
         </div>
 
-        <div id="exam-screen" class="hidden flex flex-col h-full">
+        <div id="practice-session-screen" class="hidden flex flex-col h-full">
             <div class="header-bar">
-                <span id="exam-title" class="font-semibold">Decision Making</span>
+                <span id="practice-session-title" class="font-semibold">Quantitative Reasoning</span>
                 <div class="flex items-center space-x-4">
-                    <div id="timer" class="font-semibold">06:00</div>
+                    <div id="timer" class="text-base px-3 py-1 rounded-md">26:00</div>
                     <span class="text-sm">Question <span id="question-number-info">1</span> of 5</span>
                 </div>
             </div>
             <div class="secondary-toolbar">
-                <div> 
-                    <button id="calculator-toggle-button" class="secondary-toolbar-button">Calculator (Alt+C)</button>
+                <div> <button id="calculator-toggle-button" class="secondary-toolbar-button">Calculator (Alt+C)</button>
                 </div>
-                <div> 
-                    <button id="flag-button" class="secondary-toolbar-button">Flag for Review</button>
+                <div> <button id="flag-button" class="secondary-toolbar-button">Flag for Review</button>
                 </div>
             </div>
 
             <div class="main-content-area">
-                <div class="premises-section">
-                    <h3 class="text-lg font-semibold">Premises</h3>
-                    <div id="premises-text" class="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
-                        </div>
-                </div>
+                <div class="question-column w-full">
+                    <!-- Content will be dynamically inserted here by JavaScript -->
+                    </div>
+            </div>
 
-                <div class="statements-wrapper">
-                    <div class="statements-section">
-                        <h4 class="text-md font-semibold">Statements (Question <span id="question-number">1</span>)</h4>
-                        <p class="text-xs text-gray-500 instructions">Drag 'Yes' or 'No' onto the statement row.</p>
-                        <div id="statements-list">
-                            </div>
-                    </div> <div id="draggable-options-sidebar">
-                        <div id="draggable-yes" class="draggable-option draggable-option-yes" draggable="true">Yes</div>
-                        <div id="draggable-no" class="draggable-option draggable-option-no" draggable="true">No</div>
-                     </div>
-                </div> <div id="review-explanation-container" class="mt-4"></div>
-
-            </div> <div class="footer-bar">
+            <div class="footer-bar">
                  <button id="back-to-results-button" class="hidden mr-auto">← Back to Results</button>
-                 <button id="end-exam-button-footer">End Practice</button>
+                 <button id="end-practice-session-button-footer">End Practice Session</button>
                  <div class="flex items-center space-x-2 ml-auto">
                      <button id="prev-button" disabled>← Previous (Alt+P)</button>
                      <button id="navigator-button">Navigator</button>
@@ -562,76 +518,7 @@
                  </div>
             </div>
         </div>
-
-        <div id="review-screen" class="hidden p-6 md:p-8 flex flex-col items-center h-full overflow-y-auto">
-             <div class="w-full max-w-3xl mb-4 flex justify-between items-center">
-                 <h2 class="text-2xl font-bold text-blue-600">Review Your Answers</h2>
-                 <button id="filter-flagged-button" class="secondary-button text-sm">Show Flagged Only</button>
-             </div>
-             <p class="text-center text-gray-600 mb-6">Click on a question number to review it. Green indicates answered, Yellow border indicates flagged.</p>
-            <div id="review-grid" class="grid grid-cols-5 gap-3 mb-6 w-full max-w-xl"> </div>
-            <div class="mt-auto pt-6">
-                <button id="end-exam-button" class="danger-button text-lg px-8 py-3">
-                    End Practice & See Results
-                </button>
-            </div>
-        </div>
-
-        <div id="results-screen" class="hidden p-6 md:p-8 flex flex-col h-full">
-             <div class="text-center mb-6 flex-shrink-0">
-                 <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
-                      alt="MedwithPurpose Logo"
-                      class="mx-auto h-16 w-auto mb-4"
-                      onerror="this.style.display='none'; this.onerror=null;">
-                  <h2 class="text-2xl md:text-3xl font-bold text-blue-600">DM Syllogisms Worksheet 2 Results</h2>
-             </div>
-            <div class="bg-blue-50 p-4 rounded-lg mb-6 text-center flex-shrink-0">
-                 <p class="text-lg font-semibold">Your Score: <span id="score" class="text-blue-700">0</span> / <span id="total-score-possible">10</span> Points</p>
-                 <p class="text-gray-600">Time Taken: <span id="time-taken">N/A</span></p>
-            </div>
-
-            <h3 class="text-xl font-semibold mb-1 text-center flex-shrink-0">Detailed Results Overview</h3>
-            <p class="text-sm text-gray-500 mb-4 text-center flex-shrink-0">Click on a question box below to review it. Hover for statement summary.</p>
-            
-            <div id="results-overview-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6 overflow-y-auto flex-grow px-2 py-1">
-                <!-- Question summary boxes will be populated here by JavaScript -->
-            </div>
-            
-            <div class="mt-auto flex-shrink-0 border-t pt-4">
-                 <div class="mb-4">
-                     <label for="focus-rating" class="block text-md font-semibold text-gray-700 mb-1">My focus out of 5 (1 very low, 5 very high):</label>
-                     <input type="number" id="focus-rating" name="focus-rating" min="1" max="5" class="mt-1 block w-20 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="1-5">
-                 </div>
-                 <div>
-                     <label for="reflection-text" class="block text-md font-semibold text-gray-700 mb-1">Main takeaway from this practice:</label>
-                     <textarea id="reflection-text" name="reflection-text" rows="3" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Reflect on your performance, strategies, or areas for improvement..."></textarea>
-                 </div>
-            </div>
-             <div class="mt-6 text-center flex-shrink-0 flex justify-center space-x-4">
-                <button onclick="window.location.href = 'practice.html#dm-content';" class="secondary-button px-6 py-2">
-                    Back to DM Worksheets
-                </button>
-                <button onclick="window.location.href = 'student_dashboard.html';" class="secondary-button px-6 py-2">
-                    Return to Dashboard
-                </button>
-                <button id="download-pdf-button" class="primary-button px-6 py-2">
-                    Download Results PDF
-                </button>
-            </div>
-        </div>
-
-        <div id="navigator-modal" class="modal">
-            <div class="modal-content bg-white p-6 rounded-lg shadow-xl">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-semibold text-gray-800">Question Navigator</h3>
-                    <button id="close-modal-button" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
-                </div>
-                 <p class="text-sm text-gray-600 mb-4">Click a number to jump. Green: answered, Yellow border: flagged.</p>
-                <div id="navigator-grid" class="grid grid-cols-5 gap-3">
-                    </div>
-            </div>
-        </div>
-
+        
         <div id="calculator-ui">
             <div class="calculator-header" id="calculator-drag-header">
                 <span class="title">Calculator</span>
@@ -639,7 +526,7 @@
             </div>
             <div class="calculator-decorative-text">TEXAS INSTRUMENTS TI-108</div>
             <div id="calc-display-container">
-                <span id="calc-memory-indicator">M</span>
+                <span id="calc-memory-indicator" style="position: absolute; left: 6px; top: 50%; transform: translateY(-50%); color: #2D3748; font-weight: bold; font-size: 0.9rem; display: none;">M</span>
                 <div id="calc-display">0</div>
             </div>
             <div class="calc-buttons-grid">
@@ -674,86 +561,187 @@
             </div>
         </div>
 
+
+        <div id="review-screen" class="hidden p-6 md:p-8 flex flex-col items-center h-full overflow-y-auto">
+             <div class="w-full max-w-3xl mb-4 flex justify-between items-center">
+                 <h2 class="text-2xl font-bold text-blue-600">Review Your Answers</h2>
+                 <button id="filter-flagged-button" class="secondary-button text-sm">Show Flagged Only</button>
+             </div>
+             <p class="text-center text-gray-600 mb-6">Click on a question number to review it. Green indicates answered, Yellow border indicates flagged.</p>
+            <div id="review-grid" class="grid grid-cols-4 gap-3 mb-6 w-full max-w-xs sm:max-w-sm md:max-w-md"></div>
+            <div class="mt-auto pt-6">
+                <button id="end-practice-session-button" class="danger-button text-lg px-8 py-3">Submit</button>
+            </div>
+        </div>
+
+        <div id="results-screen" class="hidden p-6 md:p-8 flex flex-col h-full">
+             <div class="text-center mb-6 flex-shrink-0">
+                <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
+                     alt="MedwithPurpose Logo" class="mx-auto h-11 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
+                 <h2 class="text-2xl md:text-3xl font-bold text-blue-600">DM Syllogisms Worksheet 2 Results</h2>
+             </div>
+            <div class="bg-blue-50 p-4 rounded-lg mb-6 text-center flex-shrink-0">
+                 <p class="text-lg font-semibold">Your Score: <span id="score" class="text-blue-700">0</span> / <span id="total-score-possible">10</span> Points</p>
+                 <p class="text-gray-600">Time Taken: <span id="time-taken"></span></p>
+            </div>
+            <h3 class="text-xl font-semibold mb-2 flex-shrink-0">Detailed Results Summary:</h3>
+            <p class="text-sm text-gray-500 mb-4 flex-shrink-0">Click on a question box below to review it.</p>
+            <div id="results-details-grid" class="overflow-y-auto flex-grow"></div>
+            <div class="mt-6 flex-shrink-0 border-t pt-4">
+                 <div class="p-3 bg-blue-50 border border-blue-100 rounded-md mb-4 text-center">
+                    <p class="text-blue-800 text-sm">Your test results for 5 questions have been submitted. You can add a reflection below if you'd like.</p>
+                 </div>
+                 <div class="mb-4">
+                    <label for="focus-rating" class="block text-md font-semibold text-gray-700 mb-1">My focus out of 5 (1 very low, 5 very high):</label>
+                    <input type="number" id="focus-rating" name="focus-rating" min="1" max="5" class="mt-1 block w-20 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="1-5">
+                 </div>
+                 <div>
+                    <label for="reflection-text" class="block text-md font-semibold text-gray-700 mb-1">Main takeaway from this practice:</label>
+                    <textarea id="reflection-text" name="reflection-text" rows="3" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Reflect on your performance, strategies, or areas for improvement..."></textarea>
+                 </div>
+            </div>
+              <div class="mt-6 text-center flex-shrink-0 flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4">
+                <button onclick="window.location.href='student_dashboard.html'" class="secondary-button px-6 py-2 w-full sm:w-auto">Return to Dashboard</button>
+                <button onclick="window.location.reload()" class="secondary-button px-6 py-2 w-full sm:w-auto">Try Again</button>
+                <div class="w-full sm:w-auto relative group">
+                    <button id="submit-performance-button" class="primary-button px-6 py-2 w-full">Submit Reflections</button>
+                    <div class="absolute left-0 right-0 -top-10 bg-blue-100 text-blue-800 text-xs p-1 rounded border border-blue-200 opacity-0 group-hover:opacity-100 transition-opacity">
+                        ↓ Optional: Submit your reflection on this practice session
+                    </div>
+                </div>
+                <button id="download-pdf-button" class="primary-button px-6 py-2 w-full sm:w-auto">Download Results PDF</button>
+            </div>
+        </div>
+
+        <div id="navigator-modal" class="modal">
+            <div class="modal-content bg-white p-6 rounded-lg shadow-xl">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800">Question Navigator</h3>
+                    <button id="close-modal-button" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+                </div>
+                 <p class="text-sm text-gray-600 mb-4">Click a number to jump. Green: answered, Yellow border: flagged.</p>
+                <div id="navigator-grid" class="grid grid-cols-4 gap-3"> </div>
+            </div>
+        </div>
     </div>
 
     <script>
+    document.addEventListener('DOMContentLoaded', function() {
         // --- Firebase Configuration ---
         const firebaseConfig = {
           apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
           authDomain: "mwp-qr-test-page.firebaseapp.com",
           projectId: "mwp-qr-test-page",
-          storageBucket: "mwp-qr-test-page.appspot.com",
+          storageBucket: "mwp-qr-test-page.appspot.com", 
           messagingSenderId: "309084045110",
           appId: "1:309084045110:web:b09ca0fdff84b094963d97",
           measurementId: "G-4M3ED641M9"
         };
-
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
-        let currentUserId = null;
+        const db = firebase.firestore(); // Initialize Firestore
 
-        auth.onAuthStateChanged((user) => {
+        // Check for review mode from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const reviewParam = urlParams.get('review');
+        
+        // Check if user is logged in via Firebase
+        firebase.auth().onAuthStateChanged(user => {
           if (user) {
-            currentUserId = user.uid;
-            console.log("Anonymous user signed in with UID:", currentUserId);
+                console.log("User is logged in:", user.displayName, user.email);
           } else {
-            currentUserId = null;
-            console.log("User signed out.");
-            auth.signInAnonymously().catch((error) => {
-                console.error("Error signing in anonymously on auth state change:", error);
-            });
-          }
+                console.log("No user is logged in");
+            }
         });
-        if (!auth.currentUser) {
-            auth.signInAnonymously().catch((error) => {
-                console.error("Error signing in anonymously on load:", error);
-            });
-        }
-
-        // --- Data ---
-        const premisesData = [
-            "All students in Club A play chess.\nSome members of Club A also play tennis.",
-            "Some trees in the park are oaks.\nNo oaks in the park are dead.",
-            "All tickets sold after noon were half-price.\nSome tickets were sold before noon.",
-            "No cats in the household like water.\nLuna is a cat in the household.",
-            "Some pictures in the gallery are abstract.\nAll abstract pictures in the gallery are large."
-        ];
-
-        const questionsData = [
-            { premiseIndex: 0, statements: ["Some chess players in Club A play tennis.","All chess players in Club A play tennis.","Some tennis players in Club A play chess.","No tennis players in Club A play chess.","Some students in Club A play neither chess nor tennis."], correctAnswers: ['Y','N','N','N','N'], explanation: "Explanation for Q1: Evaluate each conclusion based on the premises about Club A members, chess, and tennis." },
-            { premiseIndex: 1, statements: ["Some trees in the park are dead.","Some trees in the park are not dead.","No dead trees in the park are oaks.","All trees in the park are oaks.","Some oaks in the park are dead."], correctAnswers: ['N','N','Y','N','N'], explanation: "Explanation for Q2: Consider what can be deduced about dead trees and oaks given the provided premises." },
-            { premiseIndex: 2, statements: ["Some half-price tickets were sold after noon.","All half-price tickets were sold after noon.","Some tickets sold after noon were not half-price.","Some tickets sold before noon were half-price.","No tickets sold after noon were full price."], correctAnswers: ['N','N','N','N','Y'], explanation: "Explanation for Q3: Analyze the timing of ticket sales and their pricing based on the premises." },
-            { premiseIndex: 3, statements: ["Luna likes water.","Luna does not like water.","Some cats in the household dislike water.","All animals that dislike water are cats.","Some animals in the household like water."], correctAnswers: ['N','Y','N','N','N'], explanation: "Explanation for Q4: Determine Luna's preference for water and other conclusions about cats and animals in the household." },
-            { premiseIndex: 4, statements: ["Some large pictures in the gallery are abstract.","All large pictures in the gallery are abstract.","Some pictures in the gallery are not large.","No large pictures in the gallery are abstract.","Some abstract pictures in the gallery are not large."], correctAnswers: ['N','N','N','N','N'], explanation: "Explanation for Q5: Evaluate the relationships between pictures, their size, and whether they are abstract, based on the gallery's contents." }
-        ];
-
-        // --- State ---
+        
+        // Expose startTest function to global window object so it can be called from onclick
+        window.startTest = function() {
+            console.log("startTest() function called directly");
+            
+            // Get user info from Firebase Auth if available
+            if (firebase.auth && firebase.auth().currentUser) {
+                const currentUser = firebase.auth().currentUser;
+                userName = currentUser.displayName || currentUser.email || '';
+                // Store email to be used later in submission
+                userEmail = currentUser.email || '';
+                console.log("Using user info from Firebase:", userName, userEmail);
+            } else {
+                userName = '';
+                userEmail = '';
+                console.log("No user logged in - using empty user info");
+            }
+            
+            userGoal = document.getElementById('goal').value.trim();
+            userFocusArea = document.getElementById('focus-area').value.trim();
+            timeLeft = 360; // 6 minutes in seconds
+            
+            // Make sure arrays are properly initialized with the correct length
+            if (userAnswers.length !== questions.length) {
+                userAnswers = new Array(questions.length).fill(null);
+            } else {
+                userAnswers.fill(null);
+            }
+            
+            if (questionTimes.length !== questions.length) {
+                questionTimes = new Array(questions.length).fill(0);
+            } else {
+                questionTimes.fill(0);
+            }
+            
+            if (flaggedQuestions.length !== questions.length) {
+                flaggedQuestions = new Array(questions.length).fill(false);
+            } else {
+                flaggedQuestions.fill(false);
+            }
+            
+            questionStartTime = null;
+            currentQuestionIndex = 0;
+            isReviewingFromResults = false;
+            isFilteringFlagged = false;
+            currentlyDisplayedPassageIndex = -1;
+            practiceSessionEndTime = null;
+            showPracticeSessionScreen();
+            startTimer();
+            loadQuestion(0);
+            populateNavigator();
+        };
+        
+        // --- State Variables ---
+        // Define all state variables before any functions are called to avoid reference errors
         let currentQuestionIndex = 0;
-        let userAnswers = Array(questionsData.length).fill(null).map(() => Array(5).fill(null));
-        let examStartTime;
-        let examEndTime;
+        let userAnswers = [];
+        let timerInterval;
+        let timeLeft = 360; // 6 minutes in seconds 
+        let practiceSessionStartTime;
+        let practiceSessionEndTime;
         let userName = '';
+        let userEmail = '';
         let userGoal = '';
         let userFocusArea = '';
         let isReviewingFromResults = false;
-        let flaggedQuestions = new Array(questionsData.length).fill(false);
+        let questionStartTime = null;
+        let questionTimes = [];
+        let flaggedQuestions = [];
         let isFilteringFlagged = false;
-        let currentlyDisplayedPremiseIndex = -1;
-        let questionTimings = new Array(questionsData.length).fill(0);
-        let currentQuestionStartTime;
-        let lastQuestionIndexForTiming = -1;
+        let currentlyDisplayedPassageIndex = -1;
 
-        // Timer variables
-        const totalTimeAllowedInSeconds = 360; // 6 minutes
-        let timeLeft = totalTimeAllowedInSeconds;
-        let timerInterval = null;
-
+        // Calculator State
+        let calcCurrentInput = '0';
+        let calcPreviousInput = '';
+        let calcOperator = null;
+        let calcShouldResetDisplay = false; 
+        let calcMrcPressedOnce = false; 
+        let isDraggingCalculator = false;
+        let calculatorOffsetX, calculatorOffsetY;
+        let calcMemory = 0; // Add missing calculator memory variable
+        
+        // Add a debounce flag for submissions
+        let isSubmittingReflection = false;
+        
         // --- Elements ---
         const appContainer = document.getElementById('app-container');
         const setupScreen = document.getElementById('setup-screen');
-        const examScreen = document.getElementById('exam-screen');
+        const practiceSessionScreen = document.getElementById('practice-session-screen');
         const reviewScreen = document.getElementById('review-screen');
         const resultsScreen = document.getElementById('results-screen');
         const navigatorModal = document.getElementById('navigator-modal');
@@ -762,104 +750,830 @@
         const nextButton = document.getElementById('next-button');
         const navigatorButton = document.getElementById('navigator-button');
         const closeModalButton = document.getElementById('close-modal-button');
-        const endExamButton = document.getElementById('end-exam-button');
-        const endExamButtonFooter = document.getElementById('end-exam-button-footer');
+        const endPracticeSessionButton = document.getElementById('end-practice-session-button');
+        const endPracticeSessionButtonFooter = document.getElementById('end-practice-session-button-footer');
         const backToResultsButton = document.getElementById('back-to-results-button');
         const flagButton = document.getElementById('flag-button');
-        const premisesTextEl = document.getElementById('premises-text');
-        const questionNumberEl = document.getElementById('question-number');
         const questionNumberInfoEl = document.getElementById('question-number-info');
-        const statementsListContainer = document.getElementById('statements-list');
-        const draggableYes = document.getElementById('draggable-yes'); // Draggable Yes
-        const draggableNo = document.getElementById('draggable-no');   // Draggable No
+        const timerEl = document.getElementById('timer');
         const reviewGrid = document.getElementById('review-grid');
         const navigatorGrid = document.getElementById('navigator-grid');
         const scoreEl = document.getElementById('score');
-        const totalScorePossibleEl = document.getElementById('total-score-possible');
+        const totalQuestionsResultsEl = document.getElementById('total-questions-results');
         const timeTakenEl = document.getElementById('time-taken');
-        const resultsDetails = document.getElementById('results-details');
+        const resultsDetailsGrid = document.getElementById('results-details-grid');
+        const goalInput = document.getElementById('goal');
         const focusAreaInput = document.getElementById('focus-area');
-        const examTitleEl = document.getElementById('exam-title');
+        const practiceSessionTitleEl = document.getElementById('practice-session-title');
         const filterFlaggedButton = document.getElementById('filter-flagged-button');
         const setupQuestionCountEl = document.getElementById('setup-question-count');
-        const setupMaxScoreEl = document.getElementById('setup-max-score');
-        const reviewExplanationContainer = document.getElementById('review-explanation-container');
+        const setupTimeLimitEl = document.getElementById('setup-time-limit');
         const reflectionText = document.getElementById('reflection-text');
         const downloadPdfButton = document.getElementById('download-pdf-button');
         const focusRatingInput = document.getElementById('focus-rating');
-        const timerDisplay = document.getElementById('timer');
-        const goalInput = document.getElementById('goal');
-
-        // --- NEW Elements for Calculator and Secondary Toolbar ---
         const calculatorToggleButton = document.getElementById('calculator-toggle-button');
         const calculatorUI = document.getElementById('calculator-ui');
-        const closeCalculatorButton = document.getElementById('close-calculator-button');
-        const calculatorDragHeader = document.getElementById('calculator-drag-header');
         const calcDisplay = document.getElementById('calc-display');
         const calcButtons = document.querySelectorAll('.calc-button');
-        const calcMemoryIndicator = document.getElementById('calc-memory-indicator');
+        const closeCalculatorButton = document.getElementById('close-calculator-button');
+        const calculatorDragHeader = document.getElementById('calculator-drag-header');
 
-        // --- Calculator variables (from DM sylls 2 more complex version) ---
-        let calcCurrentInput = '0';
-        let calcPreviousInput = '';
-        let calcOperator = null;
-        let calcShouldResetDisplay = false;
-        let calcMemory = 0;
-        let calcMrcPressedOnce = false;
+        // --- Data ---
+        const passages = [
+            `The table shows the fees for different membership types and activities at a fitness centre.
+            
+<img src="https://ik.imagekit.io/mwp/qrtest1a" alt="Fitness centre pricing table">`,
+            `The table below displays details for 4 different inter-city bus services offered by a transport company.
+            
+<img src="https://ik.imagekit.io/mwp/qrtest1b" alt="Inter-city bus services table">`,
+            `Of the total number of students visiting the university library one day, 3/5 borrowed at least one item. Of those who borrowed items, 1/4 borrowed a non-fiction book. Students who didn't borrow any items obviously didn't borrow non-fiction books.`,
+            `A sports-drink powder states that 25 g of powder is needed per 600 mL of water. A coach wants to prepare 7.2 litres of the drink for a tournament, using exactly the recommended concentration.`,
+            `David paid a $17.00 library fine for an overdue book. The fine policy states that the initial fine is calculated based on the book type, this amount is then increased by 10% if the book is over a week late, and finally, a 25% administration fee is added to the resulting total. David's book was over a week late.`,
+            `The library analysed the types of items borrowed last week. E-books are a format option available only for Fiction and Science category items. The total items borrowed per category were:
+Fiction: 800 items
+Science: 500 items
+History: 300 items
+Journals: 400 items
+
+If one-fifth of the Fiction items borrowed were e-books and three-tenths of the Science items borrowed were e-books, how many e-books were borrowed in total last week?`,
+            `A university library tracks estimated reading hours generated by books loaned from different subject sections last month. The data is below:
+
+<img src="https://ik.imagekit.io/mwp/qrtest1c" alt="University library reading hours by subject" style="margin-top: 12px;">`,
+            `Here is a comparison of two key departments within TechCorp Industries, based on last year's performance data:
+
+<img src="https://ik.imagekit.io/mwp/qrtest1d?updatedAt=1747196268019" alt="TechCorp Industries department comparison" style="margin-top: 12px;">`,
+            `The table below shows the results of a survey asking participants about their preferred type of vacation.
+
+<img src="https://ik.imagekit.io/mwp/qrtest1e" alt="Vacation preferences survey results" style="margin-top: 12px;">`,
+            `Peter purchased 14 new baseball cards for his collection. This increased the size of his collection by 35%.`,
+            `Sarah added 3 new plants to her garden. This increased the number of plants in her garden by 15%.`,
+            `At a cinema, movie tickets normally cost $15 each. There is a special offer where you can buy 4 tickets for $50.`,
+            `<img src="https://ik.imagekit.io/mwp/qrtest1f" alt="Square patio with central square fountain">`,
+            `Alex is a diligent salesperson and has been tracking their monthly sales achieved against the average of their team (as percentages of the monthly target). The team is relatively small - the team only contains 8 members, including Alex.
+
+<img src="https://ik.imagekit.io/mwp/qrtest1i" alt="Alex's sales performance compared to team average" style="margin-top: 12px;">`,
+            `The following table shows the fare for multiple different catering services.
+
+<img src="https://ik.imagekit.io/mwp/qrtest1g?updatedAt=1747199491069" alt="Catering services pricing table" style="margin-top: 12px; margin-bottom: 12px;">
+
+For example: an event with Catering Beta for 15 guests requiring 2.5 hours of service, with a Weekend Surcharge rate of x1.4 applied, would cost: 1.4×(175.00+(15×10.50)+(2.5×25.00))=$553.00`,
+            `The following table explains the timezone difference across multiple locations.
+
+<img src="https://ik.imagekit.io/mwp/qrtest1h?updatedAt=1747199651751" alt="Timezone difference chart" style="margin-top: 12px;">`
+        ];
+        const questions = [
+            { 
+                premises: [
+                    "All students in Club A play chess.",
+                    "Some members of Club A also play tennis."
+                ],
+                statements: [
+                    "Some chess players in Club A play tennis.",
+                    "All chess players in Club A play tennis.",
+                    "Some tennis players in Club A play chess.",
+                    "No tennis players in Club A play chess.",
+                    "Some students in Club A play neither chess nor tennis."
+                ],
+                correctAnswers: ["Y", "N", "Y", "N", "N"]
+            },
+            { 
+                premises: [
+                    "Some trees in the park are oaks.",
+                    "No oaks in the park are dead."
+                ],
+                statements: [
+                    "Some trees in the park are dead.",
+                    "Some trees in the park are not dead.",
+                    "No dead trees in the park are oaks.",
+                    "All trees in the park are oaks.",
+                    "Some oaks in the park are dead."
+                ],
+                correctAnswers: ["N", "N", "Y", "N", "N"]
+            },
+            { 
+                premises: [
+                    "All tickets sold after noon were half-price.",
+                    "Some tickets were sold before noon."
+                ],
+                statements: [
+                    "Some half-price tickets were sold after noon.",
+                    "All half-price tickets were sold after noon.",
+                    "Some tickets sold after noon were not half-price.",
+                    "Some tickets sold before noon were half-price.",
+                    "No tickets sold after noon were full price."
+                ],
+                correctAnswers: ["N", "N", "N", "N", "Y"]
+            },
+            { 
+                premises: [
+                    "No cats in the household like water.",
+                    "Luna is a cat in the household."
+                ],
+                statements: [
+                    "Luna likes water.",
+                    "Luna does not like water.",
+                    "Some cats in the household dislike water.",
+                    "All animals that dislike water are cats.",
+                    "Some animals in the household like water."
+                ],
+                correctAnswers: ["N", "Y", "N", "N", "N"]
+            },
+            { 
+                premises: [
+                    "Some pictures in the gallery are abstract.",
+                    "All abstract pictures in the gallery are large."
+                ],
+                statements: [
+                    "Some large pictures in the gallery are abstract.",
+                    "All large pictures in the gallery are abstract.",
+                    "Some pictures in the gallery are not large.",
+                    "No large pictures in the gallery are abstract.",
+                    "Some abstract pictures in the gallery are not large."
+                ],
+                correctAnswers: ["N", "N", "N", "N", "N"]
+            }
+        ];
+
+        // Now initialize arrays with questions.length
+        userAnswers = new Array(questions.length).fill(null);
+        questionTimes = new Array(questions.length).fill(0);
+        flaggedQuestions = new Array(questions.length).fill(false);
+
+        // Check for review mode and initialize appropriate screen
+        if (reviewParam) {
+            // We're in review mode - load the past test data
+            loadPastTestForReview(reviewParam);
+        } else {
+            // Regular test mode - continue with normal setup
+            showSetupScreen();
+        }
 
         // --- Functions ---
-
-        // --- Calculator Functions (Adapted from DM Sylls 2 more complex version) ---
-        function toggleCalculator() {
-            // Use classList.toggle with .show class as defined in CSS
-            const isVisible = calculatorUI.classList.toggle('show'); 
-            // calculatorToggleButton.classList.toggle('active', isVisible); // Optional: if an 'active' class is styled
+        function startTimer() {
+            practiceSessionStartTime = new Date();
+            clearInterval(timerInterval);
+            timerEl.textContent = formatTimeSeconds(timeLeft);
+            timerEl.classList.remove('text-gray-300');
+            timerEl.classList.add('text-white', 'bg-opacity-20', 'bg-white');
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerEl.textContent = formatTimeSeconds(timeLeft);
+                if (timeLeft <= 0) {
+                    endPracticeSessionAndShowResults();
+                }
+            }, 1000);
         }
 
-        function updateCalcDisplay() {
-            if (!calcDisplay) return;
-            if (calcCurrentInput === 'Error') {
-                calcDisplay.value = 'Error';
-            } else if (calcCurrentInput.length > 10) { // Max 10 digits before exponent
-                try {
-                    const num = parseFloat(calcCurrentInput);
-                    if (isFinite(num)) {
-                        calcDisplay.value = num.toExponential(5); // 5 decimal places in exponent
-                    } else {
-                        calcDisplay.value = 'Error';
+        function stopTimer() {
+            clearInterval(timerInterval);
+            practiceSessionEndTime = practiceSessionEndTime || new Date();
+            timerEl.classList.remove('text-white', 'bg-opacity-20', 'bg-white');
+            timerEl.classList.add('text-gray-300');
+        }
+
+        function formatTimeSeconds(totalSeconds) {
+             if (totalSeconds < 0) totalSeconds = 0;
+             const minutes = Math.floor(totalSeconds / 60);
+             const seconds = totalSeconds % 60;
+             return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+
+        function formatTimeDifference(milliseconds) {
+            if (!milliseconds || milliseconds < 0) return "0 min 00 sec";
+            const totalSeconds = Math.round(milliseconds / 1000);
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${minutes} min ${seconds < 10 ? '0' : ''}${seconds} sec`;
+        }
+
+        function recordTimeSpent(index) {
+            if (questionStartTime && index >= 0 && index < questions.length) {
+                const timeSpent = Date.now() - questionStartTime;
+                questionTimes[index] = (questionTimes[index] || 0) + timeSpent;
+            }
+            questionStartTime = null;
+        }
+
+        function toggleFlag() {
+            if (isReviewingFromResults) return;
+            const index = currentQuestionIndex;
+            flaggedQuestions[index] = !flaggedQuestions[index];
+            updateFlagButtonAppearance();
+            updateNavigatorButtons();
+        }
+
+        function updateFlagButtonAppearance() {
+            const isFlagged = flaggedQuestions[currentQuestionIndex];
+            flagButton.textContent = isFlagged ? 'Unflag' : 'Flag for Review';
+            flagButton.classList.toggle('flagged', isFlagged);
+        }
+
+        function loadQuestion(index, reviewMode = false) {
+            if (index < 0 || index >= questions.length) return;
+            if (!isReviewingFromResults && !reviewMode) {
+                recordTimeSpent(currentQuestionIndex);
+            }
+            const question = questions[index];
+            const questionContainer = document.querySelector('.question-column');
+            
+            // Update layout for syllogism questions
+            if (questionContainer) {
+                questionContainer.style.width = '100%';
+                questionContainer.style.flex = '1';
+                questionContainer.style.marginTop = '0';
+                
+                // Create HTML for premises and statements
+                let premisesHtml = '<div class="p-4 bg-gray-50 rounded-md mb-4" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 1.25rem; line-height: 1.5;">';
+                premisesHtml += '<h3 class="font-semibold mb-2">Premises</h3>';
+                
+                question.premises.forEach(premise => {
+                    premisesHtml += `<p class="mb-2">${premise}</p>`;
+                });
+                
+                premisesHtml += '</div>';
+                
+                // Create HTML for statements section with Yes/No buttons on the right
+                let statementsHtml = `
+                    <h4 class="text-md font-semibold mb-3 bg-white pb-1">Question ${index + 1}</h4>
+                    <div class="flex justify-between items-center mb-3">
+                        <div>
+                            <h5 class="font-medium mb-2">Conclusions</h5>
+                            <p class="text-sm text-gray-600">Drag 'Yes' or 'No' onto the statement row.</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button id="yes-button" class="drag-button px-6 py-2 bg-green-100 border border-green-500 rounded-md text-green-700 font-medium">Yes</button>
+                            <button id="no-button" class="drag-button px-6 py-2 bg-red-100 border border-red-500 rounded-md text-red-700 font-medium">No</button>
+                        </div>
+                    </div>
+                    <div id="statements-container" class="space-y-3"></div>
+                    <div id="review-explanation-container"></div>
+                `;
+                
+                questionContainer.innerHTML = premisesHtml + statementsHtml;
+            }
+            
+            currentQuestionIndex = index;
+            isReviewingFromResults = reviewMode;
+            
+            questionNumberInfoEl.textContent = `${index + 1} of ${questions.length}`;
+            if (questionContainer) questionContainer.scrollTop = 0;
+            
+            // Add the statements with answer boxes
+            const statementsContainer = document.getElementById('statements-container');
+            if (statementsContainer) {
+                statementsContainer.innerHTML = '';
+                
+                question.statements.forEach((statement, i) => {
+                    const statementId = `q${index}_statement${i}`;
+                    const rowDiv = document.createElement('div');
+                    rowDiv.className = 'statement-row flex items-center mb-3 border border-gray-200 rounded-md p-3 bg-white';
+                    rowDiv.dataset.statementIndex = i;
+                    rowDiv.innerHTML = `
+                        <div class="flex-grow statement-text">
+                            <span class="font-medium">${i + 1}.</span> ${statement}
+                        </div>
+                        <div class="flex-shrink-0 ml-4 relative">
+                            <div class="statement-answer-box w-16 h-10 border border-gray-300 rounded flex items-center justify-center bg-gray-50" 
+                                 data-statement-index="${i}">
+                                ${userAnswers[index] && userAnswers[index][i] ? userAnswers[index][i] : '...'}
+                            </div>
+                        </div>
+                    `;
+                    
+                    statementsContainer.appendChild(rowDiv);
+                    
+                    // If in review mode, show correct/incorrect indicators
+                    if (reviewMode) {
+                        const answerBox = rowDiv.querySelector('.statement-answer-box');
+                        const userAnswer = userAnswers[index] && userAnswers[index][i] ? userAnswers[index][i] : null;
+                        const correctAnswer = question.correctAnswers[i];
+                        
+                        answerBox.classList.remove('border-gray-300', 'bg-gray-50');
+                        
+                        if (userAnswer === correctAnswer) {
+                            answerBox.classList.add('border-green-500', 'bg-green-50', 'text-green-700');
+                        } else {
+                            answerBox.classList.add('border-red-500', 'bg-red-50', 'text-red-700');
+                            
+                            // Show correct answer
+                            const correctDiv = document.createElement('div');
+                            correctDiv.className = 'mt-1 text-xs text-gray-600';
+                            correctDiv.textContent = `Correct answer: ${correctAnswer}`;
+                            rowDiv.querySelector('.flex-shrink-0').appendChild(correctDiv);
+                        }
                     }
-                } catch (e) {
-                    // Fallback for very long non-numeric strings if they somehow get here
-                    calcDisplay.value = calcCurrentInput.substring(0, 10);
+                });
+                
+                // Add drag and drop functionality if not in review mode
+                if (!reviewMode) {
+                    initDragAndDrop();
+                }
+            }
+            
+            prevButton.disabled = index === 0;
+            if (!reviewMode && index === questions.length - 1) {
+                 nextButton.textContent = 'Finish & Review';
+                 nextButton.disabled = false;
+            } else if (!reviewMode) {
+                 nextButton.textContent = 'Next (Alt+N) →';
+                 nextButton.disabled = false;
+            } else {
+                 nextButton.disabled = index === questions.length - 1;
+                 if (!nextButton.disabled) nextButton.textContent = 'Next →';
+            }
+            updateFlagButtonAppearance();
+            if (reviewMode) {
+                backToResultsButton.classList.remove('hidden');
+                endPracticeSessionButtonFooter.classList.add('hidden');
+                practiceSessionTitleEl.textContent = "Reviewing Question";
+                prevButton.disabled = index === 0;
+                navigatorButton.disabled = false;
+                flagButton.disabled = true;
+            } else {
+                backToResultsButton.classList.add('hidden');
+                endPracticeSessionButtonFooter.classList.remove('hidden');
+                practiceSessionTitleEl.textContent = "Decision Making";
+                navigatorButton.disabled = false;
+                flagButton.disabled = false;
+                prevButton.disabled = index === 0;
+            }
+            updateNavigatorHighlight();
+            if (!isReviewingFromResults) {
+                questionStartTime = Date.now();
+            }
+        }
+
+         // This function is replaced by the drag and drop functionality for Yes/No answers
+
+        function showNextQuestion() {
+            // Hide calculator if it's open
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator();
+            }
+            
+            if (isReviewingFromResults) {
+                if (currentQuestionIndex < questions.length - 1) {
+                    loadQuestion(currentQuestionIndex + 1, true);
+                }
+            }
+            else if (!isReviewingFromResults) {
+                 recordTimeSpent(currentQuestionIndex);
+                 if (currentQuestionIndex === questions.length - 1) {
+                     showReviewScreen();
+                 } else if (currentQuestionIndex < questions.length - 1) {
+                     loadQuestion(currentQuestionIndex + 1);
+                 }
+            }
+        }
+
+        function showPrevQuestion() {
+            // Hide calculator if it's open
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator();
+            }
+            
+             if (isReviewingFromResults) {
+                 if (currentQuestionIndex > 0) {
+                     loadQuestion(currentQuestionIndex - 1, true);
+                 }
+             }
+             else if (currentQuestionIndex > 0 && !isReviewingFromResults) {
+                 recordTimeSpent(currentQuestionIndex);
+                 loadQuestion(currentQuestionIndex - 1);
+            }
+        }
+
+        function showSetupScreen() {
+            userName = '';
+            userEmail = '';
+            userGoal = '';
+            userFocusArea = '';
+            
+            // Check for Firebase auth user
+            if (firebase.auth && firebase.auth().currentUser) {
+                const currentUser = firebase.auth().currentUser;
+                userName = currentUser.displayName || currentUser.email || '';
+                userEmail = currentUser.email || '';
+            }
+            
+            setupScreen.classList.remove('hidden');
+            practiceSessionScreen.classList.add('hidden');
+            reviewScreen.classList.add('hidden');
+            reviewScreen.classList.remove('flex');
+            resultsScreen.classList.add('hidden');
+            appContainer.classList.remove('flex', 'flex-col');
+            currentlyDisplayedPassageIndex = -1;
+            
+            if (setupQuestionCountEl) setupQuestionCountEl.textContent = "5"; // Change to 5 questions
+            if (setupTimeLimitEl) setupTimeLimitEl.textContent = `6 minutes`; // Change to 6 minutes
+            if (goalInput) {
+                goalInput.max = 10; // Change max goal to 10
+                goalInput.value = userGoal;
+                const goalLabel = document.querySelector('label[for="goal"]');
+                if (goalLabel) goalLabel.textContent = `Goal (Score out of 10):`; // Change label
+            }
+            if (focusAreaInput) {
+                focusAreaInput.value = userFocusArea;
+            }
+        }
+
+        // Ensure we call updateTimerVisibility when returning to practice screen
+        function showPracticeSessionScreen() {
+            setupScreen.classList.add('hidden');
+            practiceSessionScreen.classList.remove('hidden');
+            practiceSessionScreen.classList.add('flex');
+            reviewScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            appContainer.classList.add('flex', 'flex-col');
+            currentlyDisplayedPassageIndex = -1;
+            updateTimerVisibility();
+        }
+
+        // Ensure the timer visuals are maintained when switching between screens
+        function updateTimerVisibility() {
+            if (timerInterval) {
+                timerEl.classList.remove('text-gray-300');
+                timerEl.classList.add('text-white', 'bg-opacity-20', 'bg-white');
+            } else {
+                timerEl.classList.add('text-gray-300');
+                timerEl.classList.remove('text-white', 'bg-opacity-20', 'bg-white');
+            }
+        }
+
+        // Review screen - keep timer running
+        function showReviewScreen(filterFlagged = false) {
+            recordTimeSpent(currentQuestionIndex);
+            // Don't stop timer here - let it continue running
+            updateTimerVisibility();
+            practiceSessionScreen.classList.add('hidden');
+            reviewScreen.classList.remove('hidden');
+            reviewScreen.classList.add('flex');
+            resultsScreen.classList.add('hidden');
+            setupScreen.classList.add('hidden');
+            appContainer.classList.add('flex', 'flex-col');
+            
+            // Hide calculator if it's visible
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator();
+            }
+            
+            reviewGrid.innerHTML = '';
+            questions.forEach((_, index) => {
+                 if (filterFlagged && !flaggedQuestions[index]) {
+                     return;
+                 }
+                const button = document.createElement('button');
+                button.textContent = index + 1;
+                button.className = 'review-grid-button';
+                button.dataset.questionIndex = index;
+                if (userAnswers[index] !== null && userAnswers[index] !== undefined) {
+                    button.classList.add('review-grid-button-answered');
+                } else {
+                     button.classList.add('review-grid-button-unanswered');
+                }
+                if (flaggedQuestions[index]) {
+                    button.classList.add('review-flagged');
+                }
+                // Using event delegation, so no individual onclick handler
+                reviewGrid.appendChild(button);
+            });
+             filterFlaggedButton.textContent = filterFlagged ? 'Show All Questions' : 'Show Flagged Only';
+        }
+
+        function populateNavigator() {
+            navigatorGrid.innerHTML = '';
+            questions.forEach((_, index) => {
+                const button = document.createElement('button');
+                button.textContent = index + 1;
+                button.classList.add('py-2', 'px-1', 'border', 'border-gray-300', 'rounded-md', 'text-center', 'transition', 'duration-150', 'ease-in-out', 'text-sm', 'hover:bg-gray-100');
+                button.dataset.questionIndex = index;
+                if (userAnswers[index]) button.classList.add('nav-answered');
+                if (index === currentQuestionIndex) button.classList.add('nav-current');
+                if (flaggedQuestions[index]) button.classList.add('nav-flagged');
+                button.onclick = () => {
+                    navigatorModal.classList.remove('flex');
+                    navigatorModal.classList.add('hidden');
+                    // Hide calculator if it's open
+                    if (calculatorUI.classList.contains('visible')) {
+                        toggleCalculator();
+                    }
+                    const targetIndex = parseInt(button.dataset.questionIndex, 10);
+                    loadQuestion(targetIndex, isReviewingFromResults);
+                };
+                navigatorGrid.appendChild(button);
+            });
+        }
+
+        function updateNavigatorButtons() {
+            if (!navigatorGrid) return;
+            const buttons = navigatorGrid.querySelectorAll('button');
+            buttons.forEach(button => {
+                const index = parseInt(button.dataset.questionIndex, 10);
+                button.classList.remove('nav-answered', 'nav-current', 'nav-flagged');
+                if (userAnswers[index]) button.classList.add('nav-answered');
+                if (index === currentQuestionIndex) button.classList.add('nav-current');
+                if (flaggedQuestions[index]) button.classList.add('nav-flagged');
+            });
+        }
+
+         function updateNavigatorHighlight() {
+             if (!navigatorGrid) return;
+             const buttons = navigatorGrid.querySelectorAll('button');
+             buttons.forEach(button => {
+                 const index = parseInt(button.dataset.questionIndex, 10);
+                 button.classList.remove('nav-current');
+                 if (index === currentQuestionIndex) button.classList.add('nav-current');
+             });
+         }
+
+        function showResultsScreen() {
+            practiceSessionEndTime = practiceSessionEndTime || new Date();
+            recordTimeSpent(currentQuestionIndex);
+            stopTimer();
+
+            practiceSessionScreen.classList.add('hidden');
+            reviewScreen.classList.add('hidden');
+            reviewScreen.classList.remove('flex');
+            resultsScreen.classList.remove('hidden');
+            resultsScreen.classList.add('flex');
+            setupScreen.classList.add('hidden');
+            appContainer.classList.add('flex', 'flex-col');
+
+            let totalScore = 0;
+            resultsDetailsGrid.innerHTML = ''; 
+
+            // Add partially-correct-box style if not already defined
+            if (!document.getElementById('partially-correct-style')) {
+                const style = document.createElement('style');
+                style.id = 'partially-correct-style';
+                style.textContent = `
+                    .partially-correct-box { 
+                        background-color: #fb923c; /* Orange color */
+                        border: 2px solid #ea580c;
+                        color: white; 
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            questions.forEach((qData, index) => {
+                // Count correct answers for this question
+                let correctCount = 0;
+                
+                // For debugging
+                console.log(`Question ${index + 1} - userAnswers:`, userAnswers[index]);
+                console.log(`Question ${index + 1} - correctAnswers:`, qData.correctAnswers);
+                
+                qData.statements.forEach((statement, statementIndex) => {
+                    // In this app, Yes/No answers are stored as "Yes" and "No", but correctAnswers are "Y" and "N"
+                    // We need to convert the user's answer to match the format of correctAnswers
+                    let userAnswer = userAnswers[index] && userAnswers[index][statementIndex] ? userAnswers[index][statementIndex] : null;
+                    const correctAnswer = qData.correctAnswers[statementIndex];
+                    
+                    // Convert "Yes"/"No" to "Y"/"N" for comparison
+                    if (userAnswer === "Yes") userAnswer = "Y";
+                    if (userAnswer === "No") userAnswer = "N";
+                    
+                    console.log(`Q${index + 1}.${statementIndex + 1}: User: "${userAnswer}", Correct: "${correctAnswer}", Match: ${userAnswer === correctAnswer}`);
+                    
+                    if (userAnswer === correctAnswer) {
+                        correctCount++;
+                    }
+                });
+                
+                // Apply scoring rules
+                let questionScore = 0;
+                let boxClass = '';
+                
+                if (correctCount === 5) {
+                    questionScore = 2;
+                    boxClass = 'correct-box';
+                } else if (correctCount === 4) {
+                    questionScore = 1;
+                    boxClass = 'partially-correct-box';
+                } else {
+                    questionScore = 0;
+                    boxClass = 'incorrect-box';
+                }
+                
+                totalScore += questionScore;
+
+                const timeSpentMs = questionTimes[index] || 0;
+                const timeSpentSec = Math.round(timeSpentMs / 1000);
+
+                const summaryItem = document.createElement('div');
+                summaryItem.classList.add('result-summary-item');
+
+                const summaryBox = document.createElement('div');
+                summaryBox.classList.add('result-summary-box', boxClass);
+                summaryBox.dataset.index = index;
+                summaryBox.title = `Click to review Question ${index + 1}`;
+
+                // Show score instead of time in the summary box
+                const scoreDisplay = document.createElement('span');
+                scoreDisplay.classList.add('time-display-in-box');
+                scoreDisplay.textContent = `${correctCount}/5`;
+                summaryBox.appendChild(scoreDisplay);
+
+                const numberLabel = document.createElement('div');
+                numberLabel.classList.add('question-number-label');
+                numberLabel.textContent = `Q${index + 1}`;
+
+                summaryBox.addEventListener('click', () => {
+                    revisitQuestionFromResults(index);
+                });
+
+                summaryItem.appendChild(summaryBox);
+                summaryItem.appendChild(numberLabel);
+                resultsDetailsGrid.appendChild(summaryItem);
+            });
+
+            scoreEl.textContent = totalScore;
+            const timeDiff = practiceSessionEndTime - practiceSessionStartTime;
+            timeTakenEl.textContent = formatTimeDifference(timeDiff);
+            
+            // Update total score possible on results screen (10 points maximum: 5 questions × 2 points)
+            const totalScorePossibleEl = document.getElementById('total-score-possible');
+            if (totalScorePossibleEl) {
+                totalScorePossibleEl.textContent = "10";
+            } else {
+                const scoreDisplayParent = scoreEl.parentElement;
+                if (scoreDisplayParent) {
+                     scoreDisplayParent.innerHTML = `Your Score: <span id="score" class="text-blue-700">${totalScore}</span> / 10 Points`;
+                }
+            }
+            
+            // Make sure the submit performance button has an event listener
+            const submitButton = document.getElementById('submit-performance-button');
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Submit Reflections';
+                submitButton.classList.remove('bg-green-500');
+            }
+        }
+
+
+        function revisitQuestionFromResults(index) {
+            resultsScreen.classList.add('hidden');
+            resultsScreen.classList.remove('flex');
+            showPracticeSessionScreen();
+            loadQuestion(index, true);
+        }
+
+        // Only stop timer when showing final results
+        function endPracticeSessionAndShowResults() {
+            stopTimer();
+
+            // Gather data to submit to Firebase
+            const performanceData = {
+                studentName: userName || 'Anonymous',
+                studentEmail: userEmail || '', // <--- ADD THIS LINE
+                examName: "DM Syllogisms Worksheet 2", 
+                score: calculateScore(), // New function to calculate score
+                totalQuestions: questions.length, // Should be 5
+                totalPossibleScore: 10, // Explicitly add total possible score (2 points per question)
+                timeTaken: formatTimeDifference(practiceSessionEndTime - practiceSessionStartTime),
+                answers: userAnswers,
+                questionTimes: questionTimes,
+                flaggedQuestions: flaggedQuestions,
+                goal: userGoal || '',
+                focusArea: userFocusArea || '',
+                focusRating: '', // No reflection data available at this point
+                reflection: '',  // No reflection data available at this point
+                submissionTimestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent
+            };
+
+            // Submit data to Firebase
+            submitDataToFirebase(performanceData);
+            
+            // Show results
+            showResultsScreen();
+        }
+
+        // Function to calculate the score
+        function calculateScore() {
+            let score = 0;
+            questions.forEach((qData, index) => {
+                if (!userAnswers[index]) return;
+                
+                // Count correct answers for this question
+                let correctCount = 0;
+                qData.correctAnswers.forEach((correctAnswer, statementIndex) => {
+                    const userAnswer = userAnswers[index][statementIndex];
+                    if (userAnswer === correctAnswer) {
+                        correctCount++;
+                    }
+                });
+                
+                // Apply scoring rules:
+                // 5/5 correct = 2 points
+                // 4/5 correct = 1 point
+                // 3 or fewer correct = 0 points
+                if (correctCount === 5) {
+                    score += 2;
+                } else if (correctCount === 4) {
+                    score += 1;
+                }
+            });
+            return score;
+        }
+
+        // Function to submit data to Firebase
+        function submitDataToFirebase(data) {
+            // Only submit if Firebase is initialized
+            if (typeof firebase !== 'undefined' && firebase.firestore) {
+                try {
+                    const db = firebase.firestore();
+                    let userId = ''; // <--- Add this
+                    if (firebase.auth && firebase.auth().currentUser) {
+                        userId = firebase.auth().currentUser.uid; // <--- Get the UID
+                    }
+                    
+                    const dataToSubmit = {
+                        ...data, // Spread existing data
+                        userId: userId // <--- Add userId here
+                    };
+
+                    db.collection("performanceSubmissions").add(dataToSubmit) // Use dataToSubmit
+                      .then(() => {
+                          console.log("Performance data submitted to Firebase with userId");
+                          
+                          // Show a success notification that will be displayed on the results screen
+                          setTimeout(() => {
+                              const successNotice = document.createElement('div');
+                              successNotice.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow-lg z-50';
+                              successNotice.innerHTML = `
+                                  <div class="flex items-center">
+                                      <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                      </svg>
+                                      <span class="font-medium">Success!</span>
+                                      <span class="ml-2">Your test results have been submitted to the admin dashboard.</span>
+                                  </div>
+                              `;
+                              document.body.appendChild(successNotice);
+                              
+                              // Remove the notice after 5 seconds
+                              setTimeout(() => {
+                                  successNotice.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                                  setTimeout(() => {
+                                      document.body.removeChild(successNotice);
+                                  }, 500);
+                              }, 5000);
+                          }, 500); // Small delay to ensure results screen is visible
+                      })
+                      .catch((error) => {
+                          console.error("Error submitting to Firebase:", error);
+                          
+                          // Show error notification
+                          setTimeout(() => {
+                              const errorNotice = document.createElement('div');
+                              errorNotice.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded shadow-lg z-50';
+                              errorNotice.innerHTML = `
+                                  <div class="flex items-center">
+                                      <svg class="h-6 w-6 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                      </svg>
+                                      <span class="font-medium">Error!</span>
+                                      <span class="ml-2">Could not submit your results. You can try adding a reflection.</span>
+                                  </div>
+                              `;
+                              document.body.appendChild(errorNotice);
+                              
+                              // Remove the notice after 5 seconds
+                              setTimeout(() => {
+                                  errorNotice.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                                  setTimeout(() => {
+                                      document.body.removeChild(errorNotice);
+                                  }, 500);
+                              }, 5000);
+                          }, 500);
+                      });
+                } catch (error) {
+                    console.error("Error accessing Firebase:", error);
                 }
             } else {
-                calcDisplay.value = calcCurrentInput;
-            }
-            if (calcMemoryIndicator) {
-                calcMemoryIndicator.style.visibility = calcMemory !== 0 ? 'visible' : 'hidden';
+                console.error("Firebase is not initialized");
             }
         }
 
-        function clearCalculator(clearMemory = false) {
-            calcCurrentInput = '0';
-            calcPreviousInput = '';
-            calcOperator = null;
-            calcShouldResetDisplay = false;
-            if (clearMemory) {
-                calcMemory = 0;
-            }
-            calcMrcPressedOnce = false; 
-            updateCalcDisplay();
-        }
-        
+        function handleEndPracticeSessionFooterClick() {
+             recordTimeSpent(currentQuestionIndex);
+             // Remove stopTimer() call to keep timer running
+             showReviewScreen();
+         }
+
         function inputDigit(digit) {
-            if (calcCurrentInput === 'Error') calcCurrentInput = '0'; // Reset on new input after error
+            if (calcCurrentInput === 'Error') calcCurrentInput = '0'; // Clear error on new digit
             if (calcShouldResetDisplay) {
                 calcCurrentInput = digit;
                 calcShouldResetDisplay = false;
             } else {
-                // Limit overall length, more nuanced check for decimal places needed if very specific
-                if (calcCurrentInput.length >= 10 && calcCurrentInput !== '0') return; 
+                // Prevent excessively long numbers before decimal
+                if (calcCurrentInput.includes('.') && calcCurrentInput.split('.')[1].length >= 8) return; // Limit to 8 decimal places
+                if (!calcCurrentInput.includes('.') && calcCurrentInput.length >= 10 && calcCurrentInput !== '0') return; // Limit to 10 integer digits
+
                 calcCurrentInput = calcCurrentInput === '0' ? digit : calcCurrentInput + digit;
             }
             updateCalcDisplay();
@@ -878,424 +1592,648 @@
             calcMrcPressedOnce = false;
         }
 
-        function handleCalcOperator(nextOperator) {
+        function handleOperator(nextOperator) {
             if (calcCurrentInput === 'Error') return;
             const inputValue = parseFloat(calcCurrentInput);
-
             if (calcOperator && !calcShouldResetDisplay) { 
-                performCalculation(); // Perform existing operation before setting new one
-                if (calcCurrentInput === 'Error') return; // Stop if calculation caused error
+                calculate();
+                if (calcCurrentInput === 'Error') return; // Stop if calculation resulted in error
                 calcPreviousInput = calcCurrentInput; 
             } else {
-                calcPreviousInput = calcCurrentInput; // Store current input as previous
+                calcPreviousInput = calcCurrentInput;
             }
             calcOperator = nextOperator;
-            calcShouldResetDisplay = true; // Next digit input should reset display
+            calcShouldResetDisplay = true;
             calcMrcPressedOnce = false;
         }
 
-        function performCalculation() {
+        function calculate() {
             if (!calcOperator || calcPreviousInput === '' || calcCurrentInput === 'Error') return;
             const prev = parseFloat(calcPreviousInput);
             const current = parseFloat(calcCurrentInput);
             if (isNaN(prev) || isNaN(current)) {
-                calcCurrentInput = 'Error';
+                calcCurrentInput = 'Error'; // Should not happen if inputs are validated
                 updateCalcDisplay();
                 return;
             }
 
-            let result;
+            let result = 0;
             switch (calcOperator) {
                 case '+': result = prev + current; break;
                 case '-': result = prev - current; break;
                 case '*': result = prev * current; break;
                 case '/': 
                     if (current === 0) {
-                        calcCurrentInput = 'Error'; // Division by zero
-                        updateCalcDisplay();
-                        return;
+                        result = 'Error';
+                    } else {
+                        result = prev / current;
                     }
-                    result = prev / current; 
                     break;
                 default: return;
             }
-            // Basic check for excessively large/small numbers or precision issues
-            if (Math.abs(result) > 1e10 || (Math.abs(result) < 1e-8 && result !== 0) ) {
-                 calcCurrentInput = result.toExponential(5);
-            } else if (result.toString().includes('.') && result.toString().split('.')[1].length > 8) {
-                calcCurrentInput = parseFloat(result.toFixed(8)).toString();
+
+            if (result === 'Error') {
+                calcCurrentInput = 'Error';
             } else {
-                calcCurrentInput = result.toString();
+                // Check if result is a valid number and not Infinity or NaN
+                if (!isFinite(result)) {
+                    calcCurrentInput = 'Error';
+                } else {
+                    // Format result: if it's a very small or large number, handle differently
+                    try {
+                        // Handle large numbers better - use toFixed for numbers that are too large
+                        if (Math.abs(result) > 1e10) {
+                            let resultStr = result.toExponential(6);
+                            calcCurrentInput = resultStr;
+                        } else if (Math.abs(result) < 1e-6 && result !== 0) {
+                            // Small numbers in scientific notation
+                            let resultStr = result.toExponential(6);
+                            calcCurrentInput = resultStr;
+                        } else {
+                            // Normal sized numbers - keep precision but remove trailing zeros
+                            let resultStr = parseFloat(result.toPrecision(10)).toString();
+                            calcCurrentInput = resultStr;
+                        }
+                    } catch (e) {
+                        // Fallback if formatting fails
+                        calcCurrentInput = String(result);
+                    }
+                    
+                    // Additional safety - if we end up with an invalid display value, show Error
+                    if (calcCurrentInput === 'NaN' || calcCurrentInput === 'Infinity' || calcCurrentInput === '-Infinity') {
+                        calcCurrentInput = 'Error';
+                    }
+                }
             }
-            
-            calcOperator = null; // Reset operator after calculation
-            // calcShouldResetDisplay = true; // Display will show result, next op or digit will modify/reset
+            calcOperator = null;
+            calcShouldResetDisplay = true; 
             updateCalcDisplay();
         }
 
         function handleMemory(action) {
             const currentValue = parseFloat(calcCurrentInput);
-            if (calcCurrentInput === 'Error' && action !== 'mrc' && action !== 'clear-memory') return;
+            if (calcCurrentInput === 'Error' && action !== 'mrc') return;
 
             switch (action) {
                 case 'm+':
                     if (!isNaN(currentValue)) calcMemory += currentValue;
-                    calcShouldResetDisplay = true; // After M+, new number input clears display
+                    updateCalcDisplay();
                     break;
                 case 'm-':
                     if (!isNaN(currentValue)) calcMemory -= currentValue;
-                    calcShouldResetDisplay = true; // After M-, new number input clears display
+                    updateCalcDisplay();
                     break;
                 case 'mrc':
-                    if (calcMrcPressedOnce) { // Second press: clear memory
+                    if (calcMrcPressedOnce) { 
                         calcMemory = 0;
                         calcMrcPressedOnce = false;
-                    } else { // First press: recall memory
-                        calcCurrentInput = calcMemory.toString();
+                        // Optionally, could also clear display to 0 here
+                    } else { 
+                        calcCurrentInput = String(parseFloat(calcMemory.toPrecision(10))); // Show memory with precision
                         calcMrcPressedOnce = true;
-                        // calcShouldResetDisplay = true; // Allow user to operate on recalled number
+                        calcShouldResetDisplay = true; 
                     }
                     break;
             }
-            updateCalcDisplay();
+            if (action !== 'mrc') { // For M+ and M-, display doesn't change immediately
+                calcShouldResetDisplay = true; // Next number input should overwrite current display
+                calcMrcPressedOnce = false; 
+            } else {
+                updateCalcDisplay(); // For MRC, update display immediately
+            }
         }
 
-        function makeCalculatorDraggable() {
-            // ... existing code ...
+        function handleSpecialFunction(func) {
+            if (calcCurrentInput === 'Error' && func !== 'clear') return;
+            const currentValue = parseFloat(calcCurrentInput);
+
+            switch (func) {
+                case 'sqrt':
+                    if (currentValue < 0 || isNaN(currentValue)) {
+                        calcCurrentInput = 'Error';
+                    } else {
+                        try {
+                            const sqrtResult = Math.sqrt(currentValue);
+                            if (!isFinite(sqrtResult)) {
+                                calcCurrentInput = 'Error';
+                            } else {
+                                calcCurrentInput = String(parseFloat(sqrtResult.toPrecision(10)));
+                            }
+                        } catch (e) {
+                            calcCurrentInput = 'Error';
+                        }
+                    }
+                    break;
+                case 'percent':
+                    if (isNaN(currentValue)) { calcCurrentInput = 'Error'; break; }
+                    if (calcPreviousInput !== '' && calcOperator) {
+                        const prev = parseFloat(calcPreviousInput);
+                        if (isNaN(prev)) { calcCurrentInput = 'Error'; break; }
+                        
+                        try {
+                            const percentResult = prev * (currentValue / 100);
+                            if (!isFinite(percentResult)) {
+                                calcCurrentInput = 'Error';
+                            } else {
+                                calcCurrentInput = String(parseFloat(percentResult.toPrecision(10)));
+                            }
+                        } catch (e) {
+                            calcCurrentInput = 'Error';
+                        }
+                    } else { 
+                        try {
+                            const percentResult = currentValue / 100;
+                            if (!isFinite(percentResult)) {
+                                calcCurrentInput = 'Error';
+                            } else {
+                                calcCurrentInput = String(parseFloat(percentResult.toPrecision(10)));
+                            }
+                        } catch (e) {
+                            calcCurrentInput = 'Error';
+                        }
+                    }
+                    break;
+                case 'negate':
+                     if (calcCurrentInput !== '0' && !isNaN(currentValue)) { 
+                        calcCurrentInput = String(currentValue * -1);
+                    }
+                    break;
+                case 'backspace':
+                    if (calcCurrentInput === 'Error' || calcShouldResetDisplay) {
+                        calcCurrentInput = '0';
+                        calcShouldResetDisplay = false;
+                    } else if (calcCurrentInput.length > 1) {
+                        calcCurrentInput = calcCurrentInput.slice(0, -1);
+                    } else {
+                        calcCurrentInput = '0';
+                    }
+                    break;
+                case 'clear':
+                    clearCalculator();
+                    return; // Skip further processing
+            }
+            updateCalcDisplay();
+            if (func !== 'backspace' && func !== 'negate' && func !== 'clear') { 
+                calcShouldResetDisplay = true;
+            }
+            calcMrcPressedOnce = false;
+        }
+
+
+        function toggleCalculator() {
+            const isVisible = calculatorUI.classList.toggle('visible');
+            calculatorToggleButton.classList.toggle('active', isVisible);
+            if (isVisible) {
+                clearCalculator(); 
+            }
+        }
+        
+        // Draggable Calculator Logic
+        function makeDraggable(element, handle) {
+            let currentX, currentY;
+
+            handle.onmousedown = function(event) {
+                event.preventDefault();
+                isDraggingCalculator = true;
+                calculatorUI.style.cursor = 'grabbing';
+
+                // Get the initial mouse cursor position
+                currentX = event.clientX;
+                currentY = event.clientY;
+
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            };
+
+            function elementDrag(event) {
+                event.preventDefault();
+                if (!isDraggingCalculator) return;
+
+                // Calculate the new cursor position
+                const dx = currentX - event.clientX;
+                const dy = currentY - event.clientY;
+                currentX = event.clientX;
+                currentY = event.clientY;
+
+                // Set the element's new position
+                let newTop = element.offsetTop - dy;
+                let newLeft = element.offsetLeft - dx;
+
+                // Constrain within app-container (optional, can be complex)
+                const appRect = appContainer.getBoundingClientRect();
+                const calcRect = element.getBoundingClientRect();
+                
+                // Simple boundary check (relative to viewport for now, as appContainer might scroll)
+                // For more robust boundary, calculate relative to appContainer's scroll position
+                if (newLeft < 0) newLeft = 0;
+                if (newTop < 0) newTop = 0;
+                if (newLeft + calcRect.width > window.innerWidth) newLeft = window.innerWidth - calcRect.width;
+                if (newTop + calcRect.height > window.innerHeight) newTop = window.innerHeight - calcRect.height;
+
+
+                element.style.top = newTop + "px";
+                element.style.left = newLeft + "px";
+            }
+
+            function closeDragElement() {
+                isDraggingCalculator = false;
+                calculatorUI.style.cursor = 'grab';
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
         }
 
         // --- Event Listeners ---
         startButton.addEventListener('click', () => {
-            userGoal = goalInput.value.trim();
-            userFocusArea = focusAreaInput.value.trim();
-
-            // Initialize userName based on Firebase auth or default
-            if (currentUserId) {
-                userName = "User " + currentUserId.substring(0, 6);
-            } else {
-                userName = "User";
-            }
-
-            if (!userGoal) {
-                 alert("Please enter your goal for this session.");
-                 goalInput.focus();
-                 return;
-            }
-
-            currentQuestionIndex = 0;
-            userAnswers = Array(questionsData.length).fill(null).map(() => Array(5).fill(null));
-            flaggedQuestions = new Array(questionsData.length).fill(false);
-            questionTimings = new Array(questionsData.length).fill(0); 
-            currentQuestionStartTime = null;
-            lastQuestionIndexForTiming = -1;
-            isReviewingFromResults = false;
-            isFilteringFlagged = false;
-            examEndTime = null; 
-            // Reset calculator state if needed, or assume it's fresh per session
-            clearCalculator(); 
-
-            showExamScreen(); 
-            loadQuestion(0); 
-            populateNavigator(); // Populate navigator on start
-            // updateNavigatorButtons(); // Initial update for navigator, populateNavigator should handle this
-            startTimer(); 
-            makeCalculatorDraggable(); // Initialize draggable calculator
-            // Initialize calculator display
-            clearCalculator(true); // Clear display and memory on start
+            console.log("Start button event listener triggered, calling window.startTest()");
+            window.startTest();
         });
 
         nextButton.addEventListener('click', showNextQuestion);
         prevButton.addEventListener('click', showPrevQuestion);
-        endExamButton.addEventListener('click', endExamAndShowResults);
-        endExamButtonFooter.addEventListener('click', handleEndExamFooterClick); 
+        endPracticeSessionButton.addEventListener('click', endPracticeSessionAndShowResults);
+        endPracticeSessionButtonFooter.addEventListener('click', handleEndPracticeSessionFooterClick);
         backToResultsButton.addEventListener('click', () => { isReviewingFromResults = false; showResultsScreen(); });
         navigatorButton.addEventListener('click', () => { 
-            // updateNavigatorButtons(); // Ensure nav buttons are up-to-date before showing
+            // Hide calculator if it's open
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator(); 
+            }
+            recordTimeSpent(currentQuestionIndex); 
+            updateNavigatorButtons(); 
             navigatorModal.classList.remove('hidden'); 
-            navigatorModal.classList.add('flex');
+            navigatorModal.classList.add('flex'); 
         });
-        closeModalButton.addEventListener('click', () => { navigatorModal.classList.remove('flex'); navigatorModal.classList.add('hidden');});
+        closeModalButton.addEventListener('click', () => { navigatorModal.classList.remove('flex'); navigatorModal.classList.add('hidden'); if (!isReviewingFromResults) questionStartTime = Date.now(); });
         navigatorModal.addEventListener('click', (event) => { if (event.target === navigatorModal) closeModalButton.click(); });
         flagButton.addEventListener('click', toggleFlag);
         filterFlaggedButton.addEventListener('click', () => { isFilteringFlagged = !isFilteringFlagged; showReviewScreen(isFilteringFlagged); });
         downloadPdfButton.addEventListener('click', generatePDF);
+        document.getElementById('submit-performance-button').addEventListener('click', submitPerformanceData);
 
-        // Calculator event listeners
         calculatorToggleButton.addEventListener('click', toggleCalculator);
         closeCalculatorButton.addEventListener('click', toggleCalculator);
         makeDraggable(calculatorUI, calculatorDragHeader);
 
+        // Add a direct event listener for the equals button to ensure it works
+        const equalsButton = document.querySelector('.calc-button.equals');
+        if (equalsButton) {
+            equalsButton.addEventListener('click', function(e) {
+                console.log('Equals button clicked directly');
+                calculate();
+            });
+        }
+
+        // Add direct event listeners for all calculator buttons to ensure they work
         calcButtons.forEach(button => {
-            button.addEventListener('click', () => {
+            button.addEventListener('click', function() {
                 const value = button.dataset.calcValue;
                 const action = button.dataset.calcAction;
-
-                if (value) { // Digit or decimal
-                    if (value === '.') {
-                        inputDecimal();
-                    } else {
-                        inputDigit(value);
-                    }
-                } else if (action) { // Operator or special function
-                    switch (action) {
-                        case 'clear': // This is ON/C
-                            if (calcMrcPressedOnce && calcCurrentInput === calcMemory.toString()) { // If MRC was just pressed and display shows memory
-                                 clearCalculator(false); // Clear display, keep memory
-                            } else if (calcCurrentInput !== '0') { // If display is not 0, clear current input (CE)
-                                 calcCurrentInput = '0';
-                                 updateCalcDisplay();
-                                 calcShouldResetDisplay = false; // Allow further input on 0
-                            } else { // If display is 0, clear all (C), including memory potentially
-                                 clearCalculator(true); // Full clear including memory
-                            }
-                            calcMrcPressedOnce = false; // Reset MRC flag on any clear operation
-                            break;
-                        case 'equals':
-                            performCalculation();
-                            calcShouldResetDisplay = true; // Next number starts new calculation
-                            break;
-                        case 'm+':
-                        case 'm-':
-                        case 'mrc':
-                            handleMemory(action);
-                            break;
-                        // Operators (+, -, *, /) are handled by their data-calc-value and class 'operator'
-                    }
-                } 
-                // Handle direct operator buttons if any are not covered by calc-value approach
-                if (button.classList.contains('operator') && value) { // e.g. <button class="operator" data-calc-value="+">+</button>
-                     handleCalcOperator(value);
+                console.log('Calculator button clicked:', button.textContent, 'Value:', value, 'Action:', action);
+                
+                if (value !== undefined) { 
+                    if (value === '.') { inputDecimal(); } 
+                    else { inputDigit(value); }
+                } else if (action) { 
+                    if (['+', '-', '*', '/'].includes(action)) { handleOperator(action); } 
+                    else if (action === 'equals') { 
+                        console.log('Equals action triggered');
+                        calculate(); 
+                    } 
+                    else if (action === 'clear') { clearCalculator(); } 
+                    else if (['m+', 'm-', 'mrc'].includes(action)) { handleMemory(action); } 
+                    else if (['sqrt', 'percent', 'negate', 'backspace'].includes(action)) { handleSpecialFunction(action); }
                 }
             });
         });
 
-        // Initialize calculator display
-        updateCalcDisplay();
-
         function handleKeyboardShortcuts(e) {
-             const isExamVisible = !examScreen.classList.contains('hidden');
+             const isPracticeSessionVisible = !practiceSessionScreen.classList.contains('hidden');
              const isModalVisible = navigatorModal.classList.contains('flex');
              const isInputFocused = document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA');
              const isCalcVisible = calculatorUI.classList.contains('visible');
 
-             if (isModalVisible || isInputFocused) return;
-             if (!isExamVisible) return;
-
-             if (isCalcVisible && !isInputFocused) {
-                 if (e.key >= '0' && e.key <= '9') { e.preventDefault(); inputDigit(e.key); return; }
-                 if (e.key === '.') { e.preventDefault(); inputDecimal(); return; }
-                 // Corrected to check e.key directly for operators
-                 if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') { e.preventDefault(); handleCalcOperator(e.key); return; } 
-                 if (e.key === 'Enter' || e.key === '=') { e.preventDefault(); performCalculation(); return; }
-                 if (e.key === 'Escape') { e.preventDefault(); toggleCalculator(); return; }
-                 if (e.key === 'Backspace') { e.preventDefault(); handleSpecialFunction('backspace'); return; }
+             if (isCalcVisible && !isInputFocused) { 
+                if (e.key >= '0' && e.key <= '9') { e.preventDefault(); inputDigit(e.key); return; }
+                if (e.key === '.') { e.preventDefault(); inputDecimal(); return; }
+                if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') { e.preventDefault(); handleOperator(e.key); return; }
+                if (e.key === 'Enter' || e.key === '=') { e.preventDefault(); calculate(); return; }
+                if (e.key === 'Backspace') { e.preventDefault(); handleSpecialFunction('backspace'); return; }
+                if (e.key === 'Escape') { e.preventDefault(); toggleCalculator(); return; } 
+                if (e.key.toLowerCase() === 'p') { e.preventDefault(); handleMemory('m+'); return; }
+                if (e.key.toLowerCase() === 'm') { e.preventDefault(); handleMemory('m-'); return; }
+                if (e.key.toLowerCase() === 'c' && !e.altKey && !e.metaKey && !e.ctrlKey) { e.preventDefault(); handleMemory('mrc'); return; } 
+                if (e.key.toLowerCase() === 'x') { e.preventDefault(); handleSpecialFunction('sqrt'); return; }
              }
-
-             const altOrOption = e.altKey;
-             const code = e.code.toLowerCase();
+             
+             if (isModalVisible || isInputFocused) return; 
+             if (!isPracticeSessionVisible) return; 
+             
+             const key = e.key.toLowerCase();
+             const altOrOption = e.altKey || e.metaKey; 
+             const code = e.code.toLowerCase(); 
 
              if (altOrOption) {
-                 switch (code) {
-                     case 'keyn': e.preventDefault(); if (!nextButton.disabled) nextButton.click(); break;
-                     case 'keyp': e.preventDefault(); if (!prevButton.disabled) prevButton.click(); break;
-                     case 'keyf': e.preventDefault(); if (!isReviewingFromResults && !flagButton.disabled) flagButton.click(); break;
-                     case 'keyc': e.preventDefault(); if(calculatorToggleButton) calculatorToggleButton.click(); break; // Ensure button exists
+                 switch (code) { 
+                     case 'keyn': e.preventDefault(); if (!nextButton.disabled) nextButton.click(); return;
+                     case 'keyp': e.preventDefault(); if (!prevButton.disabled) prevButton.click(); return;
+                     case 'keyf': e.preventDefault(); if (!isReviewingFromResults && !flagButton.disabled) flagButton.click(); return;
+                     case 'keyc': e.preventDefault(); toggleCalculator(); return; 
+                     default: return; 
+                 }
+             } else { 
+                 if (['a', 'b', 'c', 'd', 'e'].includes(key) && !isReviewingFromResults && !isCalcVisible) { 
+                     // This code is not applicable for syllogism questions with Yes/No answers
+                     // So we'll just return without any action
+                     return;
                  }
              }
         }
         document.addEventListener('keydown', handleKeyboardShortcuts);
 
-        // --- MODIFIED Initial Load ---
-        document.addEventListener('DOMContentLoaded', () => {
-            checkForReviewMode();
+        // --- Initial Load ---
+        // Only initialize the setup screen if we're not in review mode
+        if (!urlParams.has('review')) {
+            showSetupScreen();
+        }
+
+        updateCalcDisplay(); 
+
+        // Update the review grid button click handler to not restart the timer
+        reviewGrid.addEventListener('click', (e) => {
+            if (e.target.classList.contains('review-grid-button')) {
+                reviewScreen.classList.add('hidden');
+                reviewScreen.classList.remove('flex');
+                showPracticeSessionScreen();
+                const index = parseInt(e.target.dataset.questionIndex);
+                if (!isNaN(index) && index >= 0 && index < questions.length) {
+                    // Hide calculator if it's open
+                    if (calculatorUI.classList.contains('visible')) {
+                        toggleCalculator();
+                    }
+                    loadQuestion(index);
+                    updateTimerVisibility();
+                }
+            }
         });
 
-        // --- NEW FUNCTION to check for and load review mode ---
-        function checkForReviewMode() {
-            const reviewSubmissionId = localStorage.getItem('reviewSubmissionId');
-            const isReviewHash = window.location.hash === '#review';
-
-            if (reviewSubmissionId && isReviewHash) {
-                console.log("Review mode detected. Submission ID:", reviewSubmissionId);
-                if(setupScreen) setupScreen.classList.add('hidden');
-                if(resultsScreen) resultsScreen.classList.add('hidden');
-                if(reviewScreen) reviewScreen.classList.add('hidden');
+        // Add keyboard event listeners for Enter key on the appropriate pages
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && !event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
+                const isInputOrTextareaFocused = document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA';
                 
-                if (!db) {
-                    console.error("Firestore (db) is not initialized. Cannot load review data.");
-                    alert("Error: Could not connect to load review data.");
-                    showSetupScreen(); 
-                    localStorage.removeItem('reviewSubmissionId'); 
-                    return;
+                // Only handle Enter key if no input or textarea is focused
+                if (!isInputOrTextareaFocused) {
+                    // Check which screen is active
+                    if (!setupScreen.classList.contains('hidden')) {
+                        // Begin test button on setup screen
+                        startButton.click();
+                        event.preventDefault();
+                    } else if (!reviewScreen.classList.contains('hidden')) {
+                        // End practice session button on review screen
+                        endPracticeSessionButton.click();
+                        event.preventDefault();
+                    }
                 }
+            }
+        });
 
-                db.collection("performanceSubmissions").doc(reviewSubmissionId).get()
-                    .then(doc => {
-                        if (doc.exists) {
-                            const submissionData = doc.data();
-                            console.log("Submission data fetched for review:", submissionData);
-                            
-                            if (submissionData.questions && Array.isArray(submissionData.questions)) {
-                                userAnswers = submissionData.questions.map(q => q.userAnswers || Array(5).fill(null));
-                                flaggedQuestions = submissionData.questions.map(q => q.isFlagged || false);
-                            } else {
-                                console.error("Submission data does not have the expected 'questions' array structure.");
-                                alert("Error: Could not load review data due to unexpected format.");
-                                showSetupScreen(); 
-                                localStorage.removeItem('reviewSubmissionId');
-                                return;
-                            }
-                            userName = submissionData.studentName || 'Review User'; 
+        // Make sure the submit button has the right event listener
+        const submitPerformanceBtn = document.getElementById('submit-performance-button');
+        if (submitPerformanceBtn) {
+            // Remove any existing listeners (just in case)
+            submitPerformanceBtn.removeEventListener('click', submitPerformanceData);
+            // Add the listener
+            submitPerformanceBtn.addEventListener('click', submitPerformanceData);
+        }
 
-                            showExamScreen(); 
-                            
-                            const nextBtn = document.getElementById('next-button');
-                            const endExamFoot = document.getElementById('end-exam-button-footer');
-                            const navigatorBtn = document.getElementById('navigator-button');
-                            const backToDashResultsButton = document.createElement('button');
-
-                            if(nextBtn) nextBtn.textContent = 'Next Question →';
-                            if(endExamFoot) endExamFoot.style.display = 'none'; 
-                            if(navigatorBtn) navigatorBtn.style.display = 'none'; 
-                            if(flagButton) flagButton.style.display = 'none'; 
-                            if(timerDisplay) timerDisplay.style.display = 'none'; 
-                            if(document.getElementById('draggable-options-sidebar')) document.getElementById('draggable-options-sidebar').style.display = 'none';
-
-                            backToDashResultsButton.textContent = '← Back to Dashboard Results';
-                            backToDashResultsButton.className = 'secondary-button'; 
-                            backToDashResultsButton.onclick = () => {
-                                if(localStorage.getItem('returnToDashboardResults')) {
-                                    localStorage.removeItem('reviewSubmissionId');
-                                    localStorage.removeItem('returnToDashboardResults');
-                                    window.location.href = 'student_dashboard.html#results';
-                                } else {
-                                     window.location.href = 'student_dashboard.html'; 
-                                }
-                            };
-                            const footerBar = document.querySelector('.footer-bar');
-                            if (footerBar) {
-                                const existingBackToResults = footerBar.querySelector('#back-to-dashboard-results-review');
-                                if (existingBackToResults) existingBackToResults.remove();
-                                backToDashResultsButton.id = 'back-to-dashboard-results-review';
-                                footerBar.insertBefore(backToDashResultsButton, footerBar.firstChild);
-                            }
-
-                            currentQuestionIndex = 0; 
-                            loadQuestion(currentQuestionIndex, true); 
-
-                        } else {
-                            console.error("No such submission document! ID:", reviewSubmissionId);
-                            alert("Could not find the submission to review. It may have been deleted.");
-                            showSetupScreen(); 
-                            localStorage.removeItem('reviewSubmissionId');
-                        }
-                    }).catch(error => {
-                        console.error("Error getting submission document:", error);
-                        alert("Error fetching review data. Please try again.");
-                        showSetupScreen(); 
-                        localStorage.removeItem('reviewSubmissionId');
-                    });
+        // Function to handle loading a past test for review
+        function loadPastTestForReview(resultId) {
+            setupScreen.classList.add('hidden');
+            
+            // Show a loading indicator
+            const loadingEl = document.createElement('div');
+            loadingEl.className = 'fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50';
+            loadingEl.innerHTML = `
+                <div class="text-center p-6 bg-white shadow-xl rounded-lg">
+                    <div class="spinner mx-auto mb-4"></div>
+                    <p class="text-gray-700 font-medium">Loading your test results...</p>
+                </div>
+            `;
+            document.body.appendChild(loadingEl);
+            
+            // Fetch the result from Firestore
+            db.collection("performanceSubmissions").doc(resultId)
+                .get()
+                .then((doc) => {
+                    if (!doc.exists) {
+                        alert("The requested test result could not be found.");
+                        window.location.href = "student_dashboard.html";
+                        return;
+                    }
+                    
+                    const resultData = doc.data();
+                    
+                    // Store the data in the appropriate variables
+                    userName = resultData.studentName || '';
+                    userGoal = resultData.goal || '';
+                    userFocusArea = resultData.focusArea || '';
+                    userAnswers = resultData.answers || new Array(questions.length).fill(null);
+                    questionTimes = resultData.questionTimes || new Array(questions.length).fill(0);
+                    flaggedQuestions = resultData.flaggedQuestions || new Array(questions.length).fill(false);
+                    practiceSessionStartTime = new Date(resultData.submissionTimestamp || Date.now());
+                    practiceSessionEndTime = new Date(practiceSessionStartTime.getTime() + 26 * 60 * 1000); // Estimate end time
+                    isReviewingFromResults = true;
+                    
+                    // Remove loading indicator
+                    document.body.removeChild(loadingEl);
+                    
+                    // Show the results screen with the data
+                    showResultsScreen();
+                    
+                    // Add a "Return to Results" button to the header
+                    const headerBar = document.querySelector('.header-bar');
+                    if (headerBar) {
+                        const returnButtonContainer = document.createElement('div');
+                        returnButtonContainer.className = 'absolute left-4';
+                        returnButtonContainer.innerHTML = `
+                            <button id="return-to-dashboard-results" class="bg-blue-500 text-white px-3 py-1 rounded text-sm flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                </svg>
+                                Return to Results
+                            </button>
+                        `;
+                        headerBar.style.position = 'relative';
+                        headerBar.appendChild(returnButtonContainer);
+                        
+                        // Add event listener to the return button
+                        document.getElementById('return-to-dashboard-results').addEventListener('click', () => {
+                            window.location.href = "student_dashboard.html";
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error loading test result:", error);
+                    alert("There was an error loading the test result. Please try again.");
+                    window.location.href = "student_dashboard.html";
+                });
+        }
+        
+        // Add a direct click event listener to the Start button to ensure it works
+        document.getElementById('start-button').addEventListener('click', function() {
+            console.log("Start button clicked via direct listener");
+            // Get user info from Firebase Auth if available
+            if (firebase.auth && firebase.auth().currentUser) {
+                const currentUser = firebase.auth().currentUser;
+                userName = currentUser.displayName || currentUser.email || '';
+                // Store email to be used later in submission
+                userEmail = currentUser.email || '';
+                console.log("Using user info from Firebase:", userName, userEmail);
             } else {
-                if(reviewSubmissionId) localStorage.removeItem('reviewSubmissionId'); 
-                if(localStorage.getItem('returnToDashboardResults')) localStorage.removeItem('returnToDashboardResults');
+                userName = '';
+                userEmail = '';
+                console.log("No user logged in - using empty user info");
+            }
+            
+            userGoal = goalInput.value.trim();
+            userFocusArea = focusAreaInput.value.trim();
+            timeLeft = 360; // 6 minutes
+            userAnswers = new Array(questions.length).fill(null);
+            questionTimes = new Array(questions.length).fill(0);
+            flaggedQuestions = new Array(questions.length).fill(false);
+            questionStartTime = null;
+            currentQuestionIndex = 0;
+            isReviewingFromResults = false;
+            isFilteringFlagged = false;
+            currentlyDisplayedPassageIndex = -1;
+            practiceSessionEndTime = null;
+            showPracticeSessionScreen();
+            startTimer();
+            loadQuestion(0);
+            populateNavigator();
+        });
+        
+        // Function to initialize the application - moved to the end to ensure all functions are defined
+        function initializeApp() {
+            // Initialize arrays with questions.length
+            userAnswers = new Array(questions.length).fill(null);
+            questionTimes = new Array(questions.length).fill(0);
+            flaggedQuestions = new Array(questions.length).fill(false);
+            
+            // Check for review mode and initialize appropriate screen
+            if (reviewParam) {
+                // We're in review mode - load the past test data
+                loadPastTestForReview(reviewParam);
+            } else {
+                // Regular test mode - continue with normal setup
                 showSetupScreen();
             }
         }
+        
+        // Actually initialize the app now that all functions and DOM elements are defined
+        initializeApp();
 
-        // --- NEW FUNCTION TO SAVE RESULTS TO FIREBASE ---
-        function saveResultsToFirebase() {
-            if (!db) {
-                console.error("Firestore (db) is not initialized.");
-                return;
-            }
-
-            const worksheetName = "DM Syllogisms Worksheet 2";
-            const totalScore = parseInt(scoreEl.textContent, 10);
-            const totalPossible = parseInt(totalScorePossibleEl.textContent, 10);
-            const timeTakenString = timeTakenEl.textContent;
-            const reflection = reflectionText.value.trim();
-            const focusRatingVal = focusRatingInput.value;
-
-            const detailedAnswers = questionsData.map((qData, index) => {
-                const userAnsArray = userAnswers[index] || Array(5).fill(null);
-                const correctAnsArray = qData.correctAnswers;
-                let correctStatements = 0;
-                userAnsArray.forEach((userAns, stmtIndex) => {
-                    if (userAns === correctAnsArray[stmtIndex]) {
-                        correctStatements++;
+        // Initialize drag and drop functionality
+        function initDragAndDrop() {
+            const yesButton = document.getElementById('yes-button');
+            const noButton = document.getElementById('no-button');
+            const statementRows = document.querySelectorAll('.statement-row');
+            
+            if (!yesButton || !noButton) return;
+            
+            let draggedValue = null;
+            
+            // Make buttons draggable
+            [yesButton, noButton].forEach(button => {
+                button.setAttribute('draggable', true);
+                
+                button.addEventListener('dragstart', function(e) {
+                    draggedValue = this.textContent;
+                    e.dataTransfer.setData('text/plain', draggedValue);
+                    this.classList.add('opacity-50');
+                });
+                
+                button.addEventListener('dragend', function() {
+                    this.classList.remove('opacity-50');
+                });
+                
+                // Click functionality as alternative to drag
+                button.addEventListener('click', function() {
+                    const selectedRow = document.querySelector('.statement-row.selected');
+                    if (selectedRow) {
+                        const statementIndex = parseInt(selectedRow.dataset.statementIndex);
+                        const answerBox = selectedRow.querySelector('.statement-answer-box');
+                        
+                        answerBox.textContent = this.textContent;
+                        selectedRow.classList.remove('selected', 'border-blue-500', 'bg-blue-50');
+                        
+                        // Update userAnswers array
+                        if (!userAnswers[currentQuestionIndex]) {
+                            userAnswers[currentQuestionIndex] = [];
+                        }
+                        // Store the answer format expected by the scoring system (Y/N)
+                        if (this.textContent === "Yes") {
+                            userAnswers[currentQuestionIndex][statementIndex] = "Y";
+                        } else if (this.textContent === "No") {
+                            userAnswers[currentQuestionIndex][statementIndex] = "N";
+                        } else {
+                            userAnswers[currentQuestionIndex][statementIndex] = this.textContent;
+                        }
+                        
+                        updateNavigatorButtons();
                     }
                 });
-                let points = 0;
-                if (correctStatements === 5) points = 2;
-                else if (correctStatements === 4) points = 1;
-
-                return {
-                    questionIndex: index,
-                    premise: premisesData[qData.premiseIndex],
-                    statements: qData.statements,
-                    userAnswers: userAnsArray,
-                    correctAnswers: correctAnsArray,
-                    explanation: qData.explanation || "",
-                    points: points,
-                    timeTakenMs: questionTimings[index] || 0,
-                    isFlagged: flaggedQuestions[index] || false
-                };
             });
-
-            const performanceData = {
-                studentName: userName || (currentUserId ? 'Anonymous User' : 'Unknown User'),
-                userId: currentUserId || null,
-                studentEmail: null,
-                examName: worksheetName,
-                score: totalScore,
-                totalPossibleScore: totalPossible,
-                timeTaken: timeTakenString,
-                goal: userGoal || '',
-                focusArea: userFocusArea || '',
-                focusRating: focusRatingVal || '',
-                reflection: reflection || '',
-                questions: detailedAnswers,
-                submissionTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                userAgent: navigator.userAgent
-            };
-
-            db.collection("performanceSubmissions").add(performanceData)
-                .then((docRef) => {
-                    console.log("Results saved to Firestore with ID: ", docRef.id);
-                })
-                .catch((error) => {
-                    console.error("Error saving results to Firebase: ", error);
+            
+            // Make entire statement rows droppable
+            statementRows.forEach(row => {
+                row.addEventListener('click', function() {
+                    // Clear any previous selections
+                    document.querySelectorAll('.statement-row.selected').forEach(el => {
+                        el.classList.remove('selected', 'border-blue-500', 'bg-blue-50');
+                    });
+                    
+                    // Select this row
+                    this.classList.add('selected', 'border-blue-500', 'bg-blue-50');
                 });
+                
+                row.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('border-blue-500', 'bg-blue-50');
+                });
+                
+                row.addEventListener('dragleave', function() {
+                    this.classList.remove('border-blue-500', 'bg-blue-50');
+                });
+                
+                row.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('border-blue-500', 'bg-blue-50');
+                    
+                    const value = e.dataTransfer.getData('text/plain');
+                    const answerBox = this.querySelector('.statement-answer-box');
+                    answerBox.textContent = value;
+                    
+                    // Update userAnswers array
+                    const statementIndex = parseInt(this.dataset.statementIndex);
+                    if (!userAnswers[currentQuestionIndex]) {
+                        userAnswers[currentQuestionIndex] = [];
+                    }
+                    // Convert to Y/N format for consistency with scoring
+                    if (value === "Yes") {
+                        userAnswers[currentQuestionIndex][statementIndex] = "Y";
+                    } else if (value === "No") {
+                        userAnswers[currentQuestionIndex][statementIndex] = "N";
+                    } else {
+                        userAnswers[currentQuestionIndex][statementIndex] = value;
+                    }
+                    
+                    updateNavigatorButtons();
+                });
+            });
         }
-        // --- END OF SAVE RESULTS FUNCTION ---
-
-        function handleEndExamFooterClick() {
-            showReviewScreen();
-        }
-
-        // --- PDF Generation Function ---
-        function generatePDF() {
-            const doc = new jsPDF();
-            doc.setFontSize(16);
-            doc.text("UCAT Decision Making Practice Results", 14, 10);
-            doc.setFontSize(12);
-            doc.text(`Date: ${new Date().toLocaleString()}`, 14, 20);
-            doc.setFontSize(12);
-            doc.text(`Total Score: ${scoreEl.textContent} / ${totalScorePossibleEl.textContent}`, 14, 30);
-            doc.setFontSize(12);
-            doc.text(`Time Taken: ${timeTakenEl.textContent}`, 14, 40);
-            doc.setFontSize(12);
-            doc.text(`Focus Rating: ${focusRatingInput.value}`, 14, 50);
-            doc.setFontSize(12);
-            doc.text(`Reflection: ${reflectionText.value.trim()}`, 14, 60);
-
-            // Add more details as needed
-
-            doc.save("UCAT_Decision_Making_Practice_Results.pdf");
-        }
-
+    });
     </script>
-
 </body>
-</html>
-
+</html> 
