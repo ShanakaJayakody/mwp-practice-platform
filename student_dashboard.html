@@ -583,6 +583,33 @@
                 font-size: 0.75rem;
             }
         }
+
+        /* Welcome Message Styling & Animation */
+        .animated-welcome-text {
+            position: relative;
+            animation: slideInFromLeft 0.8s ease-out forwards;
+            opacity: 0; /* Initial state for animation */
+            white-space: nowrap; /* Prevent wrapping during animation */
+            display: inline-block; /* Ensure it behaves like a block for animation but flows okay if text wraps on smaller screens */
+        }
+        .animated-welcome-text .welcome-part1 {
+            color: #0D47A1; /* Darker blue for "Welcome " */
+        }
+        .animated-welcome-text .welcome-part2 {
+            color: var(--color-primary); /* Brighter blue for "First Name" from existing CSS variables */
+        }
+
+        @keyframes slideInFromLeft {
+            0% {
+                transform: translateX(-60px); /* Start slightly to the left */
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        /* End Welcome Message Styling & Animation */
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -723,7 +750,10 @@
             <div id="home-content" class="hidden p-6 md:p-8 text-gray-700">
                 <div class="max-w-4xl mx-auto">
                     <div class="mb-12 text-center">
-                        <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Welcome back, <span id="home-student-name" class="text-blue-600">Student</span>!</h1>
+                        <!-- OLD: <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Welcome back, <span id="home-student-name" class="text-blue-600">Student</span>!</h1> -->
+                        <h1 class="text-3xl md:text-4xl font-bold animated-welcome-text">
+                            <span class="welcome-part1">Welcome </span><span id="home-student-first-name" class="welcome-part2">Student</span>
+                        </h1>
                         <p class="text-lg text-gray-500 mt-2">Ready to ace the UCAT? Here's your progress at a glance.</p>
                     </div>
 
@@ -1213,6 +1243,10 @@
         const allNavTabs = document.querySelectorAll('.nav-tab');
         const dashboardContentArea = document.getElementById('dashboard-content-area');
 
+        // Home content specific elements
+        const homeStudentFirstNameSpan = document.getElementById('home-student-first-name');
+        const animatedWelcomeText = document.querySelector('.animated-welcome-text'); // Get the h1 for animation reset
+
         // --- UI Helpers ---
         // Set loading state for buttons
         function setButtonLoading(button, spinner, isLoading) {
@@ -1484,8 +1518,8 @@
         // --- Content Display Logic ---
         function showContent(contentId) {
             // First, hide all content sections with a fade-out effect
-            [qrTestsContent, resultsContent, comingSoonContent, defaultDashboardMessage].forEach(el => {
-                if (!el.classList.contains('hidden')) {
+            [homeContent, qrTestsContent, resultsContent, comingSoonContent, defaultDashboardMessage].forEach(el => {
+                if (el && !el.classList.contains('hidden')) { // Check if element exists
                     el.style.opacity = "0";
                     setTimeout(() => {
                         el.classList.add('hidden');
@@ -1497,7 +1531,16 @@
             setTimeout(() => {
                 let contentToShow;
                 
-                if (contentId === 'qr') {
+                if (contentId === 'home') { // Added 'home' case
+                    contentToShow = homeContent;
+                    // Reset and re-trigger animation for welcome text if it exists
+                    if (animatedWelcomeText) {
+                        animatedWelcomeText.style.animation = 'none';
+                        animatedWelcomeText.offsetHeight; /* trigger reflow */
+                        animatedWelcomeText.style.animation = null; 
+                        animatedWelcomeText.style.animation = 'slideInFromLeft 0.8s ease-out forwards';
+                    }
+                } else if (contentId === 'qr') {
                     contentToShow = qrTestsContent;
                 } else if (contentId === 'results') {
                     contentToShow = resultsContent;
@@ -1563,8 +1606,14 @@
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
                 // User is signed in
-                studentDisplayNameSpan.textContent = user.displayName || user.email || 'Student';
-                localStorage.setItem('qrStudentName', user.displayName || user.email || '');
+                const displayName = user.displayName || user.email || 'Student';
+                const firstName = displayName.split(' ')[0]; // Get first name
+
+                studentDisplayNameSpan.textContent = displayName;
+                if (homeStudentFirstNameSpan) { // Check if element exists
+                    homeStudentFirstNameSpan.textContent = firstName; 
+                }
+                localStorage.setItem('qrStudentName', displayName);
 
                 // Check if this is a login event on student_dashboard.html
                 const justLoggedInOnThisPage = !authSection.classList.contains('hidden') && window.location.pathname.includes('student_dashboard.html');
@@ -1637,14 +1686,58 @@
         // Initialize content to default
         document.addEventListener('DOMContentLoaded', () => {
             // Set initial state
-            showContent('results');
+            // Check if URL hash targets a specific section, otherwise default to home
+            const hash = window.location.hash;
+            if (hash === '#results') {
+                showContent('results');
+                setActiveTab(navResults);
+                if (firebase.auth().currentUser) {
+                    loadUserResults();
+                }
+            } else if (hash === '#practice') {
+                showContent('qr'); // Or your main practice content ID
+                setActiveTab(document.getElementById('nav-practice-main'));
+            } else {
+                showContent('home'); // Default to home
+                setActiveTab(document.getElementById('nav-home'));
+                // Update welcome message on initial load if user is already logged in
+                if (firebase.auth().currentUser) {
+                    const currentDisplayName = firebase.auth().currentUser.displayName || firebase.auth().currentUser.email || 'Student';
+                    const currentFirstName = currentDisplayName.split(' ')[0];
+                    if (homeStudentFirstNameSpan) { // Check if element exists
+                        homeStudentFirstNameSpan.textContent = currentFirstName;
+                    }
+                }
+            }
             initializeResultAccordions(); // Initialize accordions
             
-            // Load user results if on results tab
-            if (firebase.auth().currentUser) {
-                loadUserResults();
-            }
-            
+            // Add event listeners for main navigation tabs
+            document.getElementById('nav-home').addEventListener('click', (e) => {
+                e.preventDefault();
+                showContent('home');
+                setActiveTab(document.getElementById('nav-home'));
+                window.history.pushState({}, "", "home.html"); // Update URL to reflect home.html
+            });
+
+            document.getElementById('nav-practice-main').addEventListener('click', (e) => {
+                e.preventDefault();
+                showContent('qr'); // Assuming 'qr' is your main practice content ID
+                setActiveTab(document.getElementById('nav-practice-main'));
+                window.history.pushState({}, "", "practice.html"); // Update URL to reflect practice.html
+            });
+
+            navResults.addEventListener('click', (e) => {
+                e.preventDefault();
+                showContent('results');
+                setActiveTab(navResults);
+                if (firebase.auth().currentUser) { // Only load if user is logged in
+                    loadUserResults();
+                }
+                window.history.pushState({}, "", "student_dashboard.html#results"); // Update URL for results
+            });
+
+            // No event listener for navSkills as it's disabled for now
+
             // Add handling for Enter key on inputs
             loginEmailInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') loginPasswordInput.focus();
