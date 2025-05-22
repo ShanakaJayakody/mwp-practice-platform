@@ -37,16 +37,50 @@
             border-radius: 0.375rem; /* Slightly rounded corners */
             margin: 1rem; /* Add some margin */
             overflow: hidden; /* Prevent content overflow from container */
+            position: relative; /* For calculator positioning */
         }
         /* Header and Footer */
         .header-bar, .footer-bar {
             flex-shrink: 0; /* Prevent shrinking */
-            background-color: #006DAA; /* Updated background color */
+            background-color: #005A8C; /* Slightly darker blue for top bar */
             color: white; /* Set default text color to white */
             padding: 0.75rem 1.5rem; /* Padding */
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+
+        /* Secondary toolbar styling */
+        .secondary-toolbar {
+            flex-shrink: 0;
+            background-color: #007BBD;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #005A8C;
+            z-index: 19;
+        }
+
+        /* Buttons in secondary toolbar */
+        .secondary-toolbar-button {
+            background-color: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 0.3rem 0.7rem;
+            font-size: 0.8rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            margin-left: 0.5rem; /* Spacing between buttons */
+        }
+        .secondary-toolbar-button:hover:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: white;
+        }
+        .secondary-toolbar-button.active { /* For calculator button when active */
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: white;
         }
 
         /* Specific text colors within header/footer */
@@ -413,13 +447,16 @@
             .statement-text { font-size: 0.85rem; }
             .statement-answer-box { width: 5rem; height: 2.2rem; font-size: 0.8rem; }
 
-            .header-bar, .footer-bar { padding: 0.5rem 1rem; }
-            .header-bar span, .footer-bar button { font-size: 0.8rem; }
+            .header-bar, .footer-bar, .secondary-toolbar { padding: 0.5rem 1rem; }
+            .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: 0.8rem; }
             button, .button { padding: 0.4rem 0.8rem; }
             .footer-bar button { padding: 0.3rem 0.6rem; font-size: 0.75rem; }
             .grid-cols-5 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
             #review-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
             .review-grid-button { font-size: 0.8rem; }
+            #calculator-ui { width: 210px; top: 90px; padding: 10px;} 
+            .calc-button { padding: 8px 0; font-size: 0.8rem;}
+            #calc-display { font-size: 1.4rem; }
         }
          @media (max-width: 480px) {
              .main-content-area { padding: 0.5rem; }
@@ -433,6 +470,9 @@
              #draggable-options-sidebar { gap: 0.5rem; }
              .draggable-option { width: 45%; padding: 0.4rem 0.8rem; font-size: 0.8rem; }
              .review-grid-button { font-size: 0.75rem; }
+             #calculator-ui { width: 90%; max-width: 200px; top: 85px; padding: 8px; } 
+             .calc-button { padding: 7px 0; font-size: 0.75rem;}
+             #calc-display { font-size: 1.3rem; }
          }
 
     </style>
@@ -479,12 +519,17 @@
         <div id="exam-screen" class="hidden flex flex-col h-full">
             <div class="header-bar">
                 <span id="exam-title" class="font-semibold">Decision Making</span>
-                <div id="timer" class="font-semibold">06:00</div>
                 <div class="flex items-center space-x-4">
-                     <span class="text-sm">Question <span id="question-number-info">1</span> of 5</span>
-                     <button id="flag-button" class="text-sm font-medium border border-white rounded px-2 py-1 transition-colors duration-150">
-                          Flag for Review
-                     </button>
+                    <div id="timer" class="font-semibold">06:00</div>
+                    <span class="text-sm">Question <span id="question-number-info">1</span> of 5</span>
+                </div>
+            </div>
+            <div class="secondary-toolbar">
+                <div> 
+                    <button id="calculator-toggle-button" class="secondary-toolbar-button">Calculator (Alt+C)</button>
+                </div>
+                <div> 
+                    <button id="flag-button" class="secondary-toolbar-button">Flag for Review</button>
                 </div>
             </div>
 
@@ -584,6 +629,48 @@
                  <p class="text-sm text-gray-600 mb-4">Click a number to jump. Green: answered, Yellow border: flagged.</p>
                 <div id="navigator-grid" class="grid grid-cols-5 gap-3">
                     </div>
+            </div>
+        </div>
+
+        <div id="calculator-ui">
+            <div class="calculator-header" id="calculator-drag-header">
+                <span class="title">Calculator</span>
+                <button class="close-calc-btn" id="close-calculator-button">×</button>
+            </div>
+            <div class="calculator-decorative-text">TEXAS INSTRUMENTS TI-108</div>
+            <div id="calc-display-container">
+                <span id="calc-memory-indicator">M</span>
+                <div id="calc-display">0</div>
+            </div>
+            <div class="calc-buttons-grid">
+                <button class="calc-button calc-button-red" data-calc-action="negate">+/-</button>
+                <button class="calc-button calc-button-red" data-calc-action="sqrt">√</button>
+                <button class="calc-button calc-button-red" data-calc-action="percent">%</button>
+                <button class="calc-button calc-button-red operator" data-calc-value="/">÷</button>
+                
+                <button class="calc-button calc-button-red" data-calc-action="mrc">MRC</button>
+                <button class="calc-button calc-button-red" data-calc-action="m-">M-</button>
+                <button class="calc-button calc-button-red" data-calc-action="m+">M+</button>
+                <button class="calc-button calc-button-red operator" data-calc-value="*">×</button>
+
+                <button class="calc-button calc-button-num" data-calc-value="7">7</button>
+                <button class="calc-button calc-button-num" data-calc-value="8">8</button>
+                <button class="calc-button calc-button-num" data-calc-value="9">9</button>
+                <button class="calc-button calc-button-red operator" data-calc-value="-">-</button>
+
+                <button class="calc-button calc-button-num" data-calc-value="4">4</button>
+                <button class="calc-button calc-button-num" data-calc-value="5">5</button>
+                <button class="calc-button calc-button-num" data-calc-value="6">6</button>
+                <button class="calc-button calc-button-red operator" data-calc-value="+">+</button>
+                
+                <button class="calc-button calc-button-num" data-calc-value="1">1</button>
+                <button class="calc-button calc-button-num" data-calc-value="2">2</button>
+                <button class="calc-button calc-button-num" data-calc-value="3">3</button>
+                <button class="calc-button calc-button-red equals" data-calc-action="equals">=</button>
+
+                <button class="calc-button calc-button-red" data-calc-action="clear">ON/C</button>
+                <button class="calc-button calc-button-num" data-calc-value="0">0</button>
+                <button class="calc-button calc-button-num" data-calc-value=".">.</button>
             </div>
         </div>
 
@@ -703,7 +790,263 @@
         const timerDisplay = document.getElementById('timer');
         const goalInput = document.getElementById('goal');
 
+        // --- NEW Elements for Calculator and Secondary Toolbar ---
+        const calculatorToggleButton = document.getElementById('calculator-toggle-button');
+        const calculatorUI = document.getElementById('calculator-ui');
+        const closeCalculatorButton = document.getElementById('close-calculator-button');
+        const calculatorDragHeader = document.getElementById('calculator-drag-header');
+        const calcDisplay = document.getElementById('calc-display');
+        const calcButtons = document.querySelectorAll('.calc-button');
+        const calcMemoryIndicator = document.getElementById('calc-memory-indicator');
+
+        // --- Calculator variables ---
+        let calcCurrentInput = '0';
+        let calcPreviousInput = '';
+        let calcOperator = null;
+        let calcShouldResetDisplay = false;
+        let calcMemory = 0;
+        let calcMrcPressedOnce = false;
+
         // --- Functions ---
+
+        // --- Calculator Functions (Copied from DM Sylls 1) ---
+        function toggleCalculator() {
+            const isVisible = calculatorUI.classList.toggle('visible');
+            calculatorToggleButton.classList.toggle('active', isVisible);
+        }
+
+        function updateCalcDisplay() {
+            if (calcCurrentInput === 'Error') {
+                calcDisplay.textContent = 'Error';
+            } else if (calcCurrentInput.length > 12) {
+                try {
+                    const num = parseFloat(calcCurrentInput);
+                    if (isFinite(num)) {
+                        calcDisplay.textContent = num.toExponential(6);
+                    } else {
+                        calcDisplay.textContent = 'Error';
+                    }
+                } catch (e) {
+                    calcDisplay.textContent = calcCurrentInput.substring(0, 12);
+                }
+            } else {
+                calcDisplay.textContent = calcCurrentInput;
+            }
+            if (calcMemory !== 0) {
+                calcMemoryIndicator.style.display = 'block';
+            } else {
+                calcMemoryIndicator.style.display = 'none';
+            }
+        }
+
+        function clearCalculator() {
+            calcCurrentInput = '0';
+            calcPreviousInput = '';
+            calcOperator = null;
+            calcShouldResetDisplay = false;
+            calcMrcPressedOnce = false; 
+            updateCalcDisplay();
+        }
+        
+        function inputDigit(digit) {
+            if (calcCurrentInput === 'Error') calcCurrentInput = '0';
+            if (calcShouldResetDisplay) {
+                calcCurrentInput = digit;
+                calcShouldResetDisplay = false;
+            } else {
+                if (calcCurrentInput.includes('.') && calcCurrentInput.split('.')[1].length >= 8) return;
+                if (!calcCurrentInput.includes('.') && calcCurrentInput.length >= 10 && calcCurrentInput !== '0') return;
+                calcCurrentInput = calcCurrentInput === '0' ? digit : calcCurrentInput + digit;
+            }
+            updateCalcDisplay();
+            calcMrcPressedOnce = false; 
+        }
+
+        function inputDecimal() {
+            if (calcCurrentInput === 'Error') calcCurrentInput = '0';
+            if (calcShouldResetDisplay) {
+                calcCurrentInput = '0.';
+                calcShouldResetDisplay = false;
+            } else if (!calcCurrentInput.includes('.')) {
+                calcCurrentInput += '.';
+            }
+            updateCalcDisplay();
+            calcMrcPressedOnce = false;
+        }
+
+        function handleOperator(nextOperator) {
+            if (calcCurrentInput === 'Error') return;
+            const inputValue = parseFloat(calcCurrentInput);
+            if (calcOperator && !calcShouldResetDisplay) { 
+                calculate();
+                if (calcCurrentInput === 'Error') return;
+                calcPreviousInput = calcCurrentInput; 
+            } else {
+                calcPreviousInput = calcCurrentInput;
+            }
+            calcOperator = nextOperator;
+            calcShouldResetDisplay = true;
+            calcMrcPressedOnce = false;
+        }
+
+        function calculate() {
+            if (!calcOperator || calcPreviousInput === '' || calcCurrentInput === 'Error') return;
+            const prev = parseFloat(calcPreviousInput);
+            const current = parseFloat(calcCurrentInput);
+            if (isNaN(prev) || isNaN(current)) {
+                calcCurrentInput = 'Error';
+                updateCalcDisplay();
+                return;
+            }
+            let result = 0;
+            switch (calcOperator) {
+                case '+': result = prev + current; break;
+                case '-': result = prev - current; break;
+                case '*': result = prev * current; break;
+                case '/': 
+                    if (current === 0) {
+                        result = 'Error';
+                    } else {
+                        result = prev / current;
+                    }
+                    break;
+                default: return;
+            }
+            if (result === 'Error') {
+                calcCurrentInput = 'Error';
+            } else {
+                if (!isFinite(result)) {
+                    calcCurrentInput = 'Error';
+                } else {
+                    try {
+                        if (Math.abs(result) > 1e10) {
+                            let resultStr = result.toExponential(6);
+                            calcCurrentInput = resultStr;
+                        } else if (Math.abs(result) < 1e-6 && result !== 0) {
+                            let resultStr = result.toExponential(6);
+                            calcCurrentInput = resultStr;
+                        } else {
+                            let resultStr = parseFloat(result.toPrecision(10)).toString();
+                            calcCurrentInput = resultStr;
+                        }
+                    } catch (e) {
+                        calcCurrentInput = String(result);
+                    }
+                    if (calcCurrentInput === 'NaN' || calcCurrentInput === 'Infinity' || calcCurrentInput === '-Infinity') {
+                        calcCurrentInput = 'Error';
+                    }
+                }
+            }
+            updateCalcDisplay();
+            calcOperator = null;
+            calcShouldResetDisplay = true;
+            calcMrcPressedOnce = false;
+        }
+
+        function handleSpecialFunction(action) {
+            if (calcCurrentInput === 'Error' && action !== 'clear') return;
+            const num = parseFloat(calcCurrentInput);
+            switch(action) {
+                case 'negate':
+                    if (calcCurrentInput === '0') return;
+                    calcCurrentInput = calcCurrentInput.startsWith('-') ? 
+                        calcCurrentInput.substring(1) : 
+                        '-' + calcCurrentInput;
+                    break;
+                case 'sqrt':
+                    if (num < 0) {
+                        calcCurrentInput = 'Error';
+                    } else {
+                        const result = Math.sqrt(num);
+                        calcCurrentInput = result.toString();
+                    }
+                    break;
+                case 'percent':
+                    if (calcPreviousInput && calcOperator) {
+                        const prev = parseFloat(calcPreviousInput);
+                        calcCurrentInput = (num * prev / 100).toString();
+                    } else {
+                        calcCurrentInput = (num / 100).toString();
+                    }
+                    break;
+                case 'backspace':
+                    if (calcCurrentInput.length === 1 || 
+                        (calcCurrentInput.length === 2 && calcCurrentInput.startsWith('-'))) {
+                        calcCurrentInput = '0';
+                    } else {
+                        calcCurrentInput = calcCurrentInput.slice(0, -1);
+                    }
+                    break;
+                case 'clear':
+                    clearCalculator();
+                    return;
+            }
+            updateCalcDisplay();
+            calcShouldResetDisplay = false;
+            calcMrcPressedOnce = false;
+        }
+
+        function handleMemory(action) {
+            if (calcCurrentInput === 'Error' && action !== 'mrc') return;
+            const num = parseFloat(calcCurrentInput);
+            switch(action) {
+                case 'm+':
+                    calcMemory += num;
+                    calcShouldResetDisplay = true;
+                    break;
+                case 'm-':
+                    calcMemory -= num;
+                    calcShouldResetDisplay = true;
+                    break;
+                case 'mrc':
+                    if (!calcMrcPressedOnce) {
+                        calcCurrentInput = calcMemory.toString();
+                        calcMrcPressedOnce = true;
+                    } else {
+                        calcMemory = 0;
+                        calcMrcPressedOnce = false;
+                    }
+                    break;
+            }
+            updateCalcDisplay();
+        }
+
+        let isDragging = false;
+        let dragOffsetX = 0;
+        let dragOffsetY = 0;
+
+        function makeDraggable(element, handle) {
+            handle.onmousedown = function(event) {
+                event.preventDefault();
+                isDragging = true;
+                element.style.cursor = 'grabbing';
+                const rect = element.getBoundingClientRect();
+                dragOffsetX = event.clientX - rect.left;
+                dragOffsetY = event.clientY - rect.top;
+                document.addEventListener('mousemove', handleMouseMove);
+                document.addEventListener('mouseup', () => {
+                    isDragging = false;
+                    element.style.cursor = 'grab';
+                    document.removeEventListener('mousemove', handleMouseMove);
+                }, { once: true });
+            };
+        }
+
+        function handleMouseMove(e) {
+            if (!isDragging) return;
+            const x = e.clientX - dragOffsetX;
+            const y = e.clientY - dragOffsetY;
+            const container = appContainer.getBoundingClientRect();
+            const calculator = calculatorUI.getBoundingClientRect();
+            const maxX = container.width - calculator.width;
+            const maxY = container.height - calculator.height;
+            const boundedX = Math.max(0, Math.min(maxX, x - container.left));
+            const boundedY = Math.max(0, Math.min(maxY, y - container.top));
+            calculatorUI.style.left = `${boundedX}px`;
+            calculatorUI.style.top = `${boundedY}px`;
+            calculatorUI.style.transform = 'none';
+        }
+        // --- END Calculator Functions ---
 
         // REPLACE/ENSURE TIMER FUNCTIONS
         function formatTime(seconds) {
@@ -981,6 +1324,11 @@
 
 
         function showNextQuestion() {
+            // Hide calculator if it's open
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator();
+            }
+            
             if (isReviewingFromResults) {
                 if (currentQuestionIndex < questionsData.length - 1) {
                     loadQuestion(currentQuestionIndex + 1, true);
@@ -995,6 +1343,11 @@
         }
 
         function showPrevQuestion() {
+            // Hide calculator if it's open
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator();
+            }
+
              if (isReviewingFromResults) {
                  if (currentQuestionIndex > 0) {
                      loadQuestion(currentQuestionIndex - 1, true);
@@ -1033,10 +1386,15 @@
         }
 
         function showReviewScreen(filterFlagged = false) {
-            recordQuestionTime(); // Record time for the current question before showing review screen
-            currentQuestionStartTime = null; // Stop question timer
+            recordQuestionTime(); 
+            currentQuestionStartTime = null; 
             lastQuestionIndexForTiming = -1;
-            stopTimer(); // Stop the main exam timer
+            stopTimer(); 
+
+            // Hide calculator if it's visible
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator();
+            }
 
             examScreen.classList.add('hidden');
             reviewScreen.classList.remove('hidden');
@@ -1087,19 +1445,28 @@
             questionsData.forEach((_, index) => {
                 const button = document.createElement('button');
                 button.textContent = index + 1;
-                button.classList.add('py-2', 'px-1', 'border', 'border-gray-300', 'rounded-md', 'text-center', 'transition', 'duration-150', 'ease-in-out', 'text-sm', 'hover:bg-gray-100');
-                button.dataset.questionIndex = index;
+                // Using review-grid-button for consistent styling as in DM Sylls 1 for navigator
+                button.className = 'review-grid-button'; 
 
                 const isAnswered = userAnswers[index] && userAnswers[index].some(ans => ans !== null);
-                if (isAnswered) button.classList.add('nav-answered');
-                if (index === currentQuestionIndex) button.classList.add('nav-current');
-                if (flaggedQuestions[index]) button.classList.add('nav-flagged');
 
+                if (isAnswered) {
+                    button.classList.add('review-grid-button-answered');
+                } else {
+                     button.classList.add('review-grid-button-unanswered');
+                }
+
+                if (flaggedQuestions[index]) {
+                    button.classList.add('review-flagged'); 
+                }
+                
                 button.onclick = () => {
                     navigatorModal.classList.remove('flex');
                     navigatorModal.classList.add('hidden');
-                    const targetIndex = parseInt(button.dataset.questionIndex, 10);
-                    loadQuestion(targetIndex, isReviewingFromResults);
+                    if (calculatorUI.classList.contains('visible')) { // Close calculator if open
+                        toggleCalculator();
+                    }
+                    loadQuestion(index, isReviewingFromResults); // Pass reviewMode state
                 };
                 navigatorGrid.appendChild(button);
             });
@@ -1109,22 +1476,31 @@
             if (!navigatorGrid) return;
             const buttons = navigatorGrid.querySelectorAll('button');
             buttons.forEach(button => {
-                const index = parseInt(button.dataset.questionIndex, 10);
-                button.classList.remove('nav-answered', 'nav-current', 'nav-flagged');
+                const index = parseInt(button.textContent, 10) - 1; // Assuming button text is 1-based index
+                button.classList.remove('review-grid-button-answered', 'review-grid-button-unanswered', 'nav-current', 'review-flagged');
 
                 const isAnswered = userAnswers[index] && userAnswers[index].some(ans => ans !== null);
-                if (isAnswered) button.classList.add('nav-answered');
+                if (isAnswered) {
+                    button.classList.add('review-grid-button-answered');
+                } else {
+                    button.classList.add('review-grid-button-unanswered');
+                }
 
-                if (index === currentQuestionIndex) button.classList.add('nav-current');
-                if (flaggedQuestions[index]) button.classList.add('nav-flagged');
+                if (index === currentQuestionIndex && !isReviewingFromResults) { // Current only in exam mode
+                    button.classList.add('nav-current'); // nav-current for current, ensure this style is defined or adapted
+                }
+                if (flaggedQuestions[index]) {
+                    button.classList.add('review-flagged');
+                }
             });
         }
 
          function updateNavigatorHighlight() {
              const buttons = navigatorGrid.querySelectorAll('button');
-             buttons.forEach((button, idx) => {
+             buttons.forEach((button) => {
+                 const index = parseInt(button.textContent, 10) - 1;
                  button.classList.remove('nav-current');
-                 if (idx === currentQuestionIndex && !isReviewingFromResults) { // Only highlight current in exam mode
+                 if (index === currentQuestionIndex && !isReviewingFromResults) { 
                      button.classList.add('nav-current');
                  }
              });
@@ -1261,11 +1637,13 @@
             isReviewingFromResults = false;
             isFilteringFlagged = false;
             examEndTime = null; 
+            // Reset calculator state if needed, or assume it's fresh per session
+            clearCalculator(); 
 
             showExamScreen(); 
             loadQuestion(0); 
-            populateNavigator(); 
-            updateNavigatorButtons(); 
+            populateNavigator(); // Populate navigator on start
+            // updateNavigatorButtons(); // Initial update for navigator, populateNavigator should handle this
             startTimer(); 
         });
 
@@ -1274,20 +1652,61 @@
         endExamButton.addEventListener('click', endExamAndShowResults);
         endExamButtonFooter.addEventListener('click', handleEndExamFooterClick); 
         backToResultsButton.addEventListener('click', () => { isReviewingFromResults = false; showResultsScreen(); });
-        navigatorButton.addEventListener('click', () => { updateNavigatorButtons(); navigatorModal.classList.remove('hidden'); navigatorModal.classList.add('flex');});
+        navigatorButton.addEventListener('click', () => { 
+            // updateNavigatorButtons(); // Ensure nav buttons are up-to-date before showing
+            navigatorModal.classList.remove('hidden'); 
+            navigatorModal.classList.add('flex');
+        });
         closeModalButton.addEventListener('click', () => { navigatorModal.classList.remove('flex'); navigatorModal.classList.add('hidden');});
         navigatorModal.addEventListener('click', (event) => { if (event.target === navigatorModal) closeModalButton.click(); });
         flagButton.addEventListener('click', toggleFlag);
         filterFlaggedButton.addEventListener('click', () => { isFilteringFlagged = !isFilteringFlagged; showReviewScreen(isFilteringFlagged); });
         downloadPdfButton.addEventListener('click', generatePDF);
 
+        // Calculator event listeners
+        calculatorToggleButton.addEventListener('click', toggleCalculator);
+        closeCalculatorButton.addEventListener('click', toggleCalculator);
+        makeDraggable(calculatorUI, calculatorDragHeader);
+
+        calcButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const value = button.dataset.calcValue;
+                const action = button.dataset.calcAction;
+                if (value !== undefined) { 
+                    if (value === '.') { inputDecimal(); } 
+                    else { inputDigit(value); }
+                } else if (action) { 
+                    // Corrected logic for operators to use 'value' from dataset for +,-,*,/
+                    if (['+', '-', '*', '/'].includes(button.dataset.calcValue)) { handleOperator(button.dataset.calcValue); } 
+                    else if (action === 'equals') { calculate(); } 
+                    else if (action === 'clear') { clearCalculator(); } 
+                    else if (['m+', 'm-', 'mrc'].includes(action)) { handleMemory(action); } 
+                    else if (['sqrt', 'percent', 'negate', 'backspace'].includes(action)) { handleSpecialFunction(action); }
+                }
+            });
+        });
+
+        // Initialize calculator display
+        updateCalcDisplay();
+
         function handleKeyboardShortcuts(e) {
              const isExamVisible = !examScreen.classList.contains('hidden');
              const isModalVisible = navigatorModal.classList.contains('flex');
              const isInputFocused = document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA');
+             const isCalcVisible = calculatorUI.classList.contains('visible');
 
              if (isModalVisible || isInputFocused) return;
              if (!isExamVisible) return;
+
+             if (isCalcVisible && !isInputFocused) {
+                 if (e.key >= '0' && e.key <= '9') { e.preventDefault(); inputDigit(e.key); return; }
+                 if (e.key === '.') { e.preventDefault(); inputDecimal(); return; }
+                 // Corrected to check e.key directly for operators
+                 if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') { e.preventDefault(); handleOperator(e.key); return; } 
+                 if (e.key === 'Enter' || e.key === '=') { e.preventDefault(); calculate(); return; }
+                 if (e.key === 'Escape') { e.preventDefault(); toggleCalculator(); return; }
+                 if (e.key === 'Backspace') { e.preventDefault(); handleSpecialFunction('backspace'); return; }
+             }
 
              const altOrOption = e.altKey;
              const code = e.code.toLowerCase();
@@ -1297,6 +1716,7 @@
                      case 'keyn': e.preventDefault(); if (!nextButton.disabled) nextButton.click(); break;
                      case 'keyp': e.preventDefault(); if (!prevButton.disabled) prevButton.click(); break;
                      case 'keyf': e.preventDefault(); if (!isReviewingFromResults && !flagButton.disabled) flagButton.click(); break;
+                     case 'keyc': e.preventDefault(); if(calculatorToggleButton) calculatorToggleButton.click(); break; // Ensure button exists
                  }
              }
         }
