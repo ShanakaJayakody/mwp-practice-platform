@@ -1524,7 +1524,7 @@
             questionsData.forEach((_, index) => {
                 const button = document.createElement('button');
                 button.textContent = index + 1;
-                button.className = 'review-grid-button';
+                button.className = 'review-grid-button'; // Reusing styles, ensure they are appropriate
 
                 const isAnswered = userAnswers[index] && userAnswers[index].some(ans => ans !== null);
 
@@ -1535,14 +1535,17 @@
                 }
 
                 if (flaggedQuestions[index]) {
-                    button.classList.add('review-flagged');
+                    button.classList.add('review-flagged'); // Make sure 'review-flagged' style exists and is suitable
                 }
-
+                
+                // Adjust onclick for navigator modal context
                 button.onclick = () => {
-                    reviewScreen.classList.add('hidden');
-                    reviewScreen.classList.remove('flex');
-                    showExamScreen();
-                    loadQuestion(index); // Load in normal mode for review
+                    navigatorModal.classList.remove('flex');
+                    navigatorModal.classList.add('hidden');
+                    if (calculatorUI.classList.contains('visible')) { // Close calculator if open
+                        toggleCalculator();
+                    }
+                    loadQuestion(index, isReviewingFromResults); // Pass reviewMode state
                 };
                 navigatorGrid.appendChild(button);
             });
@@ -1872,7 +1875,13 @@
         endExamButton.addEventListener('click', endExamAndShowResults);
         endExamButtonFooter.addEventListener('click', handleEndExamFooterClick);
         backToResultsButton.addEventListener('click', () => { isReviewingFromResults = false; showResultsScreen(); });
-        navigatorButton.addEventListener('click', () => { updateNavigatorButtons(); navigatorModal.classList.remove('hidden'); navigatorModal.classList.add('flex'); });
+        navigatorButton.addEventListener('click', () => { 
+            // The navigator is populated when the exam starts or when review screen is shown.
+            // This button should just toggle the modal's visibility.
+            // updateNavigatorButtons(); // This might be redundant if called frequently or could be used to ensure highlight is correct
+            navigatorModal.classList.remove('hidden'); 
+            navigatorModal.classList.add('flex'); 
+        });
         closeModalButton.addEventListener('click', () => { navigatorModal.classList.remove('flex'); navigatorModal.classList.add('hidden'); });
         navigatorModal.addEventListener('click', (event) => { if (event.target === navigatorModal) closeModalButton.click(); });
         flagButton.addEventListener('click', toggleFlag);
@@ -1977,13 +1986,10 @@
             if (timerDisplay) { // timerDisplay should be defined globally by now
                 timerDisplay.textContent = formatTime(timeLeft);
             }
-            // Correction: timeLeft should be decremented *before* checking if it's <= 0 for the last tick
-            if (timeLeft < 0) { // Check if time actually ran out
+            // Correction: timeLeft should be decremented *after* checking if it's <= 0 for the last tick
+            if (timeLeft <= 0) { 
                 endExamDueToTimeUp();
                 return; // Stop further execution if time is up
-            }
-             if (timeLeft === 0 && timerDisplay) { // Ensure last 00:00 is displayed
-                timerDisplay.textContent = formatTime(timeLeft);
             }
             timeLeft--;
         }
@@ -1991,7 +1997,7 @@
         function startTimer() {
             if (timerInterval) clearInterval(timerInterval);
             timeLeft = totalTimeAllowedInSeconds;
-            examStartTime = new Date(); // ADDED HERE
+            examStartTime = new Date(); // This is the definitive start time
             if (timerDisplay) timerDisplay.textContent = formatTime(timeLeft); // Initial display update
             timerInterval = setInterval(updateTimerDisplay, 1000);
         }
