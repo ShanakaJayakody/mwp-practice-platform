@@ -391,4 +391,4 @@
                  if (authRedirectMessage) authRedirectMessage.classList.remove('hidden');
             }
         });
-    </script>
+    <script>
