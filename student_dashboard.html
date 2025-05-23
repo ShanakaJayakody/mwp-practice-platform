@@ -612,7 +612,6 @@
         </div>
     </div>
 
-    <!-- Dashboard -->
     <div id="dashboard-wrapper" class="dashboard-wrapper hidden">
         <div class="dashboard-header">
             <a href="home.html">
@@ -630,7 +629,6 @@
             </div>
         </div>
 
-        <!-- Main Navigation -->
         <nav class="main-nav" role="navigation" aria-label="Main Navigation">
             <a href="home.html" id="nav-home" class="nav-tab" role="tab" aria-selected="false">
                 <span class="material-symbols-outlined">home</span>Home
@@ -647,439 +645,121 @@
             </div>
         </nav>
 
-        <!-- Content Area -->
         <div id="dashboard-content-area" class="dashboard-content-area">
-            <div id="home-content" class="hidden p-6 md:p-8 text-gray-700">
-                <div class="max-w-4xl mx-auto">
-                    <div class="mb-12 text-center">
-                        <!-- OLD: <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Welcome back, <span id="home-student-name" class="text-blue-600">Student</span>!</h1> -->
-                        <h1 class="text-3xl md:text-4xl font-bold animated-welcome-text">
-                            <span class="welcome-part1">Welcome </span><span id="home-student-first-name" class="welcome-part2">Student</span>
-                        </h1>
-                        <p class="text-lg text-gray-500 mt-2">Ready to ace the UCAT? Here's your progress at a glance.</p>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center">
-                            <svg class="w-12 h-12 text-blue-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-                            <h3 class="text-xl font-semibold text-gray-700 mb-1">Activities Completed</h3>
-                            <p id="home-total-activities" class="text-3xl font-bold text-blue-600">0</p>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center">
-                            <svg class="w-12 h-12 text-green-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            <h3 class="text-xl font-semibold text-gray-700 mb-1">Average Score</h3>
-                            <p id="home-average-score" class="text-3xl font-bold text-green-600">0%</p>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center">
-                            <svg class="w-12 h-12 text-yellow-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            <h3 class="text-xl font-semibold text-gray-700 mb-1">Time Practiced</h3>
-                            <p id="home-time-practiced" class="text-3xl font-bold text-yellow-600">0h 0m</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-xl shadow-lg mb-12">
-                        <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Continue Your Journey</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <a href="QR Test 1.html" class="block bg-blue-50 hover:bg-blue-100 p-6 rounded-lg transition-colors duration-300 text-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                                <h3 class="text-xl font-semibold text-blue-700 mb-2">Practice QR Test 1</h3>
-                                <p class="text-blue-600">Sharpen your Quantitative Reasoning skills.</p>
-                            </a>
-                            <a href="focus_groups.html" id="home-focus-groups-link" class="block bg-indigo-50 hover:bg-indigo-100 p-6 rounded-lg transition-colors duration-300 text-center focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">
-                                <h3 class="text-xl font-semibold text-indigo-700 mb-2">Explore Focus Groups</h3>
-                                <p class="text-indigo-600">Target specific areas like Verbal Reasoning.</p>
-                            </a>
-                        </div>
-                         <div class="mt-8 text-center">
-                            <button id="home-view-all-tests-btn" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 text-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
-                                View All Tests
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="text-center text-gray-500">
-                        <p>"The best way to predict the future is to create it." - Peter Drucker</p>
-                    </div>
-                </div>
-            </div>
-
-            <div id="qr-tests-content" class="hidden">
-                <h1 class="text-2xl md:text-3xl font-bold mb-6 text-gray-800">Quantitative Reasoning Tests</h1>
-                <p class="text-gray-500 mb-8 max-w-md mx-auto">Simulate QR under exam conditions with our simulated QR tests.</p>
+            <div id="results-content" class="max-w-5xl mx-auto"> <h1 class="text-left">Your Performance History</h1>
+                <p class="text-left mb-8">Track your progress and identify areas for improvement.</p>
                 
-                <div class="space-y-4 max-w-md mx-auto">
-                    <a href="QR Test 1.html" class="drill-link">
-                        <span>QR Test 1</span>
-                    </a>
-                    <div class="drill-link-disabled">
-                        <span>QR Test 2</span>
-                        <span class="coming-soon-badge">Coming Soon</span>
-                    </div>
-                    <div class="drill-link-disabled">
-                        <span>QR Test 3</span>
-                        <span class="coming-soon-badge">Coming Soon</span>
-                    </div>
-                    <div class="drill-link-disabled">
-                        <span>QR Test 4</span>
-                        <span class="coming-soon-badge">Coming Soon</span>
-                    </div>
-                    <div class="drill-link-disabled">
-                        <span>QR Test 5</span>
-                        <span class="coming-soon-badge">Coming Soon</span>
-                    </div>
-                    <div class="drill-link-disabled">
-                        <span>QR Test 6</span>
-                        <span class="coming-soon-badge">Coming Soon</span>
-                    </div>
+                <div id="results-loading" class="text-center py-8 hidden">
+                    <div class="spinner mx-auto mb-4"></div>
+                    <p style="color: var(--md-sys-color-on-surface-variant);">Loading your performance data...</p>
                 </div>
-            </div>
-            
-            <div id="results-content" class="hidden">
-                <h1 class="text-2xl md:text-3xl font-bold mb-6 text-gray-800">Your Performance History</h1>
-                <p class="text-gray-500 mb-8 max-w-md mx-auto">Track your progress and identify areas for improvement</p>
                 
-                <div class="mb-6 bg-white p-4 rounded-lg shadow max-w-5xl mx-auto">
-                    <div id="results-loading" class="text-center py-8">
-                        <div class="spinner mx-auto mb-4"></div>
-                        <p class="text-gray-500">Loading your performance data...</p>
-                    </div>
-                    
-                    <div id="results-error" class="hidden text-center py-8">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-red-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                        <p class="text-gray-700 font-medium">Unable to load your results</p>
-                        <p class="text-gray-500 text-sm mt-2">Please try again later or contact support</p>
-                        <button id="results-retry-button" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">Try Again</button>
-                    </div>
-                    
-                    <div id="results-empty" class="hidden text-center py-8">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-blue-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                        <p class="text-gray-700 font-medium">No test results found for your account</p>
-                        <p class="text-gray-500 text-sm mt-2">Complete a practice test and submit your reflections to see your performance history here</p>
-                        <div class="mt-4 flex flex-col md:flex-row justify-center gap-3">
-                            <button id="go-to-tests-button" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                </svg>
-                                Take QR Test 1
-                            </button>
-                            <div class="mt-4 md:mt-0 text-center border border-gray-200 rounded p-3 bg-blue-50 max-w-md">
-                                <div class="font-medium text-blue-700 mb-1">Important Note</div>
-                                <p class="text-sm text-gray-600">After completing a test, make sure to click the "Submit Reflections" button to save your results.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="results-summary" class="hidden">
-                        <div class="flex flex-col md:flex-row gap-4 mb-6">
-                            <div class="flex-1 bg-blue-50 p-4 rounded-lg border border-blue-100">
-                                <h3 class="text-lg font-semibold text-blue-800 mb-2">Overall Performance</h3>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <p class="text-sm text-gray-500">Tests Completed</p>
-                                        <p id="tests-completed" class="text-xl font-bold text-blue-600">0</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-500">Average Score</p>
-                                        <p id="average-score" class="text-xl font-bold text-blue-600">0%</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-500">Highest Score</p>
-                                        <p id="highest-score" class="text-xl font-bold text-blue-600">0%</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-500">Hours Practiced</p>
-                                        <p id="hours-practiced" class="text-xl font-bold text-blue-600">0</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="flex-1 bg-green-50 p-4 rounded-lg border border-green-100">
-                                <h3 class="text-lg font-semibold text-green-800 mb-2">Progress Trends</h3>
-                                <div id="progress-chart" class="h-32 w-full">
-                                    <!-- Chart will be rendered here -->
-                                    <div class="h-full flex items-center justify-center">
-                                        <p class="text-gray-500 text-sm">Chart loading...</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Filter and Sort Controls -->
-                            <div class="flex justify-between items-center mb-4">
-                                <h3 class="text-lg font-semibold text-gray-800">Recent Tests</h3>
-                                <div class="flex gap-2">
-                                    <select id="results-filter" class="text-sm border border-gray-300 rounded px-2 py-1">
-                                        <option value="all">All Tests</option>
-                                        <option value="QR Test 1">QR Test 1</option>
-                                        <option value="QR Test 2">QR Test 2</option>
-                                        <option value="QR Test 3">QR Test 3</option>
-                                    <option value="QR Test 4">QR Test 4</option>
-                                    <option value="QR Test 5">QR Test 5</option>
-                                    <option value="QR Test 6">QR Test 6</option>
-                                    <option value="VR Focus Group 16">VR Focus Group 16</option>
-                                    <option value="DM Syllogisms Worksheet 1">DM Syllogisms Worksheet 1</option>
-                                    <option value="DM Syllogisms Worksheet 2">DM Syllogisms Worksheet 2</option>
-                                    <option value="DM Syllogisms Worksheet 3">DM Syllogisms Worksheet 3</option>
-                                    <option value="DM Syllogisms Worksheet 4">DM Syllogisms Worksheet 4</option>
-                                    <option value="DM Syllogisms Worksheet 5">DM Syllogisms Worksheet 5</option>
-                                    </select>
-                                    <select id="results-sort" class="text-sm border border-gray-300 rounded px-2 py-1">
-                                        <option value="date-desc">Newest First</option>
-                                        <option value="date-asc">Oldest First</option>
-                                        <option value="score-desc">Highest Score</option>
-                                        <option value="score-asc">Lowest Score</option>
-                                    </select>
-                                <button id="refresh-results-button" class="text-sm bg-blue-500 hover:bg-blue-600 text-white rounded px-3 py-1">
-                                    Refresh
-                                </button>
-                                </div>
-                            </div>
-                            
-                        <!-- Accordion Sections for Test Types -->
-                        <div id="results-by-section-accordion" class="space-y-3">
-
-                            <!-- Quantitative Reasoning Section -->
-                            <div class="section-accordion-item border border-gray-200 rounded-md">
-                                <button class="section-accordion-header flex justify-between items-center w-full p-4 bg-gray-50 hover:bg-gray-100 transition-colors focus:outline-none">
-                                    <h4 class="text-md font-semibold text-gray-700">Quantitative Reasoning</h4>
-                                    <svg class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                                </button>
-                                <div class="section-accordion-content hidden p-4 overflow-x-auto">
-                                <table class="min-w-full">
-                                    <thead class="bg-gray-50">
-                                        <tr>
-                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Test</th>
-                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
-                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Taken</th>
-                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Focus Rating</th>
-                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                                        </tr>
-                                    </thead>
-                                        <tbody id="results-table-body-qr" class="bg-white divide-y divide-gray-200">
-                                            <!-- QR Results will be populated here -->
-                                    </tbody>
-                                </table>
-                                    <p id="no-results-qr" class="text-center text-gray-500 py-4 hidden">No Quantitative Reasoning results found.</p>
-                            </div>
-                        </div>
-
-                            <!-- Decision Making Section -->
-                            <div class="section-accordion-item border border-gray-200 rounded-md">
-                                <button class="section-accordion-header flex justify-between items-center w-full p-4 bg-gray-50 hover:bg-gray-100 transition-colors focus:outline-none">
-                                    <h4 class="text-md font-semibold text-gray-700">Decision Making</h4>
-                                    <svg class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                                </button>
-                                <div class="section-accordion-content hidden p-4 overflow-x-auto">
-                                    <table class="min-w-full">
-                                        <thead class="bg-gray-50">
-                                            <tr>
-                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Test</th>
-                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
-                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Taken</th>
-                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Focus Rating</th>
-                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="results-table-body-dm" class="bg-white divide-y divide-gray-200">
-                                            <!-- DM Results will be populated here -->
-                                        </tbody>
-                                    </table>
-                                     <p id="no-results-dm" class="text-center text-gray-500 py-4 hidden">No Decision Making results found.</p>
-                                </div>
-                            </div>
-                            
-                            <!-- Verbal Reasoning Section -->
-                            <div class="section-accordion-item border border-gray-200 rounded-md">
-                                <button class="section-accordion-header flex justify-between items-center w-full p-4 bg-gray-50 hover:bg-gray-100 transition-colors focus:outline-none">
-                                    <h4 class="text-md font-semibold text-gray-700">Verbal Reasoning</h4>
-                                    <svg class="w-5 h-5 text-gray-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                                </button>
-                                <div class="section-accordion-content hidden p-4 overflow-x-auto">
-                                    <table class="min-w-full">
-                                        <thead class="bg-gray-50">
-                                            <tr>
-                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Test</th>
-                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
-                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Taken</th>
-                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Focus Rating</th>
-                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="results-table-body-vr" class="bg-white divide-y divide-gray-200">
-                                            <!-- VR Results will be populated here -->
-                                        </tbody>
-                                    </table>
-                                    <p id="no-results-vr" class="text-center text-gray-500 py-4 hidden">No Verbal Reasoning results found.</p>
-                                </div>
-                            </div>
-
-                            <!-- Abstract Reasoning Section (Coming Soon) -->
-                            <div class="section-accordion-item border border-gray-200 rounded-md opacity-60">
-                                <button class="section-accordion-header flex justify-between items-center w-full p-4 bg-gray-50 cursor-not-allowed">
-                                    <h4 class="text-md font-semibold text-gray-500">Abstract Reasoning <span class="text-xs bg-yellow-200 text-yellow-700 px-2 py-0.5 rounded-full ml-2">Soon</span></h4>
-                                     <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                                </button>
-                                <!-- No content div needed yet for coming soon -->
-                            </div>
-
-                            <!-- Situational Judgement Section (Coming Soon) -->
-                            <div class="section-accordion-item border border-gray-200 rounded-md opacity-60">
-                                <button class="section-accordion-header flex justify-between items-center w-full p-4 bg-gray-50 cursor-not-allowed">
-                                    <h4 class="text-md font-semibold text-gray-500">Situational Judgement <span class="text-xs bg-yellow-200 text-yellow-700 px-2 py-0.5 rounded-full ml-2">Soon</span></h4>
-                                     <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                                </button>
-                                <!-- No content div needed yet for coming soon -->
-                            </div>
-                        </div>
-                        
-                        <!-- Original single table - to be removed once sections are populated by JS -->
-                        <!-- <div class="overflow-x-auto">
-                            <table class="min-w-full">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Test</th>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Taken</th>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Focus Rating</th>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="results-table-body" class="bg-white divide-y divide-gray-200">
-                                </tbody>
-                            </table>
-                        </div> -->
-                    </div>
-                    
-                    <!-- Detailed view for a single test result -->
-                    <div id="result-detail" class="hidden">
-                        <div class="mb-4 flex justify-between items-center">
-                            <button id="back-to-results-list" class="flex items-center text-blue-600 hover:text-blue-800">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                                </svg>
-                                Back to Results
-                            </button>
-                            <div class="flex gap-2">
-                                <button id="review-questions-button" class="text-sm px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition-colors flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                    </svg>
-                                    Review Questions
-                                </button>
-                                <button id="download-result-pdf" class="text-sm px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                    </svg>
-                                    Download PDF
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 mb-6">
-                            <div class="flex flex-wrap gap-4">
-                                <div class="flex-1 min-w-[150px]">
-                                    <h3 id="detail-test-name" class="text-xl font-semibold text-gray-800 mb-1">QR Test 1</h3>
-                                    <p id="detail-test-date" class="text-sm text-gray-500">June 15, 2023 at 10:30 AM</p>
-                                </div>
-                                <div class="flex flex-wrap gap-4">
-                                    <div class="bg-white px-4 py-2 rounded-md shadow-sm">
-                                        <p class="text-sm text-gray-500">Score</p>
-                                        <p id="detail-score" class="text-xl font-bold text-blue-600">24/36</p>
-                                    </div>
-                                    <div class="bg-white px-4 py-2 rounded-md shadow-sm">
-                                        <p class="text-sm text-gray-500">Time Taken</p>
-                                        <p id="detail-time" class="text-xl font-bold text-blue-600">22m 45s</p>
-                                    </div>
-                                    <div class="bg-white px-4 py-2 rounded-md shadow-sm">
-                                        <p class="text-sm text-gray-500">Focus Rating</p>
-                                        <p id="detail-focus" class="text-xl font-bold text-blue-600">4/5</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <div class="bg-white p-4 rounded-lg shadow">
-                                <h4 class="text-lg font-semibold text-gray-800 mb-3">Performance Breakdown</h4>
-                                <div id="performance-breakdown-chart" class="h-64">
-                                    <!-- Chart will be rendered here -->
-                                    <div class="h-full flex items-center justify-center">
-                                        <p class="text-gray-500 text-sm">Chart loading...</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="bg-white p-4 rounded-lg shadow">
-                                <h4 class="text-lg font-semibold text-gray-800 mb-3">Time Management</h4>
-                                <div id="time-management-chart" class="h-64">
-                                    <!-- Chart will be rendered here -->
-                                    <div class="h-full flex items-center justify-center">
-                                        <p class="text-gray-500 text-sm">Chart loading...</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-white p-4 rounded-lg shadow mb-6">
-                            <h4 class="text-lg font-semibold text-gray-800 mb-3">Your Reflection</h4>
-                            <div class="bg-gray-50 p-3 rounded border border-gray-200">
-                                <p id="detail-reflection" class="text-gray-700">No reflection provided.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-white p-4 rounded-lg shadow">
-                            <h4 class="text-lg font-semibold text-gray-800 mb-3">Question by Question Analysis</h4>
-                            <div class="overflow-x-auto">
-                                <table class="min-w-full">
-                                    <thead class="bg-gray-50">
-                                        <tr>
-                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Q #</th>
-                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Result</th>
-                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Your Answer</th>
-                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Correct Answer</th>
-                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Spent</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="detail-questions-table-body" class="bg-white divide-y divide-gray-200">
-                                        <!-- Question details will be populated here -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                <div id="results-error" class="hidden text-center py-8 error-message">
+                    <span class="material-symbols-outlined" style="font-size: 28px; color: var(--md-sys-color-error);">error</span>
+                    <p>Unable to load your results. Please try again later or contact support.</p>
+                    <button id="results-retry-button" class="btn btn-primary" style="width:auto; margin-top: var(--md-sys-spacing-m);">Try Again</button>
                 </div>
+                
+                <div id="results-empty" class="hidden text-center py-8">
+                    <span class="material-symbols-outlined" style="font-size: 48px; color: var(--md-sys-color-primary); margin-bottom: var(--md-sys-spacing-m);">folder_off</span>
+                    <h3 style="font-family: var(--md-sys-typescale-title-large-font-family-name); color: var(--md-sys-color-on-surface); margin-bottom: var(--md-sys-spacing-s);">No test results found</h3>
+                    <p style="color: var(--md-sys-color-on-surface-variant); margin-bottom: var(--md-sys-spacing-l);">Complete a practice test and submit your reflections to see your performance history here.</p>
+                    <button id="go-to-tests-button" class="btn btn-primary" style="width:auto;">
+                        <span class="material-symbols-outlined">model_training</span> Go to Practice
+                    </button>
+                </div>
+                
+                <div id="results-summary" class="hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                        <div class="info-card-results">
+                            <span class="material-symbols-outlined">checklist</span>
+                            <p class="metric-label">Tests Completed</p>
+                            <p id="tests-completed" class="metric-value">0</p>
+                        </div>
+                        <div class="info-card-results">
+                            <span class="material-symbols-outlined">leaderboard</span>
+                            <p class="metric-label">Average Score</p>
+                            <p id="average-score" class="metric-value">0%</p>
+                        </div>
+                         <div class="info-card-results">
+                            <span class="material-symbols-outlined">emoji_events</span>
+                            <p class="metric-label">Highest Score</p>
+                            <p id="highest-score" class="metric-value">0%</p>
+                        </div>
+                        <div class="info-card-results">
+                            <span class="material-symbols-outlined">timer</span>
+                            <p class="metric-label">Hours Practiced</p>
+                            <p id="hours-practiced" class="metric-value">0h 0m</p>
+                        </div>
+                    </div>
+                    <style>
+                        .info-card-results {
+                            background-color: var(--md-sys-color-surface);
+                            border-radius: var(--md-sys-shape-corner-medium);
+                            padding: var(--md-sys-spacing-l);
+                            text-align: center;
+                            box-shadow: var(--md-sys-elevation-level1);
+                        }
+                        .info-card-results .material-symbols-outlined {
+                            font-size: 32px;
+                            color: var(--md-sys-color-primary);
+                            margin-bottom: var(--md-sys-spacing-s);
+                        }
+                        .info-card-results .metric-label {
+                            font-family: var(--md-sys-typescale-body-medium-font-family-name);
+                            color: var(--md-sys-color-on-surface-variant);
+                            margin-bottom: var(--md-sys-spacing-xxs);
+                        }
+                        .info-card-results .metric-value {
+                            font-family: var(--md-sys-typescale-headline-small-font-family-name);
+                            color: var(--md-sys-color-primary);
+                            font-weight: var(--md-sys-font-weight-medium);
+                        }
+                    </style>
+                    
+                    <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-3 p-3" style="background-color: var(--md-sys-color-surface-variant); border-radius: var(--md-sys-shape-corner-medium);">
+                        <h3 style="font-family: var(--md-sys-typescale-title-medium-font-family-name); color: var(--md-sys-color-on-surface-variant);">Recent Tests</h3>
+                        <div class="flex gap-2 flex-wrap justify-center">
+                            <select id="results-filter" class="auth-input" style="width: auto; min-width:150px; padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); margin-bottom:0;">
+                                <option value="all">All Exams</option>
+                            </select>
+                            <select id="results-sort" class="auth-input" style="width: auto; min-width:150px; padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); margin-bottom:0;">
+                                <option value="date-desc">Newest First</option>
+                                <option value="date-asc">Oldest First</option>
+                                <option value="score-desc">Highest Score</option>
+                                <option value="score-asc">Lowest Score</option>
+                            </select>
+                            <button id="refresh-results-button" class="btn btn-primary" style="width:auto;">
+                                <span class="material-symbols-outlined">refresh</span> Refresh
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="results-by-section-accordion" class="space-y-3">
+                        </div>
+                </div>
+                
+                <div id="result-detail" class="hidden mt-6">
+                    <button id="back-to-results-list" class="btn btn-outlined mb-6" style="width:auto;">
+                        <span class="material-symbols-outlined">arrow_back</span> Back to Results List
+                    </button>
+                    <h3 id="detail-test-name">Test Name</h3>
+                    <p><strong>Date:</strong> <span id="detail-test-date"></span></p>
+                    <p><strong>Score:</strong> <span id="detail-score"></span></p>
+                    <p><strong>Time Taken:</strong> <span id="detail-time"></span></p>
+                    <p><strong>Focus Rating:</strong> <span id="detail-focus"></span></p>
+                    <p><strong>Reflection:</strong></p>
+                    <div id="detail-reflection" style="background-color: var(--md-sys-color-surface-variant); padding: var(--md-sys-spacing-m); border-radius: var(--md-sys-shape-corner-small); color: var(--md-sys-color-on-surface-variant);"></div>
+                    </div>
             </div>
             
-            <div id="coming-soon-content" class="hidden coming-soon-message">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-blue-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <h2 class="text-xl font-semibold text-gray-700 mb-2">Coming Soon!</h2>
-                <p class="text-gray-500">We're working hard to bring you more great content. This section is under development and will be available in the near future.</p>
+            <div id="default-dashboard-message" class="hidden"> <p>Welcome to your dashboard. Select a section to get started.</p>
             </div>
-            
-            <div id="default-dashboard-message" class="default-message">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-blue-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <h2 class="text-xl font-semibold text-gray-700 mb-2">Welcome to Your Dashboard!</h2>
-                <p class="text-gray-500 mb-4">Start your UCAT journey by selecting from our practice tests and training materials.</p>
-                <p class="text-sm text-gray-400">Choose "Tests" from the navigation bar to begin.</p>
-            </div>
+
         </div>
     </div>
 
     <script>
-        console.log("Executing JavaScript from student_dashboard.html -- TOP OF SCRIPT"); // Diagnostic log
-
         // --- Firebase Configuration ---
         const firebaseConfig = {
           apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
@@ -1091,27 +771,17 @@
           measurementId: "G-4M3ED641M9"
         };
 
-        // Initialize Firebase with better error handling
-        try {
-            // Check if Firebase is already initialized
-            if (!firebase.apps.length) {
-                firebase.initializeApp(firebaseConfig);
-            }
-            // Explicitly initialize Firestore
-            const db = firebase.firestore();
-            console.log("Firebase and Firestore initialized successfully");
-        } catch (error) {
-            console.error("Firebase initialization error:", error);
-            // Show error message to user
-            alert("There was an error connecting to the service. Please try again later.");
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
         }
+        const db = firebase.firestore();
+        const auth = firebase.auth();
 
-        // --- DOM Elements ---
+        // DOM Elements
         const authSection = document.getElementById('auth-section');
         const dashboardWrapper = document.getElementById('dashboard-wrapper');
-        
-        const loginForm = document.getElementById('login-form');
-        const signupForm = document.getElementById('signup-form');
+        const loginFormEl = document.getElementById('login-form'); 
+        const signupFormEl = document.getElementById('signup-form'); 
         
         const loginEmailInput = document.getElementById('login-email');
         const loginPasswordInput = document.getElementById('login-password');
@@ -1120,6 +790,7 @@
         const googleLoginButton = document.getElementById('google-login-button');
         const loginErrorP = document.getElementById('login-error');
         const showSignupLink = document.getElementById('show-signup-link');
+        const forgotPasswordLink = document.getElementById('forgot-password-link');
 
         const signupNameInput = document.getElementById('signup-name');
         const signupEmailInput = document.getElementById('signup-email');
@@ -1130,1379 +801,421 @@
         const signupErrorP = document.getElementById('signup-error');
         const showLoginLink = document.getElementById('show-login-link');
 
-        const studentDisplayNameSpan = document.getElementById('student-display-name');
+        const studentDisplayNameHeader = document.getElementById('student-display-name');
         const logoutButton = document.getElementById('logout-button');
 
-        // Navigation elements
+        const navHome = document.getElementById('nav-home');
+        const navPracticeMain = document.getElementById('nav-practice-main');
         const navResults = document.getElementById('nav-results');
         const navSkills = document.getElementById('nav-skills');
-
-        // Content area elements
-        const qrTestsContent = document.getElementById('qr-tests-content');
-        const resultsContent = document.getElementById('results-content');
-        const comingSoonContent = document.getElementById('coming-soon-content');
-        const defaultDashboardMessage = document.getElementById('default-dashboard-message');
         const allNavTabs = document.querySelectorAll('.nav-tab');
-        const dashboardContentArea = document.getElementById('dashboard-content-area');
 
-        // Home content specific elements
-        const homeStudentFirstNameSpan = document.getElementById('home-student-first-name');
-        const animatedWelcomeText = document.querySelector('.animated-welcome-text'); // Get the h1 for animation reset
+        const resultsContent = document.getElementById('results-content');
+        const defaultDashboardMessage = document.getElementById('default-dashboard-message');
+        const resultsLoading = document.getElementById('results-loading');
+        const resultsError = document.getElementById('results-error');
+        const resultsEmpty = document.getElementById('results-empty');
+        const resultsSummary = document.getElementById('results-summary');
+        const resultsBySectionAccordion = document.getElementById('results-by-section-accordion');
+        const resultDetailView = document.getElementById('result-detail');
+        const backToResultsListButton = document.getElementById('back-to-results-list');
+        const resultsFilterSelect = document.getElementById('results-filter');
+        const resultsSortSelect = document.getElementById('results-sort');
+        const refreshResultsButton = document.getElementById('refresh-results-button');
+        const goToTestsButton = document.getElementById('go-to-tests-button');
+
+
+        let allUserResults = []; 
+        let uniqueExamNames = new Set();
 
         // --- UI Helpers ---
-        // Set loading state for buttons
-        function setButtonLoading(button, spinner, isLoading) {
-            if (isLoading) {
-                button.disabled = true;
-                spinner.classList.remove('hidden');
-                button.classList.add('opacity-70');
-            } else {
-                button.disabled = false;
-                spinner.classList.add('hidden');
-                button.classList.remove('opacity-70');
-            }
+        function setButtonLoadingState(button, spinner, isLoading) {
+            if (!button || !spinner) return;
+            button.disabled = isLoading;
+            spinner.classList.toggle('hidden', !isLoading);
+            button.classList.toggle('opacity-70', isLoading); 
         }
 
-        // Show error message with fade-in animation
-        function showErrorMessage(element, message) {
-            element.textContent = message;
-            element.style.opacity = "0";
-            element.classList.remove('hidden');
+        function showAuthMessage(element, text, isError = true) {
+            if(!element) return;
+            element.textContent = text; // Keep simple text content
+            element.classList.remove('hidden', 'success-message', 'error-message');
+            element.classList.add(isError ? 'error-message' : 'success-message');
             
-            // Trigger reflow for animation
-            void element.offsetWidth;
-            
-            element.style.opacity = "1";
-            element.style.transition = "opacity 0.3s ease-in-out";
+            // Optionally, add an icon if you want, but for simplicity this is removed
+            // const iconType = isError ? 'error' : 'check_circle';
+            // element.innerHTML = `<span class="material-symbols-outlined" style="margin-right: 8px;">${iconType}</span> ${text}`;
+        }
+        
+        function toggleAuthForms(showSignup) {
+            loginFormEl.classList.toggle('hidden', showSignup);
+            signupFormEl.classList.toggle('hidden', !showSignup);
+            loginEmailInput.value = ''; loginPasswordInput.value = '';
+            signupNameInput.value = ''; signupEmailInput.value = ''; signupPasswordInput.value = '';
+            loginErrorP.classList.add('hidden'); signupErrorP.classList.add('hidden');
         }
 
-        // --- Form Transitions ---
-        function showForm(showFormId, hideFormId) {
-            const showElement = document.getElementById(showFormId);
-            const hideElement = document.getElementById(hideFormId);
-            
-            // First hide the current form
-            hideElement.style.opacity = "0";
-            
-            // After a short delay, switch forms and fade in
-            setTimeout(() => {
-                hideElement.classList.add('hidden');
-                showElement.classList.remove('hidden');
-                showElement.style.opacity = "0";
-                
-                // Trigger reflow
-                void showElement.offsetWidth;
-                
-                showElement.style.opacity = "1";
-                showElement.style.transition = "opacity 0.3s ease-in-out";
-            }, 300);
-            
-            // Clear any error messages
-            loginErrorP.textContent = '';
-            signupErrorP.textContent = '';
-            
-            // Clear password fields for security
-            loginPasswordInput.value = '';
-            signupPasswordInput.value = '';
-        }
-
-        // --- UI Toggle (Login/Signup Forms) ---
-        showSignupLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            showForm('signup-form', 'login-form');
-        });
-
-        showLoginLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            showForm('login-form', 'signup-form');
-        });
-
-        // --- Form Validation ---
-        function validateEmail(email) {
-            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return re.test(String(email).toLowerCase());
-        }
+        showSignupLink.addEventListener('click', (e) => { e.preventDefault(); toggleAuthForms(true); });
+        showLoginLink.addEventListener('click', (e) => { e.preventDefault(); toggleAuthForms(false); });
 
         // --- Authentication Logic ---
         signupButton.addEventListener('click', () => {
             const name = signupNameInput.value.trim();
             const email = signupEmailInput.value.trim();
             const password = signupPasswordInput.value;
-            
-            signupErrorP.textContent = '';
-            
-            if (name === '') {
-                showErrorMessage(signupErrorP, 'Please enter your name.');
-                signupNameInput.focus();
-                return;
-            }
-            
-            if (!validateEmail(email)) {
-                showErrorMessage(signupErrorP, 'Please enter a valid email address.');
-                signupEmailInput.focus();
-                return;
-            }
-            
-            if (password.length < 6) {
-                showErrorMessage(signupErrorP, 'Password should be at least 6 characters.');
-                signupPasswordInput.focus();
-                return;
-            }
+            if (!name) { showAuthMessage(signupErrorP, 'Please enter your name.'); return; }
+            if (!email || !/\S+@\S+\.\S+/.test(email)) { showAuthMessage(signupErrorP, 'Please enter a valid email.'); return; }
+            if (password.length < 6) { showAuthMessage(signupErrorP, 'Password must be at least 6 characters.'); return; }
 
-            setButtonLoading(signupButton, signupSpinner, true);
-
-            firebase.auth().createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    return userCredential.user.updateProfile({
-                        displayName: name
-                    }).then(() => userCredential); // Pass userCredential to the next then block
-                })
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    const db = firebase.firestore();
-                    return db.collection("users").doc(user.uid).set({
-                        displayName: name,
-                        email: user.email,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    }, { merge: true });
-                })
-                .then(() => {
-                    console.log("Account created and user details saved to Firestore");
-                    // onAuthStateChanged will handle UI update
-                })
-                .catch((error) => {
-                    console.error("Signup error:", error);
-                    showErrorMessage(signupErrorP, error.message);
-                    setButtonLoading(signupButton, signupSpinner, false);
-                });
+            setButtonLoadingState(signupButton, signupSpinner, true);
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(userCredential => userCredential.user.updateProfile({ displayName: name }))
+                .then(() => db.collection("users").doc(auth.currentUser.uid).set({ displayName: name, email: email, createdAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }))
+                .catch(error => showAuthMessage(signupErrorP, error.message))
+                .finally(() => setButtonLoadingState(signupButton, signupSpinner, false));
         });
 
         loginButton.addEventListener('click', () => {
             const email = loginEmailInput.value.trim();
             const password = loginPasswordInput.value;
-            
-            // Clear previous errors
-            loginErrorP.textContent = '';
-            
-            // Validate inputs
-            if (!validateEmail(email)) {
-                showErrorMessage(loginErrorP, 'Please enter a valid email address.');
-                loginEmailInput.focus();
-                return;
-            }
-            
-            if (password === '') {
-                showErrorMessage(loginErrorP, 'Please enter your password.');
-                loginPasswordInput.focus();
-                return;
-            }
-
-            // Show loading state
-            setButtonLoading(loginButton, loginSpinner, true);
-
-            // Sign in
-            firebase.auth().signInWithEmailAndPassword(email, password)
-                .then(() => {
-                    console.log("Logged in successfully");
-                    // onAuthStateChanged will handle UI update
-                })
-                .catch((error) => {
-                    console.error("Login error:", error);
-                    
-                    // Show user-friendly error message
-                    let errorMessage = error.message;
-                    if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
-                        errorMessage = 'Invalid email or password. Please try again.';
-                    }
-                    
-                    showErrorMessage(loginErrorP, errorMessage);
-                    
-                    // Reset loading state
-                    setButtonLoading(loginButton, loginSpinner, false);
-                });
+            if (!email || !password) { showAuthMessage(loginErrorP, 'Please enter email and password.'); return; }
+            setButtonLoadingState(loginButton, loginSpinner, true);
+            auth.signInWithEmailAndPassword(email, password)
+                .catch(error => showAuthMessage(loginErrorP, error.message))
+                .finally(() => setButtonLoadingState(loginButton, loginSpinner, false));
         });
 
-        function handleGoogleSignIn() {
-            loginErrorP.textContent = '';
-            signupErrorP.textContent = '';
-            
+        function signInWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
-            
-            const isOnLoginForm = !loginForm.classList.contains('hidden');
-            // Determine which spinner to use based on the visible form
-            const currentSpinner = isOnLoginForm ? loginSpinner : signupSpinner;
-            const currentButton = isOnLoginForm ? googleLoginButton : googleSignupButton;
-
-            setButtonLoading(currentButton, currentSpinner, true);
-            
-            firebase.auth().signInWithPopup(provider)
-                .then((result) => {
+            setButtonLoadingState(googleLoginButton, loginSpinner, true); 
+            auth.signInWithPopup(provider)
+                .then(result => {
                     const user = result.user;
-                    const db = firebase.firestore();
-                    return db.collection("users").doc(user.uid).set({
-                        displayName: user.displayName,
-                        email: user.email,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        provider: 'google.com'
-                    }, { merge: true });
+                    return db.collection("users").doc(user.uid).set({ displayName: user.displayName, email: user.email, createdAt: firebase.firestore.FieldValue.serverTimestamp(), provider: 'google.com' }, { merge: true });
                 })
-                .then(() => {
-                    console.log("Google sign-in successful and user details saved to Firestore");
-                    // onAuthStateChanged will handle UI update, no need to call setButtonLoading here as page reloads/auth state changes.
-                })
-                .catch((error) => {
-                    console.error("Google sign-in error:", error);
-                    if (isOnLoginForm) {
-                        showErrorMessage(loginErrorP, error.message);
-                    } else {
-                        showErrorMessage(signupErrorP, error.message);
-                    }
-                    setButtonLoading(currentButton, currentSpinner, false);
-                });
+                .catch(error => showAuthMessage(loginErrorP, error.message))
+                .finally(() => setButtonLoadingState(googleLoginButton, loginSpinner, false));
         }
+        googleLoginButton.addEventListener('click', signInWithGoogle);
+        googleSignupButton.addEventListener('click', signInWithGoogle);
 
-        googleLoginButton.addEventListener('click', handleGoogleSignIn);
-        googleSignupButton.addEventListener('click', handleGoogleSignIn);
-
-        // Password Reset Handler
-        const forgotPasswordLink = document.getElementById('forgot-password-link');
         forgotPasswordLink.addEventListener('click', (e) => {
             e.preventDefault();
-            
-            // Get the email from the login form
             const email = loginEmailInput.value.trim();
-            
-            // Password reset modal
-            const resetEmail = prompt('Please enter your email address to receive a password reset link:', email);
-            
-            if (resetEmail) {
-                // Clear error message
-                loginErrorP.textContent = '';
-                
-                // Show loading state
-                setButtonLoading(loginButton, loginSpinner, true);
-                
-                // Send password reset email
-                firebase.auth().sendPasswordResetEmail(resetEmail)
-                    .then(() => {
-                        // Show success message
-                        showErrorMessage(loginErrorP, 'Password reset email sent! Please check your inbox.');
-                        // Change text color to green for success message
-                        loginErrorP.style.color = 'var(--color-success)';
-                    })
-                    .catch((error) => {
-                        // Show error message
-                        showErrorMessage(loginErrorP, error.message);
-                        loginErrorP.style.color = 'var(--color-danger)';
-                    })
-                    .finally(() => {
-                        // Reset loading state
-                        setButtonLoading(loginButton, loginSpinner, false);
-                    });
-            }
+            if (!email) { showAuthMessage(loginErrorP, 'Please enter your email to reset password.'); return; }
+            auth.sendPasswordResetEmail(email)
+                .then(() => showAuthMessage(loginErrorP, 'Password reset email sent!', false))
+                .catch(error => showAuthMessage(loginErrorP, error.message));
         });
 
         logoutButton.addEventListener('click', () => {
-            // Confirm logout
             if (confirm("Are you sure you want to log out?")) {
-                firebase.auth().signOut()
-                    .then(() => {
-                        console.log("Logged out successfully");
-                        // onAuthStateChanged will handle UI update
-                    })
-                    .catch((error) => {
-                        console.error("Logout error:", error);
-                        alert("There was an error logging out. Please try again.");
-                    });
+                auth.signOut();
             }
         });
-
-        // --- Content Display Logic ---
-        function showContent(contentId) {
-            // First, hide all content sections with a fade-out effect
-            [homeContent, qrTestsContent, resultsContent, comingSoonContent, defaultDashboardMessage].forEach(el => {
-                if (el && !el.classList.contains('hidden')) { // Check if element exists
-                    el.style.opacity = "0";
-                    setTimeout(() => {
-                        el.classList.add('hidden');
-                    }, 300);
-                }
-            });
-            
-            // After a short delay, show the requested content with fade-in
-            setTimeout(() => {
-                let contentToShow;
-                
-                if (contentId === 'home') { 
-                    contentToShow = homeContent;
-                    // NOTE: Animation logic for animatedWelcomeText moved lower
-                } else if (contentId === 'qr') {
-                    contentToShow = qrTestsContent;
-                } else if (contentId === 'results') {
-                    contentToShow = resultsContent;
-                } else if (contentId === 'comingsoon') {
-                    contentToShow = comingSoonContent;
-                } else {
-                    contentToShow = defaultDashboardMessage;
-                }
-                
-                contentToShow.classList.remove('hidden');
-                contentToShow.style.opacity = "0";
-                
-                void contentToShow.offsetWidth; // Trigger reflow
-                
-                contentToShow.style.opacity = "1";
-                contentToShow.style.transition = "opacity 0.3s ease-in-out";
-
-                // If it's the home content, specifically handle the welcome text animation
-                // This is moved here and delayed to ensure parent container is visible and its animation has finished
-                if (contentId === 'home' && animatedWelcomeText) {
-                    setTimeout(() => {
-                        animatedWelcomeText.style.animation = 'none'; // Remove any existing animation
-                        animatedWelcomeText.style.opacity = '0'; // Reset to initial state (0% of keyframes)
-                        animatedWelcomeText.style.transform = 'translateX(-60px)'; // Reset to initial position (0% of keyframes)
-                        animatedWelcomeText.offsetHeight; /* trigger reflow to apply new styles */
-                        animatedWelcomeText.style.animation = 'slideInFromLeft 0.8s ease-out forwards';
-                        // Clear inline opacity and transform so 'forwards' from animation takes over
-                        animatedWelcomeText.style.opacity = ''; 
-                        animatedWelcomeText.style.transform = '';
-                    }, 300); // Delay to match parent's fade-in duration
-                }
-            }, 300);
-        }
         
-        function setActiveTab(selectedTab) {
-            allNavTabs.forEach(tab => {
-                tab.classList.remove('active');
-                // Remove aria-selected attribute for all tabs
-                tab.setAttribute('aria-selected', 'false');
-            });
-            
-            if (selectedTab && !selectedTab.classList.contains('nav-tab-disabled')) {
-                selectedTab.classList.add('active');
-                // Set aria-selected for the active tab
-                selectedTab.setAttribute('aria-selected', 'true');
-            }
-        }
-
-        // --- Navigation Event Listeners ---
-        // Event listeners for navPractice, navTests, navTestsQR, navTestsExams, navTestsVR, navTestsDM, navTestsSJT are removed as the elements are removed.
-        
-        // Focus Groups tab navigation (Element and listener removed as tab is removed)
-        // const navFocusGroups = document.getElementById('nav-focus-groups');
-        // if (navFocusGroups) { 
-        //     navFocusGroups.addEventListener('click', () => {
-        //         window.location.href = 'focus_groups.html'; 
-        //     });
-        // }
-        
-        navResults.addEventListener('click', () => {
-            showContent('results');
-            setActiveTab(navResults);
-            loadUserResults();
-        });
-        
-        navSkills.addEventListener('click', () => {
-            if (!navSkills.classList.contains('nav-tab-disabled')) {
-                showContent('comingsoon');
-                setActiveTab(navSkills);
-            }
-        });
-
-        // --- Keyboard Accessibility ---
-        // Handle keyboard navigation for dropdown (Removed as navTests is removed)
-
-        // Auth State Change Listener with improved transitions
-        firebase.auth().onAuthStateChanged(user => {
+        auth.onAuthStateChanged(user => {
+            const pageJustLoaded = !dashboardWrapper.classList.contains('hidden') && authSection.classList.contains('hidden');
             if (user) {
-                // User is signed in
-                const displayName = user.displayName || user.email || 'Student';
-                const firstName = displayName.split(' ')[0]; // Get first name
-
-                studentDisplayNameSpan.textContent = displayName;
-                if (homeStudentFirstNameSpan) { // Check if element exists
-                    homeStudentFirstNameSpan.textContent = firstName; 
-                }
-                localStorage.setItem('qrStudentName', displayName);
-
-                // Check if this is a login event on student_dashboard.html
-                const justLoggedInOnThisPage = !authSection.classList.contains('hidden') && window.location.pathname.includes('student_dashboard.html');
-
-                if (justLoggedInOnThisPage) {
-                    // Redirect to home.html after successful login
-                    window.location.href = 'home.html';
-                    return; // Stop further processing on this page to prevent flicker
-                }
-
-                // Logic for users already logged in or landing on student_dashboard.html not via fresh login on this page
-                authSection.style.opacity = "0"; // Start fade out of auth if it was somehow visible
-                setTimeout(() => {
-                    authSection.classList.add('hidden');
-                    dashboardWrapper.classList.remove('hidden');
-                    dashboardWrapper.style.opacity = "0";
-                    void dashboardWrapper.offsetWidth; // Trigger reflow
-                    dashboardWrapper.style.opacity = "1";
-                    dashboardWrapper.style.transition = "opacity 0.5s ease-in-out";
-                    
-                    // Show default content
-                    showContent('results');
-                    setActiveTab(navResults);
-                    
-                    // Load results data
-                    loadUserResults();
-                }, 300);
-            } else {
-                // User is signed out
+                studentDisplayNameHeader.textContent = user.displayName || user.email;
+                authSection.classList.add('hidden');
+                dashboardWrapper.classList.remove('hidden');
                 
-                // Fade out dashboard and fade in auth section
-                if (!dashboardWrapper.classList.contains('hidden')) {
-                    dashboardWrapper.style.opacity = "0";
-                    setTimeout(() => {
-                        dashboardWrapper.classList.add('hidden');
-                        authSection.classList.remove('hidden');
-                        authSection.style.opacity = "0";
-                        
-                        // Trigger reflow
-                        void authSection.offsetWidth;
-                        
-                        authSection.style.opacity = "1";
-                        authSection.style.transition = "opacity 0.5s ease-in-out";
-                    }, 300);
-                } else {
-                    // Initial load
-                    authSection.classList.remove('hidden');
-                }
-                
-                // Remove user info from localStorage
-                localStorage.removeItem('qrStudentName');
-                
-                // Reset form fields
-                loginEmailInput.value = '';
-                loginPasswordInput.value = '';
-                signupNameInput.value = '';
-                signupEmailInput.value = '';
-                signupPasswordInput.value = '';
-                
-                // Clear error messages
-                loginErrorP.textContent = '';
-                signupErrorP.textContent = '';
-                
-                // Reset loading states
-                setButtonLoading(loginButton, loginSpinner, false);
-                setButtonLoading(signupButton, signupSpinner, false);
-            }
-        });
-
-        // Initialize content to default
-        document.addEventListener('DOMContentLoaded', () => {
-            // Set initial state
-            // Check if URL hash targets a specific section, otherwise default to home
-            const hash = window.location.hash;
-            if (hash === '#results') {
-            showContent('results');
-                setActiveTab(navResults);
-            if (firebase.auth().currentUser) {
-                loadUserResults();
-            }
-            } else if (hash === '#practice') {
-                showContent('qr'); // Or your main practice content ID
-                setActiveTab(document.getElementById('nav-practice-main'));
-            } else {
-                showContent('home'); // Default to home
-                setActiveTab(document.getElementById('nav-home'));
-                // Update welcome message on initial load if user is already logged in
-                if (firebase.auth().currentUser) {
-                    const currentDisplayName = firebase.auth().currentUser.displayName || firebase.auth().currentUser.email || 'Student';
-                    const currentFirstName = currentDisplayName.split(' ')[0];
-                    if (homeStudentFirstNameSpan) { // Check if element exists
-                        homeStudentFirstNameSpan.textContent = currentFirstName;
+                if (window.location.pathname.includes('student_dashboard.html')) {
+                    const hash = window.location.hash;
+                     if (hash === '#results' || (!hash && pageJustLoaded)) { 
+                        showContentSection('results');
+                        setActiveTab(navResults);
+                        loadUserResults(user.uid);
+                    } else if (hash) { 
+                        const targetSection = hash.substring(1);
+                        const targetNav = document.getElementById(`nav-${targetSection.split('-')[0]}`); 
+                        showContentSection(targetSection);
+                        if (targetNav) setActiveTab(targetNav);
+                        else setActiveTab(navResults); 
+                    } else { 
+                         showContentSection('results');
+                         setActiveTab(navResults);
+                         loadUserResults(user.uid);
                     }
                 }
+            } else {
+                authSection.classList.remove('hidden');
+                dashboardWrapper.classList.add('hidden');
             }
-            initializeResultAccordions(); // Initialize accordions
-            
-            // Add event listeners for main navigation tabs
-            document.getElementById('nav-home').addEventListener('click', (e) => {
-                e.preventDefault();
-                showContent('home');
-                setActiveTab(document.getElementById('nav-home'));
-                window.history.pushState({}, "", "home.html"); // Update URL to reflect home.html
-            });
-
-            document.getElementById('nav-practice-main').addEventListener('click', (e) => {
-                e.preventDefault();
-                showContent('qr'); // Assuming 'qr' is your main practice content ID
-                setActiveTab(document.getElementById('nav-practice-main'));
-                window.history.pushState({}, "", "practice.html"); // Update URL to reflect practice.html
-            });
-
-            navResults.addEventListener('click', (e) => {
-                e.preventDefault();
-                showContent('results');
-                setActiveTab(navResults);
-                if (firebase.auth().currentUser) { // Only load if user is logged in
-                    loadUserResults();
-                }
-                window.history.pushState({}, "", "student_dashboard.html#results"); // Update URL for results
-            });
-
-            // No event listener for navSkills as it's disabled for now
-            
-            // Add handling for Enter key on inputs
-            loginEmailInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') loginPasswordInput.focus();
-            });
-            
-            loginPasswordInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') loginButton.click();
-            });
-            
-            signupNameInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') signupEmailInput.focus();
-            });
-            
-            signupEmailInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') signupPasswordInput.focus();
-            });
-            
-            signupPasswordInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') signupButton.click();
-            });
         });
 
-        // --- Results Tab Functions ---
-        // Add ChartJS script for data visualization
-        function loadChartJSIfNeeded(callback) {
-            if (window.Chart) {
-                callback();
-                return;
-            }
-            
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js';
-            script.onload = callback;
-            document.head.appendChild(script);
-        }
-
-        // Accordion Logic for Results Sections
-        function initializeResultAccordions() {
-            const accordionHeaders = document.querySelectorAll('.section-accordion-header');
-            accordionHeaders.forEach(header => {
-                if (header.closest('.opacity-60')) return; // Skip disabled sections
-
-                header.addEventListener('click', () => {
-                    const content = header.nextElementSibling;
-                    const icon = header.querySelector('svg');
-                    const isOpen = !content.classList.contains('hidden');
-
-                    content.classList.toggle('hidden');
-                    icon.classList.toggle('rotate-180', !isOpen);
-                });
+        // --- Content Display ---
+        function showContentSection(contentIdSuffix) { // contentIdSuffix e.g., "results"
+            [resultsContent, defaultDashboardMessage].forEach(el => {
+                if(el) el.classList.add('hidden');
             });
+            const sectionToShow = document.getElementById(contentIdSuffix + '-content') || document.getElementById(contentIdSuffix); // try with and without -content
+            if (sectionToShow) {
+                sectionToShow.classList.remove('hidden');
+            } else {
+                if(defaultDashboardMessage) defaultDashboardMessage.classList.remove('hidden'); 
+            }
+        }
+        
+        function setActiveTab(selectedTabEl) {
+            allNavTabs.forEach(tab => tab.classList.remove('active'));
+            if (selectedTabEl && !selectedTabEl.classList.contains('nav-tab-disabled')) {
+                selectedTabEl.classList.add('active');
+            }
         }
 
-        // Function to load user results from Firebase
-        async function loadUserResults(userIdToLoad) {
-            if (!db) {
-                console.error("Firestore (db) is not initialized. Cannot load results.");
-                resultsLoading.classList.add('hidden');
-                resultsError.classList.remove('hidden');
-                resultsSummary.classList.add('hidden');
-                resultsEmpty.classList.add('hidden');
-                return;
-            }
-            console.log("[Dashboard] Loading results for userId:", userIdToLoad);
+        navHome.addEventListener('click', (e) => { e.preventDefault(); window.location.href = 'home.html'; });
+        navPracticeMain.addEventListener('click', (e) => { e.preventDefault(); window.location.href = 'practice.html'; });
+        navResults.addEventListener('click', (e) => {
+            e.preventDefault();
+            showContentSection('results'); 
+            setActiveTab(navResults);
+            if (auth.currentUser) loadUserResults(auth.currentUser.uid);
+            window.history.pushState({}, "", "#results");
+        });
+        navSkills.addEventListener('click', (e) => { e.preventDefault(); /* show coming soon or navigate if implemented */ });
+
+
+        // --- Results Logic ---
+        function getSectionFromExamName(examName) {
+            const nameLower = examName ? examName.toLowerCase() : '';
+            if (nameLower.includes('qr') || nameLower.includes('quantitative')) return 'qr';
+            if (nameLower.includes('dm') || nameLower.includes('decision') || nameLower.includes('syllogism')) return 'dm';
+            if (nameLower.includes('vr') || nameLower.includes('verbal')) return 'vr';
+            return 'other';
+        }
+        
+        async function loadUserResults(userId) {
+            if (!db) { console.error("Firestore not initialized."); resultsLoading.classList.add('hidden'); resultsError.classList.remove('hidden'); return; }
+            if (!userId) { console.error("No user ID provided for loading results."); resultsLoading.classList.add('hidden'); resultsError.classList.remove('hidden'); return; }
+
             resultsLoading.classList.remove('hidden');
             resultsError.classList.add('hidden');
-            resultsSummary.classList.add('hidden');
+            resultsSummary.classList.add('hidden'); 
+            resultsBySectionAccordion.innerHTML = ''; 
             resultsEmpty.classList.add('hidden');
-
+            
             try {
                 const querySnapshot = await db.collection("performanceSubmissions")
-                                          .where("userId", "==", userIdToLoad)
+                                          .where("userId", "==", userId)
                                           .orderBy("submissionTimestamp", "desc")
                                           .get();
-
-                console.log(`[Dashboard] Found ${querySnapshot.size} results for user.`);
-
-                if (querySnapshot.empty) {
-                        resultsLoading.classList.add('hidden');
+                allUserResults = querySnapshot.docs.map(doc => ({
+                    id: doc.id, 
+                    ...doc.data(), 
+                    date: doc.data().submissionTimestamp?.toDate ? doc.data().submissionTimestamp.toDate() : new Date(0) 
+                }));
+                
+                if (allUserResults.length === 0) {
                     resultsEmpty.classList.remove('hidden');
-                        return;
-                    }
-                    
-                let allResults = [];
-                querySnapshot.forEach(doc => {
-                    const docData = doc.data();
-                    const docId = doc.id;
-                    console.log("[Dashboard] Processing docId:", docId, "Data:", JSON.parse(JSON.stringify(docData)));
-
-                    let score = parseFloat(docData.score);
-                    let totalPossible = parseFloat(docData.totalPossibleScore);
-                    const examName = docData.examName || 'Unknown Test';
-                    const section = getSectionFromExamName(examName);
-
-                    // DM score recalculation logic if score is 0 but questions exist
-                    if (section === 'dm' && score === 0 && docData.questions && docData.questions.length > 0) {
-                        console.log(`[Dashboard] DM Test (${examName}, id: ${docId}) has 0 score, recalculating from questions array.`);
-                        let recalculatedScore = 0;
-                        docData.questions.forEach(q => {
-                            if (q.points) recalculatedScore += q.points; 
-                        });
-                        score = recalculatedScore;
-                        // totalPossible for DM is usually questions.length * 2, ensure this is reflected
-                        // If totalPossibleScore is missing or 0, derive it for DM.
-                        if (!totalPossible || totalPossible === 0) {
-                            totalPossible = docData.questions.length * 2;
-                            console.log(`[Dashboard] DM Test (${examName}, id: ${docId}) totalPossibleScore was missing/0, set to: ${totalPossible}`);
-                    }
-                        console.log(`[Dashboard] DM Test (${examName}, id: ${docId}) recalculated score: ${score}/${totalPossible}`);
-                    } else if (section === 'dm') {
-                        console.log(`[Dashboard] DM Test (${examName}, id: ${docId}) score: ${score}, totalPossible: ${totalPossible}`);
-                         // Ensure totalPossible is correct for DM even if score isn't 0
-                        if ((!totalPossible || totalPossible === 0) && docData.questions && docData.questions.length > 0) {
-                            totalPossible = docData.questions.length * 2;
-                             console.log(`[Dashboard] DM Test (${examName}, id: ${docId}) totalPossibleScore was missing/0 (score was not 0), set to: ${totalPossible}`);
-                        }
-                    }
-
-                    // Fallback for totalPossible if still not set (e.g. for older QR/VR data)
-                    if (isNaN(totalPossible) || totalPossible === 0) {
-                        if (docData.totalQuestions) { // Older format might have totalQuestions
-                            totalPossible = parseFloat(docData.totalQuestions);
-                        } else if (docData.questions && docData.questions.length > 0 && section !== 'dm') {
-                            // For non-DM, if questions array exists, assume 1 point per question if totalPossibleScore is missing
-                            totalPossible = docData.questions.length;
-                        }
-                    }
-                    
-                    const percentage = (totalPossible > 0 && !isNaN(score)) ? (score / totalPossible) * 100 : 0;
-
-                    allResults.push({
-                        id: docId, // Store the document ID
-                        ...docData,
-                        score: !isNaN(score) ? score : 0, // Ensure score is a number
-                        totalPossibleScore: !isNaN(totalPossible) ? totalPossible : 0, // Ensure totalPossibleScore is a number
-                        percentage: percentage,
-                        submissionTimestamp: docData.submissionTimestamp ? docData.submissionTimestamp.toDate() : new Date(0) // Convert to Date object
-                    });
-                              });
-                              
-                allUserResults = allResults; // Store all results globally for filtering/sorting
-                console.log("[Dashboard] All processed results:", JSON.parse(JSON.stringify(allUserResults)));
-                updateResultsSummary(allUserResults);
-                populateResultsIntoSections(allUserResults, currentSortOption, currentFilterOption);
-                          resultsLoading.classList.add('hidden');
-                resultsSummary.classList.remove('hidden');
-                
+                } else {
+                    populateExamFilterOptions();
+                    applyResultsFiltersAndSort(); 
+                    resultsSummary.classList.remove('hidden'); 
+                    updateOverallResultsSummary(allUserResults); 
+                }
             } catch (error) {
-                console.error("[Dashboard] Error loading results: ", error);
-                resultsLoading.classList.add('hidden');
+                console.error("Error loading results: ", error);
                 resultsError.classList.remove('hidden');
+            } finally {
+                resultsLoading.classList.add('hidden');
             }
         }
-        
-        // Function to update results summary section
-        function updateResultsSummary(results) {
-            const resultsSummary = document.getElementById('results-summary');
-            resultsSummary.classList.remove('hidden');
-            
-            const testsCompleted = document.getElementById('tests-completed');
-            const averageScore = document.getElementById('average-score');
-            const highestScore = document.getElementById('highest-score');
-            const hoursPracticed = document.getElementById('hours-practiced');
-            
-            // Calculate summary metrics
-            const numTests = results.length;
-            
-            let totalScore = 0;
-            let maxScore = 0;
-            let totalMinutes = 0;
-            
-            results.forEach(result => {
-                // Process score - no need to parse again as we've already normalized in the results array
-                try {
-                    const totalPossible = result.totalPossibleScore || result.totalQuestions || 0;
-                    if (totalPossible > 0) {
-                        const percentage = (result.score / totalPossible) * 100;
-                        totalScore += percentage;
-                        maxScore = Math.max(maxScore, percentage);
-                        console.log(`Adding to avg: ${percentage.toFixed(1)}% (${result.score}/${totalPossible})`);
-                    }
-                } catch (e) {
-                    console.warn("Error processing score:", e);
-                }
-                
-                // Process time
-                try {
-                    const timeTaken = result.timeTaken;
-                    if (timeTaken) {
-                        const timeMatch = timeTaken.match(/(\d+)\s*min/);
-                        if (timeMatch && timeMatch[1]) {
-                            totalMinutes += parseInt(timeMatch[1]);
-                        }
-                    }
-                } catch (e) {
-                    console.warn("Error processing time:", e);
-                }
+
+        function populateExamFilterOptions() {
+            uniqueExamNames.clear();
+            allUserResults.forEach(result => {
+                if (result.examName) uniqueExamNames.add(result.examName);
             });
-            
-            const avgScore = numTests > 0 ? totalScore / numTests : 0;
-            const totalHours = totalMinutes / 60;
-            
-            console.log(`Summary stats: Tests=${numTests}, AvgScore=${avgScore.toFixed(1)}%, MaxScore=${maxScore.toFixed(1)}%, Hours=${totalHours.toFixed(1)}`);
-            
-            // Update summary display
-            testsCompleted.textContent = numTests;
-            averageScore.textContent = avgScore.toFixed(1) + '%';
-            highestScore.textContent = maxScore.toFixed(1) + '%';
-            hoursPracticed.textContent = totalHours.toFixed(1);
+            resultsFilterSelect.innerHTML = '<option value="all">All Exams</option>';
+            [...uniqueExamNames].sort().forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                resultsFilterSelect.appendChild(option);
+            });
         }
         
-        // NEW Function to populate results into accordion sections
-        function populateResultsIntoSections(allResults) {
-            const resultsFilter = document.getElementById('results-filter');
-            const resultsSort = document.getElementById('results-sort');
-            
-            let processedResults = [...allResults];
-            const filterValue = resultsFilter.value;
+        function applyResultsFiltersAndSort() {
+            let filtered = [...allUserResults];
+            const filterValue = resultsFilterSelect.value;
             if (filterValue !== 'all') {
-                processedResults = processedResults.filter(r => r.examName === filterValue);
+                filtered = filtered.filter(r => r.examName === filterValue);
             }
-            
-            const sortValue = resultsSort.value;
-            processedResults.sort((a, b) => {
-                const dateA = a.date instanceof Date ? a.date : new Date(a.date);
-                const dateB = b.date instanceof Date ? b.date : new Date(b.date);
+
+            const sortValue = resultsSortSelect.value;
+            filtered.sort((a, b) => {
+                const dateA = a.date;
+                const dateB = b.date;
+                const scoreA = (parseFloat(a.score) / parseFloat(a.totalPossibleScore || a.totalQuestions || 1)) * 100 || 0;
+                const scoreB = (parseFloat(b.score) / parseFloat(b.totalPossibleScore || b.totalQuestions || 1)) * 100 || 0;
 
                 switch(sortValue) {
-                    case 'date-asc':
-                        return dateA - dateB;
-                    case 'score-desc':
-                        // Score values have been normalized to numbers in results array
-                        const scoreA_total = a.totalPossibleScore || a.totalQuestions || 1;
-                        const scoreB_total = b.totalPossibleScore || b.totalQuestions || 1;
-                        const scoreA_val = scoreA_total > 0 ? a.score / scoreA_total : 0;
-                        const scoreB_val = scoreB_total > 0 ? b.score / scoreB_total : 0;
-                        return scoreB_val - scoreA_val;
-                    case 'score-asc':
-                        const scoreC_total = a.totalPossibleScore || a.totalQuestions || 1;
-                        const scoreD_total = b.totalPossibleScore || b.totalQuestions || 1;
-                        const scoreC_val = scoreC_total > 0 ? a.score / scoreC_total : 0;
-                        const scoreD_val = scoreD_total > 0 ? b.score / scoreD_total : 0;
-                        return scoreC_val - scoreD_val;
-                    case 'date-desc':
-                    default:
-                        return dateB - dateA;
+                    case 'date-asc': return dateA - dateB;
+                    case 'score-desc': return scoreB - scoreA;
+                    case 'score-asc': return scoreA - scoreB;
+                    case 'date-desc': default: return dateB - dateA;
                 }
             });
+            renderResults(filtered);
+        }
+
+        function renderResults(resultsToDisplay) {
+            resultsBySectionAccordion.innerHTML = ''; 
+            const categorized = { qr: [], dm: [], vr: [], other: [] };
+            resultsToDisplay.forEach(r => {
+                const section = getSectionFromExamName(r.examName);
+                categorized[section].push(r);
+            });
+
+            const sectionTitles = { qr: 'Quantitative Reasoning', dm: 'Decision Making', vr: 'Verbal Reasoning', other: 'Other Tests' };
+            Object.keys(categorized).forEach(sectionKey => {
+                if (categorized[sectionKey].length > 0) {
+                    const accordionItem = createAccordionItem(sectionTitles[sectionKey], sectionKey, categorized[sectionKey]);
+                    resultsBySectionAccordion.appendChild(accordionItem);
+                }
+            });
+            if(resultsBySectionAccordion.innerHTML === ''){ 
+                 resultsEmpty.classList.remove('hidden');
+                 resultsSummary.classList.add('hidden'); 
+            } else {
+                 resultsEmpty.classList.add('hidden');
+            }
+        }
+
+        function createAccordionItem(title, sectionKey, items) {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'section-accordion-item';
+
+            const headerButton = document.createElement('button');
+            headerButton.className = 'section-accordion-header';
+            headerButton.innerHTML = `
+                <span>${title}</span>
+                <span class="material-symbols-outlined">expand_more</span>
+            `;
             
-            const resultsBySection = {
-                qr: [],
-                dm: [],
-                vr: [],
-                // ar: [], // Abstract Reasoning - Placeholder for future
-                // sjt: []  // Situational Judgement - Placeholder for future
-            };
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'section-accordion-content hidden'; 
+            contentDiv.id = `content-${sectionKey}`;
 
-            // Categorize results by section with better debugging
-            processedResults.forEach(result => {
-                const examName = result.examName ? result.examName.toLowerCase() : '';
-                let sectionAssigned = false;
-                
-                if (examName.includes('qr') || examName.includes('quantitative')) {
-                    resultsBySection.qr.push(result);
-                    sectionAssigned = true;
-                    console.log(`Assigning result ${result.id} to QR section. Score: ${result.score}`);
-                } 
-                
-                if (examName.includes('dm') || examName.includes('decision making') || examName.includes('syllogisms')) {
-                    resultsBySection.dm.push(result);
-                    sectionAssigned = true;
-                    console.log(`Assigning result ${result.id} to DM section. Score: ${result.score}`);
-                } 
-                
-                if (examName.includes('vr') || examName.includes('verbal reasoning')) {
-                    resultsBySection.vr.push(result);
-                    sectionAssigned = true;
-                    console.log(`Assigning result ${result.id} to VR section. Score: ${result.score}`);
-                }
-                
-                if (!sectionAssigned) {
-                    console.warn(`Result ${result.id} with examName "${result.examName}" couldn't be categorized`);
-                }
-            });
-
-            const sections = ['qr', 'dm', 'vr'];
-            console.log("Section counts:", {
-                qr: resultsBySection.qr.length,
-                dm: resultsBySection.dm.length,
-                vr: resultsBySection.vr.length
-            });
-            
-            sections.forEach(sectionKey => {
-                const tableBody = document.getElementById(`results-table-body-${sectionKey}`);
-                const noResultsP = document.getElementById(`no-results-${sectionKey}`);
-                if (!tableBody || !noResultsP) { // Guard against missing elements
-                    console.warn(`Elements for section ${sectionKey} not found.`);
-                    return;
-                }
-                tableBody.innerHTML = ''; 
-
-                if (resultsBySection[sectionKey] && resultsBySection[sectionKey].length > 0) {
-                    noResultsP.classList.add('hidden');
-                    resultsBySection[sectionKey].forEach(result => {
-                const row = document.createElement('tr');
-                row.className = 'hover:bg-gray-50 transition-colors';
-                
-                        const date = result.date instanceof Date ? result.date : new Date(result.date);
-                const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                        const totalPossible = result.totalPossibleScore || result.totalQuestions || '-';
-                        const scoreDisplay = `${result.score}/${totalPossible}`;
-                
+            const table = document.createElement('table');
+            table.innerHTML = `
+                <thead><tr>
+                    <th>Date</th><th>Test</th><th>Score</th><th>Time Taken</th><th>Focus</th><th>Actions</th>
+                </tr></thead>
+                <tbody></tbody>
+            `;
+            const tbody = table.querySelector('tbody');
+            items.forEach(item => {
+                const row = tbody.insertRow();
+                const scoreDisplay = `${item.score || 0}/${item.totalPossibleScore || item.totalQuestions || '-'}`;
                 row.innerHTML = `
-                            <td class="px-4 py-3 whitespace-nowrap text-sm">${formattedDate}</td>
-                            <td class="px-4 py-3 text-sm">${result.examName || 'Unknown Test'}</td>
-                            <td class="px-4 py-3 font-medium text-sm">${scoreDisplay}</td>
-                            <td class="px-4 py-3 text-sm">${result.timeTaken || '-'}</td>
-                            <td class="px-4 py-3 text-sm">${result.focusRating || '-'}/5</td>
-                            <td class="px-4 py-3 text-sm">
-                        <button class="text-blue-600 hover:text-blue-800 transition-colors view-detail-button" data-result-id="${result.id}">
-                            View Details
-                        </button>
-                    </td>
+                    <td>${item.date.toLocaleDateString()}</td>
+                    <td>${item.examName}</td>
+                    <td>${scoreDisplay}</td>
+                    <td>${item.timeTaken || '-'}</td>
+                    <td>${item.focusRating || '-'}/5</td>
+                    <td><button class="view-detail-button" data-result-id="${item.id}">View</button></td>
                 `;
-                        tableBody.appendChild(row);
-            });
-            
-                    // Make sure the section accordion is open and visible
-                    let accordionHeaders = document.querySelectorAll('.section-accordion-header');
-                    accordionHeaders.forEach(header => {
-                        const headerText = header.textContent.toLowerCase();
-                        if (headerText.includes(sectionKey.toLowerCase())) {
-                            const content = header.nextElementSibling;
-                            const icon = header.querySelector('svg');
-                            
-                            // Open the accordion section if it contains results
-                            if (content && content.classList.contains('hidden')) {
-                                content.classList.remove('hidden');
-                                if (icon) icon.classList.add('rotate-180');
-                                console.log(`Opening ${sectionKey} accordion section`);
-                            }
-                        }
-                    });
-                } else {
-                    noResultsP.classList.remove('hidden');
-                }
-            });
-
-            document.querySelectorAll('.view-detail-button').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    const resultId = e.target.dataset.resultId;
-                    console.log(`View Detail button clicked for resultId: ${resultId}`); // Added log
-                    const resultToShow = allResults.find(r => r.id === resultId);
-                    if (resultToShow) {
-                        showResultDetail(resultToShow);
-                    }
+                row.querySelector('.view-detail-button').addEventListener('click', (e) => {
+                     const result = allUserResults.find(r => r.id === e.target.dataset.resultId);
+                     if(result) showResultDetail(result);
                 });
             });
+            contentDiv.appendChild(table);
+            
+            headerButton.addEventListener('click', () => {
+                contentDiv.classList.toggle('hidden');
+                headerButton.querySelector('.material-symbols-outlined').classList.toggle('rotate-180');
+            });
+
+            itemDiv.appendChild(headerButton);
+            itemDiv.appendChild(contentDiv);
+            return itemDiv;
         }
         
-        // Function to show detailed view of a specific result
         function showResultDetail(result) {
-            console.log(`Entering showResultDetail for resultId: ${result.id}`); // Added log
-            const resultsSummary = document.getElementById('results-summary');
-            const resultDetail = document.getElementById('result-detail');
+            resultsContent.classList.add('hidden'); 
+            resultDetailView.classList.remove('hidden'); 
             
-            resultsSummary.classList.add('hidden');
-            resultDetail.classList.remove('hidden');
-            
-            console.log("Showing detail for result:", result);
-            
-            // Update detail view with result data
-            document.getElementById('detail-test-name').textContent = result.examName || 'Unknown Test';
-            document.getElementById('detail-test-date').textContent = result.date.toLocaleDateString() + ' at ' + result.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            
-            // Calculate score for DM tests if needed for the detail view header
-            let displayScore = result.score;
-            let displayTotalPossible = result.totalPossibleScore || result.totalQuestions || '-';
-            const examNameLower = result.examName ? result.examName.toLowerCase() : '';
-
-            if ((examNameLower.includes('dm') || examNameLower.includes('decision making') || examNameLower.includes('syllogisms')) && result.questions && Array.isArray(result.questions)) {
-                if (result.score === 0 || displayTotalPossible === '-' || displayTotalPossible === 0) { // Recalculate if score is 0 or total is invalid
-                    let calculatedScore = 0;
-                    let calculatedTotalPossible = 0;
-                    result.questions.forEach(q => {
-                        if (q.points !== undefined) {
-                            calculatedScore += (typeof q.points === 'string' ? parseInt(q.points) : q.points) || 0;
-                        }
-                        if (q.statements && Array.isArray(q.statements)) {
-                            calculatedTotalPossible += 2; // Common for syllogisms
-                        } else {
-                            calculatedTotalPossible += 1; // Fallback if not a typical syllogism structure within questions
-                        }
-                    });
-                    displayScore = calculatedScore;
-                    displayTotalPossible = calculatedTotalPossible > 0 ? calculatedTotalPossible : '-';
-                    console.log(`DM Detail View: Recalculated score=${displayScore}, totalPossible=${displayTotalPossible}`);
-                }
-            }
-            
-            document.getElementById('detail-score').textContent = `${displayScore}/${displayTotalPossible}`;
+            document.getElementById('detail-test-name').textContent = result.examName || 'N/A';
+            document.getElementById('detail-test-date').textContent = result.date ? result.date.toLocaleString() : 'N/A';
+            document.getElementById('detail-score').textContent = `${result.score || 0}/${result.totalPossibleScore || result.totalQuestions || '-'}`;
             document.getElementById('detail-time').textContent = result.timeTaken || 'N/A';
             document.getElementById('detail-focus').textContent = `${result.focusRating || '-'}/5`;
             document.getElementById('detail-reflection').textContent = result.reflection || 'No reflection provided.';
-            
-            // Populate question-by-question table
-            const tableBody = document.getElementById('detail-questions-table-body');
-            tableBody.innerHTML = ''; // Clear previous content
-            
-            // Check if the result has the 'questions' array (used by DM syllogisms)
-            if (result.questions && Array.isArray(result.questions)) {
-                console.log("Populating questions array format for DM syllogisms");
-                result.questions.forEach((questionDetail, index) => {
-                    const questionNumber = index + 1;
-                    let points = questionDetail.points !== undefined ? questionDetail.points : 'N/A';
-                    let timeSpentSec = questionDetail.timeTakenMs ? Math.round(questionDetail.timeTakenMs / 1000) + 's' : 'N/A';
-
-                    let statementDetailsHtml = '<ul class="list-disc list-inside pl-2 text-xs">';
-                    if (questionDetail.statements && Array.isArray(questionDetail.statements)) {
-                        questionDetail.statements.forEach((stmt, stmtIndex) => {
-                            const userAnswer = questionDetail.userAnswers ? questionDetail.userAnswers[stmtIndex] : '-';
-                            const correctAnswer = questionDetail.correctAnswers ? questionDetail.correctAnswers[stmtIndex] : '-';
-                            const isCorrect = userAnswer === correctAnswer && userAnswer !== null;
-                            statementDetailsHtml += `<li class="mb-1">
-                                                        Statement ${stmtIndex + 1}: Your: <span class="font-semibold ${userAnswer === 'Y' ? 'text-green-600' : (userAnswer === 'N' ? 'text-red-600' : 'text-gray-600')}">${userAnswer || '-'}</span>, 
-                                                        Ans: <span class="font-semibold ${correctAnswer === 'Y' ? 'text-green-700' : 'text-red-700'}">${correctAnswer}</span>
-                                                        ${isCorrect ? '<span class="text-green-500 ml-1">(Correct)</span>' : (userAnswer ? '<span class="text-red-500 ml-1">(Incorrect)</span>' : '')}
-                                                    </li>`;
-                        });
-                    }
-                    statementDetailsHtml += '</ul>';
-
-                    const row = document.createElement('tr');
-                    row.className = 'hover:bg-gray-50 transition-colors';
-                    row.innerHTML = `
-                        <td class="px-3 py-2 font-medium align-top">${questionNumber}</td>
-                        <td class="px-3 py-2 align-top text-center">${points}</td>
-                        <td class="px-3 py-2 align-top">${statementDetailsHtml}</td>
-                        <td class="px-3 py-2 align-top text-center">${timeSpentSec}</td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-            // Fallback for older QR Test structure
-            } else if (result.answers && Array.isArray(result.answers)) { 
-                console.log("Populating answers array format for QR tests");
-                result.answers.forEach((answer, index) => {
-                    const questionNumber = index + 1;
-                    let correctAnswer = '?';
-                    if (result.correctAnswers && Array.isArray(result.correctAnswers)) {
-                        correctAnswer = result.correctAnswers[index] || '?';
-                    }
-                    let timeSpent = 'N/A';
-                    if (result.questionTimes && Array.isArray(result.questionTimes)) {
-                        const ms = result.questionTimes[index];
-                        if (ms) {
-                            const seconds = Math.round(ms / 1000);
-                            timeSpent = `${seconds}s`;
-                        }
-                    }
-                    let resultClass = '';
-                    let resultText = '';
-                    if (!answer) {
-                        resultClass = 'text-gray-500';
-                        resultText = 'Not Answered';
-                    } else if (answer === correctAnswer) {
-                        resultClass = 'text-green-600 font-medium';
-                        resultText = 'Correct';
-                    } else {
-                        resultClass = 'text-red-600 font-medium';
-                        resultText = 'Incorrect';
-                    }
-                    const row = document.createElement('tr');
-                    row.className = 'hover:bg-gray-50 transition-colors';
-                    row.innerHTML = `
-                        <td class="px-3 py-2 font-medium">${questionNumber}</td>
-                        <td class="px-3 py-2 ${resultClass}" colspan="2">${resultText} (Your: ${answer || '-'}, Correct: ${correctAnswer})</td> 
-                        <td class="px-3 py-2">${timeSpent}</td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-            } else {
-                console.log("No detailed question data found in result:", result);
-                tableBody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-gray-500">No detailed question data available for this submission.</td></tr>';
-            }
-            
-            // Adjust table headers for DM Syllogisms if result.questions exists
-            const aThead = tableBody.closest('table').querySelector('thead tr');
-            if (result.questions && aThead) {
-                aThead.innerHTML = `
-                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Q #</th>
-                    <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Points</th>
-                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statements (Your Answer | Correct Answer)</th>
-                    <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Time Spent</th>
-                `;
-            } else if (aThead) { // Revert to original for QR if needed
-                 aThead.innerHTML = `
-                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Q #</th>
-                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" colspan="2">Result (Your Answer | Correct Answer)</th>
-                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Spent</th>
-                `;
-            }
-            
-            // Generate charts
-            loadChartJSIfNeeded(() => {
-                renderPerformanceBreakdownChart(result);
-                renderTimeManagementChart(result);
-            });
-            
-            // Set up PDF download
-            document.getElementById('download-result-pdf').addEventListener('click', () => {
-                downloadResultPDF(result);
-            });
-
-            // Set up Review Questions button
-            document.getElementById('review-questions-button').addEventListener('click', () => {
-                reviewQuestionsFromResult(result);
-            });
         }
-        
-        // Function to render progress chart
-        function renderProgressChart(results) {
-            const progressChartContainer = document.getElementById('progress-chart');
-            
-            // Sort results by date
-            const sortedResults = [...results].sort((a, b) => a.date - b.date);
-            
-            // Extract data for chart
-            const labels = sortedResults.map(r => r.date.toLocaleDateString());
-            const scores = sortedResults.map(r => {
-                const score = parseInt(r.score);
-                const total = parseInt(r.totalQuestions);
-                return (score / total) * 100;
-            });
-            
-            // Create chart
-            const ctx = document.createElement('canvas');
-            progressChartContainer.innerHTML = '';
-            progressChartContainer.appendChild(ctx);
-            
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Score (%)',
-                        data: scores,
-                        borderColor: '#10B981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
-                        tension: 0.3,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return `Score: ${context.parsed.y.toFixed(1)}%`;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            min: 0,
-                            max: 100,
-                            ticks: {
-                                callback: function(value) {
-                                    return value + '%';
-                                }
-                            }
-                        },
-                        x: {
-                            ticks: {
-                                maxRotation: 45,
-                                minRotation: 45
-                            }
-                        }
-                    }
+
+        function updateOverallResultsSummary(allResults) { 
+            const testsCompletedEl = document.getElementById('tests-completed');
+            const averageScoreEl = document.getElementById('average-score');
+            const highestScoreEl = document.getElementById('highest-score');
+            const hoursPracticedEl = document.getElementById('hours-practiced');
+
+            if (!testsCompletedEl || !averageScoreEl || !highestScoreEl || !hoursPracticedEl) return;
+
+            const numTests = allResults.length;
+            let totalPercentageSum = 0;
+            let maxPercentage = 0;
+            let totalMinutes = 0;
+
+            allResults.forEach(result => {
+                const score = parseFloat(result.score);
+                const totalPossible = parseFloat(result.totalPossibleScore || result.totalQuestions);
+                if (!isNaN(score) && !isNaN(totalPossible) && totalPossible > 0) {
+                    const percentage = (score / totalPossible) * 100;
+                    totalPercentageSum += percentage;
+                    maxPercentage = Math.max(maxPercentage, percentage);
+                }
+                const timeTaken = result.timeTaken; 
+                if (timeTaken) {
+                    const minMatch = timeTaken.match(/(\d+)\s*min/);
+                    const secMatch = timeTaken.match(/(\d+)\s*sec/);
+                    if (minMatch) totalMinutes += parseInt(minMatch[1]);
+                    if (secMatch) totalMinutes += parseInt(secMatch[1]) / 60; 
                 }
             });
+
+            testsCompletedEl.textContent = numTests;
+            averageScoreEl.textContent = numTests > 0 ? (totalPercentageSum / numTests).toFixed(1) + '%' : '0%';
+            highestScoreEl.textContent = maxPercentage.toFixed(1) + '%';
+            hoursPracticedEl.textContent = (totalMinutes / 60).toFixed(1) + 'h';
         }
         
-        // Function to render performance breakdown chart
-        function renderPerformanceBreakdownChart(result) {
-            const chartContainer = document.getElementById('performance-breakdown-chart');
-            chartContainer.innerHTML = '';
-            
-            if (!result.answers || !Array.isArray(result.answers)) {
-                chartContainer.innerHTML = '<p class="text-center text-gray-500 mt-10">No data available</p>';
-                return;
-            }
-            
-            // Count correct, incorrect, and unanswered
-            let correct = 0;
-            let incorrect = 0;
-            let unanswered = 0;
-            
-            result.answers.forEach((answer, index) => {
-                let correctAnswer = '?';
-                if (result.correctAnswers && Array.isArray(result.correctAnswers)) {
-                    correctAnswer = result.correctAnswers[index] || '?';
-                }
-                
-                if (!answer) {
-                    unanswered++;
-                } else if (answer === correctAnswer) {
-                    correct++;
+        backToResultsListButton.addEventListener('click', () => {
+            resultDetailView.classList.add('hidden');
+            resultsContent.classList.remove('hidden');
+            if (auth.currentUser) loadUserResults(auth.currentUser.uid); 
+        });
+
+        resultsFilterSelect.addEventListener('change', applyResultsFiltersAndSort);
+        resultsSortSelect.addEventListener('change', applyResultsFiltersAndSort);
+        if(refreshResultsButton) refreshResultsButton.addEventListener('click', () => { if (auth.currentUser) loadUserResults(auth.currentUser.uid); });
+        if(goToTestsButton) goToTestsButton.addEventListener('click', () => window.location.href = 'practice.html');
+
+
+        // --- Initial DOMContentLoaded Setup ---
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.location.pathname.includes('student_dashboard.html')) {
+                const hash = window.location.hash;
+                 if (hash === '#results') {
+                    showContentSection('results');
+                    setActiveTab(navResults);
+                    if (auth.currentUser) loadUserResults(auth.currentUser.uid);
                 } else {
-                    incorrect++;
-                }
-            });
-            
-            // Create chart
-            const ctx = document.createElement('canvas');
-            chartContainer.appendChild(ctx);
-            
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Correct', 'Incorrect', 'Not Answered'],
-                    datasets: [{
-                        data: [correct, incorrect, unanswered],
-                        backgroundColor: ['#22C55E', '#EF4444', '#9CA3AF'],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const value = context.raw;
-                                    const total = result.answers.length;
-                                    const percentage = ((value / total) * 100).toFixed(1);
-                                    return `${context.label}: ${value} (${percentage}%)`;
-                                }
-                            }
-                        }
+                     if(auth.currentUser && resultsContent.classList.contains('hidden') && resultDetailView.classList.contains('hidden')) {
+                        showContentSection('results');
+                        setActiveTab(navResults);
+                        loadUserResults(auth.currentUser.uid);
+                    } else if (!auth.currentUser) {
+                        // Auth section should be visible via onAuthStateChanged
+                    } else if (resultsContent.classList.contains('hidden') && resultDetailView.classList.contains('hidden')) {
+                        if(defaultDashboardMessage) defaultDashboardMessage.classList.remove('hidden');
                     }
                 }
-            });
-        }
-        
-        // Function to render time management chart
-        function renderTimeManagementChart(result) {
-            const chartContainer = document.getElementById('time-management-chart');
-            chartContainer.innerHTML = '';
-            
-            if (!result.questionTimes || !Array.isArray(result.questionTimes)) {
-                chartContainer.innerHTML = '<p class="text-center text-gray-500 mt-10">No time data available</p>';
-                return;
             }
-            
-            // Convert milliseconds to seconds
-            const times = result.questionTimes.map(t => Math.round(t / 1000));
-            
-            // Create labels (Question 1, Question 2, etc.)
-            const labels = times.map((_, i) => `Q${i+1}`);
-            
-            // Create chart
-            const ctx = document.createElement('canvas');
-            chartContainer.appendChild(ctx);
-            
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Time (seconds)',
-                        data: times,
-                        backgroundColor: 'rgba(59, 130, 246, 0.7)',
-                        borderColor: '#3B82F6',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Seconds'
-                            }
-                        }
-                    }
-                }
-            });
-        }
-        
-        // Function to download result as PDF
-        function downloadResultPDF(result) {
-            // Check if jsPDF is available
-            if (typeof jspdf === 'undefined' || !jspdf.jsPDF) {
-                // Load jsPDF if needed
-                const script = document.createElement('script');
-                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
-                script.onload = () => downloadResultPDF(result);
-                document.head.appendChild(script);
-                return;
-            }
-            
-            const { jsPDF } = jspdf;
-            const doc = new jsPDF();
-            
-            const reflection = result.reflection || 'No reflection provided';
-            const focusRating = result.focusRating || 'N/A';
-            const score = result.score;
-            const totalQs = result.totalQuestions;
-            const timeTaken = result.timeTaken;
-            const studentName = result.studentName;
-            const examName = result.examName;
-            const date = result.date.toLocaleDateString() + ' ' + result.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            
-            let y = 15;
-            const lineHeight = 7;
-            const pageHeight = doc.internal.pageSize.height;
-            const margin = 15;
-
-            doc.setFontSize(18);
-            doc.text(`${examName} Results`, margin, y);
-            y += lineHeight * 1.5;
-            doc.setFontSize(12);
-            doc.text(`Name: ${studentName}`, margin, y); y += lineHeight;
-            doc.text(`Date: ${date}`, margin, y); y += lineHeight;
-            doc.text(`Final Score: ${score} / ${totalQs}`, margin, y); y += lineHeight;
-            doc.text(`Time Taken: ${timeTaken}`, margin, y); y += lineHeight * 1.5;
-            doc.setFontSize(14);
-            doc.text("Focus Rating (1-5):", margin, y); y += lineHeight;
-            doc.setFontSize(10);
-            doc.text(focusRating || 'N/A', margin, y); y += lineHeight * 1.5;
-            doc.setFontSize(14);
-            doc.text("Reflection:", margin, y); y += lineHeight;
-            doc.setFontSize(10);
-            const reflectionLines = doc.splitTextToSize(reflection || 'No reflection provided.', doc.internal.pageSize.width - margin * 2);
-            doc.text(reflectionLines, margin, y);
-            y += reflectionLines.length * (lineHeight * 0.7) + lineHeight;
-            doc.setFontSize(14);
-            doc.text("Question Results:", margin, y); y += lineHeight * 1.5;
-            doc.setFontSize(10);
-
-            if (result.answers && Array.isArray(result.answers)) {
-                result.answers.forEach((answer, index) => {
-                    let correctAnswer = '?';
-                    if (result.correctAnswers && Array.isArray(result.correctAnswers)) {
-                        correctAnswer = result.correctAnswers[index] || '?';
-                    }
-                    
-                    const timeSpentSec = result.questionTimes ? Math.round((result.questionTimes[index] || 0) / 1000) : 0;
-                    const isCorrect = answer === correctAnswer;
-                    const status = !answer ? "Not Answered" : (isCorrect ? "Correct" : "Incorrect");
-                    
-                    const resultText = `Q${index + 1}: Your Answer: ${answer || 'N/A'}, Correct Answer: ${correctAnswer}, Status: ${status}, Time: ${timeSpentSec}s`;
-                    
-                    let textLines = doc.splitTextToSize(resultText, doc.internal.pageSize.width - margin * 2);
-                    if (y + (textLines.length * (lineHeight * 0.7)) > pageHeight - margin) {
-                        doc.addPage();
-                        y = margin;
-                    }
-                    doc.text(textLines, margin, y);
-                    y += textLines.length * (lineHeight * 0.7) + (lineHeight*0.3);
-                });
-            }
-            
-            doc.save(`${examName.replace(/\s+/g, '_').toLowerCase()}_results_${studentName.replace(/\s+/g, '_').toLowerCase()}.pdf`);
-        }
-
-        // Function to redirect to the Test page for reviewing questions from a past result
-        function reviewQuestionsFromResult(result) {
-            if (!result || !result.id || !result.examName) {
-                console.error("Cannot review questions: result data is incomplete.", result);
-                alert("Could not start review session. Essential data is missing.");
-                return;
-            }
-            console.log(`Attempting to review questions for result ID: ${result.id}, Exam: ${result.examName}`); // Log entry
-
-            localStorage.setItem('reviewSubmissionId', result.id); 
-            localStorage.setItem('returnToDashboardResults', 'true');
-            localStorage.setItem('studentNameForReview', result.studentName || 'Review User'); // Store student name for review page
-
-            let targetPage = '';
-            const examNameLower = result.examName.toLowerCase().trim(); // Trim whitespace just in case
-            console.log(`Normalized examName for routing: '${examNameLower}'`);
-            
-            // DM Syllogisms Worksheets
-            if (examNameLower.startsWith('dm syllogisms worksheet')) {
-                const match = examNameLower.match(/dm syllogisms worksheet (\d+)/);
-                if (match && match[1]) {
-                    targetPage = `DM sylls ${match[1]}.html`;
-                    console.log(`Routing to DM Syllogisms: ${targetPage}`);
-                } else {
-                    console.warn(`Could not extract DM worksheet number from: ${result.examName}`);
-                }
-            } 
-            // Verbal Reasoning Focus Groups
-            else if (examNameLower.startsWith('vr focus group')) {
-                const match = examNameLower.match(/vr focus group (\d+)/);
-                if (match && match[1]) {
-                    targetPage = `VR focus group${match[1]}.html`;
-                    console.log(`Routing to VR Focus Group: ${targetPage}`);
-                }
-                 else {
-                    console.warn(`Could not extract VR focus group number from: ${result.examName}`);
-                }
-            } 
-            // QR Tests
-            else if (examNameLower.startsWith('qr test')) {
-                const match = examNameLower.match(/qr test (\d+)/);
-                if (match && match[1]) {
-                    targetPage = `QR Test ${match[1]}.html`;
-                    console.log(`Routing to QR Test: ${targetPage}`);
-                }
-                 else {
-                    console.warn(`Could not extract QR Test number from: ${result.examName}`);
-                }
-            } 
-            // Add other test types here with similar else if blocks
-            // else if (examNameLower.startsWith('another test type prefix')) { ... }
-            
-            else {
-                console.error("Unknown examName for review routing:", result.examName);
-                alert("This test type cannot be reviewed at this time or the name is not recognized.");
-                localStorage.removeItem('reviewSubmissionId');
-                localStorage.removeItem('returnToDashboardResults');
-                localStorage.removeItem('studentNameForReview');
-                return;
-            }
-
-            if (targetPage) {
-                console.log(`Final target page for review: ${targetPage}#review`);
-                window.location.href = `${targetPage}#review`;
-            } else {
-                 console.error("Target page for review could not be determined after checks.");
-                 alert("Error: Could not determine the correct test page for review.");
-                 localStorage.removeItem('reviewSubmissionId'); 
-                 localStorage.removeItem('returnToDashboardResults');
-                 localStorage.removeItem('studentNameForReview');
-            }
-        }
+        });
     </script>
 </body>
 </html>

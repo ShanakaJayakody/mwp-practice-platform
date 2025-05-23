@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UCAT QR Practice - MedwithPurpose</title>
+    <title>UCAT DM Syllogisms Worksheet 1 - MedwithPurpose</title>
     <link rel="icon" href="https://ik.imagekit.io/mwp/2.svg?updatedAt=1745982956185" type="image/svg+xml">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -11,6 +11,227 @@
     <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <style id="m3-styles">
+        /* M3 Base Styles */
+        :root {
+          /* Brand Colors - DM Theme (Indigo/Purple) */
+          --md-sys-color-primary: #6750A4; /* M3 Purple */
+          --md-sys-color-on-primary: #FFFFFF;
+          --md-sys-color-primary-container: #EADDFF;
+          --md-sys-color-on-primary-container: #21005D;
+
+          --md-sys-color-secondary: #625B71; /* M3 Neutral Purple-ish */
+          --md-sys-color-on-secondary: #FFFFFF;
+          --md-sys-color-secondary-container: #E8DEF8;
+          --md-sys-color-on-secondary-container: #1D192B;
+
+          --md-sys-color-tertiary: #7D5260; /* M3 Tertiary Pink-ish */
+          --md-sys-color-on-tertiary: #FFFFFF;
+          --md-sys-color-tertiary-container: #FFD8E4;
+          --md-sys-color-on-tertiary-container: #31111D;
+
+          /* Neutral Colors */
+          --md-sys-color-background: #F8F9FA; 
+          --md-sys-color-on-background: #1A1C1E;
+          --md-sys-color-surface: #FFFFFF; 
+          --md-sys-color-on-surface: #1A1C1E;
+          --md-sys-color-surface-variant: #E7E0EC;
+          --md-sys-color-on-surface-variant: #49454F;
+          --md-sys-color-surface-container-lowest: #FFFFFF;
+          --md-sys-color-surface-container-low: #F7F2FA;
+          --md-sys-color-surface-container: #F3EDF7;
+          --md-sys-color-surface-container-high: #ECE6F0;
+          --md-sys-color-surface-container-highest: #E6E0E9;
+
+          --md-sys-color-outline: #79747E;
+          --md-sys-color-outline-variant: #CAC4D0;
+
+          /* Utility Colors */
+          --md-sys-color-error: #B3261E; 
+          --md-sys-color-on-error: #FFFFFF;
+          --md-sys-color-error-container: #F9DEDC;
+          --md-sys-color-on-error-container: #410E0B;
+          --md-sys-color-scrim: #000000;
+          --md-sys-color-scrim-rgb: 0,0,0;
+
+          /* Shape */
+          --md-sys-shape-corner-none: 0px;
+          --md-sys-shape-corner-extra-small: 4px;
+          --md-sys-shape-corner-small: 8px;
+          --md-sys-shape-corner-medium: 12px;
+          --md-sys-shape-corner-large: 16px;
+          --md-sys-shape-corner-extra-large: 28px;
+          --md-sys-shape-corner-full: 9999px;
+
+          /* Typography - Using Inter as base */
+          --md-sys-typescale-font-family-name: 'Inter', sans-serif;
+          --md-sys-typescale-display-large-font-size: 3.5625rem; 
+          --md-sys-typescale-display-large-line-height: 4rem; 
+          --md-sys-typescale-display-large-font-weight: 400;
+          --md-sys-typescale-headline-large-font-size: 2rem; 
+          --md-sys-typescale-headline-large-line-height: 2.5rem; 
+          --md-sys-typescale-headline-large-font-weight: 700; 
+          --md-sys-typescale-title-large-font-size: 1.375rem; 
+          --md-sys-typescale-title-large-line-height: 1.75rem; 
+          --md-sys-typescale-title-large-font-weight: 700;
+          --md-sys-typescale-body-large-font-size: 1rem; 
+          --md-sys-typescale-body-large-line-height: 1.5rem; 
+          --md-sys-typescale-body-large-font-weight: 400;
+          --md-sys-typescale-label-large-font-size: 0.875rem; 
+          --md-sys-typescale-label-large-line-height: 1.25rem; 
+          --md-sys-typescale-label-large-font-weight: 600;
+        }
+
+        .m3-button {
+          font-family: var(--md-sys-typescale-label-large-font-family-name);
+          font-size: var(--md-sys-typescale-label-large-font-size);
+          font-weight: var(--md-sys-typescale-label-large-font-weight);
+          line-height: var(--md-sys-typescale-label-large-line-height);
+          padding: 0.625rem 1.5rem; 
+          border-radius: var(--md-sys-shape-corner-full);
+          border: none;
+          cursor: pointer;
+          text-align: center;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 2.5rem; 
+          transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+        }
+        .m3-button:hover:not(:disabled) { box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06); }
+        .m3-button:active:not(:disabled) { transform: scale(0.97); box-shadow: none; }
+        .m3-button:disabled { cursor: not-allowed; box-shadow: none; }
+        .m3-button .material-symbols-outlined { font-size: 1.125rem; margin-right: 0.5rem; }
+        .m3-button.icon-only .material-symbols-outlined { margin-right: 0; }
+
+        .m3-button-filled {
+          background-color: var(--md-sys-color-primary);
+          color: var(--md-sys-color-on-primary);
+        }
+        .m3-button-filled:hover:not(:disabled) { background-color: color-mix(in srgb, var(--md-sys-color-primary) 92%, var(--md-sys-color-on-primary) 8%); }
+        .m3-button-filled:disabled {
+          background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
+          color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+        }
+        .m3-button-filled-error {
+          background-color: var(--md-sys-color-error);
+          color: var(--md-sys-color-on-error);
+        }
+        .m3-button-filled-error:hover:not(:disabled) { background-color: color-mix(in srgb, var(--md-sys-color-error) 92%, var(--md-sys-color-on-error) 8%);}
+
+        .m3-button-outlined {
+          background-color: transparent;
+          color: var(--md-sys-color-primary);
+          border: 1px solid var(--md-sys-color-outline);
+        }
+        .m3-button-outlined:hover:not(:disabled) { background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); }
+        .m3-button-outlined:disabled {
+          border-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
+          color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+        }
+
+        .m3-button-text {
+          background-color: transparent;
+          color: var(--md-sys-color-primary);
+          padding: 0.625rem 0.75rem; 
+        }
+        .m3-button-text:hover:not(:disabled) { background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); }
+        .m3-button-text:disabled { color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent); }
+        
+        .m3-icon-button {
+          display: inline-flex; align-items: center; justify-content: center;
+          width: 2.5rem; height: 2.5rem; 
+          padding: 0.5rem; 
+          border-radius: var(--md-sys-shape-corner-full);
+          background-color: transparent;
+          color: var(--md-sys-color-on-surface-variant);
+          border: none; cursor: pointer;
+        }
+        .m3-icon-button .material-symbols-outlined { font-size: 1.5rem; margin: 0; }
+        .m3-icon-button:hover:not(:disabled) { background-color: color-mix(in srgb, currentColor 12%, transparent); }
+        .m3-icon-button:disabled { color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent); background-color: transparent; }
+        .m3-icon-button.selected {
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 12%, transparent);
+            color: var(--md-sys-color-primary);
+        }
+        .m3-icon-button.selected .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }
+
+        .m3-dialog-scrim {
+          position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+          background-color: rgba(var(--md-sys-color-scrim-rgb), 0.4);
+          display: flex; align-items: center; justify-content: center;
+          z-index: 100;
+        }
+        .m3-dialog {
+          background-color: var(--md-sys-color-surface-container-high);
+          color: var(--md-sys-color-on-surface);
+          border-radius: var(--md-sys-shape-corner-extra-large);
+          padding: 1.5rem;
+          width: calc(100% - 3.5rem);
+          max-width: 35rem;
+          box-shadow: 0px 8px 12px 6px rgba(0,0,0,0.15), 0px 4px 8px rgba(0,0,0,0.3);
+          display: flex; flex-direction: column;
+          max-height: calc(100% - 3.5rem);
+        }
+        .m3-dialog-title {
+          font-family: var(--md-sys-typescale-font-family-name);
+          font-size: 1.5rem; 
+          font-weight: 600;
+          line-height: 2rem; 
+          color: var(--md-sys-color-on-surface);
+          margin-bottom: 1rem; 
+        }
+        .m3-dialog-content {
+          font-family: var(--md-sys-typescale-body-large-font-family-name);
+          color: var(--md-sys-color-on-surface-variant);
+          margin-bottom: 1.5rem; 
+          overflow-y: auto;
+        }
+        .m3-dialog-actions { display: flex; justify-content: flex-end; gap: 0.5rem; }
+
+        /* Typography helpers */
+        .m3-body-large {
+          font-family: var(--md-sys-typescale-body-large-font-family-name);
+          font-size: var(--md-sys-typescale-body-large-font-size);
+          font-weight: var(--md-sys-typescale-body-large-font-weight);
+          line-height: var(--md-sys-typescale-body-large-line-height);
+          color: var(--md-sys-color-on-surface);
+        }
+        .m3-title-large {
+          font-family: var(--md-sys-typescale-title-large-font-family-name);
+          font-size: var(--md-sys-typescale-title-large-font-size);
+          font-weight: var(--md-sys-typescale-title-large-font-weight);
+          line-height: var(--md-sys-typescale-title-large-line-height);
+          color: var(--md-sys-color-on-surface);
+        }
+        .m3-label-large {
+          font-family: var(--md-sys-typescale-label-large-font-family-name);
+          font-size: var(--md-sys-typescale-label-large-font-size);
+          font-weight: var(--md-sys-typescale-label-large-font-weight);
+          line-height: var(--md-sys-typescale-label-large-line-height);
+        }
+
+        /* Material Symbols base style */
+        .material-symbols-outlined {
+          font-family: 'Material Symbols Outlined';
+          font-weight: normal; font-style: normal;
+          font-size: 24px; line-height: 1;
+          letter-spacing: normal; text-transform: none;
+          display: inline-block; white-space: nowrap; word-wrap: normal;
+          direction: ltr;
+          -webkit-font-smoothing: antialiased;
+          text-rendering: optimizeLegibility;
+          -moz-osx-font-smoothing: grayscale;
+          font-feature-settings: 'liga';
+        }
+    </style>
     <style>
         /* Custom styles for better UI/UX */
         html, body {
@@ -20,21 +241,21 @@
             overflow: hidden; /* Prevent scrolling on body */
         }
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: var(--md-sys-typescale-font-family-name); /* M3 Base Font */
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #f0f2f5; /* Light background like UCAT */
+            background-color: var(--md-sys-color-background); /* M3 */
         }
         #app-container {
             display: flex;
             flex-direction: column;
             height: calc(100vh - 2rem); /* Full height minus padding */
             width: 100%;
-            background-color: #ffffff;
-            border: 1px solid #d1d5db; /* Border like UCAT */
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            border-radius: 0.375rem; /* Slightly rounded corners */
+            background-color: var(--md-sys-color-surface-container-low); /* M3 */
+            border: 1px solid var(--md-sys-color-outline-variant); /* M3 */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); /* Softer shadow consistent with M3 elevation 1 */
+            border-radius: var(--md-sys-shape-corner-large); /* M3 */
             margin: 1rem; /* Add some margin */
             overflow: hidden; /* Prevent content overflow from container */
             position: relative; /* For calculator positioning */
@@ -42,9 +263,9 @@
         /* Header and Footer */
         .header-bar { /* Topmost bar */
             flex-shrink: 0;
-            background-color: #005A8C; /* Slightly darker blue for top bar */
-            color: white;
-            padding: 0.5rem 1.5rem; /* Adjusted padding */
+            background-color: var(--md-sys-color-primary); /* M3 */
+            color: var(--md-sys-color-on-primary); /* M3 */
+            padding: 0.75rem 1.5rem; /* Increased padding slightly */
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -53,153 +274,180 @@
 
         .secondary-toolbar { /* New toolbar for calculator and flag */
             flex-shrink: 0;
-            background-color: #007BBD; /* Lighter blue for secondary bar */
-            color: white;
+            background-color: var(--md-sys-color-surface-container-high); /* M3 Surface variant */
+            color: var(--md-sys-color-on-surface-variant); /* M3 */
             padding: 0.5rem 1.5rem; /* Consistent padding */
             display: flex;
-            justify-content: space-between; /* Align items */
+            justify-content: flex-end; /* Only flag button on right for Syllogisms */
             align-items: center;
-            border-bottom: 1px solid #005A8C; /* Optional: a subtle separator */
+            border-bottom: 1px solid var(--md-sys-color-outline-variant); /* M3 */
             z-index: 19;
         }
 
         /* Specific text colors within header/footer */
         .header-bar span, .header-bar div, .secondary-toolbar span, .secondary-toolbar div {
-             color: white;
+             color: inherit; /* M3: inherit from parent */
         }
         #timer {
-             background-color: rgba(255, 255, 255, 0.2); 
-             color: white;
-             font-weight: bold;
-             padding: 0.25rem 0.75rem; 
-             border-radius: 0.25rem; 
+             background-color: color-mix(in srgb, var(--md-sys-color-on-primary) 15%, transparent); /* M3 subtle bg on primary */
+             color: var(--md-sys-color-on-primary); /* M3 */
+             font-family: var(--md-sys-typescale-label-large-font-family-name);
+             font-size: var(--md-sys-typescale-label-large-font-size);
+             font-weight: var(--md-sys-typescale-label-large-font-weight);
+             padding: 0.375rem 0.75rem; 
+             border-radius: var(--md-sys-shape-corner-small); 
         }
         
-        /* Buttons in secondary toolbar */
-        .secondary-toolbar-button {
-            background-color: transparent;
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            padding: 0.3rem 0.7rem;
-            font-size: 0.8rem;
-            border-radius: 0.375rem;
-            transition: background-color 0.2s ease, border-color 0.2s ease;
-            margin-left: 0.5rem; /* Spacing between buttons */
-        }
-        .secondary-toolbar-button:hover:not(:disabled) {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-color: white;
-        }
-        .secondary-toolbar-button.active { /* For calculator button when active */
-            background-color: rgba(255, 255, 255, 0.2);
-            border-color: white;
-        }
+        /* Buttons in secondary toolbar - to become M3 text or icon buttons */
+        .secondary-toolbar-button {\n            font-family: var(--md-sys-typescale-label-large-font-family-name);\n            font-size: var(--md-sys-typescale-label-large-font-size);\n            font-weight: var(--md-sys-typescale-label-large-font-weight);\n            padding: 0.5rem 0.75rem; \n            border-radius: var(--md-sys-shape-corner-full);\n            background-color: transparent;\n            color: var(--md-sys-color-on-surface-variant); /* M3 */\n            border: none; \n            transition: background-color 0.2s ease;\n            margin-left: 0.5rem; \n            display: inline-flex;\n            align-items: center;\n            cursor:pointer;\n        }\n        .secondary-toolbar-button:hover:not(:disabled) {\n            background-color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 8%, transparent); /* M3 hover */\n        }\n        .secondary-toolbar-button.active { \n            background-color: color-mix(in srgb, var(--md-sys-color-secondary-container) 60%, transparent);\n            color: var(--md-sys-color-on-secondary-container);\n        }\n         .secondary-toolbar-button .material-symbols-outlined {\n            margin-right: 0.25rem;\n            font-size: 1.25rem; /* 20px */\n         }\n
 
 
          /* Footer Button Styling */
         .footer-bar {
             flex-shrink: 0;
-            background-color: #005A8C; /* Match top bar color */
-            color: white;
+            background-color: var(--md-sys-color-surface-container); /* M3 surface for footer */
+            color: var(--md-sys-color-on-surface); /* M3 */
             padding: 0.75rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-top: 1px solid var(--md-sys-color-outline-variant);
         }
         .footer-bar button {
-            background-color: transparent;
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.5); 
-            padding: 0.4rem 0.8rem; 
-            font-size: 0.8rem; 
-            border-radius: 0.375rem;
-             transition: background-color 0.2s ease, border-color 0.2s ease;
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-size: var(--md-sys-typescale-label-large-font-size);
+            font-weight: var(--md-sys-typescale-label-large-font-weight);
+            padding: 0.5rem 1rem; 
+            border-radius: var(--md-sys-shape-corner-full);
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+            min-height: 2.25rem; /* 36px */
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
         }
-        .footer-bar button:hover:not(:disabled) {
-            background-color: rgba(255, 255, 255, 0.15); 
-            border-color: white;
+        .footer-bar button:not(#next-button):not(#end-practice-session-button-footer) {
+             background-color: transparent;
+             color: var(--md-sys-color-primary);
+             border: none;
         }
-         .footer-bar button:disabled {
-             opacity: 0.5;
-             cursor: not-allowed;
-             border-color: rgba(255, 255, 255, 0.3);
-         }
-         .footer-bar button#next-button {
-             background-color: #ffffff; 
-             color: #006DAA; 
-             border: 1px solid white;
-             font-weight: 500;
-         }
-         .footer-bar button#next-button:hover:not(:disabled) {
-             background-color: #f0f0f0; 
-         }
-         #flag-button.flagged {
-             background-color: #facc15; 
-             border-color: #facc15;
-             color: #422006; 
-          }
-          #flag-button.flagged:hover {
-             background-color: #f59e0b; 
-             border-color: #f59e0b;
-          }
+        .footer-bar button:not(#next-button):not(#end-practice-session-button-footer):hover:not(:disabled) {
+             background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+        }
+        
+        .footer-bar button:disabled {\n             opacity: 1; \n             cursor: not-allowed;\n             background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent) !important; \n             color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent) !important;\n             border-color: transparent !important; \n         }\n         .footer-bar button#next-button:disabled {\n            border: none !important;\n         }\n
+
+         .footer-bar button#next-button {\n             background-color: var(--md-sys-color-primary); \n             color: var(--md-sys-color-on-primary); \n             border: none;\n         }\n         .footer-bar button#next-button:hover:not(:disabled) {\n             background-color: color-mix(in srgb, var(--md-sys-color-primary) 92%, var(--md-sys-color-on-primary) 8%); \n         }\n         #flag-button {\n             /* Uses .secondary-toolbar-button styles */\n         }\n         #flag-button.flagged {\n             background-color: var(--md-sys-color-tertiary-container) !important; \n             color: var(--md-sys-color-on-tertiary-container) !important;\n          }\n          #flag-button.flagged .material-symbols-outlined {\n             font-variation-settings: \'FILL\' 1;\n          }\n
 
         /* Main Content Area */
         .main-content-area {
             flex-grow: 1; 
-            display: block;
+            display: flex; /* For two-column layout */
             overflow: hidden; 
             padding: 1rem; 
+            gap: 1rem; /* Gap between columns */
+            background-color: var(--md-sys-color-surface); /* M3 */
         }
-        .question-column {
-             width: 100%;
-            overflow-y: auto;
+        .passage-column, .question-column {
+            flex: 1; /* Each column takes half the space */
+            overflow-y: auto; 
             padding: 1rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.375rem;
-             background-color: #fff;
-             height: 100%; 
-             position: relative; 
+            border: none; 
+            border-radius: var(--md-sys-shape-corner-medium); /* M3 */
+            background-color: var(--md-sys-color-surface-container-lowest); /* M3 */
+            height: 100%; 
+            position: relative; 
+            color: var(--md-sys-color-on-surface); /* M3 text color */
+            font-family: var(--md-sys-typescale-body-large-font-family-name);
+            font-size: var(--md-sys-typescale-body-large-font-size);
+            line-height: var(--md-sys-typescale-body-large-line-height);
         }
+        .question-column h4 { /* Question X */
+            font-family: var(--md-sys-typescale-title-large-font-family-name);
+            font-size: var(--md-sys-typescale-title-large-font-size);
+            font-weight: var(--md-sys-typescale-title-large-font-weight);
+            color: var(--md-sys-color-on-surface-variant);
+            margin-bottom: 0.75rem;
+        }
+        .question-column p#question-text { /* Question text itself */
+            font-size: 1.125rem; 
+            line-height: 1.625rem;
+            margin-bottom: 1.25rem;
+        }
+        .passage-column p, .passage-column div { /* Passage text */
+             font-size: var(--md-sys-typescale-body-large-font-size);
+             line-height: var(--md-sys-typescale-body-large-line-height);
+             color: var(--md-sys-color-on-surface-variant);
+        }
+        .passage-column h3 {\n            font-family: var(--md-sys-typescale-title-large-font-family-name);\n            font-size: 1.25rem; /* Slightly smaller for passage title */\n            font-weight: 600;\n            color: var(--md-sys-color-on-surface);\n            margin-bottom: 0.75rem;\n        }\n
 
-        .selected-answer {
-            background-color: #bfdbfe !important; 
-            border-color: #3b82f6 !important; 
+        /* Syllogism Yes/No Buttons */
+        .syllogism-options {\n            display: flex;\n            gap: 1rem;\n            margin-top: 1.5rem;\n        }\n        .syllogism-button {\n            /* Use M3 Filled Button styles */\n            flex-grow: 1;\n            font-family: var(--md-sys-typescale-label-large-font-family-name);\n            font-size: var(--md-sys-typescale-label-large-font-size);\n            font-weight: var(--md-sys-typescale-label-large-font-weight);\n            padding: 0.75rem 1.5rem; /* M3 standard button padding */\n            border-radius: var(--md-sys-shape-corner-full);\n            border: none;\n            cursor: pointer;\n            text-align: center;\n            transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;\n        }\n        .syllogism-button.yes {\n            background-color: var(--md-sys-color-primary);\n            color: var(--md-sys-color-on-primary);\n        }\n        .syllogism-button.yes:hover:not(:disabled) { background-color: color-mix(in srgb, var(--md-sys-color-primary) 90%, var(--md-sys-color-on-primary) 10%); }\n        \n        .syllogism-button.no {\n            background-color: var(--md-sys-color-error);\n            color: var(--md-sys-color-on-error);\n        }\n        .syllogism-button.no:hover:not(:disabled) { background-color: color-mix(in srgb, var(--md-sys-color-error) 90%, var(--md-sys-color-on-error) 10%); }\n
+
+        .syllogism-button.selected {\n            box-shadow: 0 0 0 3px var(--md-sys-color-outline-variant), inset 0 2px 4px rgba(0,0,0,0.2);\n            transform: scale(0.98);\n        }\n         .syllogism-button:disabled {\n            background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent) !important;\n            color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent) !important;\n            cursor: not-allowed;\n            box-shadow: none;\n         }\n
+
+        .nav-answered { background-color: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); border-color: var(--md-sys-color-secondary);}\n        .nav-current { border: 2px solid var(--md-sys-color-primary) !important; font-weight: bold; background-color: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }\n        .nav-flagged, .review-flagged { border: 2px solid var(--md-sys-color-tertiary) !important; position: relative; background-color: var(--md-sys-color-tertiary-container); color: var(--md-sys-color-on-tertiary-container); }\n        
+        .modal { /* Scrim part */
+            display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; 
+            overflow: auto; 
+            background-color: rgba(var(--md-sys-color-scrim-rgb), 0.4); /* M3 Scrim */
+            align-items: center; justify-content: center; 
         }
-        .nav-answered { background-color: #a7f3d0; }
-        .nav-current { border: 2px solid #3b82f6 !important; font-weight: bold; }
-        .nav-flagged, .review-flagged { border: 2px solid #f59e0b !important; position: relative; }
-        
-        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
-        .modal-content { background-color: #fefefe; margin: auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 600px; border-radius: 0.5rem; }
+        .modal-content { /* Dialog part */
+            background-color: var(--md-sys-color-surface-container-high); /* M3 */
+            color: var(--md-sys-color-on-surface); /* M3 */
+            margin: auto; padding: 1.5rem; /* 24px */ 
+            border: none; /* M3 dialogs don\'t usually have borders */
+            width: calc(100% - 3.5rem); max-width: 35rem; /* M3 sizing */
+            border-radius: var(--md-sys-shape-corner-extra-large); /* 28px M3 */
+            box-shadow: 0px 8px 12px 6px rgba(0,0,0,0.15), 0px 4px 8px rgba(0,0,0,0.3); /* M3 Elevation 3 */
+        }
         .modal.flex { display: flex; }
+        .modal-content .flex.justify-between.items-center h3 {\n            font-family: var(--md-sys-typescale-font-family-name);\n            font-size: 1.5rem; /* 24px */\n            font-weight: 600;\n            color: var(--md-sys-color-on-surface);\n        }\n        .modal-content #close-modal-button { /* Style as M3 Icon button */\n            font-size: 1.5rem; /* Icon size */\n            color: var(--md-sys-color-on-surface-variant);\n            background: transparent; border: none; padding: 0.5rem;\n            border-radius: var(--md-sys-shape-corner-full);\n            cursor:pointer;\n        }\n         .modal-content #close-modal-button:hover {\n            background-color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 8%, transparent);\n         }\n
 
-        button, .button {
+        button, .button { 
             transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
-            border-radius: 0.375rem; padding: 0.5rem 1rem; font-size: 0.875rem; font-weight: 500;
+            border-radius: var(--md-sys-shape-corner-full); 
+            padding: 0.625rem 1.5rem; 
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-size: var(--md-sys-typescale-label-large-font-size);
+            font-weight: var(--md-sys-typescale-label-large-font-weight);
             box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); cursor: pointer;
+            border: none; 
         }
         button:active, .button:active { transform: scale(0.98); }
-        button:disabled { opacity: 0.6; cursor: not-allowed; }
+        button:disabled { 
+            opacity: 1; 
+            cursor: not-allowed; 
+            color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent) !important;
+            background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent) !important;
+            border-color: transparent !important;
+        }
+        .m3-button-outlined:disabled { 
+            border: 1px solid color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent) !important;
+        }
 
-        .primary-button { background-color: #3b82f6; color: white; border: 1px solid transparent; }
-        .primary-button:hover:not(:disabled) { background-color: #2563eb; }
-        .secondary-button { background-color: white; color: #374151; border: 1px solid #d1d5db; }
-        .secondary-button:hover:not(:disabled) { background-color: #f9fafb; }
-        .danger-button { background-color: #ef4444; color: white; border: 1px solid transparent; }
-        .danger-button:hover:not(:disabled) { background-color: #dc2626; }
+        .primary-button { 
+            background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary);
+        }
+        .primary-button:hover:not(:disabled) { background-color: color-mix(in srgb, var(--md-sys-color-primary) 92%, var(--md-sys-color-on-primary) 8%); }
+        
+        .secondary-button { 
+            background-color: transparent; color: var(--md-sys-color-primary); border: 1px solid var(--md-sys-color-outline);
+        }
+        .secondary-button:hover:not(:disabled) { background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); }
+        
+        .danger-button { 
+            background-color: var(--md-sys-color-error); color: var(--md-sys-color-on-error);
+        }
+        .danger-button:hover:not(:disabled) { background-color: color-mix(in srgb, var(--md-sys-color-error) 92%, var(--md-sys-color-on-error) 8%); }
         
         .option-label {
-            display: block; padding: 0.75rem 1rem; border: 1px solid #d1d5db; 
-            border-radius: 0.375rem; margin-bottom: 0.5rem; cursor: pointer;
-            transition: background-color 0.2s ease, border-color 0.2s ease;
-            background-color: #ffffff; 
+            /* This class is not used for DM syllogisms options; .syllogism-button is used instead */
         }
-        .option-label:hover:not(.selected-answer) { background-color: #f3f4f6; border-color: #a5b4fc; }
-        input[type="radio"] { display: none; }
 
         #results-details-grid {
             display: grid; 
-            grid-template-columns: repeat(10, 1fr); 
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); 
             gap: 0.75rem; 
             padding-top: 0.5rem; 
             max-width: 950px; 
@@ -208,394 +456,119 @@
         }
         .result-summary-item { display: flex; flex-direction: column; align-items: center; text-align: center; }
         .result-summary-box {
-            width: 68px; 
-            height: 68px; 
+            width: 60px; 
+            height: 60px; 
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            border-radius: 0.375rem; 
+            border-radius: var(--md-sys-shape-corner-medium); 
             font-weight: 600; 
-            color: white; 
+            color: var(--md-sys-color-on-primary); 
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 0.25rem;
         }
-        .result-summary-box:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
-        .correct-box { background-color: #22c55e; border: 2px solid #16a34a; }
-        .incorrect-box { background-color: #ef4444; border: 2px solid #dc2626; }
-        .not-answered-box { background-color: #9ca3af; border: 2px solid #6b7280; }
-        .time-display-in-box { font-size: 1rem; }
-        .question-number-label { margin-top: 0.5rem; font-size: 0.875rem; color: #4b5563; font-weight: 500; }
+        .result-summary-box:hover { transform: translateY(-2px); box-shadow: 0 3px 6px rgba(0,0,0,0.15); }
+        .correct-box { background-color: var(--md-sys-color-primary-container); border: 1px solid var(--md-sys-color-primary); color: var(--md-sys-color-on-primary-container); }
+        .incorrect-box { background-color: var(--md-sys-color-error-container); border: 1px solid var(--md-sys-color-error); color: var(--md-sys-color-on-error-container); }
+        .not-answered-box { background-color: var(--md-sys-color-surface-variant); border: 1px solid var(--md-sys-color-outline); color: var(--md-sys-color-on-surface-variant); }
+        .time-display-in-box { font-size: 0.8rem; line-height: 1; }
+        .question-number-label { margin-top: 0; font-size: 0.75rem; font-weight: 500; }
         
         .explanation-box {
-             background-color: #fef3c7; border: 1px solid #fcd34d; padding: 0.5rem 0.75rem; 
-             margin-top: 0.75rem; border-radius: 0.375rem; font-size: 0.875rem; color: #78350f; 
+             background-color: var(--md-sys-color-surface-container-high); 
+             border: 1px solid var(--md-sys-color-outline-variant); 
+             padding: 0.75rem 1rem; 
+             margin-top: 0.75rem; border-radius: var(--md-sys-shape-corner-medium); 
+             font-family: var(--md-sys-typescale-body-large-font-family-name);
+             color: var(--md-sys-color-on-surface-variant); 
         }
         .review-grid-button {
-             padding: 0.5rem 0.25rem; border: 1px solid #d1d5db; border-radius: 0.375rem;
+             padding: 0.5rem 0.25rem; border: 1px solid var(--md-sys-color-outline); 
+             border-radius: var(--md-sys-shape-corner-medium); 
              text-align: center; transition: background-color 0.2s ease, border-color 0.2s ease;
-             font-size: 0.875rem; line-height: 1.25rem; cursor: pointer;
+             font-family: var(--md-sys-typescale-label-large-font-family-name);
+             cursor: pointer;
+             background-color: var(--md-sys-color-surface-container);
+             color: var(--md-sys-color-on-surface-variant);
         }
-        .review-grid-button-answered { background-color: #dcfce7; border-color: #86efac; color: #15803d; }
-        .review-grid-button-unanswered { background-color: #f3f4f6; border-color: #d1d5db; color: #4b5563; }
+        .review-grid-button-answered { background-color: var(--md-sys-color-secondary-container); border-color: var(--md-sys-color-secondary); color: var(--md-sys-color-on-secondary-container); }
+        .review-grid-button-unanswered { background-color: var(--md-sys-color-surface-variant); border-color: var(--md-sys-color-outline); color: var(--md-sys-color-on-surface-variant); }
         .review-grid-button:hover { filter: brightness(95%); }
 
-        /* Calculator Styles */
-        #calculator-ui {
-            display: none; 
-            position: absolute;
-            top: 100px; 
-            left: 50%;
-            width: 225px;
-            background-color: #0077b6; /* Bright blue background matching image */
-            border: 1px solid #005a8c;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            padding: 12px;
-            z-index: 1000; 
-            cursor: grab;
-            transform: translateX(-50%); /* Center horizontally */
-        }
-        #calculator-ui.visible { display: block; }
-        .calculator-header {
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            color: white; 
-            margin-bottom: 8px; 
-            font-size: 0.9rem; 
-            padding: 0 3px;
-        }
-        .calculator-header .title { font-weight: 600; }
-        .calculator-header .close-calc-btn {
-            background: none; 
-            border: none; 
-            color: white; 
-            font-size: 1.1rem; 
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .calculator-decorative-text {
-            color: white;
-            font-size: 0.65rem;
-            text-align: center;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
-        }
-
-        #calc-display-container {
-            background-color: #FFFFFF;
-            border: 1px solid #cccccc; 
-            border-radius: 4px; 
-            padding: 8px 12px;
-            margin-bottom: 12px; 
-            text-align: right; 
-            min-height: 36px;
-            display: flex; 
-            align-items: center; 
-            justify-content: flex-end;
-            position: relative; /* Add position relative to properly position the memory indicator */
-        }
-        #calc-display {
-            font-family: 'Courier New', Courier, monospace; 
-            font-size: 1.6rem;
-            color: #000000; 
-            overflow: hidden; 
-            text-overflow: ellipsis; 
-            white-space: nowrap; 
-            max-width: 100%;
-        }
-        #calc-memory-indicator {
-            position: absolute;
-            left: 6px;
-            top: 4px;
-            color: #2D3748;
-            font-weight: bold;
-            font-size: 0.9rem;
-            display: none;
-        }
-        .calc-buttons-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 6px;
-        }
-        .calc-button {
-            border: none;
-            border-radius: 4px;
-            padding: 10px 0;
-            font-size: 1rem;
-            font-weight: 500; 
-            cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-        }
-        .calc-button:active { transform: scale(0.95); }
-
-        /* Number buttons (0-9, .) */
-        .calc-button-num {
-            background-color: #FFFFFF;
-            color: #000000;
-        }
-        .calc-button-num:hover { background-color: #F0F0F0; }
-
-        /* Function and Operator buttons (Red background, white text) */
-        .calc-button-red {
-            background-color: #d62828; /* Bright red matching image */
-            color: white;
-        }
-        .calc-button-red:hover { background-color: #e63946; }
-        
-        .calc-button.equals {
-            grid-row: span 1; /* Only span 1 row */
-            grid-column: 4; /* Position in 4th column */
-            grid-row-start: 5; /* Start at row 5, below the + button */
-        }
-
+        /* No calculator for DM Syllogisms */
+        #calculator-ui { display: none !important; }
 
         @media (max-width: 1024px) {
             #results-details-grid { 
-                grid-template-columns: repeat(8, 1fr);
+                grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
                 max-width: 760px;
             }
+            .result-summary-box { width: 55px; height: 55px; }
         }
         
         @media (max-width: 768px) {
-            #app-container { height: auto; margin: 0.5rem; }
+            #app-container { height: auto; margin: 0.5rem; border-radius:var(--md-sys-shape-corner-medium); }
             .main-content-area { flex-direction: column; padding: 0.5rem; gap: 0.5rem; }
-            .question-column { flex-basis: auto; width: 100%; height: auto; max-height: 35vh; padding: 0.75rem; }
+            .passage-column, .question-column { flex-basis: auto; width: 100%; height: auto; max-height: none; padding: 0.75rem; }
             .header-bar, .secondary-toolbar, .footer-bar { padding: 0.5rem 1rem; }
-            .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: 0.8rem; }
-            button, .button { padding: 0.4rem 0.8rem; }
-            .footer-bar button { padding: 0.3rem 0.6rem; font-size: 0.75rem; }
-            #review-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } 
+            .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: var(--md-sys-typescale-label-large-font-size); }
+            button, .button { padding: 0.5rem 1rem; }
+            .footer-bar button { padding: 0.5rem 0.75rem; }
+            #review-grid { grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); } 
             .review-grid-button { font-size: 0.8rem; }
             #results-details-grid { 
-                grid-template-columns: repeat(5, 1fr); 
-                gap: 0.75rem;
+                grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); 
+                gap: 0.5rem;
                 max-width: 450px;
             }
-            .result-summary-box { width: 60px; height: 60px; }
-            .time-display-in-box { font-size: 0.9rem; }
-             #calculator-ui { width: 210px; top: 90px; padding: 10px;} 
-            .calc-button { padding: 8px 0; font-size: 0.8rem;}
-            #calc-display { font-size: 1.4rem; }
+            .result-summary-box { width: 50px; height: 50px; }
+            .time-display-in-box { font-size: 0.75rem; }
+            .syllogism-options { flex-direction: column; }
         }
-         @media (max-width: 480px) {
-             #review-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } 
-             .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: 0.75rem; }
-             button, .button { padding: 0.3rem 0.6rem; }
-             .footer-bar button { padding: 0.25rem 0.5rem; font-size: 0.7rem; }
-             .option-label { padding: 0.5rem 0.75rem; font-size: 0.8rem;}
-             .review-grid-button { font-size: 0.75rem; }
-             #results-details-grid { 
-                grid-template-columns: repeat(3, 1fr); 
-                gap: 0.5rem;
-                max-width: 220px;
-             }
-             .result-summary-box { width: 50px; height: 50px; }
-             .time-display-in-box { font-size: 0.8rem; }
-             .question-number-label { font-size: 0.8rem; }
-             #calculator-ui { width: 90%; max-width: 200px; top: 85px; padding: 8px; } 
-             .calc-button { padding: 7px 0; font-size: 0.75rem;}
-             #calc-display { font-size: 1.3rem; }
-         }
-
-        /* Statement answer boxes and Yes/No buttons */
-        .statement-row {
-            transition: all 0.2s ease;
-            border-radius: 0.375rem;
-            cursor: pointer;
-        }
-        .statement-row:hover {
-            background-color: #f9fafb;
-        }
-        .statement-row.selected {
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
-        }
-        .statement-answer-box {
-            transition: all 0.2s ease;
-            font-weight: 600;
-            font-size: 1rem;
-            user-select: none;
-            background-color: #f5f5f5;
-            color: #4b5563;
-        }
-        .drag-button {
-            cursor: pointer;
-            transition: all 0.2s ease;
-            user-select: none;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-        #yes-button {
-            background-color: #a7f3d0;
-            border-color: #10b981;
-            color: #047857;
-        }
-        #yes-button:hover {
-            background-color: #6ee7b7;
-            transform: translateY(-1px);
-        }
-        #no-button {
-            background-color: #fca5a5;
-            border-color: #ef4444;
-            color: #b91c1c;
-        }
-        #no-button:hover {
-            background-color: #f87171;
-            transform: translateY(-1px);
-        }
-        .drag-button[draggable=true] {
-            cursor: grab;
-        }
-        .drag-button.opacity-50 {
-            opacity: 0.5;
-        }
-    </style>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+         @media (max-width: 480px) {\n             #review-grid { grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); } \n             .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: 0.8rem; }\n             button, .button { padding: 0.4rem 0.8rem; }\n             .footer-bar button { padding: 0.4rem 0.6rem; }\n             .review-grid-button { font-size: 0.75rem; border-radius: var(--md-sys-shape-corner-small); }\n             #results-details-grid { \n                grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); \n                gap: 0.5rem;\n                max-width: 100%; \n                padding-left: 0.5rem; padding-right: 0.5rem;\n             }\n             .result-summary-box { width: 45px; height: 45px; border-radius: var(--md-sys-shape-corner-small); }\n             .time-display-in-box { font-size: 0.65rem; }\n             .question-number-label { font-size: 0.65rem; }\n             .syllogism-button { font-size: 0.875rem; padding: 0.625rem 1rem; }\n         }\n    </style>
 </head>
 <body>
     <div id="app-container">
 
-        <div id="setup-screen" class="p-6 md:p-8 flex flex-col justify-center items-center h-full">
+        <div id="setup-screen" class="p-6 md:p-8 flex flex-col justify-center items-center h-full bg-[var(--md-sys-color-surface)]">
              <div class="text-center mb-6">
                 <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
                      alt="MedwithPurpose Logo" class="mx-auto h-11 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
-                <h1 class="text-2xl md:text-3xl font-bold text-blue-600">Decision Making Syllogisms Worksheet 1</h1>
-                <p class="text-gray-600 mt-2">Prepare for the UCAT DM section.</p>
-                 <p class="text-sm text-gray-500 mt-4">
-                     This section contains <strong>5 questions</strong> with 5 statements each. Maximum score is <strong>10 points</strong> (2 points per question). You have <strong>6 minutes</strong> to complete it.
+                <h1 class="text-2xl md:text-3xl font-bold text-[var(--md-sys-color-primary)] m3-headline-large" id="worksheet-title-setup">DM Syllogisms Worksheet 1</h1>
+                <p class="text-[var(--md-sys-color-on-surface-variant)] mt-2 m3-body-large">Prepare for the UCAT DM Syllogisms section.</p>
+                 <p class="text-sm text-[var(--md-sys-color-on-surface-variant)] mt-4 m3-label-large">
+                     This section contains <strong id="setup-question-count">10 questions</strong> and you have <strong id="setup-time-limit">10 minutes</strong> to complete it.
                  </p>
             </div>
             <div class="space-y-4 w-full max-w-md">
                 <div>
-                    <label for="goal" class="block text-sm font-medium text-gray-700">Goal (Score out of 10):</label>
-                    <input type="number" id="goal" name="goal" min="0" max="10" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., 8">
+                    <label for="goal" class="block text-sm font-medium text-[var(--md-sys-color-on-surface-variant)] m3-label-large">Goal (Score out of 10):</label>
+                    <input type="number" id="goal" name="goal" min="0" max="10" class="mt-1 block w-full px-3 py-2 border border-[var(--md-sys-color-outline)] rounded-md shadow-sm focus:outline-none focus:ring-[var(--md-sys-color-primary)] focus:border-[var(--md-sys-color-primary)] sm:text-sm bg-[var(--md-sys-color-surface-container-lowest)] text-[var(--md-sys-color-on-surface)] m3-body-large" placeholder="e.g., 8">
                 </div>
                 <div>
-                    <label for="focus-area" class="block text-sm font-medium text-gray-700">Area of Focus / Intention For Practice:</label>
-                    <input type="text" id="focus-area" name="focus-area" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., Calculations, Speed">
+                    <label for="focus-area" class="block text-sm font-medium text-[var(--md-sys-color-on-surface-variant)] m3-label-large">Area of Focus / Intention For Practice:</label>
+                    <input type="text" id="focus-area" name="focus-area" class="mt-1 block w-full px-3 py-2 border border-[var(--md-sys-color-outline)] rounded-md shadow-sm focus:outline-none focus:ring-[var(--md-sys-color-primary)] focus:border-[var(--md-sys-color-primary)] sm:text-sm bg-[var(--md-sys-color-surface-container-lowest)] text-[var(--md-sys-color-on-surface)] m3-body-large" placeholder="e.g., Identifying conclusions, Speed">
                 </div>
             </div>
             <div class="mt-8 text-center space-y-3">
-                <button id="start-button" class="primary-button text-lg px-8 py-3">Begin</button>
-                <button onclick="window.location.href='student_dashboard.html'" class="secondary-button text-lg px-8 py-3">Return to Dashboard</button>
+                <button id="start-button" class="m3-button m3-button-filled text-lg px-8 py-3">Begin</button>
+                <button onclick="window.location.href='practice.html'" class="m3-button m3-button-outlined text-lg px-8 py-3">Return to Practice Page</button>
             </div>
         </div>
 
-        <div id="practice-session-screen" class="hidden flex flex-col h-full">
+        <div id="practice-session-screen" class="hidden flex flex-col h-full bg-[var(--md-sys-color-surface-container-low)]">
             <div class="header-bar">
-                <span id="practice-session-title" class="font-semibold">Quantitative Reasoning</span>
+                <span id="practice-session-title" class="m3-title-large" style="color: var(--md-sys-color-on-primary);">DM Syllogisms Worksheet 1</span>
                 <div class="flex items-center space-x-4">
-                    <div id="timer" class="text-base px-3 py-1 rounded-md">26:00</div>
-                    <span class="text-sm">Question <span id="question-number-info">1</span> of 5</span>
+                    <div id="timer" class="text-base px-3 py-1 rounded-md">10:00</div>
+                    <span class="text-sm m3-label-large" style="color: var(--md-sys-color-on-primary);">Question <span id="question-number-info">1</span> of 10</span>
                 </div>
             </div>
             <div class="secondary-toolbar">
-                <div> <button id="calculator-toggle-button" class="secondary-toolbar-button">Calculator (Alt+C)</button>
-                </div>
-                <div> <button id="flag-button" class="secondary-toolbar-button">Flag for Review</button>
-                </div>
-            </div>
-
-            <div class="main-content-area">
-                <div class="question-column w-full">
-                    <!-- Content will be dynamically inserted here by JavaScript -->
-                    </div>
-            </div>
-
-            <div class="footer-bar">
-                 <button id="back-to-results-button" class="hidden mr-auto">← Back to Results</button>
-                 <button id="end-practice-session-button-footer">End Practice Session</button>
-                 <div class="flex items-center space-x-2 ml-auto">
-                     <button id="prev-button" disabled>← Previous (Alt+P)</button>
-                     <button id="navigator-button">Navigator</button>
-                     <button id="next-button">Next (Alt+N) →</button>
-                 </div>
-            </div>
-        </div>
-        
-        <div id="calculator-ui">
-            <div class="calculator-header" id="calculator-drag-header">
-                <span class="title">Calculator</span>
-                <button class="close-calc-btn" id="close-calculator-button">×</button>
-            </div>
-            <div class="calculator-decorative-text">TEXAS INSTRUMENTS TI-108</div>
-            <div id="calc-display-container">
-                <span id="calc-memory-indicator" style="position: absolute; left: 6px; top: 50%; transform: translateY(-50%); color: #2D3748; font-weight: bold; font-size: 0.9rem; display: none;">M</span>
-                <div id="calc-display">0</div>
-            </div>
-            <div class="calc-buttons-grid">
-                <button class="calc-button calc-button-red" data-calc-action="negate">+/-</button>
-                <button class="calc-button calc-button-red" data-calc-action="sqrt">√</button>
-                <button class="calc-button calc-button-red" data-calc-action="percent">%</button>
-                <button class="calc-button calc-button-red operator" data-calc-value="/">÷</button>
-                
-                <button class="calc-button calc-button-red" data-calc-action="mrc">MRC</button>
-                <button class="calc-button calc-button-red" data-calc-action="m-">M-</button>
-                <button class="calc-button calc-button-red" data-calc-action="m+">M+</button>
-                <button class="calc-button calc-button-red operator" data-calc-value="*">×</button>
-
-                <button class="calc-button calc-button-num" data-calc-value="7">7</button>
-                <button class="calc-button calc-button-num" data-calc-value="8">8</button>
-                <button class="calc-button calc-button-num" data-calc-value="9">9</button>
-                <button class="calc-button calc-button-red operator" data-calc-value="-">-</button>
-
-                <button class="calc-button calc-button-num" data-calc-value="4">4</button>
-                <button class="calc-button calc-button-num" data-calc-value="5">5</button>
-                <button class="calc-button calc-button-num" data-calc-value="6">6</button>
-                <button class="calc-button calc-button-red operator" data-calc-value="+">+</button>
-                
-                <button class="calc-button calc-button-num" data-calc-value="1">1</button>
-                <button class="calc-button calc-button-num" data-calc-value="2">2</button>
-                <button class="calc-button calc-button-num" data-calc-value="3">3</button>
-                <button class="calc-button calc-button-red equals" data-calc-action="equals">=</button>
-
-                <button class="calc-button calc-button-red" data-calc-action="clear">ON/C</button>
-                <button class="calc-button calc-button-num" data-calc-value="0">0</button>
-                <button class="calc-button calc-button-num" data-calc-value=".">.</button>
-            </div>
-        </div>
-
-
-        <div id="review-screen" class="hidden p-6 md:p-8 flex flex-col items-center h-full overflow-y-auto">
-             <div class="w-full max-w-3xl mb-4 flex justify-between items-center">
-                 <h2 class="text-2xl font-bold text-blue-600">Review Your Answers</h2>
-                 <button id="filter-flagged-button" class="secondary-button text-sm">Show Flagged Only</button>
-             </div>
-             <p class="text-center text-gray-600 mb-6">Click on a question number to review it. Green indicates answered, Yellow border indicates flagged.</p>
-            <div id="review-grid" class="grid grid-cols-4 gap-3 mb-6 w-full max-w-xs sm:max-w-sm md:max-w-md"></div>
-            <div class="mt-auto pt-6">
-                <button id="end-practice-session-button" class="danger-button text-lg px-8 py-3">Submit</button>
-            </div>
-        </div>
-
-        <div id="results-screen" class="hidden p-6 md:p-8 flex flex-col h-full">
-             <div class="text-center mb-6 flex-shrink-0">
-                <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
-                     alt="MedwithPurpose Logo" class="mx-auto h-11 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
-                 <h2 class="text-2xl md:text-3xl font-bold text-blue-600">Practice Session Results</h2>
-             </div>
-            <div class="bg-blue-50 p-4 rounded-lg mb-6 text-center flex-shrink-0">
-                 <p class="text-lg font-semibold">Your Score: <span id="score" class="text-blue-700">0</span> / <span id="total-score-possible">10</span> Points</p>
-                 <p class="text-gray-600">Time Taken: <span id="time-taken"></span></p>
-            </div>
-            <h3 class="text-xl font-semibold mb-2 flex-shrink-0">Detailed Results Summary:</h3>
-            <p class="text-sm text-gray-500 mb-4 flex-shrink-0">Click on a question box below to review it.</p>
-            <div id="results-details-grid" class="overflow-y-auto flex-grow"></div>
-            <div class="mt-6 flex-shrink-0 border-t pt-4">
-                 <div class="p-3 bg-blue-50 border border-blue-100 rounded-md mb-4 text-center">
-                    <p class="text-blue-800 text-sm">Your test results for 5 questions have been submitted. You can add a reflection below if you'd like.</p>
-                 </div>
-                 <div class="mb-4">
-                    <label for="focus-rating" class="block text-md font-semibold text-gray-700 mb-1">My focus out of 5 (1 very low, 5 very high):</label>
-                    <input type="number" id="focus-rating" name="focus-rating" min="1" max="5" class="mt-1 block w-20 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="1-5">
-                 </div>
-                 <div>
+                <div> 
                     <label for="reflection-text" class="block text-md font-semibold text-gray-700 mb-1">Main takeaway from this practice:</label>
                     <textarea id="reflection-text" name="reflection-text" rows="3" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Reflect on your performance, strategies, or areas for improvement..."></textarea>
                  </div>
