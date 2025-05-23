@@ -3,574 +3,376 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Settings - Student Dashboard</title>
+    <title>User Settings - UCAT Platform</title>
     <link rel="icon" href="https://ik.imagekit.io/mwp/2.svg?updatedAt=1745982956185" type="image/svg+xml">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            /* M3 Color System - Light Mode */
+            /* M3 Color Palette - Light Theme */
             --md-sys-color-primary: #1967D2;
             --md-sys-color-on-primary: #FFFFFF;
             --md-sys-color-primary-container: #D1E3FF;
             --md-sys-color-on-primary-container: #001E3A;
-            --md-sys-color-secondary: #4285F4;
+            --md-sys-color-secondary: #5E89C2; 
             --md-sys-color-on-secondary: #FFFFFF;
-            --md-sys-color-accent: #FF6D00;
-            --md-sys-color-on-accent: #FFFFFF;
-            --md-sys-color-background: #F8F9FA;
+            --md-sys-color-background: #F8F9FA; 
             --md-sys-color-on-background: #1F1F1F;
-            --md-sys-color-surface: #FFFFFF;
+            --md-sys-color-surface: #FFFFFF; 
             --md-sys-color-on-surface: #1F1F1F;
+            --md-sys-color-surface-variant: #E1E3E5; 
             --md-sys-color-on-surface-variant: #444746;
             --md-sys-color-outline: #747775;
             --md-sys-color-error: #D93025;
             --md-sys-color-on-error: #FFFFFF;
+            --md-sys-color-error-container: #FAD2CF;
+            --md-sys-color-on-error-container: #410001;
             --md-sys-color-success: #1E8E3E;
             --md-sys-color-on-success: #FFFFFF;
-            --md-sys-color-warning: #F9AB00;
-            --md-sys-color-on-warning: #FFFFFF;
+            --md-sys-color-success-container: #C8E6C9;
+            --md-sys-color-on-success-container: #0D3C1E;
 
-            /* Legacy color mappings for backward compatibility */
-            --color-primary: var(--md-sys-color-primary);
-            --color-primary-dark: #0F4C9C;
-            --color-primary-light: var(--md-sys-color-primary-container);
-            --color-primary-bg: var(--md-sys-color-primary-container);
-            --color-success: var(--md-sys-color-success);
-            --color-warning: var(--md-sys-color-warning);
-            --color-danger: var(--md-sys-color-error);
-            --color-text: var(--md-sys-color-on-background);
-            --color-text-secondary: var(--md-sys-color-on-surface-variant);
-            --color-text-tertiary: #6B7280;
-            --color-bg: var(--md-sys-color-background);
-            --color-bg-secondary: #F1F3F4;
-            --color-border: var(--md-sys-color-outline);
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            --radius-sm: 0.375rem;
-            --radius: 0.5rem;
-            --radius-md: 0.75rem;
-            --radius-lg: 1rem;
-            --transition: 220ms cubic-bezier(0.4, 0, 0.2, 1);
-        }
 
-        /* Dark Mode Support */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                /* M3 Color System - Dark Mode */
-                --md-sys-color-primary: #AECBFA;
-                --md-sys-color-on-primary: #00325B;
-                --md-sys-color-primary-container: #00497E;
-                --md-sys-color-on-primary-container: #D1E3FF;
-                --md-sys-color-secondary: #A8C7FA;
-                --md-sys-color-on-secondary: #0A315E;
-                --md-sys-color-accent: #FFB74D;
-                --md-sys-color-on-accent: #542F00;
-                --md-sys-color-background: #1F1F1F;
-                --md-sys-color-on-background: #E3E3E3;
-                --md-sys-color-surface: #2B2B2B;
-                --md-sys-color-on-surface: #E3E3E3;
-                --md-sys-color-on-surface-variant: #C4C7C5;
-                --md-sys-color-outline: #8E918F;
-                --md-sys-color-error: #F2B8B5;
-                --md-sys-color-on-error: #601410;
-                --md-sys-color-success: #A5D6A7;
-                --md-sys-color-on-success: #0D3C1E;
-                --md-sys-color-warning: #FFD54F;
-                --md-sys-color-on-warning: #5D4037;
+            /* M3 Typography */
+            --md-sys-font-family-name: 'Roboto', sans-serif;
+            --md-sys-typescale-headline-medium-font-size: 28px;
+            --md-sys-typescale-headline-medium-line-height: 36px;
+            --md-sys-typescale-title-large-font-size: 22px;
+            --md-sys-typescale-title-large-line-height: 28px;
+            --md-sys-typescale-body-large-font-size: 16px;
+            --md-sys-typescale-body-large-line-height: 24px;
+            --md-sys-typescale-label-large-font-size: 14px;
+            --md-sys-typescale-label-large-line-height: 20px;
+            --md-sys-typescale-body-small-font-size: 12px; /* For helper/error text */
+            --md-sys-typescale-body-small-line-height: 16px;
+            --md-sys-font-weight-regular: 400;
+            --md-sys-font-weight-medium: 500;
 
-                /* Updated legacy mappings for dark mode */
-                --color-primary-dark: #7BAAF7;
-                --color-bg-secondary: #383838;
-                --color-text-tertiary: #9AA0A6;
-                --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-                --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-                --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
-                --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
-            }
-        }
+            /* M3 Spacing */
+            --md-sys-spacing-unit: 0.5rem; /* 8px */
+            --md-sys-spacing-xs: 0.5rem;
+            --md-sys-spacing-s: 0.75rem;
+            --md-sys-spacing-m: 1rem;
+            --md-sys-spacing-l: 1.5rem;
+            --md-sys-spacing-xl: 2rem;
+            
+            /* M3 Shape */
+            --md-sys-shape-corner-extra-small: 0.25rem; /* 4dp (for text fields) */
+            --md-sys-shape-corner-medium: 0.75rem; /* 12dp (for cards/sections) */
+            --md-sys-shape-corner-large: 1rem;    /* 16dp */
+            --md-sys-shape-corner-full: 9999px; /* For buttons */
+            
+            /* M3 Elevation */
+            --md-sys-elevation-level0: none;
+            --md-sys-elevation-level1: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0,0,0,0.15);
+            --md-sys-elevation-level2: 0px 1px 2px rgba(0,0,0,0.3), 0px 2px 6px 2px rgba(0,0,0,0.15);
 
-        /* Manual dark mode class override */
-        .dark-theme {
-            --md-sys-color-primary: #AECBFA;
-            --md-sys-color-on-primary: #00325B;
-            --md-sys-color-primary-container: #00497E;
-            --md-sys-color-on-primary-container: #D1E3FF;
-            --md-sys-color-secondary: #A8C7FA;
-            --md-sys-color-on-secondary: #0A315E;
-            --md-sys-color-accent: #FFB74D;
-            --md-sys-color-on-accent: #542F00;
-            --md-sys-color-background: #1F1F1F;
-            --md-sys-color-on-background: #E3E3E3;
-            --md-sys-color-surface: #2B2B2B;
-            --md-sys-color-on-surface: #E3E3E3;
-            --md-sys-color-on-surface-variant: #C4C7C5;
-            --md-sys-color-outline: #8E918F;
-            --md-sys-color-error: #F2B8B5;
-            --md-sys-color-on-error: #601410;
-            --md-sys-color-success: #A5D6A7;
-            --md-sys-color-on-success: #0D3C1E;
-            --md-sys-color-warning: #FFD54F;
-            --md-sys-color-on-warning: #5D4037;
-
-            --color-primary-dark: #7BAAF7;
-            --color-bg-secondary: #383838;
-            --color-text-tertiary: #9AA0A6;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            /* Transitions */
+            --md-sys-motion-duration-short: 150ms;
+            --md-sys-motion-easing-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: var(--md-sys-font-family-name);
             background-color: var(--md-sys-color-background);
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            padding: 0;
             color: var(--md-sys-color-on-background);
-            line-height: 1.5;
+            line-height: var(--md-sys-typescale-body-large-line-height);
+            display: flex; flex-direction: column; min-height: 100vh; margin:0;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
 
         .dashboard-wrapper {
-            background-color: var(--md-sys-color-surface);
-            width: 100%;
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
+            background-color: var(--md-sys-color-background); width: 100%;
+            flex-grow: 1; display: flex; flex-direction: column;
         }
-
-        /* New Menu Bar Box Style */
-        .menu-bar-boxed-container {
-            background-color: var(--md-sys-color-surface);
-            border-radius: 18px; /* Pronounced rounded corners like the image */
-            box-shadow: var(--shadow-lg);
-            margin: 1.5rem auto; /* Space around and center */
-            max-width: 1320px; /* Control width, adjust as needed */
-            overflow: hidden; /* Clip content to rounded corners */
-            border: 1px solid var(--md-sys-color-outline);
-        }
-
-        /* Dashboard Header */
+        
         .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            background-color: var(--md-sys-color-surface);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: var(--md-sys-spacing-m) var(--md-sys-spacing-l);
+            background-color: var(--md-sys-color-surface); 
+            box-shadow: var(--md-sys-elevation-level1);
+            position: sticky; top: 0; z-index: 1000;
         }
+        .dashboard-header .logo-small { max-width: 132px; }
+        /* Settings icon in header is less relevant on settings page itself, but keep for consistency if it's a shared component */
+        .settings-icon span { color: var(--md-sys-color-on-surface-variant); }
+        .settings-icon:hover span { color: var(--md-sys-color-primary); }
 
-        .dashboard-header .logo-small {
-            max-width: 132px;
-            transition: all var(--transition);
-        }
-
-        .dashboard-header .logo-small:hover {
-            transform: scale(1.03);
-        }
-        
-        .settings-icon {
-            color: var(--md-sys-color-on-surface-variant);
-            transition: color var(--transition);
-        }
-        .settings-icon:hover {
-            color: var(--md-sys-color-primary);
-        }
-
-        /* Main Navigation */
         .main-nav {
-            display: flex;
-            justify-content: center;
+            display: flex; justify-content: center;
             background-color: var(--md-sys-color-surface);
-            padding: 0.25rem 0;
+            padding: var(--md-sys-spacing-xxs) 0;
+            box-shadow: var(--md-sys-elevation-level1);
+            position: sticky; top: 68px; /* Adjust based on actual header height */
+            z-index: 999;
+            overflow-x: auto; /* For smaller screens */
         }
-
         .nav-tab {
-            padding: 0.875rem 1.5rem;
-            margin: 0 0.5rem;
-            cursor: pointer;
-            font-weight: 500;
-            color: var(--md-sys-color-on-surface-variant);
-            border-bottom: 2px solid transparent; /* Keep for spacing */
-            transition: color var(--transition), background-color var(--transition), border-color var(--transition);
-            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-            position: relative;
-            user-select: none;
-            text-decoration: none; /* For anchor tags */
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l); margin: 0 var(--md-sys-spacing-xs);
+            cursor: pointer; font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium); font-size: var(--md-sys-typescale-label-large-font-size);
+            color: var(--md-sys-color-on-surface-variant); border-bottom: 2px solid transparent;
+            transition: color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard), 
+                        border-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+            border-radius: var(--md-sys-shape-corner-small) var(--md-sys-shape-corner-small) 0 0;
+            position: relative; text-decoration: none; display: inline-flex; align-items: center; gap: var(--md-sys-spacing-xs);
+            white-space: nowrap;
         }
-        
-        .nav-tab::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -2px; /* Aligns with the original border-bottom space */
-            width: 100%;
-            height: 2px;
-            background-color: var(--md-sys-color-primary);
-            transform: scaleX(0);
-            transform-origin: center; /* Underline grows from the center */
-            transition: transform 0.3s ease-out;
-        }
-
-        .nav-tab:hover {
+        .nav-tab:hover { color: var(--md-sys-color-primary); }
+        .nav-tab.active { /* This class might be set by JS based on current page */
             color: var(--md-sys-color-primary);
-            background-color: var(--md-sys-color-primary-container);
+            border-bottom-color: var(--md-sys-color-primary);
         }
-        
-        .nav-tab:hover::after {
-            transform: scaleX(1); /* Show underline on hover */
-        }
-
-        .nav-tab.active {
-            color: var(--md-sys-color-primary);
-            background-color: var(--md-sys-color-primary-container);
-        }
-        
-        .nav-tab.active::after {
-            transform: scaleX(1); 
-        }
-
         .nav-tab-disabled {
             color: var(--md-sys-color-on-surface-variant);
-            cursor: not-allowed;
-            opacity: 0.7;
+            opacity: 0.38; cursor: not-allowed;
         }
-
         .nav-tab-disabled .coming-soon-inline {
-            font-size: 0.65rem;
-            color: var(--md-sys-color-on-surface-variant);
-            margin-left: 4px;
-            background-color: var(--color-bg-secondary);
-            padding: 0.1rem 0.4rem;
-            border-radius: 1rem;
-        }
-
-        /* Dropdown for Tests Tab */
-        .tests-dropdown-container {
-            position: relative;
-        }
-
-        .tests-dropdown-content {
-            opacity: 0;
-            visibility: hidden;
-            position: absolute;
-            background-color: var(--md-sys-color-surface);
-            min-width: 200px;
-            box-shadow: var(--shadow-md);
-            z-index: 50;
-            border-radius: var(--radius);
-            margin-top: 0.25rem;
-            border: 1px solid var(--md-sys-color-outline);
-            transform: translateY(-10px);
-            transition: all var(--transition);
-            overflow: hidden;
-        }
-
-        .tests-dropdown-container:hover .tests-dropdown-content {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .dropdown-item {
-            color: var(--md-sys-color-on-surface-variant);
-            padding: 0.75rem 1rem;
-            text-decoration: none;
-            display: block;
-            font-size: 0.9rem;
-            border-bottom: 1px solid var(--md-sys-color-outline);
-            transition: all var(--transition);
-        }
-
-        .dropdown-item:last-child {
-            border-bottom: none;
-        }
-
-        .dropdown-item:hover:not(.disabled) {
-            background-color: var(--md-sys-color-primary-container);
-            color: var(--md-sys-color-primary);
-            padding-left: 1.25rem;
+            font-size: 0.65rem; margin-left: var(--md-sys-spacing-xxs);
+            background-color: var(--md-sys-color-surface-variant); color: var(--md-sys-color-on-surface-variant);
+            padding: 0.1rem 0.4rem; border-radius: var(--md-sys-shape-corner-full);
         }
         
-        .dropdown-item.disabled {
-            color: var(--md-sys-color-on-surface-variant);
-            cursor: not-allowed;
-            background-color: var(--color-bg-secondary);
-            opacity: 0.7;
-        }
-
-        .dropdown-item.disabled .coming-soon-inline {
-            font-size: 0.65rem;
-            color: var(--md-sys-color-on-surface-variant);
-            margin-left: 4px;
-            background-color: rgba(255, 255, 255, 0.7);
-            padding: 0.1rem 0.4rem;
-            border-radius: 1rem;
-        }
-
         .welcome-user {
-            font-size: 0.9rem;
+            font-size: var(--md-sys-typescale-body-medium-font-size);
             color: var(--md-sys-color-on-surface-variant);
-            display: flex;
-            align-items: center;
+            display: flex; align-items: center;
         }
-
-        .welcome-user::before {
-            content: "";
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background-color: var(--md-sys-color-success);
-            border-radius: 50%;
-            margin-right: 8px;
+         .welcome-user::before {
+            content: ""; display: inline-block; width: 8px; height: 8px;
+            background-color: var(--md-sys-color-success); /* Green for online state */
+            border-radius: 50%; margin-right: var(--md-sys-spacing-xs);
         }
-        
-        .btn-logout {
-            background-color: var(--md-sys-color-error);
-            color: white;
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-            border-radius: var(--radius);
-            transition: all var(--transition);
-            border: none;
-            cursor: pointer;
+        .btn-logout { /* M3 Filled Button with Error color */
+            background-color: var(--md-sys-color-error); color: var(--md-sys-color-on-error);
+            padding: var(--md-sys-spacing-xs) var(--md-sys-spacing-m);
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-size: var(--md-sys-typescale-label-large-font-size);
+            border-radius: var(--md-sys-shape-corner-full);
+            transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+            border: none; cursor: pointer; display: inline-flex; align-items: center; gap: var(--md-sys-spacing-xs);
         }
-
-        .btn-logout:hover {
-            background-color: #dc2626;
-            box-shadow: var(--shadow);
-        }
+        .btn-logout:hover { background-color: color-mix(in srgb, var(--md-sys-color-error) 90%, black); }
         
         /* Settings Page Specific Styles */
         .dashboard-content-area {
-            padding: 2rem 2.5rem;
+            padding: var(--md-sys-spacing-xl); /* 32px */
             flex-grow: 1;
+            display: flex; /* Center the settings container */
+            justify-content: center;
+            align-items: flex-start; /* Align to top if content is shorter than viewport */
         }
         
         .settings-container {
+            width: 100%;
             max-width: 700px;
-            margin: 0 auto;
             background-color: var(--md-sys-color-surface);
-            padding: 2rem;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-md);
+            padding: var(--md-sys-spacing-xl); /* 32px */
+            border-radius: var(--md-sys-shape-corner-medium); /* 12dp for card-like appearance */
+            box-shadow: var(--md-sys-elevation-level1);
+        }
+
+        .settings-container > h1 { /* Headline Medium */
+            font-family: var(--md-sys-typescale-headline-medium-font-family-name);
+            font-weight: var(--md-sys-font-weight-regular);
+            font-size: var(--md-sys-typescale-headline-medium-font-size);
+            line-height: var(--md-sys-typescale-headline-medium-line-height);
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: var(--md-sys-spacing-xl); /* 32px */
+            text-align: center;
         }
 
         .settings-section {
-            margin-bottom: 2.5rem;
-            padding-bottom: 1.5rem;
+            margin-bottom: var(--md-sys-spacing-xl); /* 32px */
+            padding-bottom: var(--md-sys-spacing-l); /* 24px */
             border-bottom: 1px solid var(--md-sys-color-outline);
         }
-        .settings-section:last-child {
-            margin-bottom: 0;
-            border-bottom: none;
-            padding-bottom: 0;
+        .settings-section:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
+
+        .settings-section h2 { /* Title Large */
+            font-family: var(--md-sys-typescale-title-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            font-size: var(--md-sys-typescale-title-large-font-size);
+            line-height: var(--md-sys-typescale-title-large-line-height);
+            color: var(--md-sys-color-primary); /* Primary color for section titles */
+            margin-bottom: var(--md-sys-spacing-l); /* 24px */
         }
 
-        .settings-section h2 {
-            font-size: 1.5rem; /* 24px */
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface);
-            margin-bottom: 1.25rem; /* 20px */
-        }
+        .input-group { margin-bottom: var(--md-sys-spacing-l); /* 24px */ }
 
-        .input-group {
-            margin-bottom: 1.25rem; /* 20px */
-        }
-
-        .input-group label {
+        .input-group label { /* Label Large */
             display: block;
-            font-size: 0.875rem; /* 14px */
-            font-weight: 500;
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            font-size: var(--md-sys-typescale-label-large-font-size);
+            line-height: var(--md-sys-typescale-label-large-line-height);
             color: var(--md-sys-color-on-surface-variant);
-            margin-bottom: 0.375rem; /* 6px */
+            margin-bottom: var(--md-sys-spacing-xs); /* 8px */
         }
-
+        /* M3 Text Field Inspired Styling */
         .input-group input[type="text"],
         .input-group input[type="email"],
         .input-group input[type="password"],
         .input-group input[type="date"] {
             width: 100%;
-            padding: 0.75rem 1rem; /* 12px 16px */
-            border: 1px solid var(--md-sys-color-outline);
-            border-radius: var(--radius); /* 0.5rem */
-            font-size: 1rem; /* 16px */
+            padding: var(--md-sys-spacing-m); /* 16px */
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 4%, var(--md-sys-color-surface)); /* M3 Filled text field subtle bg */
+            border: none; 
+            border-bottom: 1px solid var(--md-sys-color-on-surface-variant); /* Underline */
+            border-radius: var(--md-sys-shape-corner-extra-small) var(--md-sys-shape-corner-extra-small) 0 0; /* Top corners rounded */
+            font-size: var(--md-sys-typescale-body-large-font-size);
             color: var(--md-sys-color-on-surface);
-            background-color: var(--md-sys-color-background);
-            transition: border-color var(--transition), box-shadow var(--transition);
+            transition: border-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard), 
+                        background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+            box-sizing: border-box;
         }
         .input-group input[type="text"]:read-only,
         .input-group input[type="email"]:read-only {
-             background-color: var(--md-sys-color-background);
+             background-color: var(--md-sys-color-surface-variant); /* More distinct for readonly */
+             border-bottom: 1px solid var(--md-sys-color-outline);
+             color: var(--md-sys-color-on-surface-variant);
              cursor: default;
         }
-        
         .input-group input:focus {
             outline: none;
-            border-color: var(--md-sys-color-primary);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); /* Primary focus ring */
+            border-bottom: 2px solid var(--md-sys-color-primary); /* Thicker primary underline on focus */
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, var(--md-sys-color-surface));
+            margin-bottom: calc(var(--md-sys-spacing-l) - 1px); /* Adjust for thicker border to prevent layout shift*/
+        }
+         .input-group input[type="date"]::-webkit-calendar-picker-indicator { /* Style date picker icon if possible */
+            opacity: 0.6;
+            cursor: pointer;
         }
 
-        .btn-save {
+
+        .btn-save { /* M3 Filled Button */
             background-color: var(--md-sys-color-primary);
-            color: white;
-            padding: 0.6rem 1.2rem;
-            border-radius: var(--radius);
-            font-weight: 500;
-            transition: background-color 0.2s ease;
-            border: none;
-            cursor: pointer;
-            min-width: 120px;
+            color: var(--md-sys-color-on-primary);
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l); 
+            border-radius: var(--md-sys-shape-corner-full); 
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            font-size: var(--md-sys-typescale-label-large-font-size);
+            transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
+                        box-shadow var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+            border: none; cursor: pointer; min-width: 120px;
+            display: inline-flex; align-items: center; justify-content: center; gap: var(--md-sys-spacing-xs);
         }
         .btn-save:hover {
-            background-color: var(--md-sys-color-primary-dark);
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 92%, black); 
+            box-shadow: var(--md-sys-elevation-level1);
         }
         .btn-save:disabled {
-            background-color: var(--md-sys-color-on-surface-variant);
-            cursor: not-allowed;
+            background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent); /* M3 disabled filled button */
+            color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+            box-shadow: none; cursor: not-allowed;
         }
         
-        .message {
-            font-size: 0.875rem;
-            padding: 0.75rem 1rem;
-            border-radius: var(--radius);
-            margin-top: 1rem;
-            text-align: center;
+        .message { /* M3 Banner/Snackbar like */
+            font-family: var(--md-sys-typescale-body-small-font-family-name);
+            font-size: var(--md-sys-typescale-body-small-font-size);
+            padding: var(--md-sys-spacing-m); 
+            border-radius: var(--md-sys-shape-corner-extra-small); 
+            margin-top: var(--md-sys-spacing-m);
+            text-align: left; 
+            display: flex; align-items: center; gap: var(--md-sys-spacing-s);
         }
         .message.success {
-            background-color: var(--md-sys-color-success-bg, #d1fae5); /* Adding a fallback */
-            color: var(--md-sys-color-success-dark, #065f46); /* Adding a fallback */
-            border: 1px solid var(--md-sys-color-success, #10b981);
+            background-color: var(--md-sys-color-success-container); 
+            color: var(--md-sys-color-on-success-container); 
         }
         .message.error {
-            background-color: var(--md-sys-color-danger-bg, #fee2e2); /* Adding a fallback */
-            color: var(--md-sys-color-danger-dark, #991b1b); /* Adding a fallback */
-            border: 1px solid var(--md-sys-color-danger, #ef4444);
+            background-color: var(--md-sys-color-error-container); 
+            color: var(--md-sys-color-on-error-container); 
         }
         
-        #auth-redirect-message {
-            background-color: white;
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-md);
-            padding: 2.5rem;
-            width: 100%;
-            max-width: 480px;
-            text-align: center;
-            margin: 2.5rem auto;
+        #auth-redirect-message .auth-container { /* Styles for auth redirect message box */
+            background-color: var(--md-sys-color-surface);
+            border-radius: var(--md-sys-shape-corner-large);
+            box-shadow: var(--md-sys-elevation-level2);
+            padding: var(--md-sys-spacing-xl); width: 100%; max-width: 480px;
+            text-align: center; margin: var(--md-sys-spacing-xl) auto;
         }
         
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            .dashboard-content-area {
-                padding: 1.5rem 1rem;
-            }
-            .settings-container {
-                padding: 1.5rem;
-            }
-            .main-nav { /* Allow horizontal scrolling for nav tabs on small screens */
-                overflow-x: auto;
-                justify-content: flex-start;
-                padding-left: 0.5rem;
-                padding-right: 0.5rem;
-            }
-            .nav-tab {
-                white-space: nowrap; /* Prevent tabs from wrapping */
-            }
-        }
-         /* Spinner for loading state */
         .spinner {
-            border: 3px solid rgba(0, 0, 0, 0.1);
+            border: 3px solid color-mix(in srgb, currentColor 20%, transparent);
             border-radius: 50%;
-            border-top: 3px solid var(--md-sys-color-primary);
-            width: 16px; /* Smaller spinner */
-            height: 16px;
+            border-top-color: currentColor;
+            width: 16px; height: 16px;
             animation: spin 1s linear infinite;
-            display: inline-block;
-            margin-right: 8px;
+            display: inline-block; /* margin-right handled by gap in .btn-save */
             vertical-align: middle;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
 
+        @media (max-width: 768px) {
+            .dashboard-content-area { padding: var(--md-sys-spacing-l); }
+            .settings-container { padding: var(--md-sys-spacing-l); }
+            .main-nav { justify-content: flex-start; }
+        }
+         @media (max-width: 480px) {
+            .dashboard-header { padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); }
+            .dashboard-header .logo-small { max-width: 100px; }
+            .welcome-user { display: none; } 
+            .btn-logout { padding: var(--md-sys-spacing-xxs) var(--md-sys-spacing-s); font-size: var(--md-sys-typescale-label-large-font-size); }
+            .nav-tab { padding: var(--md-sys-spacing-s); }
+         }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
 <body>
-    <div id="auth-redirect-message" class="fixed inset-0 bg-gray-100 flex items-center justify-center z-50 hidden">
-        <div class="auth-container bg-white p-8 rounded-lg shadow-xl max-w-md w-full text-center">
+    <div id="auth-redirect-message" class="fixed inset-0 flex items-center justify-center z-50 hidden" style="background-color: var(--md-sys-color-background);">
+         <div class="auth-container">
             <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="mx-auto h-12 w-auto mb-6">
-            <h2 class="text-2xl font-bold text-gray-800 mb-3">Access Denied</h2>
-            <p class="text-gray-600 mb-6">You need to be logged in to view this page.</p>
-            <a href="student_dashboard.html" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
+            <h2 style="font-family: var(--md-sys-typescale-headline-small-font-family-name); color: var(--md-sys-color-on-surface); margin-bottom: var(--md-sys-spacing-s);">Access Denied</h2>
+            <p class="mb-6" style="color: var(--md-sys-color-on-surface-variant);">You need to be logged in to view this page.</p>
+            <a href="student_dashboard.html" class="inline-block font-semibold py-2 px-6 rounded-full transition-colors" style="background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); font-family: var(--md-sys-typescale-label-large-font-family-name);">
                 Go to Login
             </a>
         </div>
     </div>
 
-    <div id="dashboard-wrapper" class="dashboard-wrapper hidden"> <!-- Initially hidden -->
-        <!-- New Boxed Menu Bar Container -->
-        <div class="menu-bar-boxed-container">
-            <!-- Header -->
-            <div class="dashboard-header">
-                <a href="home.html">
-                    <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="logo-small" onerror="this.style.display='none'; this.onerror=null;">
-                </a>
-                <div class="flex items-center">
-                    <span class="welcome-user mr-4">Welcome, <span id="student-display-name" class="font-semibold">Student</span></span>
-                    <button id="logout-button" class="btn-logout" aria-label="Logout">
-                        <span>Logout</span>
-                    </button>
-                </div>
+    <div id="dashboard-wrapper" class="dashboard-wrapper hidden">
+        <div class="dashboard-header">
+            <a href="home.html">
+                <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="logo-small" onerror="this.style.display='none'; this.onerror=null;">
+            </a>
+            <div class="flex items-center">
+                <span class="welcome-user mr-4">Welcome, <span id="student-display-name" class="font-semibold">Student</span></span>
+                <button id="logout-button" class="btn-logout" aria-label="Logout">
+                    <span class="material-symbols-outlined">logout</span>
+                    <span>Logout</span>
+                </button>
             </div>
+        </div>
 
-            <!-- Main Navigation -->
-            <nav class="main-nav" role="navigation" aria-label="Main Navigation">
-                <a href="home.html" id="nav-home" class="nav-tab">Home</a>
-                <div id="nav-practice" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
-                    <span>Practice</span> <span class="coming-soon-inline">Coming Soon</span>
-                </div>
-                <div class="tests-dropdown-container">
-                    <div id="nav-tests" class="nav-tab" role="button" aria-haspopup="true">Tests</div>
-                    <div class="tests-dropdown-content" role="menu">
-                        <a href="#" id="nav-tests-exams" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Full Exams <span class="coming-soon-inline">Coming Soon</span></a>
-                        <a href="#" id="nav-tests-vr" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Verbal Reasoning <span class="coming-soon-inline">Coming Soon</span></a>
-                        <a href="#" id="nav-tests-dm" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Decision Making <span class="coming-soon-inline">Coming Soon</span></a>
-                        <a href="student_dashboard.html#qr" id="nav-tests-qr" class="dropdown-item" role="menuitem">Quantitative Reasoning</a>
-                        <a href="#" id="nav-tests-sjt" class="dropdown-item disabled" role="menuitem" aria-disabled="true">Situational Judgement <span class="coming-soon-inline">Coming Soon</span></a>
-                    </div>
-                </div>
-                <a href="focus_groups.html" id="nav-focus-groups" class="nav-tab" role="button">Focus Groups</a>
-                <a href="student_dashboard.html#results" id="nav-results" class="nav-tab" role="button">Results</a>
-                <div id="nav-skills" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
-                    <span>Skills</span> <span class="coming-soon-inline">Coming Soon</span>
-                </div>
-            </nav>
-        </div> <!-- End of New Boxed Menu Bar Container -->
+        <nav class="main-nav" role="navigation" aria-label="Main Navigation">
+            <a href="home.html" id="nav-home" class="nav-tab" role="tab" aria-selected="false">
+                <span class="material-symbols-outlined">home</span>Home
+            </a>
+            <a href="practice.html" id="nav-practice-main" class="nav-tab" role="tab" aria-selected="false">
+                 <span class="material-symbols-outlined">model_training</span>Practice
+            </a>
+            <a href="student_dashboard.html#results" id="nav-results" class="nav-tab" role="tab" aria-selected="false">
+                <span class="material-symbols-outlined">bar_chart</span>Results
+            </a>
+            <div id="nav-skills" class="nav-tab nav-tab-disabled" role="tab" aria-disabled="true">
+                 <span class="material-symbols-outlined">psychology</span>
+                <span>Skills</span> <span class="coming-soon-inline">Soon</span>
+            </div>
+        </nav>
 
-        <!-- Content Area for Settings -->
         <main id="dashboard-content-area" class="dashboard-content-area">
             <div class="settings-container">
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-8 text-center">Account Settings</h1>
+                <h1>Account Settings</h1>
 
-                <!-- Profile Information Section -->
                 <section class="settings-section" id="profile-settings">
                     <h2>Profile Information</h2>
                     <div class="input-group">
@@ -579,16 +381,17 @@
                     </div>
                     <div class="input-group">
                         <label for="settings-email">Email Address</label>
-                        <input type="email" id="settings-email" name="settings-email" placeholder="your.email@example.com">
+                        <input type="email" id="settings-email" name="settings-email" placeholder="your.email@example.com" readonly>
+                        <p class="text-xs mt-1" style="color: var(--md-sys-color-on-surface-variant); font-size:var(--md-sys-typescale-body-small-font-size)">Email cannot be changed here. Contact support if needed.</p>
                     </div>
                     <button id="save-profile-button" class="btn-save">
                         <span id="profile-spinner" class="spinner hidden"></span>
+                        <span class="material-symbols-outlined">save</span>
                         Save Profile
                     </button>
                     <div id="profile-message" class="message hidden"></div>
                 </section>
 
-                <!-- Change Password Section -->
                 <section class="settings-section" id="password-settings">
                     <h2>Change Password</h2>
                     <div class="input-group">
@@ -605,24 +408,25 @@
                     </div>
                     <button id="change-password-button" class="btn-save">
                         <span id="password-spinner" class="spinner hidden"></span>
+                         <span class="material-symbols-outlined">password</span>
                         Change Password
                     </button>
                     <div id="password-message" class="message hidden"></div>
                 </section>
 
-                <!-- Exam Date Section -->
                 <section class="settings-section" id="exam-date-settings">
                     <h2>Exam Date</h2>
                     <div class="input-group">
-                        <label for="settings-exam-date">Date of Your Exam</label>
+                        <label for="settings-exam-date">Your UCAT Test Date</label>
                         <input type="date" id="settings-exam-date" name="settings-exam-date">
                     </div>
                     <div class="input-group">
                         <label for="days-remaining-display">Days Remaining</label>
-                        <input type="text" id="days-remaining-display" name="days-remaining-display" readonly class="bg-gray-100 cursor-default">
+                        <input type="text" id="days-remaining-display" name="days-remaining-display" readonly>
                     </div>
                     <button id="save-exam-date-button" class="btn-save">
                         <span id="exam-date-spinner" class="spinner hidden"></span>
+                        <span class="material-symbols-outlined">event</span>
                         Save Exam Date
                     </button>
                     <div id="exam-date-message" class="message hidden"></div>
@@ -644,322 +448,289 @@
           measurementId: "G-4M3ED641M9"
         };
 
-        let db;
-        let auth;
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+        const auth = firebase.auth();
 
-        // --- UI Helper Functions ---
-        function setButtonLoading(buttonId, spinnerId, isLoading) {
-            const button = document.getElementById(buttonId);
-            const spinner = document.getElementById(spinnerId);
+        // DOM Elements
+        const studentDisplayNameHeader = document.getElementById('student-display-name');
+        const dashboardWrapper = document.getElementById('dashboard-wrapper');
+        const authRedirectMessage = document.getElementById('auth-redirect-message');
+        const logoutButton = document.getElementById('logout-button');
+
+        const settingsNameInput = document.getElementById('settings-name');
+        const settingsEmailInput = document.getElementById('settings-email');
+        const saveProfileButton = document.getElementById('save-profile-button');
+        const profileSpinner = document.getElementById('profile-spinner');
+        const profileMessage = document.getElementById('profile-message');
+
+        const currentPasswordInput = document.getElementById('current-password');
+        const newPasswordInput = document.getElementById('new-password');
+        const confirmPasswordInput = document.getElementById('confirm-password');
+        const changePasswordButton = document.getElementById('change-password-button');
+        const passwordSpinner = document.getElementById('password-spinner');
+        const passwordMessage = document.getElementById('password-message');
+
+        const settingsExamDateInput = document.getElementById('settings-exam-date');
+        const daysRemainingDisplay = document.getElementById('days-remaining-display');
+        const saveExamDateButton = document.getElementById('save-exam-date-button');
+        const examDateSpinner = document.getElementById('exam-date-spinner');
+        const examDateMessage = document.getElementById('exam-date-message');
+
+
+        // UI Helper Functions
+        function setButtonLoading(button, spinner, isLoading) {
             if (!button || !spinner) return;
-
-            if (isLoading) {
-                button.disabled = true;
-                spinner.classList.remove('hidden');
-                button.classList.add('opacity-70');
-            } else {
-                button.disabled = false;
-                spinner.classList.add('hidden');
-                button.classList.remove('opacity-70');
-            }
+            button.disabled = isLoading;
+            spinner.classList.toggle('hidden', !isLoading);
+            button.classList.toggle('opacity-70', isLoading); 
         }
 
-        function showMessage(elementId, text, type = 'success') {
-            const element = document.getElementById(elementId);
+        function showMessageElement(element, text, type = 'success') {
             if (!element) return;
-            element.textContent = text;
-            element.className = 'message'; // Reset classes
-            element.classList.add(type); // Add 'success' or 'error'
+            element.innerHTML = ''; 
+            
+            const iconSpan = document.createElement('span');
+            iconSpan.classList.add('material-symbols-outlined');
+            iconSpan.style.marginRight = 'var(--md-sys-spacing-xs)';
+            iconSpan.style.fontSize = '1.25rem'; // Match button icon size
+
+            if (type === 'success') {
+                iconSpan.textContent = 'check_circle';
+                iconSpan.style.color = 'var(--md-sys-color-on-success-container)'; // Icon color consistent with text
+            } else {
+                iconSpan.textContent = 'error';
+                iconSpan.style.color = 'var(--md-sys-color-on-error-container)';
+            }
+            
+            const textSpan = document.createElement('span');
+            textSpan.textContent = text;
+
+            element.appendChild(iconSpan);
+            element.appendChild(textSpan);
+            
+            element.className = 'message'; 
+            element.classList.add(type);
             element.classList.remove('hidden');
             setTimeout(() => {
                 element.classList.add('hidden');
-            }, 5000); // Hide after 5 seconds
+            }, 5000);
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            function initializeFirebaseAndSetup() {
-                if (typeof firebase === 'undefined' || typeof firebase.initializeApp === 'undefined') {
-                    console.log("Firebase scripts not loaded yet, trying again in 100ms for settings.html");
-                    setTimeout(initializeFirebaseAndSetup, 100);
-                    return;
-                }
+
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                dashboardWrapper.classList.remove('hidden');
+                if (authRedirectMessage) authRedirectMessage.classList.add('hidden');
                 
-                try {
-                    if (!firebase.apps.length) {
-                        firebase.initializeApp(firebaseConfig);
-                    }
-                    auth = firebase.auth();
-                    db = firebase.firestore();
-                    console.log("Firebase and Firestore initialized successfully for settings.html");
-
-                    setupEventListeners();
-                    checkAuthStateAndLoadData();
-
-                } catch (error) {
-                    console.error("Firebase initialization error for settings.html:", error);
-                    const authRedirectMessage = document.getElementById('auth-redirect-message');
-                    authRedirectMessage.innerHTML = `<h2 class="text-xl font-semibold text-red-600 mb-4">Initialization Error</h2><p class="text-gray-700">Could not connect to services. Please try again later.</p>`;
-                    authRedirectMessage.classList.remove('hidden');
-                }
-            }
-
-            function checkAuthStateAndLoadData() {
-                const dashboardWrapper = document.getElementById('dashboard-wrapper');
-                const authRedirectMessage = document.getElementById('auth-redirect-message');
-                const studentDisplayNameHeader = document.getElementById('student-display-name');
+                const displayName = user.displayName || user.email || 'Student';
+                if (studentDisplayNameHeader) studentDisplayNameHeader.textContent = displayName;
                 
-                const settingsNameInput = document.getElementById('settings-name');
-                const settingsEmailInput = document.getElementById('settings-email');
-                const settingsExamDateInput = document.getElementById('settings-exam-date');
+                if (settingsNameInput) settingsNameInput.value = user.displayName || '';
+                if (settingsEmailInput) settingsEmailInput.value = user.email || '';
+                
+                loadExamDate(user);
 
-                auth.onAuthStateChanged(async user => {
-                    if (user) {
-                        dashboardWrapper.classList.remove('hidden');
-                        authRedirectMessage.classList.add('hidden');
-                        
-                        const displayName = user.displayName || user.email || 'Student';
-                        if (studentDisplayNameHeader) studentDisplayNameHeader.textContent = displayName;
-                        
-                        // Load existing user data into forms
-                        if (settingsNameInput) settingsNameInput.value = user.displayName || '';
-                        if (settingsEmailInput) settingsEmailInput.value = user.email || '';
-                        
-                        loadExamDate(user); // Load and display exam date
-
-                    } else {
-                        dashboardWrapper.classList.add('hidden');
-                        authRedirectMessage.classList.remove('hidden');
-                    }
-                });
+            } else {
+                dashboardWrapper.classList.add('hidden');
+                if (authRedirectMessage) authRedirectMessage.classList.remove('hidden');
+                // Consider redirecting to login if this page strictly requires auth
+                // window.location.href = 'student_dashboard.html'; 
             }
+        });
 
-            function setupEventListeners() {
-                const logoutButton = document.getElementById('logout-button');
-                if (logoutButton) {
-                    logoutButton.addEventListener('click', () => {
-                        auth.signOut().then(() => {
-                            window.location.href = 'student_dashboard.html';
-                        }).catch(error => {
-                            console.error("Logout error:", error);
-                            showMessage('profile-message', 'Error logging out: ' + error.message, 'error'); // Show error somewhere
-                        });
+        if(logoutButton){
+            logoutButton.addEventListener('click', () => {
+                if(confirm("Are you sure you want to log out?")){
+                    auth.signOut().then(() => {
+                        window.location.href = 'student_dashboard.html'; // Redirect to login
+                    }).catch(error => {
+                        console.error("Logout error:", error);
+                        showMessageElement(profileMessage, 'Error logging out: ' + error.message, 'error');
                     });
                 }
-                // Navigation Tabs - Remove 'active' from Home if it was set by template
-                const navHome = document.getElementById('nav-home');
-                if (navHome) navHome.classList.remove('active');
+            });
+        }
 
-                // Save Profile Button
-                const saveProfileButton = document.getElementById('save-profile-button');
-                if (saveProfileButton) {
-                    saveProfileButton.addEventListener('click', handleSaveProfile);
-                }
-
-                // Change Password Button
-                const changePasswordButton = document.getElementById('change-password-button');
-                if (changePasswordButton) {
-                    changePasswordButton.addEventListener('click', handleChangePassword);
-                }
-                
-                // Save Exam Date Button
-                const saveExamDateButton = document.getElementById('save-exam-date-button');
-                if (saveExamDateButton) {
-                    saveExamDateButton.addEventListener('click', handleSaveExamDate);
-                }
-
-                // Update days remaining when exam date input changes
-                const examDateInput = document.getElementById('settings-exam-date');
-                if (examDateInput) {
-                    examDateInput.addEventListener('change', () => {
-                        updateDaysRemainingDisplay(examDateInput.value);
-                    });
-                }
-            }
-
-            // --- Profile Settings ---
-            async function handleSaveProfile() {
+        // Profile Settings
+        if(saveProfileButton) {
+            saveProfileButton.addEventListener('click', async () => {
                 const user = auth.currentUser;
                 if (!user) return;
 
-                const newName = document.getElementById('settings-name').value.trim();
-                const newEmail = document.getElementById('settings-email').value.trim();
-
+                const newName = settingsNameInput.value.trim();
+                
                 if (!newName) {
-                    showMessage('profile-message', 'Name cannot be empty.', 'error');
-                    return;
-                }
-                if (!newEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
-                    showMessage('profile-message', 'Please enter a valid email address.', 'error');
+                    showMessageElement(profileMessage, 'Name cannot be empty.', 'error');
                     return;
                 }
                 
-                setButtonLoading('save-profile-button', 'profile-spinner', true);
+                setButtonLoading(saveProfileButton, profileSpinner, true);
                 
                 try {
-                    // Update Auth display name
                     if (user.displayName !== newName) {
                         await user.updateProfile({ displayName: newName });
-                        console.log("Auth display name updated.");
                     }
-
-                    // Update Auth email (requires re-authentication if different)
-                    // For simplicity, we'll prompt for current password if email is changed.
-                    // A more robust solution might involve a separate "verify email" flow.
-                    if (user.email !== newEmail) {
-                        const currentPassword = prompt("To change your email, please re-enter your current password:");
-                        if (currentPassword) {
-                            const credential = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
-                            await user.reauthenticateWithCredential(credential);
-                            await user.updateEmail(newEmail);
-                            console.log("Auth email updated.");
-                        } else {
-                            throw new Error("Password not provided for email change.");
-                        }
-                    }
-
-                    // Update Firestore 'users' collection
+                    // Update Firestore record if you store display name there too
                     await db.collection('users').doc(user.uid).set({
                         displayName: newName,
-                        email: newEmail // Firestore email should match auth email
                     }, { merge: true });
-                    console.log("Firestore user document updated.");
 
-                    showMessage('profile-message', 'Profile updated successfully!', 'success');
-                    // Update header display name
-                     const studentDisplayNameHeader = document.getElementById('student-display-name');
-                     if (studentDisplayNameHeader) studentDisplayNameHeader.textContent = newName;
+                    showMessageElement(profileMessage, 'Profile updated successfully!', 'success');
+                    if (studentDisplayNameHeader) studentDisplayNameHeader.textContent = newName; // Update header immediately
 
                 } catch (error) {
                     console.error("Error updating profile:", error);
-                    showMessage('profile-message', 'Error updating profile: ' + error.message, 'error');
+                    showMessageElement(profileMessage, 'Error updating profile: ' + error.message, 'error');
                 } finally {
-                    setButtonLoading('save-profile-button', 'profile-spinner', false);
+                    setButtonLoading(saveProfileButton, profileSpinner, false);
                 }
-            }
+            });
+        }
 
-            // --- Password Settings ---
-            async function handleChangePassword() {
+        // Password Settings
+        if(changePasswordButton){
+            changePasswordButton.addEventListener('click', async () => {
                 const user = auth.currentUser;
                 if (!user) return;
 
-                const currentPassword = document.getElementById('current-password').value;
-                const newPassword = document.getElementById('new-password').value;
-                const confirmPassword = document.getElementById('confirm-password').value;
+                const currentPassword = currentPasswordInput.value;
+                const newPassword = newPasswordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
 
                 if (!currentPassword) {
-                    showMessage('password-message', 'Please enter your current password.', 'error');
-                    return;
+                    showMessageElement(passwordMessage, 'Please enter your current password.', 'error'); return;
                 }
                 if (newPassword.length < 6) {
-                    showMessage('password-message', 'New password must be at least 6 characters.', 'error');
-                    return;
+                    showMessageElement(passwordMessage, 'New password must be at least 6 characters.', 'error'); return;
                 }
                 if (newPassword !== confirmPassword) {
-                    showMessage('password-message', 'New passwords do not match.', 'error');
-                    return;
+                    showMessageElement(passwordMessage, 'New passwords do not match.', 'error'); return;
                 }
 
-                setButtonLoading('change-password-button', 'password-spinner', true);
+                setButtonLoading(changePasswordButton, passwordSpinner, true);
 
                 try {
                     const credential = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
                     await user.reauthenticateWithCredential(credential);
                     await user.updatePassword(newPassword);
                     
-                    showMessage('password-message', 'Password changed successfully!', 'success');
-                    document.getElementById('current-password').value = '';
-                    document.getElementById('new-password').value = '';
-                    document.getElementById('confirm-password').value = '';
+                    showMessageElement(passwordMessage, 'Password changed successfully!', 'success');
+                    currentPasswordInput.value = '';
+                    newPasswordInput.value = '';
+                    confirmPasswordInput.value = '';
 
                 } catch (error) {
                     console.error("Error changing password:", error);
-                     let friendlyMessage = 'Error changing password. Please check your current password.';
+                    let friendlyMessage = 'Error changing password. Please check your current password and try again.';
                     if(error.code === 'auth/wrong-password'){
                          friendlyMessage = 'Incorrect current password. Please try again.';
-                    } else if (error.message) {
-                        friendlyMessage = error.message;
                     }
-                    showMessage('password-message', friendlyMessage, 'error');
+                    showMessageElement(passwordMessage, friendlyMessage, 'error');
                 } finally {
-                    setButtonLoading('change-password-button', 'password-spinner', false);
+                    setButtonLoading(changePasswordButton, passwordSpinner, false);
                 }
-            }
+            });
+        }
 
-            // --- Exam Date Settings ---
-            async function loadExamDate(user) {
-                if (!user || !db) return;
-                const examDateInput = document.getElementById('settings-exam-date');
-                try {
-                    const docRef = db.collection('userPreferences').doc(user.uid);
-                    const docSnap = await docRef.get();
-                    if (docSnap.exists) {
-                        const preferences = docSnap.data();
-                        if (preferences.examDate) {
-                            examDateInput.value = preferences.examDate;
-                            updateDaysRemainingDisplay(preferences.examDate);
-                        } else {
-                            updateDaysRemainingDisplay(null);
-                        }
+        // Exam Date Settings
+        async function loadExamDate(user) {
+            if (!user || !db || !settingsExamDateInput || !daysRemainingDisplay) return;
+            try {
+                const docRef = db.collection('userPreferences').doc(user.uid);
+                const docSnap = await docRef.get();
+                if (docSnap.exists) {
+                    const preferences = docSnap.data();
+                    if (preferences.examDate) {
+                        settingsExamDateInput.value = preferences.examDate;
+                        updateDaysRemainingDisplay(preferences.examDate);
                     } else {
-                         updateDaysRemainingDisplay(null);
+                        updateDaysRemainingDisplay(null);
                     }
-                } catch (error) {
-                    console.error("Error loading exam date for settings:", error);
-                    showMessage('exam-date-message', 'Could not load exam date.', 'error');
-                    updateDaysRemainingDisplay(null);
-                }
-            }
-            
-            function updateDaysRemainingDisplay(examDateStr) {
-                const daysRemainingDisplay = document.getElementById('days-remaining-display');
-                if (!daysRemainingDisplay) return;
-
-                if (!examDateStr) {
-                    daysRemainingDisplay.value = 'Not set';
-                    return;
-                }
-                const examDate = new Date(examDateStr + "T00:00:00"); // Ensure local midnight
-                const today = new Date();
-                today.setHours(0,0,0,0);
-
-                if (examDate < today) {
-                    daysRemainingDisplay.value = 'Date has passed';
                 } else {
-                    const diffTime = Math.abs(examDate - today);
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    daysRemainingDisplay.value = `${diffDays} day(s) remaining`;
+                     updateDaysRemainingDisplay(null); // No preference document yet
                 }
+            } catch (error) {
+                console.error("Error loading exam date:", error);
+                showMessageElement(examDateMessage, 'Could not load exam date.', 'error');
+                updateDaysRemainingDisplay(null);
             }
+        }
+        
+        function updateDaysRemainingDisplay(examDateStr) {
+            if (!daysRemainingDisplay) return;
+            if (!examDateStr) {
+                daysRemainingDisplay.value = 'Not set';
+                daysRemainingDisplay.style.color = 'var(--md-sys-color-on-surface-variant)';
+                return;
+            }
+            const examDate = new Date(examDateStr + "T00:00:00"); // Treat as local date
+            const today = new Date();
+            today.setHours(0,0,0,0); 
 
-            async function handleSaveExamDate() {
+            if (examDate < today) {
+                daysRemainingDisplay.value = 'Date has passed';
+                daysRemainingDisplay.style.color = 'var(--md-sys-color-error)';
+            } else {
+                const diffTime = examDate.getTime() - today.getTime(); 
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                daysRemainingDisplay.value = `${diffDays} day(s) remaining`;
+                daysRemainingDisplay.style.color = 'var(--md-sys-color-primary)';
+            }
+        }
+        
+        if(settingsExamDateInput){
+            settingsExamDateInput.addEventListener('change', () => {
+                updateDaysRemainingDisplay(settingsExamDateInput.value);
+            });
+        }
+
+        if(saveExamDateButton){
+            saveExamDateButton.addEventListener('click', async () => {
                 const user = auth.currentUser;
                 if (!user || !db) return;
 
-                const examDate = document.getElementById('settings-exam-date').value;
+                const examDate = settingsExamDateInput.value;
                 if (!examDate) {
-                    showMessage('exam-date-message', 'Please select an exam date.', 'error');
+                     try {
+                        await db.collection('userPreferences').doc(user.uid).update({ examDate: firebase.firestore.FieldValue.delete() });
+                        showMessageElement(examDateMessage, 'Exam date cleared.', 'success');
+                        updateDaysRemainingDisplay(null);
+                    } catch (error) {
+                        console.error("Error clearing exam date:", error);
+                        showMessageElement(examDateMessage, 'Error clearing exam date.', 'error');
+                    }
                     return;
                 }
                 
-                setButtonLoading('save-exam-date-button', 'exam-date-spinner', true);
+                setButtonLoading(saveExamDateButton, examDateSpinner, true);
 
                 try {
                     await db.collection('userPreferences').doc(user.uid).set({
                         examDate: examDate
                     }, { merge: true });
-                    showMessage('exam-date-message', 'Exam date saved successfully!', 'success');
+                    showMessageElement(examDateMessage, 'Exam date saved successfully!', 'success');
                     updateDaysRemainingDisplay(examDate);
                 } catch (error) {
                     console.error("Error saving exam date:", error);
-                    showMessage('exam-date-message', 'Error saving exam date: ' + error.message, 'error');
+                    showMessageElement(examDateMessage, 'Error saving exam date: ' + error.message, 'error');
                 } finally {
-                     setButtonLoading('save-exam-date-button', 'exam-date-spinner', false);
+                     setButtonLoading(saveExamDateButton, examDateSpinner, false);
                 }
-            }
-
-            // Start Firebase initialization
-            initializeFirebaseAndSetup();
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.main-nav .nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+                tab.setAttribute('aria-selected', 'false');
+            });
+            // No specific tab is "active" on the settings page itself by default.
         });
+
     </script>
 </body>
-</html> 
+</html>
