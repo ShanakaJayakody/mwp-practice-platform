@@ -3,150 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard - QR Drills</title>
+    <title>Student Dashboard - UCAT Platform</title>
     <link rel="icon" href="https://ik.imagekit.io/mwp/2.svg?updatedAt=1745982956185" type="image/svg+xml">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            /* M3 Color System - Light Mode */
-            --md-sys-color-primary: #1967D2;
-            --md-sys-color-on-primary: #FFFFFF;
-            --md-sys-color-primary-container: #D1E3FF;
-            --md-sys-color-on-primary-container: #001E3A;
-            --md-sys-color-secondary: #4285F4;
+            /* M3 Color Palette - Light Theme (Examples from Design Doc) */
+            --md-sys-color-primary: #1967D2; /* Primary P40 */
+            --md-sys-color-on-primary: #FFFFFF; /* Primary P100 */
+            --md-sys-color-primary-container: #D1E3FF; /* Primary P90 */
+            --md-sys-color-on-primary-container: #001E3A; /* Primary P10 */
+            --md-sys-color-secondary: #4285F4; /* Secondary P40 (desaturated version of #4285F4 might be used, e.g. #5E89C2 if desaturated) */
             --md-sys-color-on-secondary: #FFFFFF;
-            --md-sys-color-accent: #FF6D00;
-            --md-sys-color-on-accent: #FFFFFF;
-            --md-sys-color-background: #F8F9FA;
-            --md-sys-color-on-background: #1F1F1F;
-            --md-sys-color-surface: #FFFFFF;
-            --md-sys-color-on-surface: #1F1F1F;
-            --md-sys-color-on-surface-variant: #444746;
-            --md-sys-color-outline: #747775;
-            --md-sys-color-error: #D93025;
+            --md-sys-color-secondary-container: #D6E3FF; /* Example, derived */
+            --md-sys-color-on-secondary-container: #001A43; /* Example, derived */
+            --md-sys-color-accent-cta: #FF6D00; /* Tertiary P40 - Orange */
+            --md-sys-color-on-accent-cta: #FFFFFF;
+            --md-sys-color-accent-cta-container: #FFDDBA; /* Example, derived */
+            --md-sys-color-on-accent-cta-container: #381E00; /* Example, derived */
+            --md-sys-color-background: #F8F9FA; /* Neutral N99 (Light Mode Background) */
+            --md-sys-color-on-background: #1F1F1F; /* Neutral N10 (Default text on Background) */
+            --md-sys-color-surface: #FFFFFF; /* Neutral N98 (Card backgrounds, sheet backgrounds) */
+            --md-sys-color-on-surface: #1F1F1F; /* Neutral N10 (Default text on Surface) */
+            --md-sys-color-surface-variant: #E1E3E5; /* Neutral Variant N90 (e.g. for dividers, outlines) */
+            --md-sys-color-on-surface-variant: #444746; /* Neutral Variant N30 (Lower emphasis text) */
+            --md-sys-color-outline: #747775; /* Neutral Variant N50 */
+            --md-sys-color-error: #D93025; /* Error P40 */
             --md-sys-color-on-error: #FFFFFF;
-            --md-sys-color-success: #1E8E3E;
-            --md-sys-color-on-success: #FFFFFF;
-            --md-sys-color-warning: #F9AB00;
-            --md-sys-color-on-warning: #FFFFFF;
+            --md-sys-color-error-container: #FAD2CF; /* Example, derived */
+            --md-sys-color-on-error-container: #410001; /* Example, derived */
+            --md-sys-color-success-container: #C8E6C9; /* Custom for success messages */
+            --md-sys-color-on-success-container: #0D3C1E; /* Custom for success messages */
 
-            /* Legacy color mappings for backward compatibility */
-            --color-primary: var(--md-sys-color-primary);
-            --color-primary-dark: #0F4C9C;
-            --color-primary-light: var(--md-sys-color-primary-container);
-            --color-primary-bg: var(--md-sys-color-primary-container);
-            --color-success: var(--md-sys-color-success);
-            --color-warning: var(--md-sys-color-warning);
-            --color-danger: var(--md-sys-color-error);
-            --color-text: var(--md-sys-color-on-background);
-            --color-text-secondary: var(--md-sys-color-on-surface-variant);
-            --color-text-tertiary: #6B7280;
-            --color-bg: var(--md-sys-color-background);
-            --color-bg-secondary: #F1F3F4;
-            --color-border: var(--md-sys-color-outline);
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            --radius-sm: 0.375rem;
-            --radius: 0.5rem;
-            --radius-md: 0.75rem;
-            --radius-lg: 1rem;
-            --transition: 220ms cubic-bezier(0.4, 0, 0.2, 1);
-        }
 
-        /* Dark Mode Support */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                /* M3 Color System - Dark Mode */
-                --md-sys-color-primary: #AECBFA;
-                --md-sys-color-on-primary: #00325B;
-                --md-sys-color-primary-container: #00497E;
-                --md-sys-color-on-primary-container: #D1E3FF;
-                --md-sys-color-secondary: #A8C7FA;
-                --md-sys-color-on-secondary: #0A315E;
-                --md-sys-color-accent: #FFB74D;
-                --md-sys-color-on-accent: #542F00;
-                --md-sys-color-background: #1F1F1F;
-                --md-sys-color-on-background: #E3E3E3;
-                --md-sys-color-surface: #2B2B2B;
-                --md-sys-color-on-surface: #E3E3E3;
-                --md-sys-color-on-surface-variant: #C4C7C5;
-                --md-sys-color-outline: #8E918F;
-                --md-sys-color-error: #F2B8B5;
-                --md-sys-color-on-error: #601410;
-                --md-sys-color-success: #A5D6A7;
-                --md-sys-color-on-success: #0D3C1E;
-                --md-sys-color-warning: #FFD54F;
-                --md-sys-color-on-warning: #5D4037;
+            /* M3 Typography */
+            --md-sys-font-family-name: 'Roboto', sans-serif;
+            /* Body Large (Main content text) */
+            --md-sys-typescale-body-large-font-family-name: var(--md-sys-font-family-name);
+            --md-sys-typescale-body-large-font-weight: 400; /* Regular */
+            --md-sys-typescale-body-large-font-size: 16px; /* 1rem based on 16px root */
+            --md-sys-typescale-body-large-line-height: 24px; /* 1.5rem */
+            --md-sys-typescale-body-large-letter-spacing: 0.5px;
+            /* Title Medium (List item titles, smaller card titles) */
+            --md-sys-typescale-title-medium-font-family-name: var(--md-sys-font-family-name);
+            --md-sys-typescale-title-medium-font-weight: 500; /* Medium */
+            --md-sys-typescale-title-medium-font-size: 16px;
+            --md-sys-typescale-title-medium-line-height: 24px;
+            --md-sys-typescale-title-medium-letter-spacing: 0.15px;
+            /* Label Large (Button text) */
+            --md-sys-typescale-label-large-font-family-name: var(--md-sys-font-family-name);
+            --md-sys-typescale-label-large-font-weight: 500; /* Medium */
+            --md-sys-typescale-label-large-font-size: 14px;
+            --md-sys-typescale-label-large-line-height: 20px;
+            --md-sys-typescale-label-large-letter-spacing: 0.1px;
+            /* Headline Small (Sub-headings) */
+            --md-sys-typescale-headline-small-font-family-name: var(--md-sys-font-family-name);
+            --md-sys-typescale-headline-small-font-weight: 400; /* Regular */
+            --md-sys-typescale-headline-small-font-size: 24px;
+            --md-sys-typescale-headline-small-line-height: 32px;
+             /* Body Small (Helper/error text) */
+            --md-sys-typescale-body-small-font-family-name: var(--md-sys-font-family-name);
+            --md-sys-typescale-body-small-font-weight: 400;
+            --md-sys-typescale-body-small-font-size: 12px;
+            --md-sys-typescale-body-small-line-height: 16px;
 
-                /* Updated legacy mappings for dark mode */
-                --color-primary-dark: #7BAAF7;
-                --color-bg-secondary: #383838;
-                --color-text-tertiary: #9AA0A6;
-                --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-                --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-                --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
-                --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
-            }
-        }
 
-        /* Manual dark mode class override */
-        .dark-theme {
-            --md-sys-color-primary: #AECBFA;
-            --md-sys-color-on-primary: #00325B;
-            --md-sys-color-primary-container: #00497E;
-            --md-sys-color-on-primary-container: #D1E3FF;
-            --md-sys-color-secondary: #A8C7FA;
-            --md-sys-color-on-secondary: #0A315E;
-            --md-sys-color-accent: #FFB74D;
-            --md-sys-color-on-accent: #542F00;
-            --md-sys-color-background: #1F1F1F;
-            --md-sys-color-on-background: #E3E3E3;
-            --md-sys-color-surface: #2B2B2B;
-            --md-sys-color-on-surface: #E3E3E3;
-            --md-sys-color-on-surface-variant: #C4C7C5;
-            --md-sys-color-outline: #8E918F;
-            --md-sys-color-error: #F2B8B5;
-            --md-sys-color-on-error: #601410;
-            --md-sys-color-success: #A5D6A7;
-            --md-sys-color-on-success: #0D3C1E;
-            --md-sys-color-warning: #FFD54F;
-            --md-sys-color-on-warning: #5D4037;
+            /* M3 Spacing (Base unit: 8dp, using rem based on 16px root: 8px = 0.5rem) */
+            --md-sys-spacing-unit: 0.5rem; /* 8px */
+            --md-sys-spacing-xxs: 0.25rem; /* 4px (0.5 * unit) */
+            --md-sys-spacing-xs: 0.5rem;  /* 8px (1 * unit) */
+            --md-sys-spacing-s: 0.75rem;   /* 12px (1.5 * unit) */
+            --md-sys-spacing-m: 1rem;     /* 16px (2 * unit) */
+            --md-sys-spacing-l: 1.5rem;   /* 24px (3 * unit) */
+            --md-sys-spacing-xl: 2rem;    /* 32px (4 * unit) */
+            --md-sys-spacing-xxl: 3rem;   /* 48px (6 * unit) */
+            
+            /* M3 Shape */
+            --md-sys-shape-corner-extra-small: 0.25rem; /* 4dp */
+            --md-sys-shape-corner-small: 0.5rem; /* 8dp */
+            --md-sys-shape-corner-medium: 0.75rem; /* 12dp (M3 Card default is more like 12dp) */
+            --md-sys-shape-corner-large: 1rem;    /* 16dp */
+            --md-sys-shape-corner-extra-large: 1.75rem; /* 28dp */
+            --md-sys-shape-corner-full: 9999px; /* Pill shape */
+            
+            /* M3 Shadows (Examples - TailwindCSS provides utility classes that can be mapped) */
+            --md-sys-elevation-level0: none;
+            --md-sys-elevation-level1: 0px 1px 2px rgba(0,0,0,0.3), 0px 1px 3px 1px rgba(0,0,0,0.15); /* M3 Level 1 */
+            --md-sys-elevation-level2: 0px 1px 2px rgba(0,0,0,0.3), 0px 2px 6px 2px rgba(0,0,0,0.15); /* M3 Level 2 */
+            --md-sys-elevation-level3: 0px 4px 8px 3px rgba(0,0,0,0.3), 0px 1px 3px rgba(0,0,0,0.15); /* M3 Level 3 */
 
-            --color-primary-dark: #7BAAF7;
-            --color-bg-secondary: #383838;
-            --color-text-tertiary: #9AA0A6;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            
+            /* Transitions */
+            --md-sys-motion-duration-short: 100ms;
+            --md-sys-motion-duration-medium: 250ms;
+            --md-sys-motion-easing-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: var(--md-sys-font-family-name);
             background-color: var(--md-sys-color-background);
+            color: var(--md-sys-color-on-background);
+            line-height: var(--md-sys-typescale-body-large-line-height);
             display: flex;
             justify-content: center;
             align-items: flex-start;
             min-height: 100vh;
             padding: 0;
-            color: var(--md-sys-color-on-background);
-            line-height: 1.5;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Auth Container Styles */
+        /* Auth Container Styles - M3 Inspired */
         .auth-container {
             background-color: var(--md-sys-color-surface);
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-md);
-            padding: 2.5rem;
+            border-radius: var(--md-sys-shape-corner-large); /* More pronounced rounding */
+            box-shadow: var(--md-sys-elevation-level2);
+            padding: var(--md-sys-spacing-xl); /* 32px */
             width: 100%;
             max-width: 480px;
             text-align: center;
-            margin: 2.5rem auto;
+            margin: var(--md-sys-spacing-xl) auto;
             animation: fadeIn 0.3s ease-out;
         }
 
@@ -154,650 +130,437 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
+        
         .dashboard-wrapper {
-            background-color: var(--md-sys-color-surface);
+            background-color: var(--md-sys-color-background);
             width: 100%;
             margin: 0;
-            min-height: 100vh; /* Restored */
-            /* height: 100vh; */ /* Removed diagnostic */
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
-            /* border: 5px solid red; */ /* Removed diagnostic */
         }
 
         .logo {
-            max-width: 154px;
-            margin: 0 auto 1.75rem auto;
-            transition: all var(--transition);
+            max-width: 154px; 
+            margin: 0 auto var(--md-sys-spacing-l) auto; /* 24px bottom margin */
+            transition: transform var(--md-sys-motion-duration-medium) var(--md-sys-motion-easing-standard);
         }
+        .logo:hover { transform: scale(1.05); }
 
-        .logo:hover {
-            transform: scale(1.05);
-        }
-
-        /* Dashboard Header */
+        /* Dashboard Header - M3 Surface with Elevation */
         .dashboard-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 1.5rem;
-            background-color: var(--md-sys-color-surface);
-            border-bottom: 1px solid var(--md-sys-color-outline); /* Restored */
-            box-shadow: var(--shadow-sm); /* Restored */
-            position: sticky; /* Restored */
-            top: 0; /* Restored */
-            z-index: 40; /* Restored */
+            padding: var(--md-sys-spacing-m) var(--md-sys-spacing-l); /* 16px 24px */
+            background-color: var(--md-sys-color-surface); 
+            box-shadow: var(--md-sys-elevation-level1); /* Subtle shadow for header */
+            position: sticky;
+            top: 0;
+            z-index: 1000; /* Ensure header is on top */
         }
+        .dashboard-header .logo-small { max-width: 132px; }
+        .settings-icon span { color: var(--md-sys-color-on-surface-variant); transition: color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard); }
+        .settings-icon:hover span { color: var(--md-sys-color-primary); }
 
-        .dashboard-header .logo-small {
-            max-width: 132px;
-            transition: all var(--transition);
-        }
-
-        .dashboard-header .logo-small:hover {
-            transform: scale(1.03);
-        }
-
-        /* Main Navigation */
+        /* Main Navigation - M3 Surface with Active Indicator */
         .main-nav {
             display: flex;
             justify-content: center;
             background-color: var(--md-sys-color-surface);
-            padding: 0.25rem 0;
-            border-bottom: 1px solid var(--md-sys-color-outline); /* Restored */
-            box-shadow: var(--shadow-sm); /* Restored */
-            position: sticky; /* Restored */
-            top: 61px; /* Restored - Height of header */
-            z-index: 30; /* Restored */
+            padding: var(--md-sys-spacing-xxs) 0; 
+            box-shadow: var(--md-sys-elevation-level1);
+            position: sticky;
+            top: 68px; /* Approx height of dashboard-header (adjust if header height changes) */
+            z-index: 999; /* Below header, above content */
+            overflow-x: auto; /* For smaller screens */
         }
 
         .nav-tab {
-            padding: 0.875rem 1.5rem;
-            margin: 0 0.5rem;
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l); 
+            margin: 0 var(--md-sys-spacing-xs); 
             cursor: pointer;
-            font-weight: 500;
-            color: var(--md-sys-color-on-surface-variant);
-            border-bottom: 2px solid transparent; /* Keep for spacing */
-            transition: color var(--transition), background-color var(--transition); /* Specific transitions */
-            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium); /* M3 Label Large uses medium weight */
+            font-size: var(--md-sys-typescale-label-large-font-size);
+            color: var(--md-sys-color-on-surface-variant); /* Lower emphasis for inactive tabs */
+            border-bottom: 2px solid transparent;
+            transition: color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard), 
+                        border-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
+                        background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+            border-radius: var(--md-sys-shape-corner-small) var(--md-sys-shape-corner-small) 0 0;
             position: relative;
             user-select: none;
+            text-decoration: none;
+            display: inline-flex; /* To align icon and text */
+            align-items: center;
+            gap: var(--md-sys-spacing-xs); /* Space between icon and text */
         }
-
-        .nav-tab::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -2px; /* Aligns with the original border-bottom space */
-            width: 100%;
-            height: 2px;
-            background-color: var(--md-sys-color-primary);
-            transform: scaleX(0);
-            transform-origin: center; /* Underline grows from the center */
-            transition: transform 0.3s ease-out;
-        }
-
         .nav-tab:hover {
             color: var(--md-sys-color-primary);
-            background-color: var(--md-sys-color-primary-container);
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); /* Subtle hover bg */
         }
-
-        .nav-tab:hover::after {
-            transform: scaleX(1); /* Show underline on hover */
-        }
-
         .nav-tab.active {
             color: var(--md-sys-color-primary);
-            /* border-bottom-color: var(--color-primary); Removed as ::after handles it */
-            background-color: var(--md-sys-color-primary-container);
+            border-bottom-color: var(--md-sys-color-primary); /* M3 active tab indicator */
         }
-
-        .nav-tab.active::after {
-            transform: scaleX(1); /* Ensure active tab also has the underline */
+        .nav-tab.active::after { /* Remove if direct border-bottom is preferred */
+           content: none;
         }
-
         .nav-tab-disabled {
             color: var(--md-sys-color-on-surface-variant);
+            opacity: 0.38; /* M3 disabled state opacity */
             cursor: not-allowed;
-            opacity: 0.7;
         }
-
         .nav-tab-disabled .coming-soon-inline {
             font-size: 0.65rem;
             color: var(--md-sys-color-on-surface-variant);
-            margin-left: 4px;
-            background-color: var(--color-bg-secondary);
+            margin-left: var(--md-sys-spacing-xxs);
+            background-color: var(--md-sys-color-surface-variant);
             padding: 0.1rem 0.4rem;
-            border-radius: 1rem;
-            transition: all var(--transition);
-        }
-
-        /* Dropdown for Tests Tab */
-        .tests-dropdown-container {
-            position: relative;
-        }
-
-        .tests-dropdown-content {
-            opacity: 0;
-            visibility: hidden;
-            position: absolute;
-            background-color: var(--md-sys-color-surface);
-            min-width: 200px;
-            box-shadow: var(--shadow-md);
-            z-index: 50;
-            border-radius: var(--radius);
-            margin-top: 0.25rem;
-            border: 1px solid var(--md-sys-color-outline);
-            transform: translateY(-10px);
-            transition: all var(--transition);
-            overflow: hidden;
-        }
-
-        .tests-dropdown-container:hover .tests-dropdown-content {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .dropdown-item {
-            color: var(--md-sys-color-on-surface-variant);
-            padding: 0.75rem 1rem;
-            text-decoration: none;
-            display: block;
-            font-size: 0.9rem;
-            border-bottom: 1px solid var(--md-sys-color-outline);
-            transition: all var(--transition);
-        }
-
-        .dropdown-item:last-child {
-            border-bottom: none;
-        }
-
-        .dropdown-item:hover:not(.disabled) {
-            background-color: var(--md-sys-color-primary-container);
-            color: var(--md-sys-color-on-primary-container);
-            padding-left: 1.25rem;
-        }
-
-        .dropdown-item.disabled {
-            color: var(--md-sys-color-on-surface-variant);
-            cursor: not-allowed;
-            background-color: var(--color-bg-secondary);
-            opacity: 0.7;
-        }
-
-        .dropdown-item.disabled .coming-soon-inline {
-            font-size: 0.65rem;
-            color: var(--md-sys-color-on-surface-variant);
-            margin-left: 4px;
-            background-color: rgba(255, 255, 255, 0.7);
-            padding: 0.1rem 0.4rem;
-            border-radius: 1rem;
+            border-radius: var(--md-sys-shape-corner-full);
         }
 
         /* Dashboard Content Area */
         .dashboard-content-area {
-            padding: 2.5rem;
-            text-align: center;
+            padding: var(--md-sys-spacing-l); /* 24px */
             flex-grow: 1;
             background-color: var(--md-sys-color-background);
             overflow-y: auto;
-            /* border: 3px solid green; */ /* Removed diagnostic border */
         }
 
-        /* Test Links Styling */
-        .drill-link {
-            display: block;
-            background-color: var(--md-sys-color-primary-container);
-            color: var(--md-sys-color-on-primary-container);
-            padding: 1.25rem;
-            margin-bottom: 1rem;
-            border-radius: var(--radius);
-            text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 600;
-            transition: all var(--transition);
-            border: 1px solid var(--md-sys-color-outline);
-            box-shadow: var(--shadow-sm);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .drill-link::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
+        /* Auth Form Inputs - M3 Text Fields */
+        .auth-input { /* Generic class for all auth inputs */
             width: 100%;
-            height: 100%;
-            background: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.8), rgba(255,255,255,0) 70%);
-            transform: translateX(-100%);
-            transition: all 0.6s ease;
-        }
-
-        .drill-link:hover {
-            background-color: var(--md-sys-color-primary);
-            color: var(--md-sys-color-on-primary);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .drill-link:hover::before {
-            transform: translateX(100%);
-        }
-
-        .drill-link:active {
-            transform: translateY(-1px);
-        }
-
-        .drill-link-disabled {
-            display: block;
-            background-color: var(--color-bg-secondary);
-            color: var(--md-sys-color-on-surface-variant);
-            padding: 1.25rem;
-            margin-bottom: 1rem;
-            border-radius: var(--radius);
-            text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 600;
+            padding-top: var(--md-sys-spacing-m); 
+            padding-bottom: var(--md-sys-spacing-m);
+            padding-right: var(--md-sys-spacing-m); 
+            padding-left: var(--md-sys-spacing-xl); /* Space for icon */
+            margin-bottom: var(--md-sys-spacing-m); 
             border: 1px solid var(--md-sys-color-outline);
-            cursor: not-allowed;
-            pointer-events: none;
-            position: relative;
-            box-shadow: var(--shadow-sm);
-            opacity: 0.8;
-        }
-
-        .coming-soon-badge {
-            position: absolute;
-            top: 50%;
-            right: 1rem;
-            transform: translateY(-50%);
-            background-color: rgba(255, 255, 255, 0.7);
-            color: var(--md-sys-color-on-surface-variant);
-            font-size: 0.7rem;
-            padding: 0.25rem 0.75rem;
-            border-radius: 1rem;
-            font-weight: normal;
-            box-shadow: var(--shadow-sm);
-        }
-
-        /* Auth Form Styles */
-        input[type="email"], input[type="password"], input[type="text"].auth-input {
-            width: 100%;
-            padding: 1rem;
-            margin-bottom: 1.25rem;
-            border: 1px solid var(--md-sys-color-outline);
-            border-radius: var(--radius);
+            border-radius: var(--md-sys-shape-corner-extra-small); /* M3 Text Field uses 4dp corners */
             box-sizing: border-box;
-            font-size: 1rem;
-            transition: all var(--transition);
-            background-color: var(--md-sys-color-surface);
+            font-size: var(--md-sys-typescale-body-large-font-size);
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 4%, var(--md-sys-color-surface)); /* M3 Filled text field subtle bg */
             color: var(--md-sys-color-on-surface);
-            padding-left: 2.5rem;
+            transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard), 
+                        border-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
         }
-
-        input[type="email"]:focus, input[type="password"]:focus, input[type="text"].auth-input:focus {
+        .auth-input:focus {
             outline: none;
-            border-color: var(--md-sys-color-primary);
-            box-shadow: 0 0 0 3px rgba(25, 103, 210, 0.3);
-            background-color: var(--md-sys-color-surface);
+            border-color: var(--md-sys-color-primary); /* Focus border to primary */
+            border-width: 2px; /* M3 focus indicator often a thicker line */
+            padding-bottom: calc(var(--md-sys-spacing-m) - 1px); /* Adjust padding to maintain height with thicker border */
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, var(--md-sys-color-surface));
         }
-
-        .btn {
+        .auth-input-icon { 
+            position: absolute;
+            inset-y: 0;
+            left: var(--md-sys-spacing-s); /* 12px */
             display: flex;
+            align-items: center;
+            color: var(--md-sys-color-on-surface-variant);
+            pointer-events: none;
+        }
+        
+        /* Buttons - M3 Filled Button (Primary) & M3 Outlined/Text Button (Secondary) */
+        .btn {
+            display: inline-flex; 
             align-items: center;
             justify-content: center;
             width: 100%;
-            padding: 0.875rem 1.5rem;
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l); /* M3 Button typical padding for height ~40dp */
             border: none;
-            border-radius: var(--radius);
+            border-radius: var(--md-sys-shape-corner-full); /* Pill shape for M3 buttons */
             cursor: pointer;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all var(--transition);
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            font-size: var(--md-sys-typescale-label-large-font-size);
+            transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard), 
+                        box-shadow var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
             text-align: center;
-            box-shadow: var(--shadow);
+            box-shadow: var(--md-sys-elevation-level0); /* No shadow for resting state */
             position: relative;
-            overflow: hidden;
+            overflow: hidden; /* For ripple effect if added */
+            gap: var(--md-sys-spacing-xs);
         }
-
-        .btn::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.1), rgba(255,255,255,0) 70%);
-            transform: translateX(-100%);
-            transition: all 0.6s ease;
-        }
-
-        .btn:hover {
-            box-shadow: var(--shadow-md);
-            transform: translateY(-1px);
-        }
-
-        .btn:hover::after {
-            transform: translateX(100%);
-        }
-
-        .btn:active {
-            transform: translateY(1px);
-            box-shadow: var(--shadow-sm);
-        }
+        .btn:hover { box-shadow: var(--md-sys-elevation-level1); } 
+        .btn:active { box-shadow: var(--md-sys-elevation-level0); } 
 
         .btn-primary {
             background-color: var(--md-sys-color-primary);
             color: var(--md-sys-color-on-primary);
         }
+        .btn-primary:hover { background-color: color-mix(in srgb, var(--md-sys-color-primary) 92%, black); } 
 
-        .btn-primary:hover {
-            background-color: var(--color-primary-dark);
-        }
-
-        .btn-google {
-            background-color: var(--md-sys-color-surface);
-            color: var(--md-sys-color-on-surface);
+        .btn-google { /* M3 Outlined Button style */
+            background-color: transparent;
+            color: var(--md-sys-color-primary);
             border: 1px solid var(--md-sys-color-outline);
         }
+        .btn-google:hover { background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); }
+        .btn-google img { width: 20px; height: 20px; /* margin-right handled by gap in .btn */ }
 
-        .btn-google:hover {
-            background-color: var(--color-bg-secondary);
-        }
-
-        .btn-google img {
-            width: 20px;
-            height: 20px;
-            margin-right: 0.75rem;
-        }
-
-        .btn-logout {
+        .btn-logout { /* M3 Filled Button with Error color */
             background-color: var(--md-sys-color-error);
             color: var(--md-sys-color-on-error);
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-            border-radius: var(--radius);
-            transition: all var(--transition);
+            padding: var(--md-sys-spacing-xs) var(--md-sys-spacing-m); 
+            border-radius: var(--md-sys-shape-corner-full);
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            font-size: var(--md-sys-typescale-label-large-font-size);
             border: none;
-            cursor: pointer;
+            display: inline-flex; align-items: center; gap: var(--md-sys-spacing-xs);
         }
-
-        .btn-logout:hover {
-            background-color: #B71C1C;
-            box-shadow: var(--shadow);
-        }
-
+        .btn-logout:hover { background-color: color-mix(in srgb, var(--md-sys-color-error) 92%, black); box-shadow: var(--md-sys-elevation-level1); }
+        
         .auth-toggle-link {
             color: var(--md-sys-color-primary);
             cursor: pointer;
-            text-decoration: underline;
-            font-size: 0.875rem;
-            transition: all var(--transition);
+            text-decoration: none; /* M3 links often don't have underlines unless interactive state */
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
         }
+        .auth-toggle-link:hover { color: var(--md-sys-color-primary); text-decoration: underline; } /* Underline on hover */
 
-        .auth-toggle-link:hover {
-            color: var(--color-primary-dark);
-            text-decoration-thickness: 2px;
+        .error-message, .success-message { /* Updated for M3 */
+            font-family: var(--md-sys-typescale-body-small-font-family-name);
+            font-size: var(--md-sys-typescale-body-small-font-size);
+            line-height: var(--md-sys-typescale-body-small-line-height);
+            min-height: var(--md-sys-typescale-body-small-line-height);
+            margin-top: var(--md-sys-spacing-xs); 
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m);
+            border-radius: var(--md-sys-shape-corner-extra-small);
+            text-align: left;
+            display: flex; align-items: center; gap: var(--md-sys-spacing-xs);
         }
-
         .error-message {
-            color: var(--md-sys-color-error);
-            font-size: 0.875rem;
-            min-height: 1.25rem;
-            margin-top: 0.5rem;
-            transition: all var(--transition);
+            background-color: var(--md-sys-color-error-container);
+            color: var(--md-sys-color-on-error-container);
         }
-
-        .hidden {
-            display: none !important;
+        .success-message { /* Added for consistency if needed */
+            background-color: var(--md-sys-color-success-container);
+            color: var(--md-sys-color-on-success-container);
         }
-
-        .welcome-user {
-            font-size: 0.9rem;
-            color: var(--md-sys-color-on-surface-variant);
-            display: flex;
-            align-items: center;
-        }
-
-        .welcome-user::before {
-            content: "";
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background-color: var(--md-sys-color-success);
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-
-        /* Message Containers */
-        .default-message, .coming-soon-message {
-            max-width: 600px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background-color: var(--md-sys-color-surface);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            text-align: center;
-        }
-
-        /* Divider with text */
+        
         .divider {
             display: flex;
             align-items: center;
-            margin: 1rem 0;
+            margin: var(--md-sys-spacing-l) 0; 
             color: var(--md-sys-color-on-surface-variant);
-            font-size: 0.875rem;
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-size: var(--md-sys-typescale-label-large-font-size);
         }
-
         .divider::before, .divider::after {
-            content: "";
-            flex: 1;
-            border-bottom: 1px solid var(--md-sys-color-outline);
+            content: ""; flex: 1; border-bottom: 1px solid var(--md-sys-color-outline);
         }
+        .divider::before { margin-right: var(--md-sys-spacing-xs); }
+        .divider::after { margin-left: var(--md-sys-spacing-xs); }
 
-        .divider::before {
-            margin-right: 0.5rem;
-        }
-
-        .divider::after {
-            margin-left: 0.5rem;
-        }
-
-        /* Loading spinner */
         .spinner {
-            border: 3px solid rgba(0, 0, 0, 0.1);
+            border: 3px solid color-mix(in srgb, currentColor 20%, transparent);
             border-radius: 50%;
-            border-top: 3px solid var(--md-sys-color-primary);
-            width: 20px;
-            height: 20px;
+            border-top-color: currentColor; 
+            width: 18px; height: 18px; /* Slightly smaller for buttons */
             animation: spin 1s linear infinite;
-            display: inline-block;
-            margin-right: 8px;
+            display: inline-block; /* margin-right handled by gap in .btn */
             vertical-align: middle;
         }
-
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .dashboard-content-area {
-                padding: 1.5rem 1rem;
-            }
-            
-            .nav-tab {
-                padding: 0.75rem 1rem;
-                margin: 0 0.25rem;
-                font-size: 0.9rem;
-            }
-
-            .main-nav {
-                overflow-x: auto;
-                justify-content: flex-start;
-                padding: 0.25rem 0.5rem;
-            }
-
-            .coming-soon-badge {
-                font-size: 0.65rem;
-                padding: 0.2rem 0.5rem;
-            }
-            
-            .dropdown-item {
-                padding: 0.75rem 0.75rem;
-            }
+        
+        /* Results specific styling */
+        #results-content h1 {
+            font-family: var(--md-sys-typescale-headline-small-font-family-name);
+            font-size: var(--md-sys-typescale-headline-small-font-size);
+            font-weight: var(--md-sys-font-weight-regular);
+            color: var(--md-sys-color-primary);
+            text-align:left;
+        }
+        #results-content > p { /* Description below heading */
+             font-family: var(--md-sys-typescale-body-large-font-family-name);
+             color: var(--md-sys-color-on-surface-variant);
+             text-align:left;
+             max-width: none; /* Remove max-width for better alignment */
+             margin-left: 0; margin-right: 0;
         }
 
-        @media (max-width: 480px) {
-            .auth-container {
-                padding: 1.5rem;
-                margin: 1rem;
-            }
-            
-            .dashboard-header {
-                padding: 0.75rem 1rem;
-            }
-            
-            .logo-small {
-                max-width: 110px;
-            }
-
-            .welcome-user {
-                font-size: 0.8rem;
-            }
-
-            .btn-logout {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.75rem;
-            }
-        }
-
-        /* Welcome Message Styling & Animation */
-        .animated-welcome-text {
-            position: relative;
-            /* animation: slideInFromLeft 0.8s ease-out forwards; */ /* Applied by JS */
-            opacity: 0; /* Initial state for animation */
-            white-space: nowrap; /* Prevent wrapping during animation */
-            display: inline-block; /* Ensure it behaves like a block for animation but flows okay if text wraps on smaller screens */
-        }
-        .animated-welcome-text .welcome-part1 {
-            color: var(--md-sys-color-primary); /* Updated to use M3 primary */
-        }
-        .animated-welcome-text .welcome-part2 {
-            color: var(--md-sys-color-accent); /* Updated to use M3 accent */
-            font-weight: 700;
-        }
-
-        @keyframes slideInFromLeft {
-            0% {
-                transform: translateX(-60px); /* Start slightly to the left */
-                opacity: 0;
-            }
-            100% {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        /* End Welcome Message Styling & Animation */
-
-        /* Accent color applications for CTAs and important highlights */
-        .btn-accent {
-            background-color: var(--md-sys-color-accent);
-            color: var(--md-sys-color-on-accent);
-        }
-
-        .btn-accent:hover {
-            background-color: #E65100;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        /* Success indicators */
-        .success-indicator {
-            color: var(--md-sys-color-success);
-            background-color: rgba(30, 142, 62, 0.1);
-            padding: 0.5rem 1rem;
-            border-radius: var(--radius);
-            border: 1px solid var(--md-sys-color-success);
-        }
-
-        /* Warning indicators */
-        .warning-indicator {
-            color: var(--md-sys-color-warning);
-            background-color: rgba(249, 171, 0, 0.1);
-            padding: 0.5rem 1rem;
-            border-radius: var(--radius);
-            border: 1px solid var(--md-sys-color-warning);
-        }
-
-        /* Enhanced card styling with M3 principles */
-        .card {
+        #results-summary {
             background-color: var(--md-sys-color-surface);
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow);
-            transition: all var(--transition);
+            padding: var(--md-sys-spacing-l);
+            border-radius: var(--md-sys-shape-corner-medium); /* M3 Card 12dp */
+            box-shadow: var(--md-sys-elevation-level1);
+            margin-bottom: var(--md-sys-spacing-l);
+        }
+         #results-summary h3 { /* If there's an H3 inside */
+            font-family: var(--md-sys-typescale-title-large-font-family-name);
+            font-size: var(--md-sys-typescale-title-large-font-size);
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: var(--md-sys-spacing-m);
+         }
+        
+        /* Accordion Styling */
+        .section-accordion-item {
+            background-color: var(--md-sys-color-surface); /* Main surface for accordion item */
             border: 1px solid var(--md-sys-color-outline);
+            border-radius: var(--md-sys-shape-corner-medium); /* Consistent with cards */
+            margin-bottom: var(--md-sys-spacing-s); /* Space between accordion items */
+            box-shadow: var(--md-sys-elevation-level0); /* Optional subtle shadow, or level1 */
+        }
+        .section-accordion-header {
+            background-color: transparent; /* Header takes surface from parent item */
+            color: var(--md-sys-color-on-surface); /* Readable text on surface */
+            padding: var(--md-sys-spacing-m); /* 16px padding */
+            font-family: var(--md-sys-typescale-title-medium-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            cursor: pointer;
+            transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+            width: 100%; display: flex; justify-content: space-between; align-items: center;
+        }
+        .section-accordion-header:hover {
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); /* Subtle hover */
+        }
+        .section-accordion-header .material-symbols-outlined {
+            transition: transform var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+            color: var(--md-sys-color-on-surface-variant);
+        }
+        .section-accordion-header .material-symbols-outlined.rotate-180 { /* JS will toggle this class */
+            transform: rotate(180deg);
+        }
+        .section-accordion-content {
+            background-color: var(--md-sys-color-surface); /* Content area uses surface */
+            padding: var(--md-sys-spacing-m); /* Padding for content */
+            border-top: 1px solid var(--md-sys-color-outline); /* Separator */
+        }
+        
+        /* General table styling for results */
+        #results-by-section-accordion table {
+            width: 100%;
+            border-collapse: collapse; /* Or separate with border-spacing: 0 */
+        }
+        #results-by-section-accordion th, #results-by-section-accordion td {
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); 
+            text-align: left;
+            border-bottom: 1px solid var(--md-sys-color-outline);
+            font-family: var(--md-sys-typescale-body-medium-font-family-name);
+            font-size: var(--md-sys-typescale-body-medium-font-size);
+            color: var(--md-sys-color-on-surface);
+        }
+        #results-by-section-accordion th {
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            color: var(--md-sys-color-on-surface-variant);
+            background-color: var(--md-sys-color-surface-variant); 
+        }
+        #results-by-section-accordion tbody tr:hover {
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 4%, transparent); /* Subtle hover on rows */
+        }
+        #results-by-section-accordion tbody tr:last-child td {
+            border-bottom: none; /* Remove border from last row */
+        }
+        .view-detail-button { /* Style as M3 Text Button */
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            color: var(--md-sys-color-primary);
+            background: none; border: none; padding: var(--md-sys-spacing-xs) var(--md-sys-spacing-s);
+            border-radius: var(--md-sys-shape-corner-full);
+            cursor: pointer;
+            text-transform: none; /* Override Tailwind if it uppercases */
+        }
+        .view-detail-button:hover {
+             background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
         }
 
-        .card:hover {
-            box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
+        /* Result Detail View */
+        #result-detail {
+             background-color: var(--md-sys-color-surface);
+             padding: var(--md-sys-spacing-l);
+             border-radius: var(--md-sys-shape-corner-large);
+             box-shadow: var(--md-sys-elevation-level2); /* More prominent shadow for detail view */
+             text-align: left;
         }
-
-        .card-elevated {
-            background-color: var(--md-sys-color-surface);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
-            border: none;
+        #result-detail h3 {
+            font-family: var(--md-sys-typescale-headline-small-font-family-name);
+            color: var(--md-sys-color-primary);
+            margin-bottom: var(--md-sys-spacing-m);
         }
+        #result-detail p {
+            font-family: var(--md-sys-typescale-body-large-font-family-name);
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: var(--md-sys-spacing-s);
+        }
+        #result-detail p strong {
+            font-weight: var(--md-sys-font-weight-medium);
+            color: var(--md-sys-color-on-surface-variant);
+        }
+        #back-to-results-list { /* M3 Outlined button */
+            background-color: transparent;
+            color: var(--md-sys-color-primary);
+            border: 1px solid var(--md-sys-color-outline);
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l);
+            border-radius: var(--md-sys-shape-corner-full);
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            margin-bottom: var(--md-sys-spacing-l);
+            display: inline-flex; align-items: center; gap: var(--md-sys-spacing-xs);
+        }
+         #back-to-results-list:hover { background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); }
+        
+        /* Responsive Overrides */
+        @media (max-width: 768px) {
+            .main-nav { justify-content: flex-start; padding-left: var(--md-sys-spacing-xs); padding-right: var(--md-sys-spacing-xs); }
+            .nav-tab { white-space: nowrap; margin: 0 var(--md-sys-spacing-xxs); padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); }
+            .dashboard-content-area { padding: var(--md-sys-spacing-m); } 
+            .auth-container { margin: var(--md-sys-spacing-m) auto; padding: var(--md-sys-spacing-l); }
+        }
+        @media (max-width: 480px) {
+            .dashboard-header { padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); }
+            .dashboard-header .logo-small { max-width: 100px; }
+            .welcome-user { display: none; } /* Hide welcome on very small screens or make it wrap */
+            .btn-logout { padding: var(--md-sys-spacing-xxs) var(--md-sys-spacing-s); font-size: var(--md-sys-typescale-label-large-font-size); }
+            .nav-tab { padding: var(--md-sys-spacing-s) var(--md-sys-spacing-s); }
+            #results-content h1 { font-size: var(--md-sys-typescale-title-large-font-size); }
+            #results-by-section-accordion th, #results-by-section-accordion td { padding: var(--md-sys-spacing-s) var(--md-sys-spacing-xs); font-size: var(--md-sys-typescale-body-medium-font-size); }
+        }
+         /* Ensure hidden class is effective */
+        .hidden { display: none !important; }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
 
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
-    <!-- Auth Screen -->
     <div id="auth-section" class="auth-container">
         <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="logo" onerror="this.style.display='none'; this.onerror=null;">
         
-        <!-- Login Form -->
         <div id="login-form">
-            <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Welcome Back</h2>
-            <p class="text-gray-500 mb-6">Log in to access your personalized UCAT practice materials</p>
+            <h2 style="font-family: var(--md-sys-typescale-headline-small-font-family-name); font-size: var(--md-sys-typescale-headline-small-font-size); color: var(--md-sys-color-on-surface); margin-bottom: var(--md-sys-spacing-s);">Welcome Back</h2>
+            <p style="color: var(--md-sys-color-on-surface-variant); font-size: var(--md-sys-typescale-body-large-font-size); margin-bottom: var(--md-sys-spacing-l);">Log in to access your UCAT prep.</p>
             
             <div class="mb-4 relative">
+                <span class="auth-input-icon material-symbols-outlined">mail</span>
                 <input type="email" id="login-email" placeholder="Email Address" class="auth-input" aria-label="Email Address">
-                <span class="absolute inset-y-0 left-3 flex items-center text-gray-400" aria-hidden="true" style="pointer-events: none;">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                </span>
             </div>
             
             <div class="mb-6 relative">
+                 <span class="auth-input-icon material-symbols-outlined">lock</span>
                 <input type="password" id="login-password" placeholder="Password" class="auth-input" aria-label="Password">
-                <span class="absolute inset-y-0 left-3 flex items-center text-gray-400" aria-hidden="true" style="pointer-events: none;">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
-                </span>
             </div>
             
-            <div class="text-right mb-4">
-                <a href="#" id="forgot-password-link" class="text-sm text-blue-500 hover:text-blue-700 transition-colors">Forgot Password?</a>
+            <div style="text-align: right; margin-bottom: var(--md-sys-spacing-m);">
+                <a href="#" id="forgot-password-link" class="auth-toggle-link">Forgot Password?</a>
             </div>
             
             <button id="login-button" class="btn btn-primary mb-4">
                 <span id="login-spinner" class="spinner hidden"></span>
+                <span class="material-symbols-outlined">login</span>
                 <span>Login</span>
             </button>
             
@@ -808,44 +571,32 @@
                 <span>Sign in with Google</span>
             </button>
             
-            <p class="text-sm text-gray-600">Don't have an account? <a href="#" id="show-signup-link" class="auth-toggle-link">Create Account</a></p>
-            <p id="login-error" class="error-message text-center mt-3" aria-live="polite"></p>
+            <p style="font-size: var(--md-sys-typescale-body-medium-font-size); color: var(--md-sys-color-on-surface-variant);">Don't have an account? <a href="#" id="show-signup-link" class="auth-toggle-link">Create Account</a></p>
+            <p id="login-error" class="error-message text-center mt-3 hidden" aria-live="polite"></p>
         </div>
 
-        <!-- Signup Form -->
         <div id="signup-form" class="hidden">
-            <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Create Account</h2>
-            <p class="text-gray-500 mb-6">Join thousands of students preparing for the UCAT</p>
+            <h2 style="font-family: var(--md-sys-typescale-headline-small-font-family-name); font-size: var(--md-sys-typescale-headline-small-font-size); color: var(--md-sys-color-on-surface); margin-bottom: var(--md-sys-spacing-s);">Create Account</h2>
+            <p style="color: var(--md-sys-color-on-surface-variant); font-size: var(--md-sys-typescale-body-large-font-size); margin-bottom: var(--md-sys-spacing-l);">Join thousands of students preparing for the UCAT.</p>
             
             <div class="mb-4 relative">
+                <span class="auth-input-icon material-symbols-outlined">person</span>
                 <input type="text" id="signup-name" placeholder="Full Name" class="auth-input" aria-label="Full Name">
-                <span class="absolute inset-y-0 left-3 flex items-center text-gray-400" aria-hidden="true" style="pointer-events: none;">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                </span>
             </div>
             
             <div class="mb-4 relative">
+                <span class="auth-input-icon material-symbols-outlined">mail</span>
                 <input type="email" id="signup-email" placeholder="Email Address" class="auth-input" aria-label="Email Address">
-                <span class="absolute inset-y-0 left-3 flex items-center text-gray-400" aria-hidden="true" style="pointer-events: none;">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                </span>
             </div>
             
             <div class="mb-6 relative">
+                <span class="auth-input-icon material-symbols-outlined">lock</span>
                 <input type="password" id="signup-password" placeholder="Password (min. 6 characters)" class="auth-input" aria-label="Password">
-                <span class="absolute inset-y-0 left-3 flex items-center text-gray-400" aria-hidden="true" style="pointer-events: none;">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
-                </span>
             </div>
             
             <button id="signup-button" class="btn btn-primary mb-4">
                 <span id="signup-spinner" class="spinner hidden"></span>
+                <span class="material-symbols-outlined">person_add</span>
                 <span>Create Account</span>
             </button>
             
@@ -856,25 +607,24 @@
                 <span>Sign up with Google</span>
             </button>
             
-            <p class="text-sm text-gray-600">Already have an account? <a href="#" id="show-login-link" class="auth-toggle-link">Login</a></p>
-            <p id="signup-error" class="error-message text-center mt-3" aria-live="polite"></p>
+            <p style="font-size: var(--md-sys-typescale-body-medium-font-size); color: var(--md-sys-color-on-surface-variant);">Already have an account? <a href="#" id="show-login-link" class="auth-toggle-link">Login</a></p>
+            <p id="signup-error" class="error-message text-center mt-3 hidden" aria-live="polite"></p>
         </div>
     </div>
 
     <!-- Dashboard -->
     <div id="dashboard-wrapper" class="dashboard-wrapper hidden">
-        <!-- Header -->
         <div class="dashboard-header">
-            <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="logo-small" onerror="this.style.display='none'; this.onerror=null;">
+            <a href="home.html">
+                <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="logo-small" onerror="this.style.display='none'; this.onerror=null;">
+            </a>
             <div class="flex items-center">
-                <span class="welcome-user mr-4">Welcome, <span id="student-display-name" class="font-semibold">Student</span></span>
+                <span class="welcome-user mr-4" style="font-family: var(--md-sys-typescale-body-medium-font-family-name); color: var(--md-sys-color-on-surface-variant);">Welcome, <span id="student-display-name" style="font-weight: var(--md-sys-font-weight-medium); color: var(--md-sys-color-on-surface);">Student</span></span>
                 <a href="settings.html" aria-label="Account Settings" class="mr-4 settings-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
+                     <span class="material-symbols-outlined">settings</span>
                 </a>
                 <button id="logout-button" class="btn-logout" aria-label="Logout">
+                    <span class="material-symbols-outlined">logout</span>
                     <span>Logout</span>
                 </button>
             </div>
@@ -882,11 +632,18 @@
 
         <!-- Main Navigation -->
         <nav class="main-nav" role="navigation" aria-label="Main Navigation">
-            <a href="home.html" id="nav-home" class="nav-tab" role="button">Home</a>
-            <a href="practice.html" id="nav-practice-main" class="nav-tab" role="button">Practice</a>
-            <a href="student_dashboard.html#results" id="nav-results" class="nav-tab" role="button">Results</a>
-            <div id="nav-skills" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
-                <span>Skills</span> <span class="coming-soon-inline">Coming Soon</span>
+            <a href="home.html" id="nav-home" class="nav-tab" role="tab" aria-selected="false">
+                <span class="material-symbols-outlined">home</span>Home
+            </a>
+            <a href="practice.html" id="nav-practice-main" class="nav-tab" role="tab" aria-selected="false">
+                <span class="material-symbols-outlined">model_training</span>Practice
+            </a>
+             <a href="student_dashboard.html#results" id="nav-results" class="nav-tab" role="tab" aria-selected="true">
+                 <span class="material-symbols-outlined">bar_chart</span>Results
+             </a>
+            <div id="nav-skills" class="nav-tab nav-tab-disabled" role="tab" aria-disabled="true">
+                <span class="material-symbols-outlined">psychology</span>
+                <span>Skills</span> <span class="coming-soon-inline">Soon</span>
             </div>
         </nav>
 
