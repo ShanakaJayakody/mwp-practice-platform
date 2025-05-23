@@ -7,451 +7,312 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            /* M3 Color System - Light Mode */
+            /* M3 Color Palette - Light Theme */
             --md-sys-color-primary: #1967D2;
             --md-sys-color-on-primary: #FFFFFF;
             --md-sys-color-primary-container: #D1E3FF;
             --md-sys-color-on-primary-container: #001E3A;
-            --md-sys-color-secondary: #4285F4;
+            --md-sys-color-secondary: #5E89C2; 
             --md-sys-color-on-secondary: #FFFFFF;
-            --md-sys-color-accent: #FF6D00;
-            --md-sys-color-on-accent: #FFFFFF;
-            --md-sys-color-background: #F8F9FA;
-            --md-sys-color-on-background: #1F1F1F;
-            --md-sys-color-surface: #FFFFFF;
-            --md-sys-color-on-surface: #1F1F1F;
-            --md-sys-color-on-surface-variant: #444746;
-            --md-sys-color-outline: #747775;
+            --md-sys-color-secondary-container: #D8E2FF;
+            --md-sys-color-on-secondary-container: #001A43;
+            --md-sys-color-tertiary: #7D5260;
+            --md-sys-color-on-tertiary: #FFFFFF;
+            --md-sys-color-tertiary-container: #FFD8E4;
+            --md-sys-color-on-tertiary-container: #31111D;
             --md-sys-color-error: #D93025;
             --md-sys-color-on-error: #FFFFFF;
-            --md-sys-color-success: #1E8E3E;
-            --md-sys-color-on-success: #FFFFFF;
-            --md-sys-color-warning: #F9AB00;
-            --md-sys-color-on-warning: #FFFFFF;
+            --md-sys-color-error-container: #FAD2CF;
+            --md-sys-color-on-error-container: #410001;
+            --md-sys-color-background: #F8F9FA; 
+            --md-sys-color-on-background: #1F1F1F;
+            --md-sys-color-surface: #FFFFFF; 
+            --md-sys-color-on-surface: #1F1F1F;
+            --md-sys-color-surface-variant: #E1E3E5; 
+            --md-sys-color-on-surface-variant: #444746;
+            --md-sys-color-outline: #747775;
+            --md-sys-color-outline-variant: #C4C7C5;
 
-            /* Legacy color mappings for backward compatibility */
-            --color-primary: var(--md-sys-color-primary);
-            --color-primary-dark: #0F4C9C;
-            --color-primary-light: var(--md-sys-color-primary-container);
-            --color-primary-bg: var(--md-sys-color-primary-container);
-            --color-success: var(--md-sys-color-success);
-            --color-warning: var(--md-sys-color-warning);
-            --color-danger: var(--md-sys-color-error);
-            --color-text: var(--md-sys-color-on-background);
-            --color-text-secondary: var(--md-sys-color-on-surface-variant);
-            --color-text-tertiary: #6B7280;
-            --color-bg: var(--md-sys-color-background);
-            --color-bg-secondary: #F1F3F4;
-            --color-border: var(--md-sys-color-outline);
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            --radius-sm: 0.375rem;
-            --radius: 0.5rem;
-            --radius-md: 0.75rem;
-            --radius-lg: 1rem;
-            --transition: 220ms cubic-bezier(0.4, 0, 0.2, 1);
+            /* M3 Typography */
+            --md-sys-font-family-name: 'Roboto', sans-serif;
+            --md-sys-typescale-headline-small-font-size: 24px;
+            --md-sys-typescale-headline-small-line-height: 32px;
+            --md-sys-typescale-title-large-font-size: 22px;
+            --md-sys-typescale-title-large-line-height: 28px;
+            --md-sys-typescale-title-medium-font-size: 16px;
+            --md-sys-typescale-title-medium-line-height: 24px;
+            --md-sys-typescale-label-large-font-size: 14px;
+            --md-sys-typescale-label-large-line-height: 20px;
+            --md-sys-typescale-body-medium-font-size: 14px;
+            --md-sys-typescale-body-medium-line-height: 20px;
+            --md-sys-typescale-body-small-font-size: 12px;
+            --md-sys-typescale-body-small-line-height: 16px;
+            --md-sys-font-weight-regular: 400;
+            --md-sys-font-weight-medium: 500;
+
+            /* M3 Spacing */
+            --md-sys-spacing-unit: 0.5rem; /* 8px */
+            --md-sys-spacing-xs: 0.5rem;
+            --md-sys-spacing-s: 0.75rem;
+            --md-sys-spacing-m: 1rem;
+            --md-sys-spacing-l: 1.5rem;
+            --md-sys-spacing-xl: 2rem;
+            
+            /* M3 Shape */
+            --md-sys-shape-corner-extra-small: 0.25rem; /* 4dp */
+            --md-sys-shape-corner-small: 0.5rem; /* 8dp */
+            --md-sys-shape-corner-medium: 0.75rem; /* 12dp */
+            --md-sys-shape-corner-large: 1rem;    /* 16dp */
+            --md-sys-shape-corner-full: 9999px;
+            
+            /* M3 Elevation */
+            --md-sys-elevation-level0: none;
+            --md-sys-elevation-level1: 0px 1px 2px rgba(0,0,0,0.3), 0px 1px 3px 1px rgba(0,0,0,0.15);
+            --md-sys-elevation-level2: 0px 1px 2px rgba(0,0,0,0.3), 0px 2px 6px 2px rgba(0,0,0,0.15);
+            --md-sys-elevation-level3: 0px 4px 8px 3px rgba(0,0,0,0.3), 0px 1px 3px rgba(0,0,0,0.15);
+
+            /* Transitions */
+            --md-sys-motion-duration-short: 150ms;
+            --md-sys-motion-easing-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
         }
 
-        /* Dark Mode Support */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                /* M3 Color System - Dark Mode */
-                --md-sys-color-primary: #AECBFA;
-                --md-sys-color-on-primary: #00325B;
-                --md-sys-color-primary-container: #00497E;
-                --md-sys-color-on-primary-container: #D1E3FF;
-                --md-sys-color-secondary: #A8C7FA;
-                --md-sys-color-on-secondary: #0A315E;
-                --md-sys-color-accent: #FFB74D;
-                --md-sys-color-on-accent: #542F00;
-                --md-sys-color-background: #1F1F1F;
-                --md-sys-color-on-background: #E3E3E3;
-                --md-sys-color-surface: #2B2B2B;
-                --md-sys-color-on-surface: #E3E3E3;
-                --md-sys-color-on-surface-variant: #C4C7C5;
-                --md-sys-color-outline: #8E918F;
-                --md-sys-color-error: #F2B8B5;
-                --md-sys-color-on-error: #601410;
-                --md-sys-color-success: #A5D6A7;
-                --md-sys-color-on-success: #0D3C1E;
-                --md-sys-color-warning: #FFD54F;
-                --md-sys-color-on-warning: #5D4037;
-
-                /* Updated legacy mappings for dark mode */
-                --color-primary-dark: #7BAAF7;
-                --color-bg-secondary: #383838;
-                --color-text-tertiary: #9AA0A6;
-                --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-                --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-                --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
-                --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
-            }
-        }
-
-        /* Manual dark mode class override */
-        .dark-theme {
-            --md-sys-color-primary: #AECBFA;
-            --md-sys-color-on-primary: #00325B;
-            --md-sys-color-primary-container: #00497E;
-            --md-sys-color-on-primary-container: #D1E3FF;
-            --md-sys-color-secondary: #A8C7FA;
-            --md-sys-color-on-secondary: #0A315E;
-            --md-sys-color-accent: #FFB74D;
-            --md-sys-color-on-accent: #542F00;
-            --md-sys-color-background: #1F1F1F;
-            --md-sys-color-on-background: #E3E3E3;
-            --md-sys-color-surface: #2B2B2B;
-            --md-sys-color-on-surface: #E3E3E3;
-            --md-sys-color-on-surface-variant: #C4C7C5;
-            --md-sys-color-outline: #8E918F;
-            --md-sys-color-error: #F2B8B5;
-            --md-sys-color-on-error: #601410;
-            --md-sys-color-success: #A5D6A7;
-            --md-sys-color-on-success: #0D3C1E;
-            --md-sys-color-warning: #FFD54F;
-            --md-sys-color-on-warning: #5D4037;
-
-            --color-primary-dark: #7BAAF7;
-            --color-bg-secondary: #383838;
-            --color-text-tertiary: #9AA0A6;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Base styles for body and main containers */
         body { 
-            font-family: 'Inter', sans-serif; 
+            font-family: var(--md-sys-font-family-name);
             margin: 0; 
             background-color: var(--md-sys-color-background);
             color: var(--md-sys-color-on-background);
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            padding-top: 2rem; /* Space from top */
+            padding-top: var(--md-sys-spacing-l);
             min-height: 100vh; 
         }
         .container { 
-            background-color: var(--md-sys-color-surface);
-            padding: 2rem; 
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-lg);
+            background-color: var(--md-sys-color-surface); 
+            padding: var(--md-sys-spacing-l); 
+            border-radius: var(--md-sys-shape-corner-medium);
+            box-shadow: var(--md-sys-elevation-level1);
             width: 100%; 
             max-width: 1200px; 
-            margin: 1rem; 
-            border: 1px solid var(--md-sys-color-outline);
+            margin: var(--md-sys-spacing-m); 
         }
         .login-container { 
             max-width: 400px; 
-            margin: 2rem auto; 
-            padding: 2.5rem; /* More padding */
-            background-color: var(--md-sys-color-surface);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            border: 1px solid var(--md-sys-color-outline);
+            margin: var(--md-sys-spacing-xl) auto; 
+            padding: var(--md-sys-spacing-xl);
+            background-color: var(--md-sys-color-surface); 
+            border-radius: var(--md-sys-shape-corner-large); 
+            box-shadow: var(--md-sys-elevation-level2); 
         }
 
-        /* Input field styling */
-        input[type="email"], input[type="password"] { 
+        /* M3 Text Field Inspired Styling */
+        input[type="email"], input[type="password"], .filter-input { 
             width: 100%; 
-            padding: 0.875rem; /* Slightly more padding */
-            margin-bottom: 1.25rem; 
+            padding: var(--md-sys-spacing-m); 
+            margin-bottom: var(--md-sys-spacing-m); 
             border: 1px solid var(--md-sys-color-outline);
-            border-radius: var(--radius-sm);
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 4%, var(--md-sys-color-surface));
+            border-radius: var(--md-sys-shape-corner-extra-small) var(--md-sys-shape-corner-extra-small) 0 0;
+            border-bottom: 1px solid var(--md-sys-color-on-surface-variant);
             box-sizing: border-box; 
-            font-size: 1rem;
-            transition: border-color var(--transition);
-            background-color: var(--md-sys-color-surface);
+            font-size: var(--md-sys-typescale-body-large-font-size);
             color: var(--md-sys-color-on-surface);
+            transition: border-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard), background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
         }
-        input[type="email"]:focus, input[type="password"]:focus {
+        input[type="email"]:focus, input[type="password"]:focus, .filter-input:focus {
             outline: none;
-            border-color: var(--md-sys-color-primary);
-            box-shadow: 0 0 0 2px rgba(25, 103, 210, 0.3);
+            border-bottom: 2px solid var(--md-sys-color-primary);
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, var(--md-sys-color-surface));
+            margin-bottom: calc(var(--md-sys-spacing-m) - 1px); /* Adjust margin to keep layout stable */
+        }
+        select.filter-input {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23444746'%3E%3Cpath d='M7 10l5 5 5-5H7z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right var(--md-sys-spacing-m) center;
+            background-size: 1.2em;
+            padding-right: var(--md-sys-spacing-xl); /* Make space for arrow */
         }
 
-        /* General button styling */
+
+        /* M3 Button Styles */
         .btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: var(--radius-sm);
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l);
+            border: none; border-radius: var(--md-sys-shape-corner-full);
             cursor: pointer;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all var(--transition);
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            font-size: var(--md-sys-typescale-label-large-font-size);
+            transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard), box-shadow var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
             text-align: center;
-            box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
+            box-shadow: var(--md-sys-elevation-level0);
+            gap: var(--md-sys-spacing-xs);
         }
+        .btn:hover { box-shadow: var(--md-sys-elevation-level1); }
+        .btn:active { box-shadow: var(--md-sys-elevation-level0); }
 
-        .btn::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.1), rgba(255,255,255,0) 70%);
-            transform: translateX(-100%);
-            transition: all 0.6s ease;
-        }
-
-        .btn:hover {
-            box-shadow: var(--shadow-md);
-            transform: translateY(-1px);
-        }
-
-        .btn:hover::after {
-            transform: translateX(100%);
-        }
-
-        /* Email login button */
-        .btn-email {
+        .btn-filled { /* M3 Filled button */
             background-color: var(--md-sys-color-primary);
             color: var(--md-sys-color-on-primary);
-            margin-bottom: 0.75rem; /* Space before OR divider */
         }
-        .btn-email:hover {
-            background-color: var(--color-primary-dark);
-        }
+        .btn-filled:hover { background-color: color-mix(in srgb, var(--md-sys-color-primary) 92%, black); }
 
-        /* Google login button */
-        .btn-google {
-            background-color: var(--md-sys-color-surface);
-            color: var(--md-sys-color-on-surface);
+        .btn-outlined { /* M3 Outlined button */
+            background-color: transparent;
+            color: var(--md-sys-color-primary);
             border: 1px solid var(--md-sys-color-outline);
-            margin-top: 0.75rem; /* Space after OR divider */
         }
-        .btn-google:hover {
-            background-color: var(--color-bg-secondary);
+        .btn-outlined:hover { background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); }
+        
+        .btn-text { /* M3 Text button */
+            background-color: transparent;
+            color: var(--md-sys-color-primary);
+            padding-left: var(--md-sys-spacing-s);
+            padding-right: var(--md-sys-spacing-s);
         }
-        .btn-google img { /* For Google icon */
-            width: 20px;
-            height: 20px;
-            margin-right: 0.75rem;
+        .btn-text:hover { background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); }
+
+
+        .btn-email-login { /* Specific for login button */
+            width: 100%; margin-bottom: var(--md-sys-spacing-s);
         }
+        .btn-google-login { /* Specific for Google login */
+            width: 100%; margin-top: var(--md-sys-spacing-s);
+        }
+        .btn-google-login img { width: 20px; height: 20px; }
 
         .btn-logout { 
-            background-color: var(--md-sys-color-error);
-            color: var(--md-sys-color-on-error);
+            background-color: var(--md-sys-color-error); color: var(--md-sys-color-on-error);
+            font-size: var(--md-sys-typescale-label-large-font-size);
         }
-        .btn-logout:hover { 
-            background-color: #B71C1C;
-        }
+        .btn-logout:hover { background-color: color-mix(in srgb, var(--md-sys-color-error) 90%, black); }
 
-        /* Table and other dashboard styles */
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin-top: 20px; 
-            background-color: var(--md-sys-color-surface);
-        }
-        th, td { 
-            border: 1px solid var(--md-sys-color-outline);
-            padding: 10px; 
-            text-align: left; 
-            font-size: 0.9rem; 
-            color: var(--md-sys-color-on-surface);
-        }
+        /* Table Styling */
+        table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: var(--md-sys-spacing-l); border: 1px solid var(--md-sys-color-outline-variant); border-radius: var(--md-sys-shape-corner-small); overflow: hidden;}
+        th, td { padding: var(--md-sys-spacing-m); text-align: left; font-size: var(--md-sys-typescale-body-medium-font-size); border-bottom: 1px solid var(--md-sys-color-outline-variant); }
         th { 
-            background-color: var(--color-bg-secondary);
-            color: var(--md-sys-color-on-surface-variant);
-            font-weight: 600; 
-            text-transform: uppercase; 
-            letter-spacing: 0.05em;
+            background-color: var(--md-sys-color-surface-variant); 
+            color: var(--md-sys-color-on-surface-variant); 
+            font-weight: var(--md-sys-font-weight-medium);
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-size: var(--md-sys-typescale-label-large-font-size);
+            text-transform: none; /* M3 tables don't typically uppercase */
+            letter-spacing: normal;
         }
-        tr:nth-child(even) { 
-            background-color: var(--color-bg-secondary);
-        }
+        tbody tr:hover { background-color: color-mix(in srgb, var(--md-sys-color-primary) 4%, transparent); }
+        tbody tr:last-child td { border-bottom: none; }
+
         h1 { 
-            color: var(--md-sys-color-on-surface);
-            text-align: center; 
-            margin-bottom: 1.5rem; 
-            font-size: 1.75rem; 
-            font-weight: 700; 
+            color: var(--md-sys-color-primary); 
+            text-align: center; margin-bottom: var(--md-sys-spacing-l); 
+            font-size: var(--md-sys-typescale-headline-medium-font-size); 
+            font-weight: var(--md-sys-font-weight-regular); 
         }
-        h2 { 
+        h2 { /* Title Large for filter section */
             color: var(--md-sys-color-on-surface);
+            font-family: var(--md-sys-typescale-title-large-font-family-name);
+            font-size: var(--md-sys-typescale-title-large-font-size);
+            font-weight: var(--md-sys-font-weight-medium);
         }
-        td { word-break: break-word; white-space: pre-wrap; }
+        td { word-break: break-word; white-space: pre-wrap; color: var(--md-sys-color-on-surface);}
         .hidden { display: none !important; }
-        #admin-controls { 
-            text-align: right; 
-            margin-bottom: 1rem; 
-            display: flex; 
-            justify-content: flex-end; 
-            align-items: center; 
-        }
+        #admin-controls { text-align: right; margin-bottom: var(--md-sys-spacing-m); display: flex; justify-content: flex-end; align-items: center; }
+        #admin-user-email { color: var(--md-sys-color-on-surface-variant); margin-right: var(--md-sys-spacing-m); font-size: var(--md-sys-typescale-body-medium-font-size); }
+        
         .social-login-divider { 
-            display: flex; 
-            align-items: center; 
-            text-align: center; 
-            color: var(--md-sys-color-on-surface-variant);
-            margin: 1.5rem 0; /* Increased margin */
+            display: flex; align-items: center; text-align: center; 
+            color: var(--md-sys-color-on-surface-variant); margin: var(--md-sys-spacing-l) 0;
         }
-        .social-login-divider::before,
-        .social-login-divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid var(--md-sys-color-outline);
+        .social-login-divider::before, .social-login-divider::after {
+            content: ''; flex: 1; border-bottom: 1px solid var(--md-sys-color-outline-variant);
         }
         .social-login-divider span { 
-            padding: 0 1rem; /* More padding for OR text */
-            font-size: 0.875rem;
+            padding: 0 var(--md-sys-spacing-m); font-size: var(--md-sys-typescale-label-large-font-size);
         }
         #login-error {
-            min-height: 1.25rem; /* Reserve space for error message */
-            color: var(--md-sys-color-error);
+            min-height: 1.25rem; color: var(--md-sys-color-error); font-size: var(--md-sys-typescale-body-small-font-size);
         }
 
-        /* New styles for filtering controls */
+        /* Filter controls */
         .filter-controls {
-            background-color: var(--color-bg-secondary);
-            border: 1px solid var(--md-sys-color-outline);
-            border-radius: var(--radius);
-            padding: 1.25rem;
-            margin-bottom: 1.5rem;
+            background-color: var(--md-sys-color-surface-variant); /* Distinct background for filter area */
+            border-radius: var(--md-sys-shape-corner-medium);
+            padding: var(--md-sys-spacing-l);
+            margin-bottom: var(--md-sys-spacing-l);
         }
-        
-        .filter-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-        
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            min-width: 200px;
-        }
-        
         .filter-group label {
-            font-size: 0.8rem;
-            font-weight: 600;
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
             color: var(--md-sys-color-on-surface-variant);
-            margin-bottom: 0.375rem;
+            margin-bottom: var(--md-sys-spacing-xs);
         }
-        
-        .filter-input {
-            padding: 0.625rem;
-            border: 1px solid var(--md-sys-color-outline);
-            border-radius: var(--radius-sm);
-            font-size: 0.9rem;
-            background-color: var(--md-sys-color-surface);
-            color: var(--md-sys-color-on-surface);
-        }
-        
-        .filter-input:focus {
-            outline: none;
-            border-color: var(--md-sys-color-primary);
-            box-shadow: 0 0 0 2px rgba(25, 103, 210, 0.3);
-        }
-        
         .filter-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 0.5rem;
+            display: flex; justify-content: space-between; align-items: center; margin-top: var(--md-sys-spacing-m);
         }
-        
-        .filter-button {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-weight: 500;
-            font-size: 0.875rem;
-            cursor: pointer;
-            transition: all var(--transition);
+        .filter-button { /* General style for filter action buttons */
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l);
+            font-size: var(--md-sys-typescale-label-large-font-size);
         }
-        
-        .apply-filters {
-            background-color: var(--md-sys-color-primary);
-            color: var(--md-sys-color-on-primary);
+        .apply-filters { /* M3 Filled Button */
+            background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary);
         }
-        
-        .apply-filters:hover {
-            background-color: var(--color-primary-dark);
+        .apply-filters:hover { background-color: color-mix(in srgb, var(--md-sys-color-primary) 92%, black); }
+        .reset-filters { /* M3 Outlined Button */
+            background-color: transparent; color: var(--md-sys-color-primary); border: 1px solid var(--md-sys-color-outline);
         }
-        
-        .reset-filters {
-            background-color: var(--color-bg-secondary);
-            color: var(--md-sys-color-on-surface-variant);
-            border: 1px solid var(--md-sys-color-outline);
+        .reset-filters:hover { background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); }
+        .export-csv { /* M3 Filled Tonal Button (using secondary as example) */
+            background-color: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container);
         }
-        
-        .reset-filters:hover {
-            background-color: var(--color-bg-secondary);
-        }
-        
-        .export-csv {
-            background-color: var(--md-sys-color-success);
-            color: var(--md-sys-color-on-success);
-        }
-        
-        .export-csv:hover {
-            background-color: var(--color-success);
-        }
+        .export-csv:hover { background-color: color-mix(in srgb, var(--md-sys-color-secondary-container) 92%, black); }
         
         /* Sortable table headers */
-        th.sortable {
-            cursor: pointer;
-            position: relative;
-            padding-right: 20px;
+        th.sortable { cursor: pointer; position: relative; padding-right: var(--md-sys-spacing-l); }
+        th.sortable .material-symbols-outlined { /* For sort icon */
+            font-size: 16px; position: absolute; right: var(--md-sys-spacing-xs); top: 50%;
+            transform: translateY(-50%); opacity: 0.6;
         }
+        th.sortable:hover .material-symbols-outlined { opacity: 1; color: var(--md-sys-color-primary); }
+        th.sorted-asc .material-symbols-outlined, th.sorted-desc .material-symbols-outlined { opacity: 1; color: var(--md-sys-color-primary); }
         
-        th.sortable::after {
-            content: "↕️";
-            font-size: 0.8rem;
-            position: absolute;
-            right: 5px;
-            top: 50%;
-            transform: translateY(-50%);
-            opacity: 0.5;
+        /* Modal Styling - M3 Dialog */
+        #detailsModal {
+            background-color: rgba(0,0,0,0.4); /* Scrim */
         }
-        
-        th.sorted-asc::after {
-            content: "↑";
-            opacity: 1;
+        #detailsModal .modal-content {
+            background-color: var(--md-sys-color-surface);
+            border-radius: var(--md-sys-shape-corner-large); /* 28dp in M3, using large for now */
+            box-shadow: var(--md-sys-elevation-level3);
+            padding: var(--md-sys-spacing-l); /* 24dp */
+            max-width: 600px;
         }
-        
-        th.sorted-desc::after {
-            content: "↓";
-            opacity: 1;
+        #detailsModal h3 { /* Dialog Title */
+            font-family: var(--md-sys-typescale-headline-small-font-family-name);
+            font-size: var(--md-sys-typescale-headline-small-font-size);
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: var(--md-sys-spacing-m);
         }
-        
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .filter-row {
-                flex-direction: column;
-                gap: 0.75rem;
-            }
-            
-            .filter-group {
-                width: 100%;
-            }
-            
-            .filter-actions {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-            
-            .filter-button {
-                width: 100%;
-            }
+        #detailsModal #modalContent p {
+            font-family: var(--md-sys-typescale-body-medium-font-family-name);
+            color: var(--md-sys-color-on-surface-variant);
+            margin-bottom: var(--md-sys-spacing-s);
         }
+         #detailsModal #modalContent strong { color: var(--md-sys-color-on-surface); font-weight: var(--md-sys-font-weight-medium); }
+        #closeModalButton { /* M3 Text Button for close */
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            color: var(--md-sys-color-primary);
+            background: none; border: none; font-size: 2rem; line-height: 1; padding: var(--md-sys-spacing-xs);
+        }
+         #closeModalButton:hover { background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); border-radius: 50%; }
+
+        .material-symbols-outlined { vertical-align: middle; }
+
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
 
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -459,527 +320,447 @@
 </head>
 <body>
     <div id="login-section" class="login-container">
-        <h2 class="text-2xl font-bold text-center mb-8 text-gray-800">Admin Portal</h2>
+        <h2 class="text-2xl font-bold text-center mb-8" style="font-family: var(--md-sys-typescale-headline-small-font-family-name); color: var(--md-sys-color-on-surface);">Admin Portal</h2>
         <input type="email" id="admin-email" placeholder="Email Address">
         <input type="password" id="admin-password" placeholder="Password">
-        <button id="admin-login-button" class="btn btn-email">Login with Email</button>
+        <button id="admin-login-button" class="btn btn-filled btn-email-login">
+            <span class="material-symbols-outlined text-lg">login</span>Login with Email
+        </button>
         
         <div class="social-login-divider"><span>OR</span></div>
 
-        <button id="google-login-button" class="btn btn-google">
+        <button id="google-login-button" class="btn btn-outlined btn-google-login">
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google icon">
             Sign in with Google
         </button>
-        <p id="login-error" class="text-red-600 text-sm mt-4 text-center"></p>
+        <p id="login-error" class="text-center mt-4"></p>
     </div>
 
     <div id="dashboard-section" class="container hidden">
-        <div id="admin-controls">
-            <span id="admin-user-email" class="text-gray-700 mr-4"></span>
-            <button id="admin-logout-button" class="btn btn-logout text-sm px-4 py-2">Logout</button>
+        <div id="admin-controls" class="mb-6">
+            <span id="admin-user-email" class="mr-4"></span>
+            <button id="admin-logout-button" class="btn btn-logout">
+                <span class="material-symbols-outlined text-lg">logout</span>Logout
+            </button>
         </div>
         <h1>Student Performance Dashboard</h1>
         
-        <!-- Filter controls -->
         <div class="filter-controls">
-            <h2 class="text-lg font-semibold mb-3">Filter Results</h2>
-            
-            <div class="filter-row">
+            <h2 class="mb-4">Filter Results</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                 <div class="filter-group">
                     <label for="filter-student">Student Name/Email</label>
-                    <input type="text" id="filter-student" class="filter-input" placeholder="Filter by student name or email">
+                    <input type="text" id="filter-student" class="filter-input" placeholder="Filter by student">
                 </div>
-                
                 <div class="filter-group">
                     <label for="filter-exam">Exam Type</label>
                     <select id="filter-exam" class="filter-input">
                         <option value="">All Exams</option>
-                        <option value="QR Test 1">QR Test 1</option>
-                        <option value="QR Test 2">QR Test 2</option>
-                        <option value="QR Test 3">QR Test 3</option>
-                        <option value="QR Test 4">QR Test 4</option>
-                        <option value="QR Test 5">QR Test 5</option>
-                        <option value="QR Test 6">QR Test 6</option>
-                        <option value="VR Focus Group 16">VR Focus Group 16</option>
-                        <option value="DM Syllogisms Worksheet 1">DM Syllogisms Worksheet 1</option>
-                        <option value="DM Syllogisms Worksheet 2">DM Syllogisms Worksheet 2</option>
-                        <option value="DM Syllogisms Worksheet 3">DM Syllogisms Worksheet 3</option>
-                        <option value="DM Syllogisms Worksheet 4">DM Syllogisms Worksheet 4</option>
-                        <option value="DM Syllogisms Worksheet 5">DM Syllogisms Worksheet 5</option>
-                    </select>
+                        </select>
                 </div>
-                
                 <div class="filter-group">
                     <label for="filter-date-from">From Date</label>
                     <input type="date" id="filter-date-from" class="filter-input">
                 </div>
-                
                 <div class="filter-group">
                     <label for="filter-date-to">To Date</label>
                     <input type="date" id="filter-date-to" class="filter-input">
                 </div>
-            </div>
-            
-            <div class="filter-row">
                 <div class="filter-group">
                     <label for="search-input">Search (any field)</label>
-                    <input type="text" id="search-input" class="filter-input" placeholder="Search in all fields">
+                    <input type="text" id="search-input" class="filter-input" placeholder="Global search">
                 </div>
                 <div class="filter-group">
-                    <label for="filter-score-min">Min Score</label>
-                    <input type="number" id="filter-score-min" class="filter-input" placeholder="Min score" min="0">
+                    <label for="filter-score-min">Min Score (%)</label>
+                    <input type="number" id="filter-score-min" class="filter-input" placeholder="e.g., 0" min="0" max="100">
                 </div>
                 <div class="filter-group">
-                    <label for="filter-score-max">Max Score</label>
-                    <input type="number" id="filter-score-max" class="filter-input" placeholder="Max score" max="36">
+                    <label for="filter-score-max">Max Score (%)</label>
+                    <input type="number" id="filter-score-max" class="filter-input" placeholder="e.g., 100" min="0" max="100">
                 </div>
-                <div class="filter-group">
-                    <label for="submissions-count">Results Count</label>
-                    <div id="submissions-count" class="mt-2 text-center text-gray-600 font-semibold">Showing 0 results</div>
+                 <div class="filter-group flex items-end">
+                    <div id="submissions-count" class="p-2 text-center rounded-md w-full" style="background-color: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface-variant); border: 1px solid var(--md-sys-color-outline-variant);">Showing 0 results</div>
                 </div>
             </div>
-            
             <div class="filter-actions">
                 <div>
-                    <button id="apply-filters" class="filter-button apply-filters mr-2">Apply Filters</button>
-                    <button id="reset-filters" class="filter-button reset-filters">Reset</button>
+                    <button id="apply-filters" class="filter-button apply-filters mr-2 btn btn-filled">
+                        <span class="material-symbols-outlined text-lg">filter_alt</span>Apply Filters
+                    </button>
+                    <button id="reset-filters" class="filter-button reset-filters btn btn-outlined">
+                        <span class="material-symbols-outlined text-lg">refresh</span>Reset
+                    </button>
                 </div>
-                <button id="export-csv" class="filter-button export-csv">Export to CSV</button>
+                <button id="export-csv" class="filter-button export-csv btn" style="background-color: var(--md-sys-color-tertiary-container); color: var(--md-sys-color-on-tertiary-container);">
+                    <span class="material-symbols-outlined text-lg">download</span>Export to CSV
+                </button>
             </div>
         </div>
         
-        <div id="performance-table-container">
-            <p>Loading performance data...</p>
+        <div id="performance-table-container" class="overflow-x-auto">
+            <p class="text-center py-8" style="color: var(--md-sys-color-on-surface-variant);">Loading performance data...</p>
         </div>
     </div>
 
-    <!-- Details Modal HTML (Add this at the end of your body, before the main script tag) -->
-    <div id="detailsModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center hidden z-50">
-        <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+    <div id="detailsModal" class="fixed inset-0 flex items-center justify-center hidden z-50">
+        <div class="modal-content w-full max-w-2xl max-h-[80vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-semibold text-gray-800">Submission Details</h3>
-                <button id="closeModalButton" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+                <h3>Submission Details</h3>
+                <button id="closeModalButton">&times;</button>
             </div>
-            <div id="modalContent" class="text-sm">
-                <!-- Details will be populated here -->
-            </div>
+            <div id="modalContent" class="text-sm"></div>
         </div>
     </div>
 
     <script>
-        // --- Firebase Configuration & Initialization ---
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY", // Replace with your actual Firebase config
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID",
-            measurementId: "YOUR_MEASUREMENT_ID" // Optional
-        };
-        firebase.initializeApp(firebaseConfig);
+        // Firebase Configuration (already in HTML)
+        if (!firebase.apps.length) {
+            const firebaseConfig = {
+                apiKey: "YOUR_API_KEY", // Replace with your actual Firebase config
+                authDomain: "YOUR_AUTH_DOMAIN",
+                projectId: "YOUR_PROJECT_ID",
+                storageBucket: "YOUR_STORAGE_BUCKET",
+                messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+                appId: "YOUR_APP_ID",
+                measurementId: "YOUR_MEASUREMENT_ID" // Optional
+            };
+            firebase.initializeApp(firebaseConfig);
+        }
         const db = firebase.firestore();
         const auth = firebase.auth();
 
-        // --- DOM Elements ---
+        // DOM Elements
         const loginContainer = document.getElementById('login-section');
         const adminPanel = document.getElementById('dashboard-section');
-        const loginButton = document.getElementById('admin-login-button');
-        const logoutButton = document.getElementById('admin-logout-button');
-        const emailInput = document.getElementById('admin-email');
-        const passwordInput = document.getElementById('admin-password');
-        const loginMessage = document.getElementById('login-error');
-        const performanceTableBody = document.getElementById('performance-table-container');
-        const noResultsMessage = document.getElementById('submissions-count');
-        const examNameFilter = document.getElementById('filter-exam');
-        const studentNameFilter = document.getElementById('filter-student');
-        const dateFilter = document.getElementById('filter-date-from');
-        const exportCsvBtn = document.getElementById('export-csv');
-        // Modal Elements
+        const adminLoginButton = document.getElementById('admin-login-button');
+        const googleLoginButton = document.getElementById('google-login-button');
+        const adminLogoutButton = document.getElementById('admin-logout-button');
+        const adminEmailInput = document.getElementById('admin-email');
+        const adminPasswordInput = document.getElementById('admin-password');
+        const loginErrorP = document.getElementById('login-error');
+        const adminUserEmailSpan = document.getElementById('admin-user-email');
+        const performanceTableContainer = document.getElementById('performance-table-container');
+        const submissionsCountDiv = document.getElementById('submissions-count');
+
+        const filterStudentInput = document.getElementById('filter-student');
+        const filterExamSelect = document.getElementById('filter-exam');
+        const filterDateFromInput = document.getElementById('filter-date-from');
+        const filterDateToInput = document.getElementById('filter-date-to');
+        const searchInput = document.getElementById('search-input');
+        const filterScoreMinInput = document.getElementById('filter-score-min');
+        const filterScoreMaxInput = document.getElementById('filter-score-max');
+        const applyFiltersButton = document.getElementById('apply-filters');
+        const resetFiltersButton = document.getElementById('reset-filters');
+        const exportCsvButton = document.getElementById('export-csv');
+        
         const detailsModal = document.getElementById('detailsModal');
         const modalContent = document.getElementById('modalContent');
         const closeModalButton = document.getElementById('closeModalButton');
 
-        // --- State & Configuration ---
         let allPerformanceData = [];
-        let filteredData = []; // Will store currently filtered data
-        let currentSortColumn = 'submissionTimestamp'; // Default sort column
-        let currentSortOrder = 'desc'; // Default sort order: descending
-        const specificAdminUid = "CPQ9CqEuY0Z1n2Yso0NPGN2j9z73"; // Replace with your actual Admin UID
+        let currentSortColumn = 'submissionTimestamp';
+        let currentSortOrder = 'desc';
+        const specificAdminUid = "CPQ9CqEuY0Z1n2Yso0NPGN2j9z73"; // Specific Admin UID
 
-        // --- Authentication Logic ---
+        // Authentication
         auth.onAuthStateChanged(user => {
-            if (user) {
-                console.log("Auth state changed: User is signed in.", user.uid);
-                // ADMIN UID CHECK
-                if (user.uid !== specificAdminUid) {
-                    console.warn("Unauthorized access attempt by UID:", user.uid);
-                    if(loginMessage) loginMessage.textContent = "You are not authorized to view this data.";
-                    if(adminUserEmailSpan) adminUserEmailSpan.textContent = 'Not Authorized';
-                    if(loginContainer) loginContainer.classList.remove('hidden');
-                    if(adminPanel) adminPanel.classList.add('hidden');
-                    auth.signOut(); // Optional: sign out non-admin
-                    return;
-                }
-                // END ADMIN UID CHECK
-
-                if(adminUserEmailSpan) adminUserEmailSpan.textContent = `Logged in as: ${user.email || user.displayName || 'Admin'}`;
+            if (user && user.uid === specificAdminUid) {
+                adminUserEmailSpan.textContent = `Logged in as: ${user.email || 'Admin'}`;
                 loginContainer.classList.add('hidden');
                 adminPanel.classList.remove('hidden');
-                fetchPerformanceData(); 
+                fetchPerformanceData();
             } else {
-                console.log("User logged out or not logged in.");
+                if (user) { // Logged in but not the admin
+                    loginErrorP.textContent = "Unauthorized access.";
+                    auth.signOut(); // Sign out non-admin user
+                }
                 adminPanel.classList.add('hidden');
                 loginContainer.classList.remove('hidden');
-                loginMessage.textContent = 'Please log in to access the admin panel.';
-                performanceTableBody.innerHTML = ''; // Clear table
-                noResultsMessage.classList.remove('hidden');
-                noResultsMessage.textContent = 'Please log in to view data.';
+                adminUserEmailSpan.textContent = '';
+                performanceTableContainer.innerHTML = '<p class="text-center py-8" style="color: var(--md-sys-color-on-surface-variant);">Please log in with admin credentials.</p>';
             }
         });
 
-        function displayLoginMessage(message, isError = true) {
-            loginMessage.textContent = message;
-            loginMessage.className = isError ? 'text-red-500 text-sm mt-2' : 'text-green-500 text-sm mt-2';
-        }
-
-        loginButton.addEventListener('click', () => {
-            const email = emailInput.value;
-            const password = passwordInput.value;
-            if (!email || !password) {
-                displayLoginMessage("Please enter both email and password.");
-                return;
-            }
+        adminLoginButton.addEventListener('click', () => {
+            const email = adminEmailInput.value;
+            const password = adminPasswordInput.value;
+            loginErrorP.textContent = '';
             auth.signInWithEmailAndPassword(email, password)
-                .then(userCredential => {
-                    // onAuthStateChanged will handle UI changes
-                    displayLoginMessage("Login successful! Fetching data...", false);
-                })
-                .catch(error => {
-                    console.error("Login error: ", error);
-                    displayLoginMessage(`Login failed: ${error.message}`);
-        });
+                .catch(error => loginErrorP.textContent = error.message);
         });
 
-        logoutButton.addEventListener('click', () => {
-            auth.signOut().then(() => {
-                // onAuthStateChanged will handle UI changes
-                allPerformanceData = []; // Clear data on logout
-                // filteredPerformanceData = [];
-                displayResults([]); // Clear table display
-                updateExamFilterOptions(new Set()); // Clear filters
-            });
+        googleLoginButton.addEventListener('click', () => {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            loginErrorP.textContent = '';
+            auth.signInWithPopup(provider)
+                .catch(error => loginErrorP.textContent = error.message);
         });
-        
-        // --- Data Fetching and Display ---
+
+        adminLogoutButton.addEventListener('click', () => auth.signOut());
+
+        // Fetch and Display Data
         async function fetchPerformanceData() {
-            if (!auth.currentUser) {
-                console.log("FetchPerformanceData called, but no user is logged in.");
-                performanceTableBody.innerHTML = '<p class="text-center text-gray-500">Please log in to view data.</p>';
-                return;
+            performanceTableContainer.innerHTML = '<p class="text-center py-8" style="color: var(--md-sys-color-on-surface-variant);">Loading performance data...</p>';
+            try {
+                const snapshot = await db.collection("performanceSubmissions").orderBy("submissionTimestamp", "desc").get();
+                allPerformanceData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                populateExamFilter();
+                applyAndDisplayFilters();
+            } catch (error) {
+                console.error("Error fetching performance data: ", error);
+                performanceTableContainer.innerHTML = '<p class="text-center text-red-500 py-8">Error fetching data. Please try again.</p>';
             }
-            // ADMIN UID CHECK for fetchPerformanceData
-            if (auth.currentUser.uid !== specificAdminUid) {
-                console.warn("Unauthorized data fetch attempt by UID:", auth.currentUser.uid);
-                performanceTableBody.innerHTML = '<p class="text-center text-red-500">You are not authorized to view this data.</p>';
-                return;
-            }
-            // END ADMIN UID CHECK
-
-            console.log("Attempting to fetch performance data (user authenticated)...");
-            const performanceCollection = db.collection("performanceSubmissions")
-                                          .orderBy("submissionTimestamp", "desc"); // Sort by newest first
-
-            performanceCollection.get()
-                .then(querySnapshot => {
-                    allPerformanceData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    console.log("Fetched performance data items: ", allPerformanceData.length);
-                    applyFilters(); // Display initial data
-                    updateExamFilterOptions(new Set(allPerformanceData.map(item => item.examName)));
-                })
-                .catch(error => {
-                    console.error("Error fetching performance data: ", error);
-                    noResultsMessage.textContent = 'Error fetching data. Check console for details.';
-                    noResultsMessage.classList.remove('hidden');
-                });
         }
 
-        function applyFilters() {
-            const examFilterValue = examNameFilter.value;
-            const nameFilterValue = studentNameFilter.value.toLowerCase();
-            const dateFilterValue = dateFilter.value;
-
-            let dataToDisplay = allPerformanceData;
-
-            if (examFilterValue) {
-                dataToDisplay = dataToDisplay.filter(item => item.examName === examFilterValue);
-            }
-            if (nameFilterValue) {
-                dataToDisplay = dataToDisplay.filter(item => item.studentName && item.studentName.toLowerCase().includes(nameFilterValue));
-            }
-            if (dateFilterValue) {
-                dataToDisplay = dataToDisplay.filter(item => {
-                    if (!item.submissionTimestamp || !item.submissionTimestamp.toDate) return false;
-                    const itemDate = item.submissionTimestamp.toDate().toISOString().split('T')[0];
-                    return itemDate === dateFilterValue;
-                });
-            }
-            // filteredPerformanceData = dataToDisplay; // No longer need this if displayResults is called directly
-            displayResults(dataToDisplay);
-        }
-
-        function updateExamFilterOptions(uniqueExamNames) {
-            const currentSelection = examNameFilter.value;
-            examNameFilter.innerHTML = '<option value="">All Exams</option>'; // Reset
-             // Add DM Syllogisms Worksheets 1-5 and VR Focus Group 16 by default if not in uniqueExamNames
-            const defaultExams = [
-                "DM Syllogisms Worksheet 1", "DM Syllogisms Worksheet 2",
-                "DM Syllogisms Worksheet 3", "DM Syllogisms Worksheet 4",
-                "DM Syllogisms Worksheet 5", "VR Focus Group 16"
-            ];
-            defaultExams.forEach(name => uniqueExamNames.add(name));
-
-            Array.from(uniqueExamNames).sort().forEach(name => {
-                if (!name) return; // Skip null or empty names
+        function populateExamFilter() {
+            const examNames = new Set(allPerformanceData.map(item => item.examName).filter(name => name));
+            filterExamSelect.innerHTML = '<option value="">All Exams</option>';
+            [...examNames].sort().forEach(name => {
                 const option = document.createElement('option');
                 option.value = name;
                 option.textContent = name;
-                examNameFilter.appendChild(option);
+                filterExamSelect.appendChild(option);
             });
-            // Restore previous selection if still valid
-            if (Array.from(uniqueExamNames).includes(currentSelection)) {
-                examNameFilter.value = currentSelection;
-                }
+        }
+        
+        function applyAndDisplayFilters() {
+            let filtered = [...allPerformanceData];
+            const studentFilter = filterStudentInput.value.toLowerCase();
+            const examFilter = filterExamSelect.value;
+            const dateFromFilter = filterDateFromInput.value;
+            const dateToFilter = filterDateToInput.value;
+            const globalSearch = searchInput.value.toLowerCase();
+            const scoreMin = parseFloat(filterScoreMinInput.value);
+            const scoreMax = parseFloat(filterScoreMaxInput.value);
+
+            if (studentFilter) {
+                filtered = filtered.filter(item => 
+                    (item.studentName && item.studentName.toLowerCase().includes(studentFilter)) ||
+                    (item.studentEmail && item.studentEmail.toLowerCase().includes(studentFilter))
+                );
+            }
+            if (examFilter) {
+                filtered = filtered.filter(item => item.examName === examFilter);
+            }
+            if (dateFromFilter) {
+                filtered = filtered.filter(item => {
+                    if (!item.submissionTimestamp) return false;
+                    const itemDate = item.submissionTimestamp.toDate ? item.submissionTimestamp.toDate() : new Date(item.submissionTimestamp);
+                    return itemDate >= new Date(dateFromFilter + "T00:00:00");
+                });
+            }
+            if (dateToFilter) {
+                filtered = filtered.filter(item => {
+                    if (!item.submissionTimestamp) return false;
+                    const itemDate = item.submissionTimestamp.toDate ? item.submissionTimestamp.toDate() : new Date(item.submissionTimestamp);
+                    return itemDate <= new Date(dateToFilter + "T23:59:59");
+                });
+            }
+            if (!isNaN(scoreMin)) {
+                filtered = filtered.filter(item => {
+                    const totalPossible = parseFloat(item.totalPossibleScore || item.totalQuestions);
+                    if (isNaN(item.score) || isNaN(totalPossible) || totalPossible === 0) return false;
+                    return (parseFloat(item.score) / totalPossible * 100) >= scoreMin;
+                });
+            }
+            if (!isNaN(scoreMax)) {
+                 filtered = filtered.filter(item => {
+                    const totalPossible = parseFloat(item.totalPossibleScore || item.totalQuestions);
+                    if (isNaN(item.score) || isNaN(totalPossible) || totalPossible === 0) return false;
+                    return (parseFloat(item.score) / totalPossible * 100) <= scoreMax;
+                });
+            }
+            if (globalSearch) {
+                filtered = filtered.filter(item => 
+                    Object.values(item).some(val => 
+                        String(val).toLowerCase().includes(globalSearch)
+                    )
+                );
+            }
+            
+            sortDataArray(filtered, currentSortColumn, currentSortOrder);
+            displayResults(filtered);
         }
 
-        function displayResults(data) {
-            if (!performanceTableBody) { console.error('performanceTableBody not found'); return; }
-            if (data.length === 0) {
-                performanceTableBody.innerHTML = "<p class=\"text-center text-gray-600\">No matching records found.</p>";
-                if (noResultsMessage) noResultsMessage.textContent = "Showing 0 results";
-                return;
+        function sortDataArray(dataArray, column, order) {
+            dataArray.sort((a, b) => {
+                let valA = a[column];
+                let valB = b[column];
+
+                if (column === 'submissionTimestamp') {
+                    valA = valA?.toDate ? valA.toDate().getTime() : new Date(valA).getTime();
+                    valB = valB?.toDate ? valB.toDate().getTime() : new Date(valB).getTime();
+                } else if (column === 'score') {
+                    const scoreA = parseFloat(a.score);
+                    const totalA = parseFloat(a.totalPossibleScore || a.totalQuestions);
+                    valA = (totalA > 0 && !isNaN(scoreA)) ? (scoreA / totalA) * 100 : -1;
+
+                    const scoreB = parseFloat(b.score);
+                    const totalB = parseFloat(b.totalPossibleScore || b.totalQuestions);
+                    valB = (totalB > 0 && !isNaN(scoreB)) ? (scoreB / totalB) * 100 : -1;
+                } else if (typeof valA === 'string') {
+                    valA = valA.toLowerCase();
+                    valB = valB.toLowerCase();
                 }
-                
-            let tableHTML = `
-                <div class="overflow-x-auto">
-                    <table class="min-w-full">
-                        <thead>
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'submissionTimestamp' ? 'sorted-' + currentSortOrder : ''}" 
-                                    data-sort="submissionTimestamp">Timestamp</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'studentName' ? 'sorted-' + currentSortOrder : ''}" 
-                                    data-sort="studentName">Student Name</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'userId' ? 'sorted-' + currentSortOrder : ''}" 
-                                    data-sort="userId">User ID</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'examName' ? 'sorted-' + currentSortOrder : ''}" 
-                                    data-sort="examName">Exam Name</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'score' ? 'sorted-' + currentSortOrder : ''}" 
-                                    data-sort="score">Score</th>
-                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'timeTaken' ? 'sorted-' + currentSortOrder : ''}" 
-                                    data-sort="timeTaken">Time Taken</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider sortable ${currentSortColumn === 'focusRating' ? 'sorted-' + currentSortOrder : ''}" 
-                                    data-sort="focusRating">Focus (1-5)</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Details</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-            `;
 
-            data.forEach((item, index) => {
-                const submissionDate = item.submissionTimestamp && item.submissionTimestamp.toDate ? item.submissionTimestamp.toDate().toLocaleString() : (item.submissionTimestamp ? new Date(item.submissionTimestamp).toLocaleString() : 'N/A');
-                const scoreDisplay = item.score !== undefined ? `${item.score} / ${item.totalPossibleScore || item.totalQuestions || 'N/A'}` : 'N/A';
-
-                tableHTML += `
-                    <tr id="submission-row-${index}">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${submissionDate}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-medium">${item.studentName || 'N/A'}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${item.userId || 'N/A'}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${item.examName || 'N/A'}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${scoreDisplay}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${item.timeTaken || 'N/A'}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${item.focusRating || 'N/A'}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                            <button class="text-blue-600 hover:text-blue-800 font-medium view-details-btn" data-item-id="${item.id}">View</button>
-                        </td>
-                    </tr>
-                `;
+                if (valA < valB) return order === 'asc' ? -1 : 1;
+                if (valA > valB) return order === 'asc' ? 1 : -1;
+                return 0;
             });
+        }
+        
+        function displayResults(data) {
+            if (data.length === 0) {
+                performanceTableContainer.innerHTML = "<p class='text-center py-8' style='color: var(--md-sys-color-on-surface-variant);'>No matching records found.</p>";
+                submissionsCountDiv.textContent = "Showing 0 results";
+                return;
+            }
+            submissionsCountDiv.textContent = `Showing ${data.length} results`;
 
-            tableHTML += `
-                        </tbody>
-                    </table>
-                </div>
-            `;
-            performanceTableBody.innerHTML = tableHTML;
+            let tableHTML = `
+                <table class="min-w-full">
+                    <thead><tr>
+                        ${createSortableHeader('submissionTimestamp', 'Timestamp')}
+                        ${createSortableHeader('studentName', 'Student Name')}
+                        ${createSortableHeader('userId', 'User ID')}
+                        ${createSortableHeader('examName', 'Exam Name')}
+                        ${createSortableHeader('score', 'Score (%)')}
+                        ${createSortableHeader('timeTaken', 'Time Taken')}
+                        ${createSortableHeader('focusRating', 'Focus (1-5)')}
+                        <th>Details</th>
+                    </tr></thead>
+                    <tbody>`;
 
-            // Add event listeners to new "View Details" buttons
+            data.forEach(item => {
+                const submissionDate = item.submissionTimestamp?.toDate ? item.submissionTimestamp.toDate().toLocaleString() : (item.submissionTimestamp ? new Date(item.submissionTimestamp).toLocaleString() : 'N/A');
+                const score = parseFloat(item.score);
+                const totalPossible = parseFloat(item.totalPossibleScore || item.totalQuestions);
+                const percentageScore = (totalPossible > 0 && !isNaN(score)) ? ((score / totalPossible) * 100).toFixed(1) + '%' : 'N/A';
+                
+                tableHTML += `
+                    <tr>
+                        <td>${submissionDate}</td>
+                        <td>${item.studentName || 'N/A'}</td>
+                        <td>${item.userId || 'N/A'}</td>
+                        <td>${item.examName || 'N/A'}</td>
+                        <td>${percentageScore} (${item.score || 'N/A'}/${totalPossible || 'N/A'})</td>
+                        <td>${item.timeTaken || 'N/A'}</td>
+                        <td>${item.focusRating || 'N/A'}</td>
+                        <td><button class="btn btn-text view-details-btn" data-item-id="${item.id}">
+                            <span class="material-symbols-outlined text-lg">visibility</span>View</button></td>
+                    </tr>`;
+            });
+            tableHTML += `</tbody></table>`;
+            performanceTableContainer.innerHTML = tableHTML;
+
             document.querySelectorAll('.view-details-btn').forEach(button => {
                 button.addEventListener('click', function() {
-                    const itemId = this.dataset.itemId;
-                    const itemToShow = filteredData.find(d => d.id === itemId); // Use filteredData here
-                    if (itemToShow) {
-                        showDetailsModal(itemToShow);
-                    } else {
-                        console.error("Could not find item with ID:", itemId, "in filteredData");
-                         const allDataItem = allPerformanceData.find(d => d.id === itemId);
-                         if(allDataItem) {
-                            console.log("Found in allPerformanceData, showing that instead.");
-                            showDetailsModal(allDataItem);
-                         } else {
-                            alert("Details for this item could not be loaded.");
-                         }
-                    }
+                    const item = allPerformanceData.find(d => d.id === this.dataset.itemId); // Changed to search allPerformanceData
+                    if (item) showDetailsModal(item);
                 });
             });
             
-            // Re-attach sort listeners to headers
             document.querySelectorAll('th.sortable').forEach(th => {
                 th.addEventListener('click', () => {
-                    sortData(th.dataset.sort);
-                });
-            });
-        }
-
-        // --- Modal Functions NEW ---
-        function showDetailsModal(item) {
-            if (!item) return;
-            modalContent.innerHTML = ''; // Clear previous content
-
-            let contentHtml = `
-                <h4 class="text-lg font-semibold mb-2">${item.examName || 'N/A'} - ${item.studentName || 'N/A'}</h4>
-                <div class="grid grid-cols-2 gap-x-4 gap-y-2 mb-3">
-                    <p><strong>User ID:</strong> ${item.userId || 'N/A'}</p>
-                    <p><strong>Score:</strong> ${item.score !== undefined ? item.score : 'N/A'} / ${item.totalPossibleScore !== undefined ? item.totalPossibleScore : 'N/A'}</p>
-                    <p><strong>Time Taken:</strong> ${item.timeTaken || 'N/A'}</p>
-                    <p><strong>Date:</strong> ${item.submissionTimestamp && item.submissionTimestamp.toDate ? item.submissionTimestamp.toDate().toLocaleString() : (item.submissionTimestamp ? new Date(item.submissionTimestamp).toLocaleString() : 'N/A')}</p>
-                    <p><strong>Goal:</strong> ${item.goal || 'N/A'}</p>
-                    <p><strong>Focus Area:</strong> ${item.focusArea || 'N/A'}</p>
-                    <p><strong>Focus Rating:</strong> ${item.focusRating || 'N/A'}</p>
-                </div>
-                <div class="mb-3">
-                    <p class="font-semibold">Reflection:</p>
-                    <p class="whitespace-pre-wrap bg-gray-50 p-2 rounded">${item.reflection || 'No reflection provided.'}</p>
-                </div>
-            `;
-
-            if (item.questions && Array.isArray(item.questions)) {
-                contentHtml += '<h5 class="text-md font-semibold mt-3 mb-1">Question Breakdown:</h5>';
-                contentHtml += '<div class="space-y-3">';
-                item.questions.forEach((q, index) => {
-                    contentHtml += `
-                        <div class="p-2 border rounded bg-gray-50">
-                            <p class="font-semibold">Question ${q.questionIndex !== undefined ? q.questionIndex + 1 : 'N/A'} (Points: ${q.points !== undefined ? q.points : 'N/A'}/2)</p>
-                            <p class="text-xs text-gray-600 mb-1 whitespace-pre-wrap"><strong>Premise:</strong> ${q.premise || 'N/A'}</p>
-                            <ul class="list-disc list-inside pl-1 text-xs space-y-0.5">
-                    `;
-                    if (q.statements && Array.isArray(q.statements)) {
-                        q.statements.forEach((stmt, stmtIdx) => {
-                            const userAns = q.userAnswers && q.userAnswers[stmtIdx] !== undefined ? q.userAnswers[stmtIdx] : 'N/A';
-                            const correctAns = q.correctAnswers && q.correctAnswers[stmtIdx] !== undefined ? q.correctAnswers[stmtIdx] : 'N/A';
-                            const isCorrect = userAns !== 'N/A' && userAns === correctAns;
-                            contentHtml += `
-                                <li>
-                                    "${stmt || 'Statement text missing'}"
-                                    <br> &nbsp;&nbsp;&nbsp;Your: <span class="${userAns !== 'N/A' ? (isCorrect ? 'text-green-600' : 'text-red-600') : 'text-gray-500'}">${userAns}</span> |
-                                    Correct: <span class="text-blue-600">${correctAns}</span>
-                                </li>
-                            `;
-                        });
+                    const column = th.dataset.sort;
+                    if (currentSortColumn === column) {
+                        currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
                     } else {
-                        contentHtml += '<li>No statements data available.</li>';
-                }
-                    contentHtml += `</ul>`;
-                    if (q.explanation) {
-                         contentHtml += `<p class="text-xs mt-1 text-gray-700 bg-yellow-50 p-1 rounded"><strong>Explanation:</strong> ${q.explanation || 'N/A'}</p>`;
+                        currentSortColumn = column;
+                        currentSortOrder = 'asc';
                     }
-                    contentHtml += `</div>`;
+                    applyAndDisplayFilters(); // Re-sort and display
                 });
-                contentHtml += '</div>';
+            });
+        }
+        
+        function createSortableHeader(columnKey, displayName) {
+            let sortIcon = 'unfold_more'; // Default icon
+            if (currentSortColumn === columnKey) {
+                sortIcon = currentSortOrder === 'asc' ? 'arrow_upward' : 'arrow_downward';
             }
-
-            modalContent.innerHTML = contentHtml;
-            if (detailsModal) detailsModal.classList.remove('hidden');
+            return `<th class="sortable" data-sort="${columnKey}">${displayName} <span class="material-symbols-outlined">${sortIcon}</span></th>`;
         }
 
-        if (closeModalButton) {
-            closeModalButton.addEventListener('click', () => {
-                if (detailsModal) detailsModal.classList.add('hidden');
-            });
-        }
-        if (detailsModal) {
-            detailsModal.addEventListener('click', (event) => { // Close modal if clicked outside
-                if (event.target === detailsModal) {
-                    detailsModal.classList.add('hidden');
-        }
-            });
-        }
-        // END MODAL FUNCTIONS NEW
+        applyFiltersButton.addEventListener('click', applyAndDisplayFilters);
+        resetFiltersButton.addEventListener('click', () => {
+            filterStudentInput.value = '';
+            filterExamSelect.value = '';
+            filterDateFromInput.value = '';
+            filterDateToInput.value = '';
+            searchInput.value = '';
+            filterScoreMinInput.value = '';
+            filterScoreMaxInput.value = '';
+            currentSortColumn = 'submissionTimestamp'; // Reset sort
+            currentSortOrder = 'desc';
+            applyAndDisplayFilters();
+        });
+        exportCsvButton.addEventListener('click', exportToCSV);
 
-        // --- CSV Export ---
+        // Modal
+        closeModalButton.addEventListener('click', () => detailsModal.classList.add('hidden'));
+        detailsModal.addEventListener('click', (e) => { if (e.target === detailsModal) detailsModal.classList.add('hidden'); });
+
+        function showDetailsModal(item) {
+            let content = `<div class="space-y-3">`;
+            for (const key in item) {
+                if (Object.hasOwnProperty.call(item, key)) {
+                    let value = item[key];
+                    if (key === 'submissionTimestamp' && value && value.toDate) {
+                        value = value.toDate().toLocaleString();
+                    } else if (typeof value === 'object' && value !== null) {
+                        value = `<pre class="bg-gray-100 p-2 rounded overflow-x-auto text-xs" style="background-color: var(--md-sys-color-surface-variant); color: var(--md-sys-color-on-surface-variant);">${JSON.stringify(value, null, 2)}</pre>`;
+                    }
+                    content += `<p><strong>${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:</strong> ${value}</p>`;
+                }
+            }
+            content += `</div>`;
+            modalContent.innerHTML = content;
+            detailsModal.classList.remove('hidden');
+        }
+        
         function exportToCSV() {
-            // Only export if there's data
-            if (allPerformanceData.length === 0) {
-                alert('No data to export!');
+            const dataToExport = allPerformanceData; // Or use filtered data by getting it from the current display
+            if (dataToExport.length === 0) {
+                alert('No data to export.');
                 return;
             }
-            
-            // Define CSV headers
-            const headers = [
-                'Submission Time',
-                'Student Name',
-                'Student Email',
-                'Exam Name',
-                'Score',
-                'Total Questions',
-                'Time Taken',
-                'Goal',
-                'Focus Area',
-                'Focus Rating',
-                'Reflection'
-            ];
-            
-            // Format data for CSV
-            const rows = [headers];
-            
-            allPerformanceData.forEach(item => {
+            const headers = ['Timestamp', 'Student Name', 'User ID', 'Exam Name', 'Score', 'Total Possible', 'Time Taken', 'Focus Rating', 'Reflection', 'Goal', 'Focus Area'];
+            const csvRows = [headers.join(',')];
+
+            dataToExport.forEach(item => {
+                const timestamp = item.submissionTimestamp?.toDate ? item.submissionTimestamp.toDate().toLocaleString() : (item.submissionTimestamp ? new Date(item.submissionTimestamp).toLocaleString() : 'N/A');
+                const score = item.score !== undefined ? item.score : 'N/A';
+                const totalPossible = item.totalPossibleScore || item.totalQuestions || 'N/A';
+                
                 const row = [
-                    item.submissionTimestamp ? new Date(item.submissionTimestamp).toLocaleString() : 'N/A',
-                    item.studentName || 'N/A',
-                    item.studentEmail || 'N/A',
-                    item.examName || 'N/A',
-                    item.score !== undefined ? item.score.toString() : 'N/A',
-                    item.totalQuestions !== undefined ? item.totalQuestions.toString() : 'N/A',
-                    item.timeTaken || 'N/A',
-                    item.goal || 'N/A',
-                    item.focusArea || 'N/A',
-                    item.focusRating || 'N/A',
-                    item.reflection || 'N/A'
+                    `"${timestamp}"`,
+                    `"${item.studentName || 'N/A'}"`,
+                    `"${item.userId || 'N/A'}"`,
+                    `"${item.examName || 'N/A'}"`,
+                    score,
+                    totalPossible,
+                    `"${item.timeTaken || 'N/A'}"`,
+                    `"${item.focusRating || 'N/A'}"`,
+                    `"${(item.reflection || 'N/A').replace(/"/g, '""')}"`, // Escape quotes in reflection
+                    `"${item.goal || 'N/A'}"`,
+                    `"${item.focusArea || 'N/A'}"`
                 ];
-                
-                // Clean up any commas and quotes in the data to avoid CSV issues
-                const cleanedRow = row.map(cell => {
-                    // Escape double quotes with double quotes
-                    const escaped = String(cell).replace(/"/g, '""');
-                    // Wrap in quotes if contains comma, newline or quotes
-                    return /[",\n\r]/.test(escaped) ? `"${escaped}"` : escaped;
-                });
-                
-                rows.push(cleanedRow);
+                csvRows.push(row.join(','));
             });
-            
-            // Convert to CSV string
-            const csvContent = rows.map(row => row.join(',')).join('\n');
-            
-            // Create and trigger download
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
+
+            const csvString = csvRows.join('\n');
+            const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
-            link.setAttribute('href', url);
-            link.setAttribute('download', `performance_data_${new Date().toISOString().slice(0,10)}.csv`);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            if (link.download !== undefined) {
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', `ucat_performance_data_${new Date().toISOString().slice(0,10)}.csv`);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
         }
     </script>
 </body>
