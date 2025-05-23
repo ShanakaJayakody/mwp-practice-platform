@@ -8,19 +8,42 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            --color-primary: #3b82f6;
-            --color-primary-dark: #2563eb;
-            --color-primary-light: #93c5fd;
-            --color-primary-bg: #eff6ff;
-            --color-success: #10b981;
-            --color-warning: #f59e0b;
-            --color-danger: #ef4444;
-            --color-text: #1f2937;
-            --color-text-secondary: #4b5563;
-            --color-text-tertiary: #6b7280;
-            --color-bg: #f9fafb;
-            --color-bg-secondary: #f3f4f6;
-            --color-border: #e5e7eb;
+            /* M3 Color System - Light Mode */
+            --md-sys-color-primary: #1967D2;
+            --md-sys-color-on-primary: #FFFFFF;
+            --md-sys-color-primary-container: #D1E3FF;
+            --md-sys-color-on-primary-container: #001E3A;
+            --md-sys-color-secondary: #4285F4;
+            --md-sys-color-on-secondary: #FFFFFF;
+            --md-sys-color-accent: #FF6D00;
+            --md-sys-color-on-accent: #FFFFFF;
+            --md-sys-color-background: #F8F9FA;
+            --md-sys-color-on-background: #1F1F1F;
+            --md-sys-color-surface: #FFFFFF;
+            --md-sys-color-on-surface: #1F1F1F;
+            --md-sys-color-on-surface-variant: #444746;
+            --md-sys-color-outline: #747775;
+            --md-sys-color-error: #D93025;
+            --md-sys-color-on-error: #FFFFFF;
+            --md-sys-color-success: #1E8E3E;
+            --md-sys-color-on-success: #FFFFFF;
+            --md-sys-color-warning: #F9AB00;
+            --md-sys-color-on-warning: #FFFFFF;
+
+            /* Legacy color mappings for backward compatibility */
+            --color-primary: var(--md-sys-color-primary);
+            --color-primary-dark: #0F4C9C;
+            --color-primary-light: var(--md-sys-color-primary-container);
+            --color-primary-bg: var(--md-sys-color-primary-container);
+            --color-success: var(--md-sys-color-success);
+            --color-warning: var(--md-sys-color-warning);
+            --color-danger: var(--md-sys-color-error);
+            --color-text: var(--md-sys-color-on-background);
+            --color-text-secondary: var(--md-sys-color-on-surface-variant);
+            --color-text-tertiary: #6B7280;
+            --color-bg: var(--md-sys-color-background);
+            --color-bg-secondary: #F1F3F4;
+            --color-border: var(--md-sys-color-outline);
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -32,15 +55,83 @@
             --transition: 220ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                /* M3 Color System - Dark Mode */
+                --md-sys-color-primary: #AECBFA;
+                --md-sys-color-on-primary: #00325B;
+                --md-sys-color-primary-container: #00497E;
+                --md-sys-color-on-primary-container: #D1E3FF;
+                --md-sys-color-secondary: #A8C7FA;
+                --md-sys-color-on-secondary: #0A315E;
+                --md-sys-color-accent: #FFB74D;
+                --md-sys-color-on-accent: #542F00;
+                --md-sys-color-background: #1F1F1F;
+                --md-sys-color-on-background: #E3E3E3;
+                --md-sys-color-surface: #2B2B2B;
+                --md-sys-color-on-surface: #E3E3E3;
+                --md-sys-color-on-surface-variant: #C4C7C5;
+                --md-sys-color-outline: #8E918F;
+                --md-sys-color-error: #F2B8B5;
+                --md-sys-color-on-error: #601410;
+                --md-sys-color-success: #A5D6A7;
+                --md-sys-color-on-success: #0D3C1E;
+                --md-sys-color-warning: #FFD54F;
+                --md-sys-color-on-warning: #5D4037;
+
+                /* Updated legacy mappings for dark mode */
+                --color-primary-dark: #7BAAF7;
+                --color-bg-secondary: #383838;
+                --color-text-tertiary: #9AA0A6;
+                --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+                --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+                --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+                --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            }
+        }
+
+        /* Manual dark mode class override */
+        .dark-theme {
+            --md-sys-color-primary: #AECBFA;
+            --md-sys-color-on-primary: #00325B;
+            --md-sys-color-primary-container: #00497E;
+            --md-sys-color-on-primary-container: #D1E3FF;
+            --md-sys-color-secondary: #A8C7FA;
+            --md-sys-color-on-secondary: #0A315E;
+            --md-sys-color-accent: #FFB74D;
+            --md-sys-color-on-accent: #542F00;
+            --md-sys-color-background: #1F1F1F;
+            --md-sys-color-on-background: #E3E3E3;
+            --md-sys-color-surface: #2B2B2B;
+            --md-sys-color-on-surface: #E3E3E3;
+            --md-sys-color-on-surface-variant: #C4C7C5;
+            --md-sys-color-outline: #8E918F;
+            --md-sys-color-error: #F2B8B5;
+            --md-sys-color-on-error: #601410;
+            --md-sys-color-success: #A5D6A7;
+            --md-sys-color-on-success: #0D3C1E;
+            --md-sys-color-warning: #FFD54F;
+            --md-sys-color-on-warning: #5D4037;
+
+            --color-primary-dark: #7BAAF7;
+            --color-bg-secondary: #383838;
+            --color-text-tertiary: #9AA0A6;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--color-bg);
+            background-color: var(--md-sys-color-background);
             display: flex;
             justify-content: center;
             align-items: flex-start;
             min-height: 100vh;
             padding: 0;
-            color: var(--color-text);
+            color: var(--md-sys-color-on-background);
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
@@ -48,7 +139,7 @@
 
         /* Auth Container Styles */
         .auth-container {
-            background-color: #ffffff;
+            background-color: var(--md-sys-color-surface);
             border-radius: var(--radius-md);
             box-shadow: var(--shadow-md);
             padding: 2.5rem;
@@ -65,7 +156,7 @@
         }
 
         .dashboard-wrapper {
-            background-color: #ffffff;
+            background-color: var(--md-sys-color-surface);
             width: 100%;
             margin: 0;
             min-height: 100vh; /* Restored */
@@ -92,8 +183,8 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem 1.5rem;
-            background-color: #ffffff;
-            border-bottom: 1px solid var(--color-border); /* Restored */
+            background-color: var(--md-sys-color-surface);
+            border-bottom: 1px solid var(--md-sys-color-outline); /* Restored */
             box-shadow: var(--shadow-sm); /* Restored */
             position: sticky; /* Restored */
             top: 0; /* Restored */
@@ -113,9 +204,9 @@
         .main-nav {
             display: flex;
             justify-content: center;
-            background-color: #ffffff;
+            background-color: var(--md-sys-color-surface);
             padding: 0.25rem 0;
-            border-bottom: 1px solid var(--color-border); /* Restored */
+            border-bottom: 1px solid var(--md-sys-color-outline); /* Restored */
             box-shadow: var(--shadow-sm); /* Restored */
             position: sticky; /* Restored */
             top: 61px; /* Restored - Height of header */
@@ -127,7 +218,7 @@
             margin: 0 0.5rem;
             cursor: pointer;
             font-weight: 500;
-            color: var(--color-text-secondary);
+            color: var(--md-sys-color-on-surface-variant);
             border-bottom: 2px solid transparent; /* Keep for spacing */
             transition: color var(--transition), background-color var(--transition); /* Specific transitions */
             border-radius: var(--radius-sm) var(--radius-sm) 0 0;
@@ -142,15 +233,15 @@
             bottom: -2px; /* Aligns with the original border-bottom space */
             width: 100%;
             height: 2px;
-            background-color: var(--color-primary);
+            background-color: var(--md-sys-color-primary);
             transform: scaleX(0);
             transform-origin: center; /* Underline grows from the center */
             transition: transform 0.3s ease-out;
         }
 
         .nav-tab:hover {
-            color: var(--color-primary);
-            background-color: var(--color-primary-bg);
+            color: var(--md-sys-color-primary);
+            background-color: var(--md-sys-color-primary-container);
         }
 
         .nav-tab:hover::after {
@@ -158,9 +249,9 @@
         }
 
         .nav-tab.active {
-            color: var(--color-primary);
+            color: var(--md-sys-color-primary);
             /* border-bottom-color: var(--color-primary); Removed as ::after handles it */
-            background-color: var(--color-primary-bg);
+            background-color: var(--md-sys-color-primary-container);
         }
 
         .nav-tab.active::after {
@@ -168,14 +259,14 @@
         }
 
         .nav-tab-disabled {
-            color: var(--color-text-tertiary);
+            color: var(--md-sys-color-on-surface-variant);
             cursor: not-allowed;
             opacity: 0.7;
         }
 
         .nav-tab-disabled .coming-soon-inline {
             font-size: 0.65rem;
-            color: var(--color-text-tertiary);
+            color: var(--md-sys-color-on-surface-variant);
             margin-left: 4px;
             background-color: var(--color-bg-secondary);
             padding: 0.1rem 0.4rem;
@@ -192,13 +283,13 @@
             opacity: 0;
             visibility: hidden;
             position: absolute;
-            background-color: #ffffff;
+            background-color: var(--md-sys-color-surface);
             min-width: 200px;
             box-shadow: var(--shadow-md);
             z-index: 50;
             border-radius: var(--radius);
             margin-top: 0.25rem;
-            border: 1px solid var(--color-border);
+            border: 1px solid var(--md-sys-color-outline);
             transform: translateY(-10px);
             transition: all var(--transition);
             overflow: hidden;
@@ -211,12 +302,12 @@
         }
 
         .dropdown-item {
-            color: var(--color-text-secondary);
+            color: var(--md-sys-color-on-surface-variant);
             padding: 0.75rem 1rem;
             text-decoration: none;
             display: block;
             font-size: 0.9rem;
-            border-bottom: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--md-sys-color-outline);
             transition: all var(--transition);
         }
 
@@ -225,13 +316,13 @@
         }
 
         .dropdown-item:hover:not(.disabled) {
-            background-color: var(--color-primary-bg);
-            color: var(--color-primary-dark);
+            background-color: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
             padding-left: 1.25rem;
         }
 
         .dropdown-item.disabled {
-            color: var(--color-text-tertiary);
+            color: var(--md-sys-color-on-surface-variant);
             cursor: not-allowed;
             background-color: var(--color-bg-secondary);
             opacity: 0.7;
@@ -239,7 +330,7 @@
 
         .dropdown-item.disabled .coming-soon-inline {
             font-size: 0.65rem;
-            color: var(--color-text-tertiary);
+            color: var(--md-sys-color-on-surface-variant);
             margin-left: 4px;
             background-color: rgba(255, 255, 255, 0.7);
             padding: 0.1rem 0.4rem;
@@ -251,7 +342,7 @@
             padding: 2.5rem;
             text-align: center;
             flex-grow: 1;
-            background-color: var(--color-bg);
+            background-color: var(--md-sys-color-background);
             overflow-y: auto;
             /* border: 3px solid green; */ /* Removed diagnostic border */
         }
@@ -259,8 +350,8 @@
         /* Test Links Styling */
         .drill-link {
             display: block;
-            background-color: var(--color-primary-bg);
-            color: var(--color-primary-dark);
+            background-color: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
             padding: 1.25rem;
             margin-bottom: 1rem;
             border-radius: var(--radius);
@@ -268,7 +359,7 @@
             font-size: 1.1rem;
             font-weight: 600;
             transition: all var(--transition);
-            border: 1px solid var(--color-primary-light);
+            border: 1px solid var(--md-sys-color-outline);
             box-shadow: var(--shadow-sm);
             position: relative;
             overflow: hidden;
@@ -287,7 +378,8 @@
         }
 
         .drill-link:hover {
-            background-color: var(--color-primary-light);
+            background-color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
             transform: translateY(-3px);
             box-shadow: var(--shadow-md);
         }
@@ -303,14 +395,14 @@
         .drill-link-disabled {
             display: block;
             background-color: var(--color-bg-secondary);
-            color: var(--color-text-tertiary);
+            color: var(--md-sys-color-on-surface-variant);
             padding: 1.25rem;
             margin-bottom: 1rem;
             border-radius: var(--radius);
             text-decoration: none;
             font-size: 1.1rem;
             font-weight: 600;
-            border: 1px solid var(--color-border);
+            border: 1px solid var(--md-sys-color-outline);
             cursor: not-allowed;
             pointer-events: none;
             position: relative;
@@ -324,7 +416,7 @@
             right: 1rem;
             transform: translateY(-50%);
             background-color: rgba(255, 255, 255, 0.7);
-            color: var(--color-text-tertiary);
+            color: var(--md-sys-color-on-surface-variant);
             font-size: 0.7rem;
             padding: 0.25rem 0.75rem;
             border-radius: 1rem;
@@ -337,20 +429,21 @@
             width: 100%;
             padding: 1rem;
             margin-bottom: 1.25rem;
-            border: 1px solid var(--color-border);
+            border: 1px solid var(--md-sys-color-outline);
             border-radius: var(--radius);
             box-sizing: border-box;
             font-size: 1rem;
             transition: all var(--transition);
-            background-color: var(--color-bg-secondary);
+            background-color: var(--md-sys-color-surface);
+            color: var(--md-sys-color-on-surface);
             padding-left: 2.5rem;
         }
 
         input[type="email"]:focus, input[type="password"]:focus, input[type="text"].auth-input:focus {
             outline: none;
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
-            background-color: #ffffff;
+            border-color: var(--md-sys-color-primary);
+            box-shadow: 0 0 0 3px rgba(25, 103, 210, 0.3);
+            background-color: var(--md-sys-color-surface);
         }
 
         .btn {
@@ -398,8 +491,8 @@
         }
 
         .btn-primary {
-            background-color: var(--color-primary);
-            color: white;
+            background-color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
         }
 
         .btn-primary:hover {
@@ -407,9 +500,9 @@
         }
 
         .btn-google {
-            background-color: #ffffff;
-            color: var(--color-text);
-            border: 1px solid var(--color-border);
+            background-color: var(--md-sys-color-surface);
+            color: var(--md-sys-color-on-surface);
+            border: 1px solid var(--md-sys-color-outline);
         }
 
         .btn-google:hover {
@@ -423,8 +516,8 @@
         }
 
         .btn-logout {
-            background-color: var(--color-danger);
-            color: white;
+            background-color: var(--md-sys-color-error);
+            color: var(--md-sys-color-on-error);
             padding: 0.5rem 1rem;
             font-size: 0.875rem;
             border-radius: var(--radius);
@@ -434,12 +527,12 @@
         }
 
         .btn-logout:hover {
-            background-color: #dc2626;
+            background-color: #B71C1C;
             box-shadow: var(--shadow);
         }
 
         .auth-toggle-link {
-            color: var(--color-primary);
+            color: var(--md-sys-color-primary);
             cursor: pointer;
             text-decoration: underline;
             font-size: 0.875rem;
@@ -452,7 +545,7 @@
         }
 
         .error-message {
-            color: var(--color-danger);
+            color: var(--md-sys-color-error);
             font-size: 0.875rem;
             min-height: 1.25rem;
             margin-top: 0.5rem;
@@ -465,7 +558,7 @@
 
         .welcome-user {
             font-size: 0.9rem;
-            color: var(--color-text-secondary);
+            color: var(--md-sys-color-on-surface-variant);
             display: flex;
             align-items: center;
         }
@@ -475,7 +568,7 @@
             display: inline-block;
             width: 8px;
             height: 8px;
-            background-color: var(--color-success);
+            background-color: var(--md-sys-color-success);
             border-radius: 50%;
             margin-right: 8px;
         }
@@ -485,7 +578,7 @@
             max-width: 600px;
             margin: 2rem auto;
             padding: 2rem;
-            background-color: #ffffff;
+            background-color: var(--md-sys-color-surface);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             text-align: center;
@@ -496,14 +589,14 @@
             display: flex;
             align-items: center;
             margin: 1rem 0;
-            color: var(--color-text-tertiary);
+            color: var(--md-sys-color-on-surface-variant);
             font-size: 0.875rem;
         }
 
         .divider::before, .divider::after {
             content: "";
             flex: 1;
-            border-bottom: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--md-sys-color-outline);
         }
 
         .divider::before {
@@ -518,7 +611,7 @@
         .spinner {
             border: 3px solid rgba(0, 0, 0, 0.1);
             border-radius: 50%;
-            border-top: 3px solid var(--color-primary);
+            border-top: 3px solid var(--md-sys-color-primary);
             width: 20px;
             height: 20px;
             animation: spin 1s linear infinite;
@@ -593,10 +686,11 @@
             display: inline-block; /* Ensure it behaves like a block for animation but flows okay if text wraps on smaller screens */
         }
         .animated-welcome-text .welcome-part1 {
-            color: #85C1E9; /* Lighter blue for "Welcome " */
+            color: var(--md-sys-color-primary); /* Updated to use M3 primary */
         }
         .animated-welcome-text .welcome-part2 {
-            color: #3498DB; /* Vibrant blue for "First Name" */
+            color: var(--md-sys-color-accent); /* Updated to use M3 accent */
+            font-weight: 700;
         }
 
         @keyframes slideInFromLeft {
@@ -610,6 +704,57 @@
             }
         }
         /* End Welcome Message Styling & Animation */
+
+        /* Accent color applications for CTAs and important highlights */
+        .btn-accent {
+            background-color: var(--md-sys-color-accent);
+            color: var(--md-sys-color-on-accent);
+        }
+
+        .btn-accent:hover {
+            background-color: #E65100;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Success indicators */
+        .success-indicator {
+            color: var(--md-sys-color-success);
+            background-color: rgba(30, 142, 62, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--md-sys-color-success);
+        }
+
+        /* Warning indicators */
+        .warning-indicator {
+            color: var(--md-sys-color-warning);
+            background-color: rgba(249, 171, 0, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--md-sys-color-warning);
+        }
+
+        /* Enhanced card styling with M3 principles */
+        .card {
+            background-color: var(--md-sys-color-surface);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow);
+            transition: all var(--transition);
+            border: 1px solid var(--md-sys-color-outline);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .card-elevated {
+            background-color: var(--md-sys-color-surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: none;
+        }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
