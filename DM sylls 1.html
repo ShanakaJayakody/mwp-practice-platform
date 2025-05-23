@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UCAT DM Syllogisms Worksheet 1 - MedwithPurpose</title>
+    <title>UCAT DM Syllogisms Worksheet 1 - MedwithPurpose</title> {/* Title from original DM sylls 1.html */}
     <link rel="icon" href="https://ik.imagekit.io/mwp/2.svg?updatedAt=1745982956185" type="image/svg+xml">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <!-- Firebase SDK -->
     <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -16,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
     <style id="m3-styles">
-        /* M3 Base Styles */
+        /* M3 Base Styles from DM sylls 2.html */
         :root {
           /* Brand Colors - DM Theme (Indigo/Purple) */
           --md-sys-color-primary: #6750A4; /* M3 Purple */
@@ -35,10 +34,10 @@
           --md-sys-color-on-tertiary-container: #31111D;
 
           /* Neutral Colors */
-          --md-sys-color-background: #F8F9FA; 
-          --md-sys-color-on-background: #1A1C1E;
-          --md-sys-color-surface: #FFFFFF; 
-          --md-sys-color-on-surface: #1A1C1E;
+          --md-sys-color-background: #FFFBFE; /* M3 Surface Tone Background */
+          --md-sys-color-on-background: #1C1B1F;
+          --md-sys-color-surface: #FFFBFE; 
+          --md-sys-color-on-surface: #1C1B1F;
           --md-sys-color-surface-variant: #E7E0EC;
           --md-sys-color-on-surface-variant: #49454F;
           --md-sys-color-surface-container-lowest: #FFFFFF;
@@ -55,6 +54,12 @@
           --md-sys-color-on-error: #FFFFFF;
           --md-sys-color-error-container: #F9DEDC;
           --md-sys-color-on-error-container: #410E0B;
+          --md-sys-color-success: #1E8E3E; /* Added for consistency */
+          --md-sys-color-on-success: #FFFFFF;
+          --md-sys-color-success-container: #C8E6C9;
+          --md-sys-color-on-success-container: #0D3C1E;
+          --md-sys-color-warning-container: #FFDDB3; /* For flagged in results */
+          --md-sys-color-on-warning-container: #2B1700;
           --md-sys-color-scrim: #000000;
           --md-sys-color-scrim-rgb: 0,0,0;
 
@@ -85,7 +90,7 @@
           --md-sys-typescale-label-large-line-height: 1.25rem; 
           --md-sys-typescale-label-large-font-weight: 600;
         }
-
+        /* M3 Button Component Styles from DM sylls 2.html */
         .m3-button {
           font-family: var(--md-sys-typescale-label-large-font-family-name);
           font-size: var(--md-sys-typescale-label-large-font-size);
@@ -230,67 +235,65 @@
           text-rendering: optimizeLegibility;
           -moz-osx-font-smoothing: grayscale;
           font-feature-settings: 'liga';
+          vertical-align: middle; /* Added for better alignment */
         }
     </style>
     <style>
-        /* Custom styles for better UI/UX */
+        /* Custom styles for DM Syllogisms page, based on DM Sylls 2.html */
         html, body {
             height: 100%;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Prevent scrolling on body */
+            overflow: hidden; 
         }
         body {
-            font-family: var(--md-sys-typescale-font-family-name); /* M3 Base Font */
+            font-family: var(--md-sys-typescale-font-family-name);
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: var(--md-sys-color-background); /* M3 */
+            background-color: var(--md-sys-color-background);
         }
         #app-container {
             display: flex;
             flex-direction: column;
-            height: calc(100vh - 2rem); /* Full height minus padding */
+            height: calc(100vh - 2rem); 
             width: 100%;
-            background-color: var(--md-sys-color-surface-container-low); /* M3 */
-            border: 1px solid var(--md-sys-color-outline-variant); /* M3 */
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); /* Softer shadow consistent with M3 elevation 1 */
-            border-radius: var(--md-sys-shape-corner-large); /* M3 */
-            margin: 1rem; /* Add some margin */
-            overflow: hidden; /* Prevent content overflow from container */
-            position: relative; /* For calculator positioning */
+            max-width: 1400px; /* Max width for large screens */
+            background-color: var(--md-sys-color-surface);
+            border: 1px solid var(--md-sys-color-outline-variant);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* M3 Elevation 1-2 */
+            border-radius: var(--md-sys-shape-corner-large); 
+            margin: 1rem; 
+            overflow: hidden; 
+            position: relative; 
         }
-        /* Header and Footer */
-        .header-bar { /* Topmost bar */
+        
+        .header-bar { 
             flex-shrink: 0;
-            background-color: var(--md-sys-color-primary); /* M3 */
-            color: var(--md-sys-color-on-primary); /* M3 */
-            padding: 0.75rem 1.5rem; /* Increased padding slightly */
+            background-color: var(--md-sys-color-primary); 
+            color: var(--md-sys-color-on-primary); 
+            padding: 0.75rem 1.5rem; 
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 20; /* Ensure it's above the secondary bar if overlapping */
+            z-index: 20; 
         }
 
-        .secondary-toolbar { /* New toolbar for calculator and flag */
+        .secondary-toolbar { 
             flex-shrink: 0;
-            background-color: var(--md-sys-color-surface-container-high); /* M3 Surface variant */
-            color: var(--md-sys-color-on-surface-variant); /* M3 */
-            padding: 0.5rem 1.5rem; /* Consistent padding */
+            background-color: var(--md-sys-color-surface-container); 
+            color: var(--md-sys-color-on-surface-variant); 
+            padding: 0.5rem 1.5rem; 
             display: flex;
-            justify-content: flex-end; /* Only flag button on right for Syllogisms */
+            justify-content: flex-end; /* Only flag button here */
             align-items: center;
-            border-bottom: 1px solid var(--md-sys-color-outline-variant); /* M3 */
+            border-bottom: 1px solid var(--md-sys-color-outline-variant); 
             z-index: 19;
         }
-
-        /* Specific text colors within header/footer */
-        .header-bar span, .header-bar div, .secondary-toolbar span, .secondary-toolbar div {
-             color: inherit; /* M3: inherit from parent */
-        }
+        
         #timer {
-             background-color: color-mix(in srgb, var(--md-sys-color-on-primary) 15%, transparent); /* M3 subtle bg on primary */
-             color: var(--md-sys-color-on-primary); /* M3 */
+             background-color: color-mix(in srgb, var(--md-sys-color-on-primary) 15%, transparent); 
+             color: var(--md-sys-color-on-primary); 
              font-family: var(--md-sys-typescale-label-large-font-family-name);
              font-size: var(--md-sys-typescale-label-large-font-size);
              font-weight: var(--md-sys-typescale-label-large-font-weight);
@@ -298,153 +301,206 @@
              border-radius: var(--md-sys-shape-corner-small); 
         }
         
-        /* Buttons in secondary toolbar - to become M3 text or icon buttons */
-        .secondary-toolbar-button {\n            font-family: var(--md-sys-typescale-label-large-font-family-name);\n            font-size: var(--md-sys-typescale-label-large-font-size);\n            font-weight: var(--md-sys-typescale-label-large-font-weight);\n            padding: 0.5rem 0.75rem; \n            border-radius: var(--md-sys-shape-corner-full);\n            background-color: transparent;\n            color: var(--md-sys-color-on-surface-variant); /* M3 */\n            border: none; \n            transition: background-color 0.2s ease;\n            margin-left: 0.5rem; \n            display: inline-flex;\n            align-items: center;\n            cursor:pointer;\n        }\n        .secondary-toolbar-button:hover:not(:disabled) {\n            background-color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 8%, transparent); /* M3 hover */\n        }\n        .secondary-toolbar-button.active { \n            background-color: color-mix(in srgb, var(--md-sys-color-secondary-container) 60%, transparent);\n            color: var(--md-sys-color-on-secondary-container);\n        }\n         .secondary-toolbar-button .material-symbols-outlined {\n            margin-right: 0.25rem;\n            font-size: 1.25rem; /* 20px */\n         }\n
-
-
-         /* Footer Button Styling */
         .footer-bar {
             flex-shrink: 0;
-            background-color: var(--md-sys-color-surface-container); /* M3 surface for footer */
-            color: var(--md-sys-color-on-surface); /* M3 */
+            background-color: var(--md-sys-color-surface-container); 
+            color: var(--md-sys-color-on-surface); 
             padding: 0.75rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-top: 1px solid var(--md-sys-color-outline-variant);
         }
-        .footer-bar button {
-            font-family: var(--md-sys-typescale-label-large-font-family-name);
-            font-size: var(--md-sys-typescale-label-large-font-size);
-            font-weight: var(--md-sys-typescale-label-large-font-weight);
-            padding: 0.5rem 1rem; 
-            border-radius: var(--md-sys-shape-corner-full);
-            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-            min-height: 2.25rem; /* 36px */
-            display: inline-flex;
-            align-items: center;
-            cursor: pointer;
-        }
-        .footer-bar button:not(#next-button):not(#end-practice-session-button-footer) {
-            background-color: transparent;
-             color: var(--md-sys-color-primary);
-             border: none;
-        }
-        .footer-bar button:not(#next-button):not(#end-practice-session-button-footer):hover:not(:disabled) {
-             background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
-        }
         
-        .footer-bar button:disabled {\n             opacity: 1; \n             cursor: not-allowed;\n             background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent) !important; \n             color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent) !important;\n             border-color: transparent !important; \n         }\n         .footer-bar button#next-button:disabled {\n            border: none !important;\n         }\n
-
-         .footer-bar button#next-button {\n             background-color: var(--md-sys-color-primary); \n             color: var(--md-sys-color-on-primary); \n             border: none;\n         }\n         .footer-bar button#next-button:hover:not(:disabled) {\n             background-color: color-mix(in srgb, var(--md-sys-color-primary) 92%, var(--md-sys-color-on-primary) 8%); \n         }\n         #flag-button {\n             /* Uses .secondary-toolbar-button styles */\n         }\n         #flag-button.flagged {\n             background-color: var(--md-sys-color-tertiary-container) !important; \n             color: var(--md-sys-color-on-tertiary-container) !important;\n          }\n          #flag-button.flagged .material-symbols-outlined {\n             font-variation-settings: \'FILL\' 1;\n          }\n
-
-        /* Main Content Area */
         .main-content-area {
             flex-grow: 1; 
-            display: flex; /* For two-column layout */
+            display: block; /* Single column for syllogisms */
             overflow: hidden; 
-            padding: 1rem; 
-            gap: 1rem; /* Gap between columns */
-            background-color: var(--md-sys-color-surface); /* M3 */
+            padding: 1.5rem; /* Increased padding */
+            background-color: var(--md-sys-color-surface); 
         }
-        .passage-column, .question-column {
-            flex: 1; /* Each column takes half the space */
-            overflow-y: auto;
+        .question-column { /* Takes full width */
+            width: 100%;
+            max-width: 800px; /* Max width for readability */
+            margin: 0 auto; /* Center the content */
+            overflow-y: auto; 
             padding: 1rem;
             border: none; 
-            border-radius: var(--md-sys-shape-corner-medium); /* M3 */
-            background-color: var(--md-sys-color-surface-container-lowest); /* M3 */
-             height: 100%; 
-             position: relative; 
-            color: var(--md-sys-color-on-surface); /* M3 text color */
+            border-radius: var(--md-sys-shape-corner-medium); 
+            background-color: var(--md-sys-color-surface-container-lowest); 
+            height: 100%; 
+            position: relative; 
+            color: var(--md-sys-color-on-surface); 
             font-family: var(--md-sys-typescale-body-large-font-family-name);
             font-size: var(--md-sys-typescale-body-large-font-size);
             line-height: var(--md-sys-typescale-body-large-line-height);
         }
-        .question-column h4 { /* Question X */
+        .question-column h4 { 
             font-family: var(--md-sys-typescale-title-large-font-family-name);
             font-size: var(--md-sys-typescale-title-large-font-size);
             font-weight: var(--md-sys-typescale-title-large-font-weight);
             color: var(--md-sys-color-on-surface-variant);
             margin-bottom: 0.75rem;
         }
-        .question-column p#question-text { /* Question text itself */
+        .question-column p#question-text { /* This ID is not used for Syllogisms structure */
             font-size: 1.125rem; 
             line-height: 1.625rem;
             margin-bottom: 1.25rem;
         }
-        .passage-column p, .passage-column div { /* Passage text */
-             font-size: var(--md-sys-typescale-body-large-font-size);
-             line-height: var(--md-sys-typescale-body-large-line-height);
-             color: var(--md-sys-color-on-surface-variant);
+        .premises-container {
+            background-color: var(--md-sys-color-surface-container);
+            padding: 1rem;
+            border-radius: var(--md-sys-shape-corner-medium);
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--md-sys-color-outline-variant);
         }
-        .passage-column h3 {\n            font-family: var(--md-sys-typescale-title-large-font-family-name);\n            font-size: 1.25rem; /* Slightly smaller for passage title */\n            font-weight: 600;\n            color: var(--md-sys-color-on-surface);\n            margin-bottom: 0.75rem;\n        }\n
+        .premises-container h3 {
+            font-family: var(--md-sys-typescale-title-medium-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            color: var(--md-sys-color-on-surface-variant);
+            margin-bottom: 0.5rem;
+        }
+        .premises-container p {
+            font-family: var(--md-sys-typescale-body-large-font-family-name);
+            color: var(--md-sys-color-on-surface);
+            line-height: 1.6;
+        }
 
-        /* Syllogism Yes/No Buttons */
-        .syllogism-options {\n            display: flex;\n            gap: 1rem;\n            margin-top: 1.5rem;\n        }\n        .syllogism-button {\n            /* Use M3 Filled Button styles */\n            flex-grow: 1;\n            font-family: var(--md-sys-typescale-label-large-font-family-name);\n            font-size: var(--md-sys-typescale-label-large-font-size);\n            font-weight: var(--md-sys-typescale-label-large-font-weight);\n            padding: 0.75rem 1.5rem; /* M3 standard button padding */\n            border-radius: var(--md-sys-shape-corner-full);\n            border: none;\n            cursor: pointer;\n            text-align: center;\n            transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;\n        }\n        .syllogism-button.yes {\n            background-color: var(--md-sys-color-primary);\n            color: var(--md-sys-color-on-primary);\n        }\n        .syllogism-button.yes:hover:not(:disabled) { background-color: color-mix(in srgb, var(--md-sys-color-primary) 90%, var(--md-sys-color-on-primary) 10%); }\n        \n        .syllogism-button.no {\n            background-color: var(--md-sys-color-error);\n            color: var(--md-sys-color-on-error);\n        }\n        .syllogism-button.no:hover:not(:disabled) { background-color: color-mix(in srgb, var(--md-sys-color-error) 90%, var(--md-sys-color-on-error) 10%); }\n
+        .syllogism-options-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .syllogism-options-header h5 {
+            font-family: var(--md-sys-typescale-title-medium-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            color: var(--md-sys-color-on-surface);
+        }
+        .syllogism-options-header p {
+            font-family: var(--md-sys-typescale-body-medium-font-family-name);
+            color: var(--md-sys-color-on-surface-variant);
+        }
+        .drag-buttons-container {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .drag-button { /* M3 Filled Tonal Button style */
+            padding: 0.5rem 1rem;
+            border-radius: var(--md-sys-shape-corner-full);
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            cursor: grab;
+            user-select: none;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid transparent; /* Base border */
+        }
+        .drag-button:active { cursor: grabbing; }
+        .drag-button.dragging { opacity: 0.7; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
 
-        .syllogism-button.selected {\n            box-shadow: 0 0 0 3px var(--md-sys-color-outline-variant), inset 0 2px 4px rgba(0,0,0,0.2);\n            transform: scale(0.98);\n        }\n         .syllogism-button:disabled {\n            background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent) !important;\n            color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent) !important;\n            cursor: not-allowed;\n            box-shadow: none;\n         }\n
+        #yes-button {
+            background-color: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+            border-color: var(--md-sys-color-primary-container);
+        }
+        #yes-button:hover { background-color: color-mix(in srgb, var(--md-sys-color-primary) 12%, var(--md-sys-color-primary-container));}
 
-        .nav-answered { background-color: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); border-color: var(--md-sys-color-secondary);}\n        .nav-current { border: 2px solid var(--md-sys-color-primary) !important; font-weight: bold; background-color: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }\n        .nav-flagged, .review-flagged { border: 2px solid var(--md-sys-color-tertiary) !important; position: relative; background-color: var(--md-sys-color-tertiary-container); color: var(--md-sys-color-on-tertiary-container); }\n        
-        .modal { /* Scrim part */
+        #no-button {
+            background-color: var(--md-sys-color-error-container);
+            color: var(--md-sys-color-on-error-container);
+            border-color: var(--md-sys-color-error-container);
+        }
+        #no-button:hover { background-color: color-mix(in srgb, var(--md-sys-color-error) 12%, var(--md-sys-color-error-container));}
+        
+        .statement-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid var(--md-sys-color-outline-variant);
+            border-radius: var(--md-sys-shape-corner-medium);
+            background-color: var(--md-sys-color-surface-container-lowest);
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .statement-row.drag-over {
+            background-color: var(--md-sys-color-secondary-container);
+            border-color: var(--md-sys-color-secondary);
+        }
+        .statement-text {
+            flex-grow: 1;
+            font-family: var(--md-sys-typescale-body-large-font-family-name);
+            color: var(--md-sys-color-on-surface);
+        }
+        .statement-answer-box {
+            width: 4.5rem; /* 72px */
+            height: 2.25rem; /* 36px */
+            border: 2px dashed var(--md-sys-color-outline-variant);
+            border-radius: var(--md-sys-shape-corner-small);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            color: var(--md-sys-color-on-surface-variant);
+            margin-left: 1rem;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .statement-answer-box.answered-yes {
+            background-color: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+            border-style: solid;
+            border-color: var(--md-sys-color-primary);
+        }
+        .statement-answer-box.answered-no {
+            background-color: var(--md-sys-color-error-container);
+            color: var(--md-sys-color-on-error-container);
+            border-style: solid;
+            border-color: var(--md-sys-color-error);
+        }
+        
+        .nav-answered { background-color: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); border-color: var(--md-sys-color-secondary);}
+        .nav-current { border: 2px solid var(--md-sys-color-primary) !important; font-weight: bold; background-color: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
+        .nav-flagged, .review-flagged { 
+            border: 2px solid var(--md-sys-color-tertiary) !important; 
+            position: relative; 
+            background-color: var(--md-sys-color-tertiary-container); 
+            color: var(--md-sys-color-on-tertiary-container); 
+        }
+        
+        .modal { 
             display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; 
             overflow: auto; 
-            background-color: rgba(var(--md-sys-color-scrim-rgb), 0.4); /* M3 Scrim */
+            background-color: rgba(var(--md-sys-color-scrim-rgb), 0.4); 
             align-items: center; justify-content: center; 
         }
-        .modal-content { /* Dialog part */
-            background-color: var(--md-sys-color-surface-container-high); /* M3 */
-            color: var(--md-sys-color-on-surface); /* M3 */
-            margin: auto; padding: 1.5rem; /* 24px */ 
-            border: none; /* M3 dialogs don\'t usually have borders */
-            width: calc(100% - 3.5rem); max-width: 35rem; /* M3 sizing */
-            border-radius: var(--md-sys-shape-corner-extra-large); /* 28px M3 */
-            box-shadow: 0px 8px 12px 6px rgba(0,0,0,0.15), 0px 4px 8px rgba(0,0,0,0.3); /* M3 Elevation 3 */
+        .modal-content { 
+            background-color: var(--md-sys-color-surface-container-high); 
+            color: var(--md-sys-color-on-surface); 
+            margin: auto; padding: 1.5rem; 
+            border: none; 
+            width: calc(100% - 3.5rem); max-width: 35rem; 
+            border-radius: var(--md-sys-shape-corner-extra-large); 
+            box-shadow: 0px 8px 12px 6px rgba(0,0,0,0.15), 0px 4px 8px rgba(0,0,0,0.3); 
         }
         .modal.flex { display: flex; }
-        .modal-content .flex.justify-between.items-center h3 {\n            font-family: var(--md-sys-typescale-font-family-name);\n            font-size: 1.5rem; /* 24px */\n            font-weight: 600;\n            color: var(--md-sys-color-on-surface);\n        }\n        .modal-content #close-modal-button { /* Style as M3 Icon button */\n            font-size: 1.5rem; /* Icon size */\n            color: var(--md-sys-color-on-surface-variant);\n            background: transparent; border: none; padding: 0.5rem;\n            border-radius: var(--md-sys-shape-corner-full);\n            cursor:pointer;\n        }\n         .modal-content #close-modal-button:hover {\n            background-color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 8%, transparent);\n         }\n
-
-        button, .button {
-            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
-            border-radius: var(--md-sys-shape-corner-full); 
-            padding: 0.625rem 1.5rem; 
-            font-family: var(--md-sys-typescale-label-large-font-family-name);
-            font-size: var(--md-sys-typescale-label-large-font-size);
-            font-weight: var(--md-sys-typescale-label-large-font-weight);
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); cursor: pointer;
-            border: none; 
+        .modal-content .flex.justify-between.items-center h3 {
+            font-family: var(--md-sys-typescale-font-family-name);
+            font-size: 1.5rem; 
+            font-weight: 600;
+            color: var(--md-sys-color-on-surface);
         }
-        button:active, .button:active { transform: scale(0.98); }
-        button:disabled { 
-            opacity: 1; 
-            cursor: not-allowed; 
-            color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent) !important;
-            background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent) !important;
-            border-color: transparent !important;
+        .modal-content #close-modal-button { 
+            font-size: 1.5rem; 
+            color: var(--md-sys-color-on-surface-variant);
+            background: transparent; border: none; padding: 0.5rem;
+            border-radius: var(--md-sys-shape-corner-full);
+            cursor:pointer;
         }
-        .m3-button-outlined:disabled { 
-            border: 1px solid color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent) !important;
-        }
-
-        .primary-button { 
-            background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary);
-        }
-        .primary-button:hover:not(:disabled) { background-color: color-mix(in srgb, var(--md-sys-color-primary) 92%, var(--md-sys-color-on-primary) 8%); }
+         .modal-content #close-modal-button:hover {
+            background-color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 8%, transparent);
+         }
         
-        .secondary-button { 
-            background-color: transparent; color: var(--md-sys-color-primary); border: 1px solid var(--md-sys-color-outline);
-        }
-        .secondary-button:hover:not(:disabled) { background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); }
-        
-        .danger-button { 
-            background-color: var(--md-sys-color-error); color: var(--md-sys-color-on-error);
-        }
-        .danger-button:hover:not(:disabled) { background-color: color-mix(in srgb, var(--md-sys-color-error) 92%, var(--md-sys-color-on-error) 8%); }
-        
-        .option-label {
-            /* This class is not used for DM syllogisms options; .syllogism-button is used instead */
-        }
-
         #results-details-grid {
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); 
@@ -464,18 +520,18 @@
             justify-content: center;
             border-radius: var(--md-sys-shape-corner-medium); 
             font-weight: 600; 
-            color: var(--md-sys-color-on-primary); 
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease; 
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             padding: 0.25rem;
         }
         .result-summary-box:hover { transform: translateY(-2px); box-shadow: 0 3px 6px rgba(0,0,0,0.15); }
-        .correct-box { background-color: var(--md-sys-color-primary-container); border: 1px solid var(--md-sys-color-primary); color: var(--md-sys-color-on-primary-container); }
+        .correct-box { background-color: var(--md-sys-color-success-container); border: 1px solid var(--md-sys-color-success); color: var(--md-sys-color-on-success-container); }
+        .partially-correct-box { background-color: var(--md-sys-color-warning-container); border: 1px solid var(--md-sys-color-tertiary); color: var(--md-sys-color-on-warning-container); }
         .incorrect-box { background-color: var(--md-sys-color-error-container); border: 1px solid var(--md-sys-color-error); color: var(--md-sys-color-on-error-container); }
         .not-answered-box { background-color: var(--md-sys-color-surface-variant); border: 1px solid var(--md-sys-color-outline); color: var(--md-sys-color-on-surface-variant); }
         .time-display-in-box { font-size: 0.8rem; line-height: 1; }
-        .question-number-label { margin-top: 0; font-size: 0.75rem; font-weight: 500; }
+        .question-number-label { margin-top: 0.25rem; font-size: 0.75rem; font-weight: 500; color: var(--md-sys-color-on-surface-variant); }
         
         .explanation-box {
              background-color: var(--md-sys-color-surface-container-high); 
@@ -512,10 +568,9 @@
         @media (max-width: 768px) {
             #app-container { height: auto; margin: 0.5rem; border-radius:var(--md-sys-shape-corner-medium); }
             .main-content-area { flex-direction: column; padding: 0.5rem; gap: 0.5rem; }
-            .passage-column, .question-column { flex-basis: auto; width: 100%; height: auto; max-height: none; padding: 0.75rem; }
+            .question-column { flex-basis: auto; width: 100%; height: auto; max-height: none; padding: 0.75rem; }
             .header-bar, .secondary-toolbar, .footer-bar { padding: 0.5rem 1rem; }
             .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: var(--md-sys-typescale-label-large-font-size); }
-            button, .button { padding: 0.5rem 1rem; }
             .footer-bar button { padding: 0.5rem 0.75rem; }
             #review-grid { grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); } 
             .review-grid-button { font-size: 0.8rem; }
@@ -523,83 +578,151 @@
                 grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); 
                 gap: 0.5rem;
                 max-width: 450px;
-             }
-             .result-summary-box { width: 50px; height: 50px; }
+            }
+            .result-summary-box { width: 50px; height: 50px; }
             .time-display-in-box { font-size: 0.75rem; }
-            .syllogism-options { flex-direction: column; }
+            .question-number-label { font-size: 0.65rem; }
         }
-         @media (max-width: 480px) {\n             #review-grid { grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); } \n             .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: 0.8rem; }\n             button, .button { padding: 0.4rem 0.8rem; }\n             .footer-bar button { padding: 0.4rem 0.6rem; }\n             .review-grid-button { font-size: 0.75rem; border-radius: var(--md-sys-shape-corner-small); }\n             #results-details-grid { \n                grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); \n                gap: 0.5rem;\n                max-width: 100%; \n                padding-left: 0.5rem; padding-right: 0.5rem;\n             }\n             .result-summary-box { width: 45px; height: 45px; border-radius: var(--md-sys-shape-corner-small); }\n             .time-display-in-box { font-size: 0.65rem; }\n             .question-number-label { font-size: 0.65rem; }\n             .syllogism-button { font-size: 0.875rem; padding: 0.625rem 1rem; }\n         }\n    </style>
+         @media (max-width: 480px) {
+             #review-grid { grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); } 
+             .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: 0.8rem; }
+             .footer-bar button { padding: 0.4rem 0.6rem; font-size: 0.7rem; }
+             .review-grid-button { font-size: 0.75rem; border-radius: var(--md-sys-shape-corner-small); }
+             #results-details-grid { 
+                grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); 
+                gap: 0.5rem;
+                max-width: 100%; 
+                padding-left: 0.5rem; padding-right: 0.5rem;
+             }
+             .result-summary-box { width: 45px; height: 45px; border-radius: var(--md-sys-shape-corner-small); }
+             .time-display-in-box { font-size: 0.65rem; }
+             .question-number-label { font-size: 0.65rem; }
+         }
+        .hidden { display: none !important; }
+    </style>
 </head> 
 <body>
     <div id="app-container">
 
-        <div id="setup-screen" class="p-6 md:p-8 flex flex-col justify-center items-center h-full bg-[var(--md-sys-color-surface)]">
+        <div id="setup-screen" class="p-6 md:p-8 flex flex-col justify-center items-center h-full">
              <div class="text-center mb-6">
                 <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
                      alt="MedwithPurpose Logo" class="mx-auto h-11 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
-                <h1 class="text-2xl md:text-3xl font-bold text-[var(--md-sys-color-primary)] m3-headline-large" id="worksheet-title-setup">DM Syllogisms Worksheet 1</h1>
-                <p class="text-[var(--md-sys-color-on-surface-variant)] mt-2 m3-body-large">Prepare for the UCAT DM Syllogisms section.</p>
-                 <p class="text-sm text-[var(--md-sys-color-on-surface-variant)] mt-4 m3-label-large">
-                     This section contains <strong id="setup-question-count">10 questions</strong> and you have <strong id="setup-time-limit">10 minutes</strong> to complete it.
+                <h1 class="m3-headline-large" id="worksheet-title-setup">DM Syllogisms Worksheet 1</h1>
+                <p class="m3-body-large text-[var(--md-sys-color-on-surface-variant)] mt-2">Prepare for the UCAT DM section.</p>
+                 <p class="m3-label-large text-[var(--md-sys-color-on-surface-variant)] mt-4">
+                     This section contains <strong id="setup-question-count" class="text-[var(--md-sys-color-primary)]">5 questions</strong> with 5 statements each. Maximum score is <strong class="text-[var(--md-sys-color-primary)]">10 points</strong>. You have <strong id="setup-time-limit" class="text-[var(--md-sys-color-primary)]">6 minutes</strong> to complete it.
                  </p>
             </div>
             <div class="space-y-4 w-full max-w-md">
                 <div>
-                    <label for="goal" class="block text-sm font-medium text-[var(--md-sys-color-on-surface-variant)] m3-label-large">Goal (Score out of 10):</label>
+                    <label for="goal" class="block m3-label-large text-[var(--md-sys-color-on-surface-variant)] mb-1">Goal (Score out of 10):</label>
                     <input type="number" id="goal" name="goal" min="0" max="10" class="mt-1 block w-full px-3 py-2 border border-[var(--md-sys-color-outline)] rounded-md shadow-sm focus:outline-none focus:ring-[var(--md-sys-color-primary)] focus:border-[var(--md-sys-color-primary)] sm:text-sm bg-[var(--md-sys-color-surface-container-lowest)] text-[var(--md-sys-color-on-surface)] m3-body-large" placeholder="e.g., 8">
                 </div>
                 <div>
-                    <label for="focus-area" class="block text-sm font-medium text-[var(--md-sys-color-on-surface-variant)] m3-label-large">Area of Focus / Intention For Practice:</label>
+                    <label for="focus-area" class="block m3-label-large text-[var(--md-sys-color-on-surface-variant)] mb-1">Area of Focus / Intention For Practice:</label>
                     <input type="text" id="focus-area" name="focus-area" class="mt-1 block w-full px-3 py-2 border border-[var(--md-sys-color-outline)] rounded-md shadow-sm focus:outline-none focus:ring-[var(--md-sys-color-primary)] focus:border-[var(--md-sys-color-primary)] sm:text-sm bg-[var(--md-sys-color-surface-container-lowest)] text-[var(--md-sys-color-on-surface)] m3-body-large" placeholder="e.g., Identifying conclusions, Speed">
                 </div>
             </div>
             <div class="mt-8 text-center space-y-3">
-                <button id="start-button" class="m3-button m3-button-filled text-lg px-8 py-3">Begin</button>
-                <button onclick="window.location.href='practice.html'" class="m3-button m3-button-outlined text-lg px-8 py-3">Return to Practice Page</button>
+                <button id="start-button" class="m3-button m3-button-filled text-lg px-8 py-3"><span class="material-symbols-outlined">play_arrow</span>Begin</button>
+                <button onclick="window.location.href='practice.html'" class="m3-button m3-button-outlined text-lg px-8 py-3"><span class="material-symbols-outlined">arrow_back</span>Return to Practice</button>
             </div>
         </div>
 
-        <div id="practice-session-screen" class="hidden flex flex-col h-full bg-[var(--md-sys-color-surface-container-low)]">
+        <div id="practice-session-screen" class="hidden flex flex-col h-full">
             <div class="header-bar">
-                <span id="practice-session-title" class="m3-title-large" style="color: var(--md-sys-color-on-primary);">DM Syllogisms Worksheet 1</span>
+                <span id="practice-session-title" class="m3-title-large">DM Syllogisms Worksheet 1</span>
                 <div class="flex items-center space-x-4">
-                    <div id="timer" class="text-base px-3 py-1 rounded-md">10:00</div>
-                    <span class="text-sm m3-label-large" style="color: var(--md-sys-color-on-primary);">Question <span id="question-number-info">1</span> of 10</span>
+                    <div id="timer" class="m3-label-large">06:00</div>
+                    <span class="m3-label-large">Question <span id="question-number-info">1</span> of 5</span>
                 </div>
             </div>
             <div class="secondary-toolbar">
-                 <div>
-                    <label for="reflection-text" class="block text-md font-semibold text-gray-700 mb-1">Main takeaway from this practice:</label>
-                    <textarea id="reflection-text" name="reflection-text" rows="3" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Reflect on your performance, strategies, or areas for improvement..."></textarea>
+                <button id="flag-button" class="m3-icon-button">
+                    <span class="material-symbols-outlined">flag</span>
+                </button>
+            </div>
+
+            <div class="main-content-area">
+                <div class="question-column">
+                    {/* Content dynamically inserted by JS */}
+                </div>
+            </div>
+
+            <div class="footer-bar">
+                 <button id="back-to-results-button" class="m3-button m3-button-text hidden mr-auto"><span class="material-symbols-outlined">arrow_back</span>Back to Results</button>
+                 <button id="end-practice-session-button-footer" class="m3-button m3-button-text"><span class="material-symbols-outlined">stop_circle</span>End Session</button>
+                 <div class="flex items-center space-x-2 ml-auto">
+                     <button id="prev-button" class="m3-button m3-button-outlined icon-only" disabled aria-label="Previous Question"><span class="material-symbols-outlined">chevron_left</span></button>
+                     <button id="navigator-button" class="m3-button m3-button-outlined"><span class="material-symbols-outlined">grid_view</span>Navigator</button>
+                     <button id="next-button" class="m3-button m3-button-filled icon-only" aria-label="Next Question"><span class="material-symbols-outlined">chevron_right</span></button>
                  </div>
             </div>
-              <div class="mt-6 text-center flex-shrink-0 flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4">
-                <button onclick="window.location.href='student_dashboard.html'" class="secondary-button px-6 py-2 w-full sm:w-auto">Return to Dashboard</button>
-                <button onclick="window.location.reload()" class="secondary-button px-6 py-2 w-full sm:w-auto">Try Again</button>
-                <div class="w-full sm:w-auto relative group">
-                    <button id="submit-performance-button" class="primary-button px-6 py-2 w-full">Submit Reflections</button>
-                    <div class="absolute left-0 right-0 -top-10 bg-blue-100 text-blue-800 text-xs p-1 rounded border border-blue-200 opacity-0 group-hover:opacity-100 transition-opacity">
-                        ↓ Optional: Submit your reflection on this practice session
-                    </div>
-                </div>
-                <button id="download-pdf-button" class="primary-button px-6 py-2 w-full sm:w-auto">Download Results PDF</button>
+        </div>
+        
+        <div id="review-screen" class="hidden p-6 md:p-8 flex-col items-center h-full overflow-y-auto">
+             <div class="w-full max-w-3xl mb-4 flex justify-between items-center">
+                 <h2 class="m3-dialog-title">Review Your Answers</h2>
+                 <button id="filter-flagged-button" class="m3-button m3-button-text"><span class="material-symbols-outlined">filter_list</span>Show Flagged Only</button>
+             </div>
+             <p class="m3-body-large text-[var(--md-sys-color-on-surface-variant)] text-center mb-6">Click a number to jump. Answered questions are in a colored container. Flagged questions have a warning-colored border.</p>
+            <div id="review-grid" class="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-10 gap-3 mb-6 w-full max-w-2xl"></div>
+            <div class="mt-auto pt-6">
+                <button id="end-practice-session-button" class="m3-button m3-button-filled-error text-lg px-8 py-3">
+                    <span class="material-symbols-outlined">check_circle</span>Submit & View Results
+                </button>
             </div>
         </div>
 
-        <div id="navigator-modal" class="modal">
-            <div class="modal-content bg-white p-6 rounded-lg shadow-xl">
+        <div id="results-screen" class="hidden p-6 md:p-8 flex-col h-full">
+             <div class="text-center mb-6 flex-shrink-0">
+                <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
+                     alt="MedwithPurpose Logo" class="mx-auto h-12 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
+                 <h2 class="m3-headline-large text-[var(--md-sys-color-primary)]">DM Syllogisms Worksheet 1 Results</h2>
+             </div>
+            <div class="p-4 rounded-lg mb-6 text-center flex-shrink-0" style="background-color: var(--md-sys-color-primary-container);">
+                 <p class="m3-title-large font-semibold" style="color: var(--md-sys-color-on-primary-container);">Your Score: <span id="score" class="text-[var(--md-sys-color-primary)]">0</span> / <span id="total-score-possible">10</span> Points</p>
+                 <p class="m3-body-large" style="color: var(--md-sys-color-on-primary-container);">Time Taken: <span id="time-taken"></span></p>
+            </div>
+            <h3 class="m3-title-large font-semibold mb-2 flex-shrink-0">Detailed Results Summary:</h3>
+            <p class="m3-body-medium text-[var(--md-sys-color-on-surface-variant)] mb-4 flex-shrink-0">Click on a question box below to review it.</p>
+            <div id="results-details-grid" class="overflow-y-auto flex-grow"></div>
+            <div class="mt-6 flex-shrink-0 border-t pt-4" style="border-color: var(--md-sys-color-outline-variant);">
+                 <div class="p-3 rounded-md mb-4 text-center" style="background-color: var(--md-sys-color-secondary-container); border: 1px solid var(--md-sys-color-outline-variant);">
+                    <p class="m3-body-medium" style="color: var(--md-sys-color-on-secondary-container);">Your test results have been submitted. You can add a reflection below.</p>
+                 </div>
+                 <div class="mb-4">
+                    <label for="focus-rating" class="block m3-label-large text-[var(--md-sys-color-on-surface-variant)] mb-1">My focus (1-5):</label>
+                    <input type="number" id="focus-rating" name="focus-rating" min="1" max="5" class="mt-1 block w-20 px-3 py-2 border border-[var(--md-sys-color-outline)] rounded-md shadow-sm focus:outline-none focus:ring-[var(--md-sys-color-primary)] focus:border-[var(--md-sys-color-primary)] sm:text-sm bg-[var(--md-sys-color-surface-container-lowest)] text-[var(--md-sys-color-on-surface)]" placeholder="1-5">
+                 </div>
+                 <div>
+                    <label for="reflection-text" class="block m3-label-large text-[var(--md-sys-color-on-surface-variant)] mb-1">Main takeaway:</label>
+                    <textarea id="reflection-text" name="reflection-text" rows="3" class="block w-full px-3 py-2 border border-[var(--md-sys-color-outline)] rounded-md shadow-sm focus:outline-none focus:ring-[var(--md-sys-color-primary)] focus:border-[var(--md-sys-color-primary)] sm:text-sm bg-[var(--md-sys-color-surface-container-lowest)] text-[var(--md-sys-color-on-surface)]" placeholder="Reflect on your performance..."></textarea>
+                 </div>
+            </div>
+              <div class="mt-6 text-center flex-shrink-0 flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4">
+                <button onclick="window.location.href='student_dashboard.html'" class="m3-button m3-button-outlined px-6 py-2 w-full sm:w-auto"><span class="material-symbols-outlined">dashboard</span>Dashboard</button>
+                <button onclick="window.location.reload()" class="m3-button m3-button-outlined px-6 py-2 w-full sm:w-auto"><span class="material-symbols-outlined">refresh</span>Try Again</button>
+                <button id="submit-performance-button" class="m3-button m3-button-filled px-6 py-2 w-full sm:w-auto"><span class="material-symbols-outlined">send</span>Submit Reflections</button>
+                <button id="download-pdf-button" class="m3-button m3-button-filled px-6 py-2 w-full sm:w-auto"><span class="material-symbols-outlined">download</span>Download PDF</button>
+            </div>
+        </div>
+
+        <div id="navigator-modal" class="modal m3-dialog-scrim">
+            <div class="modal-content m3-dialog">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-semibold text-gray-800">Question Navigator</h3>
-                    <button id="close-modal-button" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+                    <h3 class="m3-dialog-title">Question Navigator</h3>
+                    <button id="close-modal-button" class="m3-icon-button"><span class="material-symbols-outlined">close</span></button>
                 </div>
-                 <p class="text-sm text-gray-600 mb-4">Click a number to jump. Green: answered, Yellow border: flagged.</p>
-                <div id="navigator-grid" class="grid grid-cols-4 gap-3"> </div>
+                 <p class="m3-dialog-content">Click a number to jump. Answered questions are colored. Flagged questions have a warning-colored border.</p>
+                <div id="navigator-grid" class="grid grid-cols-5 gap-2 mt-4"> {/* Adjusted to 5 columns for 5 questions */}
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
         // --- Firebase Configuration ---
         const firebaseConfig = {
           apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
@@ -610,190 +733,23 @@
           appId: "1:309084045110:web:b09ca0fdff84b094963d97",
           measurementId: "G-4M3ED641M9"
         };
+        
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore(); // Initialize Firestore
-
-        // Check for review mode from URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const reviewParam = urlParams.get('review');
+        if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        } else if (typeof firebase === 'undefined') {
+            console.error("Firebase SDK not loaded. Ensure Firebase scripts are in <head> with defer attribute.");
+        }
         
-        // Check if user is logged in via Firebase
-        firebase.auth().onAuthStateChanged(user => {
-          if (user) {
-                console.log("User is logged in:", user.displayName, user.email);
-          } else {
-                console.log("No user is logged in");
-            }
-        });
+        let db, auth;
+        if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
+            db = firebase.firestore();
+            auth = firebase.auth();
+        } else {
+            console.error("Firebase not initialized. DB and Auth objects will be undefined.");
+        }
         
-        // Expose startTest function to global window object so it can be called from onclick
-        window.startTest = function() {
-            console.log("startTest() function called directly");
-            
-            // Get user info from Firebase Auth if available
-            if (firebase.auth && firebase.auth().currentUser) {
-                const currentUser = firebase.auth().currentUser;
-                userName = currentUser.displayName || currentUser.email || '';
-                // Store email to be used later in submission
-                userEmail = currentUser.email || '';
-                console.log("Using user info from Firebase:", userName, userEmail);
-            } else {
-                userName = '';
-                userEmail = '';
-                console.log("No user logged in - using empty user info");
-            }
-            
-            userGoal = document.getElementById('goal').value.trim();
-            userFocusArea = document.getElementById('focus-area').value.trim();
-            timeLeft = 360; // 6 minutes in seconds
-            
-            // Make sure arrays are properly initialized with the correct length
-            if (userAnswers.length !== questions.length) {
-                userAnswers = new Array(questions.length).fill(null);
-            } else {
-                userAnswers.fill(null);
-            }
-            
-            if (questionTimes.length !== questions.length) {
-                questionTimes = new Array(questions.length).fill(0);
-            } else {
-                questionTimes.fill(0);
-            }
-            
-            if (flaggedQuestions.length !== questions.length) {
-                flaggedQuestions = new Array(questions.length).fill(false);
-            } else {
-                flaggedQuestions.fill(false);
-            }
-            
-            questionStartTime = null;
-            currentQuestionIndex = 0;
-            isReviewingFromResults = false;
-            isFilteringFlagged = false;
-            currentlyDisplayedPassageIndex = -1;
-            practiceSessionEndTime = null;
-            showPracticeSessionScreen();
-            startTimer();
-            loadQuestion(0);
-            populateNavigator();
-        };
-        
-        // --- State Variables ---
-        // Define all state variables before any functions are called to avoid reference errors
-        let currentQuestionIndex = 0;
-        let userAnswers = [];
-        let timerInterval;
-        let timeLeft = 360; // 6 minutes in seconds 
-        let practiceSessionStartTime;
-        let practiceSessionEndTime;
-        let userName = '';
-        let userEmail = '';
-        let userGoal = '';
-        let userFocusArea = '';
-        let isReviewingFromResults = false;
-        let questionStartTime = null;
-        let questionTimes = [];
-        let flaggedQuestions = [];
-        let isFilteringFlagged = false;
-        let currentlyDisplayedPassageIndex = -1;
-
-        // Calculator State
-        let calcCurrentInput = '0';
-        let calcPreviousInput = '';
-        let calcOperator = null;
-        let calcMemory = 0;
-        let calcShouldResetDisplay = false; 
-        let calcMrcPressedOnce = false; 
-        let isDraggingCalculator = false;
-        let calculatorOffsetX, calculatorOffsetY;
-        
-        // Add a debounce flag for submissions
-        let isSubmittingReflection = false;
-        
-        // --- Elements ---
-        const appContainer = document.getElementById('app-container');
-        const setupScreen = document.getElementById('setup-screen');
-        const practiceSessionScreen = document.getElementById('practice-session-screen');
-        const reviewScreen = document.getElementById('review-screen');
-        const resultsScreen = document.getElementById('results-screen');
-        const navigatorModal = document.getElementById('navigator-modal');
-        const startButton = document.getElementById('start-button');
-        const prevButton = document.getElementById('prev-button');
-        const nextButton = document.getElementById('next-button');
-        const navigatorButton = document.getElementById('navigator-button');
-        const closeModalButton = document.getElementById('close-modal-button');
-        const endPracticeSessionButton = document.getElementById('end-practice-session-button');
-        const endPracticeSessionButtonFooter = document.getElementById('end-practice-session-button-footer');
-        const backToResultsButton = document.getElementById('back-to-results-button');
-        const flagButton = document.getElementById('flag-button');
-        const questionNumberInfoEl = document.getElementById('question-number-info');
-        const timerEl = document.getElementById('timer');
-        const reviewGrid = document.getElementById('review-grid');
-        const navigatorGrid = document.getElementById('navigator-grid');
-        const scoreEl = document.getElementById('score');
-        const totalQuestionsResultsEl = document.getElementById('total-questions-results');
-        const timeTakenEl = document.getElementById('time-taken');
-        const resultsDetailsGrid = document.getElementById('results-details-grid');
-        const goalInput = document.getElementById('goal');
-        const focusAreaInput = document.getElementById('focus-area');
-        const practiceSessionTitleEl = document.getElementById('practice-session-title');
-        const filterFlaggedButton = document.getElementById('filter-flagged-button');
-        const setupQuestionCountEl = document.getElementById('setup-question-count');
-        const setupTimeLimitEl = document.getElementById('setup-time-limit');
-        const reflectionText = document.getElementById('reflection-text');
-        const downloadPdfButton = document.getElementById('download-pdf-button');
-        const focusRatingInput = document.getElementById('focus-rating');
-        const calculatorToggleButton = document.getElementById('calculator-toggle-button');
-        const calculatorUI = document.getElementById('calculator-ui');
-        const calcDisplay = document.getElementById('calc-display');
-        const calcButtons = document.querySelectorAll('.calc-button');
-        const closeCalculatorButton = document.getElementById('close-calculator-button');
-        const calculatorDragHeader = document.getElementById('calculator-drag-header');
-
-        // --- Data ---
-        const passages = [
-            `The table shows the fees for different membership types and activities at a fitness centre.
-            
-<img src="https://ik.imagekit.io/mwp/qrtest1a" alt="Fitness centre pricing table">`,
-            `The table below displays details for 4 different inter-city bus services offered by a transport company.
-            
-<img src="https://ik.imagekit.io/mwp/qrtest1b" alt="Inter-city bus services table">`,
-            `Of the total number of students visiting the university library one day, 3/5 borrowed at least one item. Of those who borrowed items, 1/4 borrowed a non-fiction book. Students who didn't borrow any items obviously didn't borrow non-fiction books.`,
-            `A sports-drink powder states that 25 g of powder is needed per 600 mL of water. A coach wants to prepare 7.2 litres of the drink for a tournament, using exactly the recommended concentration.`,
-            `David paid a $17.00 library fine for an overdue book. The fine policy states that the initial fine is calculated based on the book type, this amount is then increased by 10% if the book is over a week late, and finally, a 25% administration fee is added to the resulting total. David's book was over a week late.`,
-            `The library analysed the types of items borrowed last week. E-books are a format option available only for Fiction and Science category items. The total items borrowed per category were:
-Fiction: 800 items
-Science: 500 items
-History: 300 items
-Journals: 400 items
-
-If one-fifth of the Fiction items borrowed were e-books and three-tenths of the Science items borrowed were e-books, how many e-books were borrowed in total last week?`,
-            `A university library tracks estimated reading hours generated by books loaned from different subject sections last month. The data is below:
-
-<img src="https://ik.imagekit.io/mwp/qrtest1c" alt="University library reading hours by subject" style="margin-top: 12px;">`,
-            `Here is a comparison of two key departments within TechCorp Industries, based on last year's performance data:
-
-<img src="https://ik.imagekit.io/mwp/qrtest1d?updatedAt=1747196268019" alt="TechCorp Industries department comparison" style="margin-top: 12px;">`,
-            `The table below shows the results of a survey asking participants about their preferred type of vacation.
-
-<img src="https://ik.imagekit.io/mwp/qrtest1e" alt="Vacation preferences survey results" style="margin-top: 12px;">`,
-            `Peter purchased 14 new baseball cards for his collection. This increased the size of his collection by 35%.`,
-            `Sarah added 3 new plants to her garden. This increased the number of plants in her garden by 15%.`,
-            `At a cinema, movie tickets normally cost $15 each. There is a special offer where you can buy 4 tickets for $50.`,
-            `<img src="https://ik.imagekit.io/mwp/qrtest1f" alt="Square patio with central square fountain">`,
-            `Alex is a diligent salesperson and has been tracking their monthly sales achieved against the average of their team (as percentages of the monthly target). The team is relatively small - the team only contains 8 members, including Alex.
-
-<img src="https://ik.imagekit.io/mwp/qrtest1i" alt="Alex's sales performance compared to team average" style="margin-top: 12px;">`,
-            `The following table shows the fare for multiple different catering services.
-
-<img src="https://ik.imagekit.io/mwp/qrtest1g?updatedAt=1747199491069" alt="Catering services pricing table" style="margin-top: 12px; margin-bottom: 12px;">
-
-For example: an event with Catering Beta for 15 guests requiring 2.5 hours of service, with a Weekend Surcharge rate of x1.4 applied, would cost: 1.4×(175.00+(15×10.50)+(2.5×25.00))=$553.00`,
-            `The following table explains the timezone difference across multiple locations.
-
-<img src="https://ik.imagekit.io/mwp/qrtest1h?updatedAt=1747199651751" alt="Timezone difference chart" style="margin-top: 12px;">`
-        ];
+        // --- Data for DM Syllogisms Worksheet 1 ---
         const questions = [
             { 
                 premises: [
@@ -862,28 +818,81 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
                 correctAnswers: ["N", "N", "N", "Y", "N"]
             }
         ];
+        
+        // --- State Variables ---
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(questions.length).fill(null).map(() => new Array(5).fill(null)); // For 5 statements per question
+        let timerInterval;
+        let timeLeft = 360; // 6 minutes for 5 questions
+        let practiceSessionStartTime;
+        let practiceSessionEndTime;
+        let userName = '';
+        let userEmail = '';
+        let userGoal = '';
+        let userFocusArea = '';
+        let isReviewingFromResults = false;
+        let questionStartTime = null;
+        let questionTimes = new Array(questions.length).fill(0);
+        let flaggedQuestions = new Array(questions.length).fill(false);
+        let isFilteringFlagged = false;
+        let isSubmittingReflection = false;
 
-        // Now initialize arrays with questions.length
-        userAnswers = new Array(questions.length).fill(null);
-        questionTimes = new Array(questions.length).fill(0);
-        flaggedQuestions = new Array(questions.length).fill(false);
+        // --- Elements ---
+        // (Elements are largely the same as DM Sylls 2, ensure IDs match)
+        const appContainer = document.getElementById('app-container');
+        const setupScreen = document.getElementById('setup-screen');
+        const practiceSessionScreen = document.getElementById('practice-session-screen');
+        const reviewScreen = document.getElementById('review-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const navigatorModal = document.getElementById('navigator-modal');
+        const startButton = document.getElementById('start-button');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const navigatorButton = document.getElementById('navigator-button');
+        const closeModalButton = document.getElementById('close-modal-button');
+        const endPracticeSessionButton = document.getElementById('end-practice-session-button');
+        const endPracticeSessionButtonFooter = document.getElementById('end-practice-session-button-footer');
+        const backToResultsButton = document.getElementById('back-to-results-button');
+        const flagButton = document.getElementById('flag-button');
+        const questionNumberInfoEl = document.getElementById('question-number-info');
+        const timerEl = document.getElementById('timer');
+        const reviewGrid = document.getElementById('review-grid');
+        const navigatorGrid = document.getElementById('navigator-grid');
+        const scoreEl = document.getElementById('score');
+        const totalScorePossibleEl = document.getElementById('total-score-possible'); // Added for clarity
+        const timeTakenEl = document.getElementById('time-taken');
+        const resultsDetailsGrid = document.getElementById('results-details-grid');
+        const goalInput = document.getElementById('goal');
+        const focusAreaInput = document.getElementById('focus-area');
+        const practiceSessionTitleEl = document.getElementById('practice-session-title');
+        const filterFlaggedButton = document.getElementById('filter-flagged-button');
+        const setupQuestionCountEl = document.getElementById('setup-question-count');
+        const setupTimeLimitEl = document.getElementById('setup-time-limit');
+        const reflectionText = document.getElementById('reflection-text');
+        const downloadPdfButton = document.getElementById('download-pdf-button');
+        const focusRatingInput = document.getElementById('focus-rating');
+        const worksheetTitleSetupEl = document.getElementById('worksheet-title-setup');
 
-        // Check for review mode and initialize appropriate screen
-        if (reviewParam) {
-            // We're in review mode - load the past test data
-            loadPastTestForReview(reviewParam);
-        } else {
-            // Regular test mode - continue with normal setup
-            showSetupScreen();
-        }
 
-        // --- Functions ---
+        // --- Functions (Copied from DM Sylls 2, with minor adjustments for titles/counts) ---
+        // (startTimer, stopTimer, formatTimeSeconds, formatTimeDifference, recordTimeSpent,
+        // toggleFlag, updateFlagButtonAppearance, loadQuestion, showNextQuestion, showPrevQuestion,
+        // showSetupScreen, showPracticeSessionScreen, showReviewScreen, populateNavigator,
+        // updateNavigatorButtons, updateNavigatorHighlight, showResultsScreen, revisitQuestionFromResults,
+        // endPracticeSessionAndShowResults, calculateScore, submitDataToFirebase, 
+        // handleEndPracticeSessionFooterClick, generatePDF, submitPerformanceData, initDragAndDrop,
+        // handleKeyboardShortcuts, initializeApp, loadPastTestForReview)
+
+        // Ensure all functions from DM Sylls 2.html's script are here.
+        // For brevity, I'm not re-listing all of them but they should be identical
+        // except for minor text changes (e.g., worksheet title).
+
         function startTimer() {
             practiceSessionStartTime = new Date();
             clearInterval(timerInterval);
             timerEl.textContent = formatTimeSeconds(timeLeft);
-            timerEl.classList.remove('text-gray-300');
-            timerEl.classList.add('text-white', 'bg-opacity-20', 'bg-white');
+            timerEl.classList.remove('text-[var(--md-sys-color-on-surface-variant)]'); // Assuming this was a placeholder
+            timerEl.classList.add('text-[var(--md-sys-color-on-primary)]');
             timerInterval = setInterval(() => {
                 timeLeft--;
                 timerEl.textContent = formatTimeSeconds(timeLeft);
@@ -896,10 +905,10 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
         function stopTimer() {
             clearInterval(timerInterval);
             practiceSessionEndTime = practiceSessionEndTime || new Date();
-            timerEl.classList.remove('text-white', 'bg-opacity-20', 'bg-white');
-            timerEl.classList.add('text-gray-300');
+            timerEl.classList.add('text-[var(--md-sys-color-on-surface-variant)]');
+            timerEl.classList.remove('text-[var(--md-sys-color-on-primary)]');
         }
-
+        
         function formatTimeSeconds(totalSeconds) {
              if (totalSeconds < 0) totalSeconds = 0;
              const minutes = Math.floor(totalSeconds / 60);
@@ -914,13 +923,13 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
             const seconds = totalSeconds % 60;
             return `${minutes} min ${seconds < 10 ? '0' : ''}${seconds} sec`;
         }
-
+        
         function recordTimeSpent(index) {
             if (questionStartTime && index >= 0 && index < questions.length) {
                 const timeSpent = Date.now() - questionStartTime;
                 questionTimes[index] = (questionTimes[index] || 0) + timeSpent;
             }
-            questionStartTime = null;
+            questionStartTime = null; // Reset for the next question
         }
 
         function toggleFlag() {
@@ -928,164 +937,149 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
             const index = currentQuestionIndex;
             flaggedQuestions[index] = !flaggedQuestions[index];
             updateFlagButtonAppearance();
-            updateNavigatorButtons();
+            updateNavigatorButtons(); // Update navigator appearance
         }
 
         function updateFlagButtonAppearance() {
             const isFlagged = flaggedQuestions[currentQuestionIndex];
-            flagButton.textContent = isFlagged ? 'Unflag' : 'Flag for Review';
-            flagButton.classList.toggle('flagged', isFlagged);
+            // flagButton.textContent = isFlagged ? 'Unflag' : 'Flag for Review'; // Text content not needed if using icon only
+            flagButton.classList.toggle('selected', isFlagged); // M3 selected state for icon button
+            const flagIcon = flagButton.querySelector('.material-symbols-outlined');
+            if (flagIcon) {
+                 flagIcon.textContent = isFlagged ? 'flag' : 'outlined_flag'; // Or 'flag' vs 'flag_outline'
+                 if(isFlagged) {
+                    flagIcon.style.fontVariationSettings = "'FILL' 1";
+                    flagButton.style.backgroundColor = 'var(--md-sys-color-tertiary-container)';
+                    flagButton.style.color = 'var(--md-sys-color-on-tertiary-container)';
+                 } else {
+                    flagIcon.style.fontVariationSettings = "'FILL' 0";
+                    flagButton.style.backgroundColor = 'transparent';
+                    flagButton.style.color = 'var(--md-sys-color-on-surface-variant)';
+                 }
+            }
         }
-
+        
         function loadQuestion(index, reviewMode = false) {
             if (index < 0 || index >= questions.length) return;
             if (!isReviewingFromResults && !reviewMode) {
                 recordTimeSpent(currentQuestionIndex);
             }
+            currentQuestionIndex = index;
+            isReviewingFromResults = reviewMode; // Set review mode state
+
             const question = questions[index];
             const questionContainer = document.querySelector('.question-column');
-            
-            // Update layout for syllogism questions
-            if (questionContainer) {
-                questionContainer.style.width = '100%';
-                questionContainer.style.flex = '1';
-                questionContainer.style.marginTop = '0';
-                
-                // Create HTML for premises and statements
-                let premisesHtml = '<div class="p-4 bg-gray-50 rounded-md mb-4" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 1.25rem; line-height: 1.5;">';
-                premisesHtml += '<h3 class="font-semibold mb-2">Premises</h3>';
-                
-                question.premises.forEach(premise => {
-                    premisesHtml += `<p class="mb-2">${premise}</p>`;
-                });
-                
-                premisesHtml += '</div>';
-                
-                // Create HTML for statements section with Yes/No buttons on the right
-                let statementsHtml = `
-                    <h4 class="text-md font-semibold mb-3 bg-white pb-1">Question ${index + 1}</h4>
-                    <div class="flex justify-between items-center mb-3">
-                        <div>
-                            <h5 class="font-medium mb-2">Conclusions</h5>
-                            <p class="text-sm text-gray-600">Drag 'Yes' or 'No' onto the statement row.</p>
-                        </div>
-                        <div class="flex space-x-2">
-                            <button id="yes-button" class="drag-button px-6 py-2 bg-green-100 border border-green-500 rounded-md text-green-700 font-medium">Yes</button>
-                            <button id="no-button" class="drag-button px-6 py-2 bg-red-100 border border-red-500 rounded-md text-red-700 font-medium">No</button>
-                        </div>
+            if (!questionContainer) return;
+
+            let premisesHtml = `<div class="premises-container"><h3>Premises</h3>`;
+            question.premises.forEach(premise => {
+                premisesHtml += `<p class="mb-1">${premise}</p>`;
+            });
+            premisesHtml += '</div>';
+
+            let statementsHtml = `
+                <h4 class="m3-title-large">Question ${index + 1}</h4>
+                <div class="syllogism-options-header">
+                    <div>
+                        <h5 class="m3-title-medium">Conclusions</h5>
+                        <p class="m3-body-medium">Drag 'Yes' or 'No' to the box, or click a statement then a button.</p>
                     </div>
-                    <div id="statements-container" class="space-y-3"></div>
-                    <div id="review-explanation-container"></div>
-                `;
-                
-                questionContainer.innerHTML = premisesHtml + statementsHtml;
-            }
-            
-            currentQuestionIndex = index;
-            isReviewingFromResults = reviewMode;
+                    <div class="drag-buttons-container">
+                        <button id="yes-button" class="drag-button">Yes</button>
+                        <button id="no-button" class="drag-button">No</button>
+                    </div>
+                </div>
+                <div id="statements-container" class="space-y-2"></div>
+                <div id="review-explanation-container" class="mt-4"></div>
+            `;
+            questionContainer.innerHTML = premisesHtml + statementsHtml;
             
             questionNumberInfoEl.textContent = `${index + 1} of ${questions.length}`;
-            if (questionContainer) questionContainer.scrollTop = 0;
-            
-            // Add the statements with answer boxes
+            questionContainer.scrollTop = 0;
+
             const statementsContainer = document.getElementById('statements-container');
             if (statementsContainer) {
-                statementsContainer.innerHTML = '';
-                
                 question.statements.forEach((statement, i) => {
                     const statementId = `q${index}_statement${i}`;
                     const rowDiv = document.createElement('div');
-                    rowDiv.className = 'statement-row flex items-center mb-3 border border-gray-200 rounded-md p-3 bg-white';
+                    rowDiv.className = 'statement-row';
                     rowDiv.dataset.statementIndex = i;
+                    
+                    let userAnswerDisplay = '...';
+                    let answerBoxClass = '';
+
+                    if (userAnswers[index] && userAnswers[index][i]) {
+                        userAnswerDisplay = userAnswers[index][i] === 'Y' ? 'Yes' : (userAnswers[index][i] === 'N' ? 'No' : '...');
+                        if (userAnswers[index][i] === 'Y') answerBoxClass = 'answered-yes';
+                        if (userAnswers[index][i] === 'N') answerBoxClass = 'answered-no';
+                    }
+
                     rowDiv.innerHTML = `
-                        <div class="flex-grow statement-text">
-                            <span class="font-medium">${i + 1}.</span> ${statement}
+                        <div class="statement-text">
+                            <span class="font-medium">${String.fromCharCode(65 + i)}.</span> ${statement}
                         </div>
-                        <div class="flex-shrink-0 ml-4 relative">
-                            <div class="statement-answer-box w-16 h-10 border border-gray-300 rounded flex items-center justify-center bg-gray-50" 
-                                 data-statement-index="${i}">
-                                ${userAnswers[index] && userAnswers[index][i] ? userAnswers[index][i] : '...'}
-                            </div>
+                        <div class="statement-answer-box ${answerBoxClass}" data-statement-index="${i}">
+                            ${userAnswerDisplay}
                         </div>
                     `;
-                    
                     statementsContainer.appendChild(rowDiv);
-                    
-                    // If in review mode, show correct/incorrect indicators
+
                     if (reviewMode) {
                         const answerBox = rowDiv.querySelector('.statement-answer-box');
-                        const userAnswer = userAnswers[index] && userAnswers[index][i] ? userAnswers[index][i] : null;
+                        const userAnswer = userAnswers[index] ? userAnswers[index][i] : null;
                         const correctAnswer = question.correctAnswers[i];
-                        
-                        answerBox.classList.remove('border-gray-300', 'bg-gray-50');
-                        
+                        answerBox.classList.remove('answered-yes', 'answered-no'); // Clear previous dynamic classes
+
                         if (userAnswer === correctAnswer) {
-                            answerBox.classList.add('border-green-500', 'bg-green-50', 'text-green-700');
+                            answerBox.classList.add('correct-box'); // Use results screen styling
+                            answerBox.textContent = userAnswer === 'Y' ? 'Yes' : 'No';
                         } else {
-                            answerBox.classList.add('border-red-500', 'bg-red-50', 'text-red-700');
-                            
-                            // Show correct answer
-                            const correctDiv = document.createElement('div');
-                            correctDiv.className = 'mt-1 text-xs text-gray-600';
-                            correctDiv.textContent = `Correct answer: ${correctAnswer}`;
-                            rowDiv.querySelector('.flex-shrink-0').appendChild(correctDiv);
+                            answerBox.classList.add('incorrect-box');
+                            answerBox.textContent = userAnswer === 'Y' ? 'Yes' : (userAnswer === 'N' ? 'No' : 'N/A');
+                            const correctAnsDiv = document.createElement('div');
+                            correctAnsDiv.className = 'text-xs text-gray-600 mt-1';
+                            correctAnsDiv.textContent = `Correct: ${correctAnswer === 'Y' ? 'Yes' : 'No'}`;
+                            rowDiv.querySelector('.statement-answer-box').insertAdjacentElement('afterend', correctAnsDiv);
                         }
                     }
                 });
-                
-                // Add drag and drop functionality if not in review mode
-                if (!reviewMode) {
-                    initDragAndDrop();
-                }
+                if (!reviewMode) initDragAndDrop();
             }
-            
+
             prevButton.disabled = index === 0;
-            if (!reviewMode && index === questions.length - 1) {
-                 nextButton.textContent = 'Finish & Review';
-                 nextButton.disabled = false;
-            } else if (!reviewMode) {
-                 nextButton.textContent = 'Next (Alt+N) →';
-                 nextButton.disabled = false;
+            nextButton.disabled = index === questions.length - 1 && !reviewMode; // Disable next on last question unless in review
+             if (!reviewMode && index === questions.length - 1) {
+                nextButton.innerHTML = `<span class="material-symbols-outlined">done_all</span>Finish & Review`;
             } else {
-                 nextButton.disabled = index === questions.length - 1;
-                 if (!nextButton.disabled) nextButton.textContent = 'Next →';
+                nextButton.innerHTML = `<span class="material-symbols-outlined">chevron_right</span>Next`;
             }
+
             updateFlagButtonAppearance();
             if (reviewMode) {
                 backToResultsButton.classList.remove('hidden');
                 endPracticeSessionButtonFooter.classList.add('hidden');
-                practiceSessionTitleEl.textContent = "Reviewing Question";
-                prevButton.disabled = index === 0;
-                navigatorButton.disabled = false;
+                if (practiceSessionTitleEl) practiceSessionTitleEl.textContent = "Reviewing Worksheet 1";
                 flagButton.disabled = true;
+                flagButton.classList.add('opacity-50', 'cursor-not-allowed');
             } else {
                 backToResultsButton.classList.add('hidden');
                 endPracticeSessionButtonFooter.classList.remove('hidden');
-                practiceSessionTitleEl.textContent = "Decision Making";
-                navigatorButton.disabled = false;
+                if (practiceSessionTitleEl) practiceSessionTitleEl.textContent = "DM Syllogisms Worksheet 1";
                 flagButton.disabled = false;
-                prevButton.disabled = index === 0;
+                flagButton.classList.remove('opacity-50', 'cursor-not-allowed');
             }
             updateNavigatorHighlight();
-            if (!isReviewingFromResults) {
+            if (!isReviewingFromResults && !reviewMode) {
                 questionStartTime = Date.now();
             }
         }
 
-         // This function is replaced by the drag and drop functionality for Yes/No answers
-
         function showNextQuestion() {
-            // Hide calculator if it's open
-            if (calculatorUI.classList.contains('visible')) {
-                toggleCalculator();
-            }
-            
             if (isReviewingFromResults) {
                 if (currentQuestionIndex < questions.length - 1) {
                     loadQuestion(currentQuestionIndex + 1, true);
                 }
-            }
-            else if (!isReviewingFromResults) {
+            } else {
                  recordTimeSpent(currentQuestionIndex);
                  if (currentQuestionIndex === questions.length - 1) {
                      showReviewScreen();
@@ -1096,136 +1090,113 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
         }
 
         function showPrevQuestion() {
-            // Hide calculator if it's open
-            if (calculatorUI.classList.contains('visible')) {
-                toggleCalculator();
-            }
-            
              if (isReviewingFromResults) {
                  if (currentQuestionIndex > 0) {
                      loadQuestion(currentQuestionIndex - 1, true);
                  }
-             }
-             else if (currentQuestionIndex > 0 && !isReviewingFromResults) {
+             } else if (currentQuestionIndex > 0) { // Not in review mode
                  recordTimeSpent(currentQuestionIndex);
                  loadQuestion(currentQuestionIndex - 1);
             }
         }
 
         function showSetupScreen() {
-            userName = '';
-            userEmail = '';
-            userGoal = '';
-            userFocusArea = '';
-            
-            // Check for Firebase auth user
-            if (firebase.auth && firebase.auth().currentUser) {
-                const currentUser = firebase.auth().currentUser;
+            userName = ''; userEmail = ''; userGoal = ''; userFocusArea = '';
+            if (auth && auth.currentUser) {
+                const currentUser = auth.currentUser;
                 userName = currentUser.displayName || currentUser.email || '';
                 userEmail = currentUser.email || '';
             }
             
-            setupScreen.classList.remove('hidden');
-            practiceSessionScreen.classList.add('hidden');
-            reviewScreen.classList.add('hidden');
-            reviewScreen.classList.remove('flex');
-            resultsScreen.classList.add('hidden');
-            appContainer.classList.remove('flex', 'flex-col');
-            currentlyDisplayedPassageIndex = -1;
+            if (setupScreen) setupScreen.classList.remove('hidden');
+            if (practiceSessionScreen) practiceSessionScreen.classList.add('hidden');
+            if (reviewScreen) { reviewScreen.classList.add('hidden'); reviewScreen.classList.remove('flex');}
+            if (resultsScreen) resultsScreen.classList.add('hidden');
+            if (appContainer) appContainer.classList.remove('flex', 'flex-col'); // Reset app container style if needed
             
-            if (setupQuestionCountEl) setupQuestionCountEl.textContent = "5"; // Change to 5 questions
-            if (setupTimeLimitEl) setupTimeLimitEl.textContent = `6 minutes`; // Change to 6 minutes
+            if (worksheetTitleSetupEl) worksheetTitleSetupEl.textContent = "DM Syllogisms Worksheet 1";
+            if (setupQuestionCountEl) setupQuestionCountEl.textContent = questions.length;
+            if (setupTimeLimitEl) setupTimeLimitEl.textContent = `${timeLeft / 60} minutes`;
             if (goalInput) {
-                goalInput.max = 10; // Change max goal to 10
+                goalInput.max = questions.length * 2; // Max score is 2 per question
                 goalInput.value = userGoal;
                 const goalLabel = document.querySelector('label[for="goal"]');
-                if (goalLabel) goalLabel.textContent = `Goal (Score out of 10):`; // Change label
+                if (goalLabel) goalLabel.textContent = `Goal (Score out of ${questions.length * 2}):`;
             }
-            if (focusAreaInput) {
-                focusAreaInput.value = userFocusArea;
-            }
+            if (focusAreaInput) focusAreaInput.value = userFocusArea;
         }
 
-        // Ensure we call updateTimerVisibility when returning to practice screen
         function showPracticeSessionScreen() {
-            setupScreen.classList.add('hidden');
-            practiceSessionScreen.classList.remove('hidden');
-            practiceSessionScreen.classList.add('flex');
-            reviewScreen.classList.add('hidden');
-            resultsScreen.classList.add('hidden');
-            appContainer.classList.add('flex', 'flex-col');
-            currentlyDisplayedPassageIndex = -1;
+            if (setupScreen) setupScreen.classList.add('hidden');
+            if (practiceSessionScreen) {
+                practiceSessionScreen.classList.remove('hidden');
+                practiceSessionScreen.classList.add('flex');
+            }
+            if (reviewScreen) reviewScreen.classList.add('hidden');
+            if (resultsScreen) resultsScreen.classList.add('hidden');
+            if (appContainer) appContainer.classList.add('flex', 'flex-col');
             updateTimerVisibility();
         }
 
-        // Ensure the timer visuals are maintained when switching between screens
         function updateTimerVisibility() {
-            if (timerInterval) {
-                timerEl.classList.remove('text-gray-300');
-                timerEl.classList.add('text-white', 'bg-opacity-20', 'bg-white');
-            } else {
-                timerEl.classList.add('text-gray-300');
-                timerEl.classList.remove('text-white', 'bg-opacity-20', 'bg-white');
+            if (!timerEl) return;
+            if (timerInterval) { // Timer is running
+                timerEl.classList.remove('text-[var(--md-sys-color-on-surface-variant)]');
+                timerEl.classList.add('text-[var(--md-sys-color-on-primary)]');
+            } else { // Timer is stopped or not started
+                timerEl.classList.add('text-[var(--md-sys-color-on-surface-variant)]');
+                timerEl.classList.remove('text-[var(--md-sys-color-on-primary)]');
             }
         }
 
-        // Review screen - keep timer running
         function showReviewScreen(filterFlagged = false) {
             recordTimeSpent(currentQuestionIndex);
-            // Don't stop timer here - let it continue running
-            updateTimerVisibility();
-            practiceSessionScreen.classList.add('hidden');
-            reviewScreen.classList.remove('hidden');
-            reviewScreen.classList.add('flex');
-            resultsScreen.classList.add('hidden');
-            setupScreen.classList.add('hidden');
-            appContainer.classList.add('flex', 'flex-col');
-            
-            // Hide calculator if it's visible
-            if (calculatorUI.classList.contains('visible')) {
-                toggleCalculator();
-            }
+            updateTimerVisibility(); // Keep timer display consistent
+            if (practiceSessionScreen) practiceSessionScreen.classList.add('hidden');
+            if (reviewScreen) { reviewScreen.classList.remove('hidden'); reviewScreen.classList.add('flex');}
+            if (resultsScreen) resultsScreen.classList.add('hidden');
+            if (setupScreen) setupScreen.classList.add('hidden');
+            if (appContainer) appContainer.classList.add('flex', 'flex-col');
             
             reviewGrid.innerHTML = '';
             questions.forEach((_, index) => {
-                 if (filterFlagged && !flaggedQuestions[index]) {
-                     return;
-                 }
+                 if (filterFlagged && !flaggedQuestions[index]) return;
                 const button = document.createElement('button');
                 button.textContent = index + 1;
                 button.className = 'review-grid-button';
                 button.dataset.questionIndex = index;
-                if (userAnswers[index] !== null && userAnswers[index] !== undefined) {
+                // Check if any statement for this question has an answer
+                const hasAnswer = userAnswers[index] && userAnswers[index].some(ans => ans !== null);
+                if (hasAnswer) {
                     button.classList.add('review-grid-button-answered');
                 } else {
                      button.classList.add('review-grid-button-unanswered');
                 }
-                if (flaggedQuestions[index]) {
-                    button.classList.add('review-flagged');
-                }
-                // Using event delegation, so no individual onclick handler
+                if (flaggedQuestions[index]) button.classList.add('review-flagged');
                 reviewGrid.appendChild(button);
             });
-             filterFlaggedButton.textContent = filterFlagged ? 'Show All Questions' : 'Show Flagged Only';
+            if(filterFlaggedButton) filterFlaggedButton.innerHTML = `<span class="material-symbols-outlined">${filterFlagged ? 'checklist' : 'filter_list'}</span> ${filterFlagged ? 'Show All' : 'Flagged Only'}`;
         }
 
         function populateNavigator() {
+            if (!navigatorGrid) return;
             navigatorGrid.innerHTML = '';
             questions.forEach((_, index) => {
                 const button = document.createElement('button');
                 button.textContent = index + 1;
-                button.classList.add('py-2', 'px-1', 'border', 'border-gray-300', 'rounded-md', 'text-center', 'transition', 'duration-150', 'ease-in-out', 'text-sm', 'hover:bg-gray-100');
+                button.className = 'm3-button m3-button-outlined'; // Use M3 button style
+                button.style.minWidth = '40px'; // Ensure buttons are reasonably sized
+                button.style.padding = '0.5rem';
                 button.dataset.questionIndex = index;
-                if (userAnswers[index]) button.classList.add('nav-answered');
+
+                const hasAnswer = userAnswers[index] && userAnswers[index].some(ans => ans !== null);
+                if (hasAnswer) button.classList.add('nav-answered');
                 if (index === currentQuestionIndex) button.classList.add('nav-current');
                 if (flaggedQuestions[index]) button.classList.add('nav-flagged');
+                
                 button.onclick = () => {
-                    navigatorModal.classList.remove('flex');
-                    navigatorModal.classList.add('hidden');
-                    // Hide calculator if it's open
-                    if (calculatorUI.classList.contains('visible')) {
-                        toggleCalculator();
-                    }
+                    if(navigatorModal) navigatorModal.classList.remove('flex');
+                    if(navigatorModal) navigatorModal.classList.add('hidden');
                     const targetIndex = parseInt(button.dataset.questionIndex, 10);
                     loadQuestion(targetIndex, isReviewingFromResults);
                 };
@@ -1233,16 +1204,8 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
             });
         }
 
-        function updateNavigatorButtons() {
-            if (!navigatorGrid) return;
-            const buttons = navigatorGrid.querySelectorAll('button');
-            buttons.forEach(button => {
-                const index = parseInt(button.dataset.questionIndex, 10);
-                button.classList.remove('nav-answered', 'nav-current', 'nav-flagged');
-                if (userAnswers[index]) button.classList.add('nav-answered');
-                if (index === currentQuestionIndex) button.classList.add('nav-current');
-                if (flaggedQuestions[index]) button.classList.add('nav-flagged');
-            });
+        function updateNavigatorButtons() { // Simplified, relies on populateNavigator to rebuild for now
+            populateNavigator(); // Rebuild to reflect current state
         }
 
          function updateNavigatorHighlight() {
@@ -1260,300 +1223,144 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
             recordTimeSpent(currentQuestionIndex);
             stopTimer();
 
-            practiceSessionScreen.classList.add('hidden');
-            reviewScreen.classList.add('hidden');
-            reviewScreen.classList.remove('flex');
-            resultsScreen.classList.remove('hidden');
-            resultsScreen.classList.add('flex');
-            setupScreen.classList.add('hidden');
-            appContainer.classList.add('flex', 'flex-col');
+            if(practiceSessionScreen) practiceSessionScreen.classList.add('hidden');
+            if(reviewScreen) {reviewScreen.classList.add('hidden'); reviewScreen.classList.remove('flex');}
+            if(resultsScreen) {resultsScreen.classList.remove('hidden'); resultsScreen.classList.add('flex');}
+            if(setupScreen) setupScreen.classList.add('hidden');
+            if(appContainer) appContainer.classList.add('flex', 'flex-col');
 
             let totalScore = 0;
             resultsDetailsGrid.innerHTML = ''; 
 
-            // Add partially-correct-box style if not already defined
-            if (!document.getElementById('partially-correct-style')) {
-                const style = document.createElement('style');
-                style.id = 'partially-correct-style';
-                style.textContent = `
-                    .partially-correct-box { 
-                        background-color: #fb923c; /* Orange color */
-                        border: 2px solid #ea580c;
-                        color: white; 
-                    }
-                `;
-                document.head.appendChild(style);
-            }
-
             questions.forEach((qData, index) => {
-                // Count correct answers for this question
-                let correctCount = 0;
-                
-                // For debugging
-                console.log(`Question ${index + 1} - userAnswers:`, userAnswers[index]);
-                console.log(`Question ${index + 1} - correctAnswers:`, qData.correctAnswers);
-                
-                qData.statements.forEach((statement, statementIndex) => {
-                    // In this app, Yes/No answers are stored as "Yes" and "No", but correctAnswers are "Y" and "N"
-                    // We need to convert the user's answer to match the format of correctAnswers
-                    let userAnswer = userAnswers[index] && userAnswers[index][statementIndex] ? userAnswers[index][statementIndex] : null;
-                    const correctAnswer = qData.correctAnswers[statementIndex];
-                    
-                    // Convert "Yes"/"No" to "Y"/"N" for comparison
-                    if (userAnswer === "Yes") userAnswer = "Y";
-                    if (userAnswer === "No") userAnswer = "N";
-                    
-                    console.log(`Q${index + 1}.${statementIndex + 1}: User: "${userAnswer}", Correct: "${correctAnswer}", Match: ${userAnswer === correctAnswer}`);
-                    
-                    if (userAnswer === correctAnswer) {
-                        correctCount++;
-                    }
-                });
-                
-                // Apply scoring rules
-                let questionScore = 0;
-                let boxClass = '';
-                
-                if (correctCount === 5) {
-                    questionScore = 2;
-                    boxClass = 'correct-box';
-                } else if (correctCount === 4) {
-                    questionScore = 1;
-                    boxClass = 'partially-correct-box';
-                } else {
-                    questionScore = 0;
-                    boxClass = 'incorrect-box';
+                let correctStatements = 0;
+                if (userAnswers[index]) {
+                    qData.statements.forEach((_, statementIndex) => {
+                        if (userAnswers[index][statementIndex] === qData.correctAnswers[statementIndex]) {
+                            correctStatements++;
+                        }
+                    });
                 }
                 
+                let questionScore = 0;
+                let boxClass = 'not-answered-box';
+                if (userAnswers[index] && userAnswers[index].some(ans => ans !== null)) { // If at least one statement was answered
+                    if (correctStatements === 5) { questionScore = 2; boxClass = 'correct-box'; }
+                    else if (correctStatements === 4) { questionScore = 1; boxClass = 'partially-correct-box'; }
+                    else { questionScore = 0; boxClass = 'incorrect-box'; }
+                }
                 totalScore += questionScore;
 
-                const timeSpentMs = questionTimes[index] || 0;
-                const timeSpentSec = Math.round(timeSpentMs / 1000);
-
                 const summaryItem = document.createElement('div');
-                summaryItem.classList.add('result-summary-item');
-
+                summaryItem.className = 'result-summary-item';
                 const summaryBox = document.createElement('div');
-                summaryBox.classList.add('result-summary-box', boxClass);
+                summaryBox.className = `result-summary-box ${boxClass}`;
                 summaryBox.dataset.index = index;
                 summaryBox.title = `Click to review Question ${index + 1}`;
-
-                // Show score instead of time in the summary box
-                const scoreDisplay = document.createElement('span');
-                scoreDisplay.classList.add('time-display-in-box');
-                scoreDisplay.textContent = `${correctCount}/5`;
-                summaryBox.appendChild(scoreDisplay);
-
+                summaryBox.innerHTML = `<span class="time-display-in-box">${correctStatements}/5</span>`;
                 const numberLabel = document.createElement('div');
-                numberLabel.classList.add('question-number-label');
+                numberLabel.className = 'question-number-label';
                 numberLabel.textContent = `Q${index + 1}`;
-
-                summaryBox.addEventListener('click', () => {
-                    revisitQuestionFromResults(index);
-                });
-
+                summaryBox.onclick = () => revisitQuestionFromResults(index);
                 summaryItem.appendChild(summaryBox);
                 summaryItem.appendChild(numberLabel);
                 resultsDetailsGrid.appendChild(summaryItem);
             });
 
-            scoreEl.textContent = totalScore;
-            const timeDiff = practiceSessionEndTime - practiceSessionStartTime;
-            timeTakenEl.textContent = formatTimeDifference(timeDiff);
+            if(scoreEl) scoreEl.textContent = totalScore;
+            if(totalScorePossibleEl) totalScorePossibleEl.textContent = questions.length * 2; // Max 2 points per question
+            if(timeTakenEl) timeTakenEl.textContent = formatTimeDifference(practiceSessionEndTime - practiceSessionStartTime);
             
-            // Update total score possible on results screen (10 points maximum: 5 questions × 2 points)
-            const totalScorePossibleEl = document.getElementById('total-score-possible');
-            if (totalScorePossibleEl) {
-                totalScorePossibleEl.textContent = "10";
-            } else {
-                const scoreDisplayParent = scoreEl.parentElement;
-                if (scoreDisplayParent) {
-                     scoreDisplayParent.innerHTML = `Your Score: <span id="score" class="text-blue-700">${totalScore}</span> / 10 Points`;
-                }
-            }
-            
-            // Make sure the submit performance button has an event listener
             const submitButton = document.getElementById('submit-performance-button');
             if (submitButton) {
                 submitButton.disabled = false;
-                submitButton.textContent = 'Submit Reflections';
-                submitButton.classList.remove('bg-green-500');
+                submitButton.innerHTML = '<span class="material-symbols-outlined">send</span>Submit Reflections';
             }
         }
 
-
         function revisitQuestionFromResults(index) {
-            resultsScreen.classList.add('hidden');
-            resultsScreen.classList.remove('flex');
+            if(resultsScreen) resultsScreen.classList.add('hidden');
             showPracticeSessionScreen();
-            loadQuestion(index, true);
+            loadQuestion(index, true); // true for reviewMode
         }
 
-        // Only stop timer when showing final results
         function endPracticeSessionAndShowResults() {
             stopTimer();
-
-            // Gather data to submit to Firebase
+            const finalScore = calculateScore();
             const performanceData = {
                 studentName: userName || 'Anonymous',
-                studentEmail: userEmail || '', // <--- ADD THIS LINE
-                examName: "DM Syllogisms Worksheet 1", // Updated examName
-                score: calculateScore(), // New function to calculate score
-                totalQuestions: questions.length, // Should be 5
-                totalPossibleScore: 10, // Explicitly add total possible score (2 points per question)
+                studentEmail: userEmail || '',
+                userId: auth && auth.currentUser ? auth.currentUser.uid : '',
+                examName: "DM Syllogisms Worksheet 1",
+                score: finalScore,
+                totalQuestions: questions.length,
+                totalPossibleScore: questions.length * 2,
                 timeTaken: formatTimeDifference(practiceSessionEndTime - practiceSessionStartTime),
                 answers: userAnswers,
                 questionTimes: questionTimes,
                 flaggedQuestions: flaggedQuestions,
                 goal: userGoal || '',
                 focusArea: userFocusArea || '',
-                focusRating: '', // No reflection data available at this point
-                reflection: '',  // No reflection data available at this point
-                submissionTimestamp: new Date().toISOString(),
+                submissionTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
                 userAgent: navigator.userAgent
             };
-
-            // Submit data to Firebase
-            submitDataToFirebase(performanceData);
-            
-            // Show results
+            submitDataToFirebase(performanceData); // Submit before showing results
             showResultsScreen();
         }
 
-        // Function to calculate the score
         function calculateScore() {
             let score = 0;
             questions.forEach((qData, index) => {
                 if (!userAnswers[index]) return;
-                
-                // Count correct answers for this question
                 let correctCount = 0;
-                qData.correctAnswers.forEach((correctAnswer, statementIndex) => {
-                    const userAnswer = userAnswers[index][statementIndex];
-                    if (userAnswer === correctAnswer) {
+                qData.statements.forEach((_, statementIndex) => {
+                    if (userAnswers[index][statementIndex] === qData.correctAnswers[statementIndex]) {
                         correctCount++;
                     }
                 });
-                
-                // Apply scoring rules:
-                // 5/5 correct = 2 points
-                // 4/5 correct = 1 point
-                // 3 or fewer correct = 0 points
-                if (correctCount === 5) {
-                    score += 2;
-                } else if (correctCount === 4) {
-                    score += 1;
-                }
+                if (correctCount === 5) score += 2;
+                else if (correctCount === 4) score += 1;
             });
             return score;
         }
 
-        // Function to submit data to Firebase
-        function submitDataToFirebase(data) {
-            // Only submit if Firebase is initialized
-            if (typeof firebase !== 'undefined' && firebase.firestore) {
-                try {
-                    const db = firebase.firestore();
-                    let userId = ''; // <--- Add this
-                    if (firebase.auth && firebase.auth().currentUser) {
-                        userId = firebase.auth().currentUser.uid; // <--- Get the UID
-                    }
-                    
-                    const dataToSubmit = {
-                        ...data, // Spread existing data
-                        userId: userId // <--- Add userId here
-                    };
-
-                    db.collection("performanceSubmissions").add(dataToSubmit) // Use dataToSubmit
-                      .then(() => {
-                          console.log("Performance data submitted to Firebase with userId");
-                          
-                          // Show a success notification that will be displayed on the results screen
-                          setTimeout(() => {
-                              const successNotice = document.createElement('div');
-                              successNotice.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow-lg z-50';
-                              successNotice.innerHTML = `
-                                  <div class="flex items-center">
-                                      <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                      </svg>
-                                      <span class="font-medium">Success!</span>
-                                      <span class="ml-2">Your test results have been submitted to the admin dashboard.</span>
-                                  </div>
-                              `;
-                              document.body.appendChild(successNotice);
-                              
-                              // Remove the notice after 5 seconds
-                              setTimeout(() => {
-                                  successNotice.classList.add('opacity-0', 'transition-opacity', 'duration-500');
-                                  setTimeout(() => {
-                                      document.body.removeChild(successNotice);
-                                  }, 500);
-                              }, 5000);
-                          }, 500); // Small delay to ensure results screen is visible
-                      })
-                      .catch((error) => {
-                          console.error("Error submitting to Firebase:", error);
-                          
-                          // Show error notification
-                          setTimeout(() => {
-                              const errorNotice = document.createElement('div');
-                              errorNotice.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded shadow-lg z-50';
-                              errorNotice.innerHTML = `
-                                  <div class="flex items-center">
-                                      <svg class="h-6 w-6 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                      </svg>
-                                      <span class="font-medium">Error!</span>
-                                      <span class="ml-2">Could not submit your results. You can try adding a reflection.</span>
-                                  </div>
-                              `;
-                              document.body.appendChild(errorNotice);
-                              
-                              // Remove the notice after 5 seconds
-                              setTimeout(() => {
-                                  errorNotice.classList.add('opacity-0', 'transition-opacity', 'duration-500');
-                                  setTimeout(() => {
-                                      document.body.removeChild(errorNotice);
-                                  }, 500);
-                              }, 5000);
-                          }, 500);
-                      });
-                } catch (error) {
-                    console.error("Error accessing Firebase:", error);
-                }
-            } else {
-                console.error("Firebase is not initialized");
+        async function submitDataToFirebase(data) {
+            if (!db || !auth) { console.error("Firebase (db or auth) not initialized for submission."); return; }
+            try {
+                await db.collection("performanceSubmissions").add(data);
+                console.log("Performance data submitted to Firebase.");
+                // Optional: Show a temporary success message on the results screen
+            } catch (error) {
+                console.error("Error submitting to Firebase:", error);
             }
         }
 
         function handleEndPracticeSessionFooterClick() {
              recordTimeSpent(currentQuestionIndex);
-             // Remove stopTimer() call to keep timer running
              showReviewScreen();
          }
 
         function generatePDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            const reflection = reflectionText.value.trim();
-            const focusRating = focusRatingInput.value;
-            const finalScore = scoreEl.textContent;
-            const totalQs = totalQuestionsResultsEl.textContent;
-            const timeTaken = timeTakenEl.textContent;
+            const reflection = reflectionText ? reflectionText.value.trim() : 'N/A';
+            const focusRating = focusRatingInput ? focusRatingInput.value : 'N/A';
+            const finalScore = scoreEl ? scoreEl.textContent : 'N/A';
+            const totalPossible = totalScorePossibleEl ? totalScorePossibleEl.textContent : (questions.length * 2);
+            const timeTaken = timeTakenEl ? timeTakenEl.textContent : 'N/A';
             let y = 15;
             const lineHeight = 7;
             const pageHeight = doc.internal.pageSize.height;
             const margin = 15;
 
             doc.setFontSize(18);
-            doc.text("UCAT Quantitative Reasoning Results", margin, y);
+            doc.text("UCAT DM Syllogisms Worksheet 1 Results", margin, y);
             y += lineHeight * 1.5;
             doc.setFontSize(12);
             doc.text(`Name: ${userName || 'N/A'}`, margin, y); y += lineHeight;
-            doc.text(`Goal: ${userGoal || 'N/A'} / ${totalQs}`, margin, y); y += lineHeight;
+            doc.text(`Goal: ${userGoal || 'N/A'} / ${totalPossible}`, margin, y); y += lineHeight;
             doc.text(`Focus Area: ${userFocusArea || 'N/A'}`, margin, y); y += lineHeight;
-            doc.text(`Final Score: ${finalScore} / ${totalQs}`, margin, y); y += lineHeight;
+            doc.text(`Final Score: ${finalScore} / ${totalPossible}`, margin, y); y += lineHeight;
             doc.text(`Time Taken: ${timeTaken}`, margin, y); y += lineHeight * 1.5;
             doc.setFontSize(14);
             doc.text("Focus Rating (1-5):", margin, y); y += lineHeight;
@@ -1570,12 +1377,19 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
             doc.setFontSize(10);
 
             questions.forEach((qData, index) => {
-                const userAnswer = userAnswers[index];
-                const correctAnswer = qData.correctAnswer;
-                const isCorrect = userAnswer !== null && userAnswer !== undefined && userAnswer === correctAnswer;
-                const status = userAnswer === null || userAnswer === undefined ? "Not Answered" : (isCorrect ? "Correct" : "Incorrect");
-                const timeSpentSec = Math.round((questionTimes[index] || 0) / 1000);
-                const resultText = `Q${index + 1}: Your Ans: ${userAnswer || 'N/A'}, Correct: ${correctAnswer}, Status: ${status}, Time: ${timeSpentSec}s`;
+                let resultText = `Q${index + 1}: `;
+                let correctCount = 0;
+                if (userAnswers[index]) {
+                    qData.statements.forEach((stmt, stmtIdx) => {
+                        const uAns = userAnswers[index][stmtIdx];
+                        const cAns = qData.correctAnswers[stmtIdx];
+                        if (uAns === cAns) correctCount++;
+                        resultText += `S${stmtIdx+1}: ${uAns || 'N/A'} (Correct: ${cAns}) | `;
+                    });
+                } else {
+                    resultText += "Not Answered";
+                }
+                resultText += ` (${correctCount}/5 correct)`;
                 
                 let textLines = doc.splitTextToSize(resultText, doc.internal.pageSize.width - margin * 2);
                 if (y + (textLines.length * (lineHeight * 0.7)) > pageHeight - margin) {
@@ -1585,535 +1399,147 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
                 doc.text(textLines, margin, y);
                 y += textLines.length * (lineHeight * 0.7) + (lineHeight*0.3);
             });
-            doc.save(`ucat_qr_results_${userName || 'user'}.pdf`);
+            doc.save(`ucat_dm_syllogisms_1_results_${userName || 'user'}.pdf`);
         }
         
-        // Function to submit performance data to server
         async function submitPerformanceData() {
-            // Prevent multiple submissions
-            if (isSubmittingReflection) {
-                console.log("Submission already in progress, ignoring duplicate call");
+            if (isSubmittingReflection) return;
+            if (!auth || !auth.currentUser || !db) {
+                alert("You must be logged in to submit reflections.");
                 return;
             }
+            isSubmittingReflection = true;
+            const submitButton = document.getElementById('submit-performance-button');
+            if(submitButton) submitButton.disabled = true;
+            if(submitButton) submitButton.innerHTML = `<span class="material-symbols-outlined animate-spin">progress_activity</span> Submitting...`;
+
+            const focusRatingVal = focusRatingInput ? focusRatingInput.value : '';
+            const reflectionVal = reflectionText ? reflectionText.value.trim() : '';
             
+            // Find the most recent submission for THIS specific worksheet by this user to update it.
+            // This assumes we have a unique examName for each worksheet.
+            const examNameForQuery = "DM Syllogisms Worksheet 1"; 
+
             try {
-                isSubmittingReflection = true;
-                
-                // Get additional reflection data
-                const focusRating = document.getElementById('focus-rating').value || '';
-                const reflection = document.getElementById('reflection-text').value || '';
-                
-                if (typeof firebase !== 'undefined' && firebase.firestore) {
-                    const db = firebase.firestore();
-                    
-                    // Get current authenticated user data if available
-                    let userDisplayName = '';
-                    let userId = ''; // <--- Add this
-                    
-                    if (firebase.auth && firebase.auth().currentUser) {
-                        const currentUser = firebase.auth().currentUser;
-                        userDisplayName = currentUser.displayName || '';
-                        userId = currentUser.uid; // <--- Get the UID
-                        // Note: we're already storing userEmail from when the test started
-                    }
-                    
-                    // Instead of querying for existing document, create a new one with both test results and reflection
-                    const performanceData = {
-                        studentName: userName || userDisplayName || 'Anonymous',
-                        studentEmail: userEmail || '',
-                        userId: userId, // <--- Add userId here
-                        examName: "DM Syllogisms Worksheet 1", // Updated examName
-                        score: scoreEl.textContent,
-                        totalQuestions: totalQuestionsResultsEl.textContent, // Should be 5
-                        totalPossibleScore: 10, // Explicitly add total possible score (2 points per question)
-                        timeTaken: timeTakenEl.textContent,
-                        answers: userAnswers,
-                        questionTimes: questionTimes,
-                        flaggedQuestions: flaggedQuestions,
+                const querySnapshot = await db.collection("performanceSubmissions")
+                    .where("userId", "==", auth.currentUser.uid)
+                    .where("examName", "==", examNameForQuery)
+                    .orderBy("submissionTimestamp", "desc")
+                    .limit(1)
+                    .get();
+
+                if (!querySnapshot.empty) {
+                    const docToUpdate = querySnapshot.docs[0];
+                    await db.collection("performanceSubmissions").doc(docToUpdate.id).update({
+                        focusRating: focusRatingVal,
+                        reflection: reflectionVal,
+                        reflectionTimestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    if(submitButton) submitButton.innerHTML = `<span class="material-symbols-outlined">check_circle</span> Reflections Saved!`;
+                    if(submitButton) submitButton.style.backgroundColor = 'var(--md-sys-color-success)'; // M3 Success color
+                    console.log("Reflection updated for existing submission.");
+                } else {
+                    // This case should ideally not happen if endPracticeSessionAndShowResults always submits initial data.
+                    // But as a fallback, create a new entry if no prior submission for this worksheet is found.
+                    console.warn("No prior submission found for this worksheet to update reflection. Creating new entry.");
+                    const fallbackData = {
+                        studentName: userName || auth.currentUser.displayName || 'Anonymous',
+                        studentEmail: userEmail || auth.currentUser.email || '',
+                        userId: auth.currentUser.uid,
+                        examName: examNameForQuery,
+                        score: scoreEl ? scoreEl.textContent : 'N/A',
+                        totalQuestions: questions.length,
+                        totalPossibleScore: questions.length * 2,
+                        timeTaken: timeTakenEl ? timeTakenEl.textContent : 'N/A',
+                        answers: userAnswers, // These might be empty if page was reloaded on results
+                        questionTimes: questionTimes, // Same as above
+                        flaggedQuestions: flaggedQuestions, // Same as above
                         goal: userGoal || '',
                         focusArea: userFocusArea || '',
-                        focusRating: focusRating,
-                        reflection: reflection,
-                        submissionTimestamp: new Date().toISOString(),
+                        focusRating: focusRatingVal,
+                        reflection: reflectionVal,
+                        submissionTimestamp: firebase.firestore.FieldValue.serverTimestamp(), // New timestamp for this entry
                         userAgent: navigator.userAgent,
-                        isReflection: true // Flag to indicate this is a reflection submission
+                        isReflectionOnly: true // Flag to indicate this was primarily a reflection submission
                     };
-                    
-                    // Add as a new document
-                    await db.collection("performanceSubmissions").add(performanceData);
-                    
-                    // Show success message
-                    const successNotice = document.createElement('div');
-                    successNotice.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow-lg z-50';
-                    successNotice.innerHTML = `
-                        <div class="flex items-center">
-                            <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            <span class="font-medium">Success!</span>
-                            <span class="ml-2">Your reflection has been saved.</span>
-                        </div>
-                    `;
-                    document.body.appendChild(successNotice);
-                    
-                    // Remove the notice after 5 seconds
-                    setTimeout(() => {
-                        successNotice.classList.add('opacity-0', 'transition-opacity', 'duration-500');
-                        setTimeout(() => {
-                            document.body.removeChild(successNotice);
-                        }, 500);
-                    }, 5000);
-                    
-                    // Update the button
-                    document.getElementById('submit-performance-button').disabled = true;
-                    document.getElementById('submit-performance-button').textContent = 'Reflection Saved ✓';
-                    document.getElementById('submit-performance-button').classList.add('bg-green-500');
-                } else {
-                    alert('Firebase is not initialized. Please configure Firebase first.');
-                    console.error('Firebase or Firestore is not available.');
+                    await db.collection("performanceSubmissions").add(fallbackData);
+                    if(submitButton) submitButton.innerHTML = `<span class="material-symbols-outlined">check_circle</span> Reflections Saved!`;
+                     if(submitButton) submitButton.style.backgroundColor = 'var(--md-sys-color-success)';
                 }
             } catch (error) {
                 console.error('Error saving reflection:', error);
                 alert('An error occurred while saving your reflection. Please try again.');
+                if(submitButton) submitButton.disabled = false;
+                if(submitButton) submitButton.innerHTML = `<span class="material-symbols-outlined">send</span>Submit Reflections`;
             } finally {
-                // Reset the submission flag after a delay, just in case
-                setTimeout(() => {
-                    isSubmittingReflection = false;
-                }, 2000);
+                setTimeout(() => { isSubmittingReflection = false; }, 2000);
             }
         }
         
-        // --- Calculator Functions ---
-        function updateCalcDisplay() {
-            // Ensure display doesn't overflow, use scientific notation for very long numbers
-            if (calcCurrentInput === 'Error') {
-                calcDisplay.textContent = 'Error';
-            } else if (calcCurrentInput.length > 12) {
-                // For long numbers, try scientific notation
-                try {
-                    const num = parseFloat(calcCurrentInput);
-                    if (isFinite(num)) {
-                        calcDisplay.textContent = num.toExponential(6);
-                    } else {
-                        calcDisplay.textContent = 'Error';
-                    }
-                } catch (e) {
-                    calcDisplay.textContent = calcCurrentInput.substring(0, 12);
-                }
-            } else {
-                calcDisplay.textContent = calcCurrentInput;
-            }
+        function initDragAndDrop() {
+            const yesButton = document.getElementById('yes-button');
+            const noButton = document.getElementById('no-button');
+            const statementRows = document.querySelectorAll('.statement-row');
             
-            // Show/hide memory indicator
-            const memIndicator = document.getElementById('calc-memory-indicator');
-            if (calcMemory !== 0) {
-                memIndicator.style.display = 'block';
-            } else {
-                memIndicator.style.display = 'none';
-            }
-        }
-
-        // Add specific event handler for equals button
-        document.querySelector('.calc-button.equals').addEventListener('click', (e) => {
-            console.log('Equals button clicked');
-            calculate();
-            e.stopPropagation(); // Prevent event bubbling
-        });
-
-        calcButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const value = button.dataset.calcValue;
-                const action = button.dataset.calcAction;
-                
-                console.log('Button clicked:', button.textContent, 'value:', value, 'action:', action);
-
-                if (value !== undefined) { 
-                    if (value === '.') { inputDecimal(); } 
-                    else { inputDigit(value); }
-                } else if (action) { 
-                    if (['+', '-', '*', '/'].includes(action)) { handleOperator(action); } 
-                    else if (action === 'equals') { 
-                        console.log('Equals action detected');
-                        calculate(); 
-                    } 
-                    else if (action === 'clear') { clearCalculator(); } 
-                    else if (['m+', 'm-', 'mrc'].includes(action)) { handleMemory(action); } 
-                    else if (['sqrt', 'percent', 'negate', 'backspace'].includes(action)) { handleSpecialFunction(action); }
-                }
+            if (!yesButton || !noButton || !statementRows.length) return;
+            
+            let draggedValue = null;
+            
+            [yesButton, noButton].forEach(button => {
+                button.setAttribute('draggable', true);
+                button.addEventListener('dragstart', function(e) {
+                    draggedValue = this.textContent; // "Yes" or "No"
+                    e.dataTransfer.setData('text/plain', draggedValue);
+                    this.classList.add('dragging');
+                });
+                button.addEventListener('dragend', function() {
+                    this.classList.remove('dragging');
+                });
             });
-        });
-
-        function clearCalculator() {
-            calcCurrentInput = '0';
-            calcPreviousInput = '';
-            calcOperator = null;
-            calcShouldResetDisplay = false;
-            calcMrcPressedOnce = false; 
-            updateCalcDisplay();
-        }
-        
-        function inputDigit(digit) {
-            if (calcCurrentInput === 'Error') calcCurrentInput = '0'; // Clear error on new digit
-            if (calcShouldResetDisplay) {
-                calcCurrentInput = digit;
-                calcShouldResetDisplay = false;
-            } else {
-                // Prevent excessively long numbers before decimal
-                if (calcCurrentInput.includes('.') && calcCurrentInput.split('.')[1].length >= 8) return; // Limit to 8 decimal places
-                if (!calcCurrentInput.includes('.') && calcCurrentInput.length >= 10 && calcCurrentInput !== '0') return; // Limit to 10 integer digits
-
-                calcCurrentInput = calcCurrentInput === '0' ? digit : calcCurrentInput + digit;
-            }
-            updateCalcDisplay();
-            calcMrcPressedOnce = false; 
-        }
-
-        function inputDecimal() {
-            if (calcCurrentInput === 'Error') calcCurrentInput = '0';
-            if (calcShouldResetDisplay) {
-                calcCurrentInput = '0.';
-                calcShouldResetDisplay = false;
-            } else if (!calcCurrentInput.includes('.')) {
-                calcCurrentInput += '.';
-            }
-            updateCalcDisplay();
-            calcMrcPressedOnce = false;
-        }
-
-        function handleOperator(nextOperator) {
-            if (calcCurrentInput === 'Error') return;
-            const inputValue = parseFloat(calcCurrentInput);
-            if (calcOperator && !calcShouldResetDisplay) { 
-                calculate();
-                if (calcCurrentInput === 'Error') return; // Stop if calculation resulted in error
-                calcPreviousInput = calcCurrentInput; 
-            } else {
-                calcPreviousInput = calcCurrentInput;
-            }
-            calcOperator = nextOperator;
-            calcShouldResetDisplay = true;
-            calcMrcPressedOnce = false;
-        }
-
-        function calculate() {
-            if (!calcOperator || calcPreviousInput === '' || calcCurrentInput === 'Error') return;
-            const prev = parseFloat(calcPreviousInput);
-            const current = parseFloat(calcCurrentInput);
-            if (isNaN(prev) || isNaN(current)) {
-                calcCurrentInput = 'Error'; // Should not happen if inputs are validated
-                updateCalcDisplay();
-                return;
-            }
-
-            let result = 0;
-            switch (calcOperator) {
-                case '+': result = prev + current; break;
-                case '-': result = prev - current; break;
-                case '*': result = prev * current; break;
-                case '/': 
-                    if (current === 0) {
-                        result = 'Error';
-                    } else {
-                        result = prev / current;
-                    }
-                    break;
-                default: return;
-            }
-
-            if (result === 'Error') {
-                calcCurrentInput = 'Error';
-            } else {
-                // Check if result is a valid number and not Infinity or NaN
-                if (!isFinite(result)) {
-                    calcCurrentInput = 'Error';
-                } else {
-                    // Format result: if it's a very small or large number, handle differently
-                    try {
-                        // Handle large numbers better - use toFixed for numbers that are too large
-                        if (Math.abs(result) > 1e10) {
-                            let resultStr = result.toExponential(6);
-                            calcCurrentInput = resultStr;
-                        } else if (Math.abs(result) < 1e-6 && result !== 0) {
-                            // Small numbers in scientific notation
-                            let resultStr = result.toExponential(6);
-                            calcCurrentInput = resultStr;
-                        } else {
-                            // Normal sized numbers - keep precision but remove trailing zeros
-                            let resultStr = parseFloat(result.toPrecision(10)).toString();
-                            calcCurrentInput = resultStr;
-                        }
-                    } catch (e) {
-                        // Fallback if formatting fails
-                        calcCurrentInput = String(result);
-                    }
+            
+            statementRows.forEach(row => {
+                const answerBox = row.querySelector('.statement-answer-box');
+                row.addEventListener('dragover', function(e) {
+                    e.preventDefault(); 
+                    this.classList.add('drag-over');
+                });
+                row.addEventListener('dragleave', function() {
+                    this.classList.remove('drag-over');
+                });
+                row.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('drag-over');
+                    const value = e.dataTransfer.getData('text/plain');
+                    answerBox.textContent = value;
+                    answerBox.classList.remove('answered-yes', 'answered-no');
+                    answerBox.classList.add(value === 'Yes' ? 'answered-yes' : 'answered-no');
                     
-                    // Additional safety - if we end up with an invalid display value, show Error
-                    if (calcCurrentInput === 'NaN' || calcCurrentInput === 'Infinity' || calcCurrentInput === '-Infinity') {
-                        calcCurrentInput = 'Error';
+                    const statementIndex = parseInt(this.dataset.statementIndex);
+                    if (!userAnswers[currentQuestionIndex]) {
+                        userAnswers[currentQuestionIndex] = new Array(questions[currentQuestionIndex].statements.length).fill(null);
                     }
-                }
-            }
-            calcOperator = null;
-            calcShouldResetDisplay = true; 
-            updateCalcDisplay();
-        }
+                    userAnswers[currentQuestionIndex][statementIndex] = (value === 'Yes' ? 'Y' : 'N');
+                    updateNavigatorButtons();
+                });
 
-        function handleMemory(action) {
-            const currentValue = parseFloat(calcCurrentInput);
-            if (calcCurrentInput === 'Error' && action !== 'mrc') return;
-
-            switch (action) {
-                case 'm+':
-                    if (!isNaN(currentValue)) calcMemory += currentValue;
-                    updateCalcDisplay();
-                    break;
-                case 'm-':
-                    if (!isNaN(currentValue)) calcMemory -= currentValue;
-                    updateCalcDisplay();
-                    break;
-                case 'mrc':
-                    if (calcMrcPressedOnce) { 
-                        calcMemory = 0;
-                        calcMrcPressedOnce = false;
-                        // Optionally, could also clear display to 0 here
-                    } else { 
-                        calcCurrentInput = String(parseFloat(calcMemory.toPrecision(10))); // Show memory with precision
-                        calcMrcPressedOnce = true;
-                        calcShouldResetDisplay = true; 
+                // Click to clear answer
+                answerBox.addEventListener('click', function() {
+                    if (isReviewingFromResults) return; // Don't allow clearing in review mode
+                    this.textContent = '...';
+                    this.classList.remove('answered-yes', 'answered-no');
+                    const statementIndex = parseInt(this.dataset.statementIndex);
+                     if (userAnswers[currentQuestionIndex]) {
+                        userAnswers[currentQuestionIndex][statementIndex] = null;
                     }
-                    break;
-            }
-            if (action !== 'mrc') { // For M+ and M-, display doesn't change immediately
-                calcShouldResetDisplay = true; // Next number input should overwrite current display
-                calcMrcPressedOnce = false; 
-            } else {
-                updateCalcDisplay(); // For MRC, update display immediately
-            }
-        }
-
-        function handleSpecialFunction(func) {
-            if (calcCurrentInput === 'Error' && func !== 'clear') return;
-            const currentValue = parseFloat(calcCurrentInput);
-
-            switch (func) {
-                case 'sqrt':
-                    if (currentValue < 0 || isNaN(currentValue)) {
-                        calcCurrentInput = 'Error';
-                    } else {
-                        try {
-                            const sqrtResult = Math.sqrt(currentValue);
-                            if (!isFinite(sqrtResult)) {
-                                calcCurrentInput = 'Error';
-                            } else {
-                                calcCurrentInput = String(parseFloat(sqrtResult.toPrecision(10)));
-                            }
-                        } catch (e) {
-                            calcCurrentInput = 'Error';
-                        }
-                    }
-                    break;
-                case 'percent':
-                    if (isNaN(currentValue)) { calcCurrentInput = 'Error'; break; }
-                    if (calcPreviousInput !== '' && calcOperator) {
-                        const prev = parseFloat(calcPreviousInput);
-                        if (isNaN(prev)) { calcCurrentInput = 'Error'; break; }
-                        
-                        try {
-                            const percentResult = prev * (currentValue / 100);
-                            if (!isFinite(percentResult)) {
-                                calcCurrentInput = 'Error';
-                            } else {
-                                calcCurrentInput = String(parseFloat(percentResult.toPrecision(10)));
-                            }
-                        } catch (e) {
-                            calcCurrentInput = 'Error';
-                        }
-                    } else { 
-                        try {
-                            const percentResult = currentValue / 100;
-                            if (!isFinite(percentResult)) {
-                                calcCurrentInput = 'Error';
-                            } else {
-                                calcCurrentInput = String(parseFloat(percentResult.toPrecision(10)));
-                            }
-                        } catch (e) {
-                            calcCurrentInput = 'Error';
-                        }
-                    }
-                    break;
-                case 'negate':
-                     if (calcCurrentInput !== '0' && !isNaN(currentValue)) { 
-                        calcCurrentInput = String(currentValue * -1);
-                    }
-                    break;
-                case 'backspace':
-                    if (calcCurrentInput === 'Error' || calcShouldResetDisplay) {
-                        calcCurrentInput = '0';
-                        calcShouldResetDisplay = false;
-                    } else if (calcCurrentInput.length > 1) {
-                        calcCurrentInput = calcCurrentInput.slice(0, -1);
-                    } else {
-                        calcCurrentInput = '0';
-                    }
-                    break;
-                case 'clear':
-                    clearCalculator();
-                    return; // Skip further processing
-            }
-            updateCalcDisplay();
-            if (func !== 'backspace' && func !== 'negate' && func !== 'clear') { 
-                calcShouldResetDisplay = true;
-            }
-            calcMrcPressedOnce = false;
-        }
-
-
-        function toggleCalculator() {
-            const isVisible = calculatorUI.classList.toggle('visible');
-            calculatorToggleButton.classList.toggle('active', isVisible);
-            if (isVisible) {
-                clearCalculator(); 
-            }
-        }
-        
-        // Draggable Calculator Logic
-        function makeDraggable(element, handle) {
-            let currentX, currentY;
-
-            handle.onmousedown = function(event) {
-                event.preventDefault();
-                isDraggingCalculator = true;
-                calculatorUI.style.cursor = 'grabbing';
-
-                // Get the initial mouse cursor position
-                currentX = event.clientX;
-                currentY = event.clientY;
-
-                document.onmouseup = closeDragElement;
-                document.onmousemove = elementDrag;
-            };
-
-            function elementDrag(event) {
-                event.preventDefault();
-                if (!isDraggingCalculator) return;
-
-                // Calculate the new cursor position
-                const dx = currentX - event.clientX;
-                const dy = currentY - event.clientY;
-                currentX = event.clientX;
-                currentY = event.clientY;
-
-                // Set the element's new position
-                let newTop = element.offsetTop - dy;
-                let newLeft = element.offsetLeft - dx;
-
-                // Constrain within app-container (optional, can be complex)
-                const appRect = appContainer.getBoundingClientRect();
-                const calcRect = element.getBoundingClientRect();
-                
-                // Simple boundary check (relative to viewport for now, as appContainer might scroll)
-                // For more robust boundary, calculate relative to appContainer's scroll position
-                if (newLeft < 0) newLeft = 0;
-                if (newTop < 0) newTop = 0;
-                if (newLeft + calcRect.width > window.innerWidth) newLeft = window.innerWidth - calcRect.width;
-                if (newTop + calcRect.height > window.innerHeight) newTop = window.innerHeight - calcRect.height;
-
-
-                element.style.top = newTop + "px";
-                element.style.left = newLeft + "px";
-            }
-
-            function closeDragElement() {
-                isDraggingCalculator = false;
-                calculatorUI.style.cursor = 'grab';
-                document.onmouseup = null;
-                document.onmousemove = null;
-            }
-        }
-
-
-        // --- Event Listeners ---
-        startButton.addEventListener('click', () => {
-            console.log("Start button event listener triggered, calling window.startTest()");
-            window.startTest();
-        });
-
-        nextButton.addEventListener('click', showNextQuestion);
-        prevButton.addEventListener('click', showPrevQuestion);
-        endPracticeSessionButton.addEventListener('click', endPracticeSessionAndShowResults);
-        endPracticeSessionButtonFooter.addEventListener('click', handleEndPracticeSessionFooterClick);
-        backToResultsButton.addEventListener('click', () => { isReviewingFromResults = false; showResultsScreen(); });
-        navigatorButton.addEventListener('click', () => { 
-            // Hide calculator if it's open
-            if (calculatorUI.classList.contains('visible')) {
-                toggleCalculator(); 
-            }
-            recordTimeSpent(currentQuestionIndex); 
-            updateNavigatorButtons(); 
-            navigatorModal.classList.remove('hidden'); 
-            navigatorModal.classList.add('flex'); 
-        });
-        closeModalButton.addEventListener('click', () => { navigatorModal.classList.remove('flex'); navigatorModal.classList.add('hidden'); if (!isReviewingFromResults) questionStartTime = Date.now(); });
-        navigatorModal.addEventListener('click', (event) => { if (event.target === navigatorModal) closeModalButton.click(); });
-        flagButton.addEventListener('click', toggleFlag);
-        filterFlaggedButton.addEventListener('click', () => { isFilteringFlagged = !isFilteringFlagged; showReviewScreen(isFilteringFlagged); });
-        downloadPdfButton.addEventListener('click', generatePDF);
-        document.getElementById('submit-performance-button').addEventListener('click', submitPerformanceData);
-
-        calculatorToggleButton.addEventListener('click', toggleCalculator);
-        closeCalculatorButton.addEventListener('click', toggleCalculator);
-        makeDraggable(calculatorUI, calculatorDragHeader);
-
-        // Add a direct event listener for the equals button to ensure it works
-        const equalsButton = document.querySelector('.calc-button.equals');
-        if (equalsButton) {
-            equalsButton.addEventListener('click', function(e) {
-                console.log('Equals button clicked directly');
-                calculate();
+                    updateNavigatorButtons();
+                });
             });
         }
-
-        // Add direct event listeners for all calculator buttons to ensure they work
-        calcButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const value = button.dataset.calcValue;
-                const action = button.dataset.calcAction;
-                console.log('Calculator button clicked:', button.textContent, 'Value:', value, 'Action:', action);
-                
-                if (value !== undefined) { 
-                    if (value === '.') { inputDecimal(); } 
-                    else { inputDigit(value); }
-                } else if (action) { 
-                    if (['+', '-', '*', '/'].includes(action)) { handleOperator(action); } 
-                    else if (action === 'equals') { 
-                        console.log('Equals action triggered');
-                        calculate(); 
-                    } 
-                    else if (action === 'clear') { clearCalculator(); } 
-                    else if (['m+', 'm-', 'mrc'].includes(action)) { handleMemory(action); } 
-                    else if (['sqrt', 'percent', 'negate', 'backspace'].includes(action)) { handleSpecialFunction(action); }
-                }
-            });
-        });
 
         function handleKeyboardShortcuts(e) {
-             const isPracticeSessionVisible = !practiceSessionScreen.classList.contains('hidden');
-             const isModalVisible = navigatorModal.classList.contains('flex');
+             const isPracticeSessionVisible = practiceSessionScreen && !practiceSessionScreen.classList.contains('hidden');
+             const isModalVisible = navigatorModal && navigatorModal.classList.contains('flex');
              const isInputFocused = document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA');
-             const isCalcVisible = calculatorUI.classList.contains('visible');
-
-             if (isCalcVisible && !isInputFocused) { 
-                if (e.key >= '0' && e.key <= '9') { e.preventDefault(); inputDigit(e.key); return; }
-                if (e.key === '.') { e.preventDefault(); inputDecimal(); return; }
-                if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') { e.preventDefault(); handleOperator(e.key); return; }
-                if (e.key === 'Enter' || e.key === '=') { e.preventDefault(); calculate(); return; }
-                if (e.key === 'Backspace') { e.preventDefault(); handleSpecialFunction('backspace'); return; }
-                if (e.key === 'Escape') { e.preventDefault(); toggleCalculator(); return; } 
-                if (e.key.toLowerCase() === 'p') { e.preventDefault(); handleMemory('m+'); return; }
-                if (e.key.toLowerCase() === 'm') { e.preventDefault(); handleMemory('m-'); return; }
-                if (e.key.toLowerCase() === 'c' && !e.altKey && !e.metaKey && !e.ctrlKey) { e.preventDefault(); handleMemory('mrc'); return; } 
-                if (e.key.toLowerCase() === 'x') { e.preventDefault(); handleSpecialFunction('sqrt'); return; }
-             }
              
              if (isModalVisible || isInputFocused) return; 
              if (!isPracticeSessionVisible) return; 
@@ -2124,310 +1550,48 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
 
              if (altOrOption) {
                  switch (code) { 
-                     case 'keyn': e.preventDefault(); if (!nextButton.disabled) nextButton.click(); return;
-                     case 'keyp': e.preventDefault(); if (!prevButton.disabled) prevButton.click(); return;
-                     case 'keyf': e.preventDefault(); if (!isReviewingFromResults && !flagButton.disabled) flagButton.click(); return;
-                     case 'keyc': e.preventDefault(); toggleCalculator(); return; 
+                     case 'keyn': e.preventDefault(); if (nextButton && !nextButton.disabled) nextButton.click(); return;
+                     case 'keyp': e.preventDefault(); if (prevButton && !prevButton.disabled) prevButton.click(); return;
+                     case 'keyf': e.preventDefault(); if (!isReviewingFromResults && flagButton && !flagButton.disabled) flagButton.click(); return;
                      default: return; 
-                 }
-             } else { 
-                 if (['a', 'b', 'c', 'd', 'e'].includes(key) && !isReviewingFromResults && !isCalcVisible) { 
-                     e.preventDefault();
-                     const optionIndex = ['a', 'b', 'c', 'd', 'e'].indexOf(key);
-                     const optionValue = ['A', 'B', 'C', 'D', 'E'][optionIndex];
-                     const currentQuestionData = questions[currentQuestionIndex];
-                     if (optionIndex < currentQuestionData.options.length) {
-                         handleOptionSelect(currentQuestionIndex, optionIndex, optionValue);
-                     }
-                     return;
                  }
              }
         }
         document.addEventListener('keydown', handleKeyboardShortcuts);
 
-        // --- Initial Load ---
-        // Only initialize the setup screen if we're not in review mode
-        if (!urlParams.has('review')) {
-            showSetupScreen();
-        }
-
-        updateCalcDisplay(); 
-
-        // Update the review grid button click handler to not restart the timer
-        reviewGrid.addEventListener('click', (e) => {
-            if (e.target.classList.contains('review-grid-button')) {
-                reviewScreen.classList.add('hidden');
-                reviewScreen.classList.remove('flex');
-                showPracticeSessionScreen();
-                const index = parseInt(e.target.dataset.questionIndex);
-                if (!isNaN(index) && index >= 0 && index < questions.length) {
-                    // Hide calculator if it's open
-                    if (calculatorUI.classList.contains('visible')) {
-                        toggleCalculator();
-                    }
-                    loadQuestion(index);
-                    updateTimerVisibility();
-                }
-            }
-        });
-
-        // Add keyboard event listeners for Enter key on the appropriate pages
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter' && !event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
-                const isInputOrTextareaFocused = document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA';
-                
-                // Only handle Enter key if no input or textarea is focused
-                if (!isInputOrTextareaFocused) {
-                    // Check which screen is active
-                    if (!setupScreen.classList.contains('hidden')) {
-                        // Begin test button on setup screen
-                        startButton.click();
-                        event.preventDefault();
-                    } else if (!reviewScreen.classList.contains('hidden')) {
-                        // End practice session button on review screen
-                        endPracticeSessionButton.click();
-                        event.preventDefault();
-                    }
-                }
-            }
-        });
-
-        // Make sure the submit button has the right event listener
-        const submitPerformanceBtn = document.getElementById('submit-performance-button');
-        if (submitPerformanceBtn) {
-            // Remove any existing listeners (just in case)
-            submitPerformanceBtn.removeEventListener('click', submitPerformanceData);
-            // Add the listener
-            submitPerformanceBtn.addEventListener('click', submitPerformanceData);
-        }
-
-        // Function to handle loading a past test for review
-        function loadPastTestForReview(resultId) {
-            setupScreen.classList.add('hidden');
-            
-            // Show a loading indicator
-            const loadingEl = document.createElement('div');
-            loadingEl.className = 'fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50';
-            loadingEl.innerHTML = `
-                <div class="text-center p-6 bg-white shadow-xl rounded-lg">
-                    <div class="spinner mx-auto mb-4"></div>
-                    <p class="text-gray-700 font-medium">Loading your test results...</p>
-                </div>
-            `;
-            document.body.appendChild(loadingEl);
-            
-            // Fetch the result from Firestore
-            db.collection("performanceSubmissions").doc(resultId)
-                .get()
-                .then((doc) => {
-                    if (!doc.exists) {
-                        alert("The requested test result could not be found.");
-                        window.location.href = "student_dashboard.html";
-                        return;
-                    }
-                    
-                    const resultData = doc.data();
-                    
-                    // Store the data in the appropriate variables
-                    userName = resultData.studentName || '';
-                    userGoal = resultData.goal || '';
-                    userFocusArea = resultData.focusArea || '';
-                    userAnswers = resultData.answers || new Array(questions.length).fill(null);
-                    questionTimes = resultData.questionTimes || new Array(questions.length).fill(0);
-                    flaggedQuestions = resultData.flaggedQuestions || new Array(questions.length).fill(false);
-                    practiceSessionStartTime = new Date(resultData.submissionTimestamp || Date.now());
-                    practiceSessionEndTime = new Date(practiceSessionStartTime.getTime() + 26 * 60 * 1000); // Estimate end time
-                    isReviewingFromResults = true;
-                    
-                    // Remove loading indicator
-                    document.body.removeChild(loadingEl);
-                    
-                    // Show the results screen with the data
-                    showResultsScreen();
-                    
-                    // Add a "Return to Results" button to the header
-                    const headerBar = document.querySelector('.header-bar');
-                    if (headerBar) {
-                        const returnButtonContainer = document.createElement('div');
-                        returnButtonContainer.className = 'absolute left-4';
-                        returnButtonContainer.innerHTML = `
-                            <button id="return-to-dashboard-results" class="bg-blue-500 text-white px-3 py-1 rounded text-sm flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                                </svg>
-                                Return to Results
-                            </button>
-                        `;
-                        headerBar.style.position = 'relative';
-                        headerBar.appendChild(returnButtonContainer);
-                        
-                        // Add event listener to the return button
-                        document.getElementById('return-to-dashboard-results').addEventListener('click', () => {
-                            window.location.href = "student_dashboard.html";
-                        });
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error loading test result:", error);
-                    alert("There was an error loading the test result. Please try again.");
-                    window.location.href = "student_dashboard.html";
-                });
-        }
-        
-        // Add a direct click event listener to the Start button to ensure it works
-        document.getElementById('start-button').addEventListener('click', function() {
-            console.log("Start button clicked via direct listener");
-            // Get user info from Firebase Auth if available
-            if (firebase.auth && firebase.auth().currentUser) {
-                const currentUser = firebase.auth().currentUser;
-                userName = currentUser.displayName || currentUser.email || '';
-                // Store email to be used later in submission
-                userEmail = currentUser.email || '';
-                console.log("Using user info from Firebase:", userName, userEmail);
-            } else {
-                userName = '';
-                userEmail = '';
-                console.log("No user logged in - using empty user info");
-            }
-            
-            userGoal = goalInput.value.trim();
-            userFocusArea = focusAreaInput.value.trim();
-            timeLeft = 360; // 6 minutes
-            userAnswers = new Array(questions.length).fill(null);
-            questionTimes = new Array(questions.length).fill(0);
-            flaggedQuestions = new Array(questions.length).fill(false);
-            questionStartTime = null;
-            currentQuestionIndex = 0;
-            isReviewingFromResults = false;
-            isFilteringFlagged = false;
-            currentlyDisplayedPassageIndex = -1;
-            practiceSessionEndTime = null;
-            showPracticeSessionScreen();
-            startTimer();
-            loadQuestion(0);
-            populateNavigator();
-        });
-        
-        // Function to initialize the application - moved to the end to ensure all functions are defined
         function initializeApp() {
-            // Initialize arrays with questions.length
-            userAnswers = new Array(questions.length).fill(null);
+            userAnswers = new Array(questions.length).fill(null).map(() => new Array(5).fill(null));
             questionTimes = new Array(questions.length).fill(0);
             flaggedQuestions = new Array(questions.length).fill(false);
             
-            // Check for review mode and initialize appropriate screen
-            if (reviewParam) {
-                // We're in review mode - load the past test data
+            const urlParams = new URLSearchParams(window.location.search);
+            const reviewParam = urlParams.get('review');
+            if (reviewParam && db && auth) { // Ensure db and auth are available
                 loadPastTestForReview(reviewParam);
             } else {
-                // Regular test mode - continue with normal setup
                 showSetupScreen();
             }
         }
         
-        // Actually initialize the app now that all functions and DOM elements are defined
-        initializeApp();
-
-        // Initialize drag and drop functionality
-        function initDragAndDrop() {
-            const yesButton = document.getElementById('yes-button');
-            const noButton = document.getElementById('no-button');
-            const statementRows = document.querySelectorAll('.statement-row');
-            
-            if (!yesButton || !noButton) return;
-            
-            let draggedValue = null;
-            
-            // Make buttons draggable
-            [yesButton, noButton].forEach(button => {
-                button.setAttribute('draggable', true);
-                
-                button.addEventListener('dragstart', function(e) {
-                    draggedValue = this.textContent;
-                    e.dataTransfer.setData('text/plain', draggedValue);
-                    this.classList.add('opacity-50');
-                });
-                
-                button.addEventListener('dragend', function() {
-                    this.classList.remove('opacity-50');
-                });
-                
-                // Click functionality as alternative to drag
-                button.addEventListener('click', function() {
-                    const selectedRow = document.querySelector('.statement-row.selected');
-                    if (selectedRow) {
-                        const statementIndex = parseInt(selectedRow.dataset.statementIndex);
-                        const answerBox = selectedRow.querySelector('.statement-answer-box');
-                        
-                        answerBox.textContent = this.textContent;
-                        selectedRow.classList.remove('selected', 'border-blue-500', 'bg-blue-50');
-                        
-                        // Update userAnswers array
-                        if (!userAnswers[currentQuestionIndex]) {
-                            userAnswers[currentQuestionIndex] = [];
-                        }
-                        // Store the answer format expected by the scoring system (Y/N)
-                        if (this.textContent === "Yes") {
-                            userAnswers[currentQuestionIndex][statementIndex] = "Y";
-                        } else if (this.textContent === "No") {
-                            userAnswers[currentQuestionIndex][statementIndex] = "N";
-                        } else {
-                            userAnswers[currentQuestionIndex][statementIndex] = this.textContent;
-                        }
-                        
-                        updateNavigatorButtons();
-                    }
-                });
-            });
-            
-            // Make entire statement rows droppable
-            statementRows.forEach(row => {
-                row.addEventListener('click', function() {
-                    // Clear any previous selections
-                    document.querySelectorAll('.statement-row.selected').forEach(el => {
-                        el.classList.remove('selected', 'border-blue-500', 'bg-blue-50');
-                    });
-                    
-                    // Select this row
-                    this.classList.add('selected', 'border-blue-500', 'bg-blue-50');
-                });
-                
-                row.addEventListener('dragover', function(e) {
-                    e.preventDefault();
-                    this.classList.add('border-blue-500', 'bg-blue-50');
-                });
-                
-                row.addEventListener('dragleave', function() {
-                    this.classList.remove('border-blue-500', 'bg-blue-50');
-                });
-                
-                row.addEventListener('drop', function(e) {
-                    e.preventDefault();
-                    this.classList.remove('border-blue-500', 'bg-blue-50');
-                    
-                    const value = e.dataTransfer.getData('text/plain');
-                    const answerBox = this.querySelector('.statement-answer-box');
-                    answerBox.textContent = value;
-                    
-                    // Update userAnswers array
-                    const statementIndex = parseInt(this.dataset.statementIndex);
-                    if (!userAnswers[currentQuestionIndex]) {
-                        userAnswers[currentQuestionIndex] = [];
-                    }
-                    // Convert to Y/N format for consistency with scoring
-                    if (value === "Yes") {
-                        userAnswers[currentQuestionIndex][statementIndex] = "Y";
-                    } else if (value === "No") {
-                        userAnswers[currentQuestionIndex][statementIndex] = "N";
-                    } else {
-                        userAnswers[currentQuestionIndex][statementIndex] = value;
-                    }
-                    
-                    updateNavigatorButtons();
-                });
-            });
-        }
-    }); // Closing bracket for DOMContentLoaded
+        // Ensure DOM is ready and Firebase is potentially loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof firebase === 'undefined' || !firebase.apps.length) {
+                console.error("Firebase SDKs not loaded when DOMContentLoaded. Retrying init or showing error.");
+                // Attempt to re-initialize or show a persistent error
+                if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+                     firebase.initializeApp(firebaseConfig);
+                     db = firebase.firestore();
+                     auth = firebase.auth();
+                     console.log("Firebase initialized on DOMContentLoaded.");
+                } else {
+                    // Show critical error if Firebase still not loaded
+                    const appContainerEl = document.getElementById('app-container');
+                    if (appContainerEl) appContainerEl.innerHTML = "<p class='m3-body-large text-center p-8 text-[var(--md-sys-color-error)]'>Error: Critical application services failed to load. Please check your internet connection and refresh the page. If the problem persists, contact support.</p>";
+                    return; // Stop further script execution
+                }
+            }
+            initializeApp(); // Now call initializeApp
+        });
     </script>
 </body>
 </html>
