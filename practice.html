@@ -33,10 +33,10 @@
             --section-vr-container: var(--md-sys-color-primary-container);
             --section-vr-on-container: var(--md-sys-color-on-primary-container);
 
-            --section-dm-primary: #6366F1; 
+            --section-dm-primary: #6366F1; /* Indigo for DM */
             --section-dm-on-primary: #FFFFFF;
-            --section-dm-container: #E0E7FF; 
-            --section-dm-on-container: #3730A3; 
+            --section-dm-container: #E0E7FF; /* Lighter Indigo for DM container */
+            --section-dm-on-container: #3730A3; /* Darker Indigo for DM on-container */
 
             --section-qr-primary: #1E8E3E; 
             --section-qr-on-primary: #FFFFFF;
@@ -146,8 +146,7 @@
             border-radius: var(--md-sys-shape-corner-small) var(--md-sys-shape-corner-small) 0 0;
             position: relative; text-decoration: none; display: inline-flex; align-items: center; gap: var(--md-sys-spacing-xs);
             white-space: nowrap;
-            /* Default inactive state for main nav tabs */
-            background-color: transparent;
+            background-color: transparent; /* Default for main nav tabs */
             color: var(--md-sys-color-on-surface-variant);
         }
         .nav-tab:hover { 
@@ -160,10 +159,10 @@
             background-color: transparent; 
         }
         .nav-tab-disabled {
-            color: var(--md-sys-color-on-surface-variant) !important; /* Ensure override */
+            color: var(--md-sys-color-on-surface-variant) !important; 
             opacity: 0.38 !important; 
             cursor: not-allowed !important;
-            background-color: transparent !important; /* Ensure disabled doesn't have odd background */
+            background-color: transparent !important; 
             border-bottom-color: transparent !important;
         }
         .nav-tab-disabled .coming-soon-inline {
@@ -226,32 +225,38 @@
             font-weight: var(--md-sys-font-weight-medium);
             font-size: var(--md-sys-typescale-label-large-font-size);
             
-            /* Explicit default/inactive state styling - THIS IS THE FIX */
-            background-color: transparent !important; /* Ensure override default browser styles for <a> */
-            color: var(--md-sys-color-on-surface-variant) !important; /* Ensure override */
+            /* Explicit default/inactive state styling */
+            background-color: transparent; 
+            color: var(--md-sys-color-on-surface-variant); 
             
             cursor: pointer;
             transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
                         color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
-            text-decoration: none !important; /* Ensure no underline from browser defaults */
-            border: 1px solid transparent; /* To maintain layout consistency with potential borders on active/hover */
+            text-decoration: none; 
+            border: 1px solid transparent; 
         }
-        .left-nav-tab .material-symbols-outlined { margin-right: var(--md-sys-spacing-m); vertical-align: middle; }
+        /* Ensure icons align well and have consistent styling */
+        .left-nav-tab .material-symbols-outlined { 
+            margin-right: var(--md-sys-spacing-m); 
+            vertical-align: middle; 
+            font-size: 20px; /* Explicit size for icons in nav */
+            line-height: 1; /* Prevent extra space from icon line-height */
+            color: inherit; /* Inherit color from parent .left-nav-tab */
+        }
         
         .left-nav-tab:hover { 
-            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent) !important;
-            color: var(--md-sys-color-primary) !important;
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+            color: var(--md-sys-color-primary);
         }
         .left-nav-tab.active { 
-            /* General active state - overridden by specific section styles */
-            background-color: var(--md-sys-color-primary-container) !important; 
-            color: var(--md-sys-color-on-primary-container) !important;
+            background-color: var(--md-sys-color-primary-container); 
+            color: var(--md-sys-color-on-primary-container);
         }
-        /* Section specific active colors for left nav */
-        .left-nav-tab[data-target="vr-content"].active { background-color: var(--section-vr-container) !important; color: var(--section-vr-on-container) !important; }
-        .left-nav-tab[data-target="dm-content"].active { background-color: var(--section-dm-container) !important; color: var(--section-dm-on-container) !important; }
-        .left-nav-tab[data-target="qr-content"].active { background-color: var(--section-qr-container) !important; color: var(--section-qr-on-container) !important; }
-        .left-nav-tab[data-target="focus-groups-content"].active { background-color: var(--section-fg-container) !important; color: var(--section-fg-on-container) !important; }
+        /* Section specific active colors for left nav - these !important flags can be removed if specificity is managed well */
+        .left-nav-tab[data-target="vr-content"].active { background-color: var(--section-vr-container); color: var(--section-vr-on-container); }
+        .left-nav-tab[data-target="dm-content"].active { background-color: var(--section-dm-container); color: var(--section-dm-on-container); }
+        .left-nav-tab[data-target="qr-content"].active { background-color: var(--section-qr-container); color: var(--section-qr-on-container); }
+        .left-nav-tab[data-target="focus-groups-content"].active { background-color: var(--section-fg-container); color: var(--section-fg-on-container); }
 
 
         .practice-main-content {
@@ -484,8 +489,7 @@
                     <span class="material-symbols-outlined">menu_book</span>Verbal Reasoning
                 </a>
                 <a href="#" class="left-nav-tab" data-target="dm-content">
-                    <span class="material-symbols-outlined">decision_auto</span>Decision Making
-                </a>
+                    <span class="material-symbols-outlined">psychology</span>Decision Making </a>
                 <a href="#" class="left-nav-tab" data-target="qr-content">
                     <span class="material-symbols-outlined">calculate</span>Quantitative Reasoning
                 </a>
@@ -572,8 +576,7 @@
                             <button class="btn-select-section-fg">Select VR</button>
                         </div>
                         <div id="select-dm-fg" class="section-card-fg text-center disabled" data-section="DM">
-                             <span class="material-symbols-outlined">decision_auto</span>
-                            <h3>Decision Making</h3>
+                             <span class="material-symbols-outlined">psychology</span> <h3>Decision Making</h3>
                             <p>Sharpen your DM abilities (Coming Soon).</p>
                             <button class="btn-select-section-fg" disabled>Coming Soon</button>
                         </div>
