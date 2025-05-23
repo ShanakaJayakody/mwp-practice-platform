@@ -27,27 +27,26 @@
             --md-sys-color-tertiary-container: #FFD8E4;
             --md-sys-color-on-tertiary-container: #31111D;
             
-            /* Section specific theme colors (derived from design doc examples or M3 principles) */
-            --section-vr-primary: var(--md-sys-color-primary); /* Blue */
+            /* Section specific theme colors */
+            --section-vr-primary: var(--md-sys-color-primary);
             --section-vr-on-primary: var(--md-sys-color-on-primary);
             --section-vr-container: var(--md-sys-color-primary-container);
             --section-vr-on-container: var(--md-sys-color-on-primary-container);
 
-            --section-dm-primary: #6366F1; /* Indigo (DM) - As per existing file */
+            --section-dm-primary: #6366F1; 
             --section-dm-on-primary: #FFFFFF;
-            --section-dm-container: #E0E7FF; /* Lighter Indigo */
-            --section-dm-on-container: #3730A3; /* Darker Indigo */
+            --section-dm-container: #E0E7FF; 
+            --section-dm-on-container: #3730A3; 
 
-            --section-qr-primary: #1E8E3E; /* Green (QR) - From design doc success green */
+            --section-qr-primary: #1E8E3E; 
             --section-qr-on-primary: #FFFFFF;
-            --section-qr-container: #C8E6C9; /* Lighter Green */
-            --section-qr-on-container: #0D3C1E; /* Darker Green */
+            --section-qr-container: #C8E6C9; 
+            --section-qr-on-container: #0D3C1E; 
 
-            --section-fg-primary: #FF6D00; /* Orange (Focus Groups) - From design doc accent */
+            --section-fg-primary: #FF6D00; 
             --section-fg-on-primary: #FFFFFF;
             --section-fg-container: #FFDDBA;
             --section-fg-on-container: #5F2000;
-
 
             --md-sys-color-background: #F8F9FA; 
             --md-sys-color-on-background: #1F1F1F;
@@ -218,7 +217,7 @@
             cursor: pointer;
             transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
                         color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
-            text-decoration: none; /* Ensure links are not underlined by default */
+            text-decoration: none; 
         }
         .left-nav-tab .material-symbols-outlined { margin-right: var(--md-sys-spacing-m); }
         
@@ -229,9 +228,7 @@
         .left-nav-tab.active {
             background-color: var(--md-sys-color-primary-container); 
             color: var(--md-sys-color-on-primary-container);
-            font-weight: var(--md-sys-font-weight-medium); /* M3 active nav items often don't change weight significantly, rely on bg/color */
         }
-        /* Section specific active colors for left nav */
         .left-nav-tab[data-target="vr-content"].active { background-color: var(--section-vr-container); color: var(--section-vr-on-container); }
         .left-nav-tab[data-target="dm-content"].active { background-color: var(--section-dm-container); color: var(--section-dm-on-container); }
         .left-nav-tab[data-target="qr-content"].active { background-color: var(--section-qr-container); color: var(--section-qr-on-container); }
@@ -253,7 +250,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .section-content > h2 { /* Headline Small */
+        .section-content > h2 { 
             font-family: var(--md-sys-typescale-headline-small-font-family-name);
             font-weight: var(--md-sys-font-weight-regular);
             font-size: var(--md-sys-typescale-headline-small-font-size);
@@ -261,33 +258,32 @@
             margin-bottom: var(--md-sys-spacing-l); 
             border-bottom: 1px solid var(--md-sys-color-outline);
         }
-        /* Section specific h2 colors */
         #vr-content > h2 { color: var(--section-vr-primary); border-bottom-color: var(--section-vr-primary); }
         #dm-content > h2 { color: var(--section-dm-primary); border-bottom-color: var(--section-dm-primary); }
         #qr-content > h2 { color: var(--section-qr-primary); border-bottom-color: var(--section-qr-primary); }
         #focus-groups-content > h2 { color: var(--section-fg-primary); border-bottom-color: var(--section-fg-primary); }
 
-        .subsection-card { /* M3 Card */
+        .subsection-card { 
             background-color: var(--md-sys-color-surface-variant); 
             padding: var(--md-sys-spacing-l); 
             border-radius: var(--md-sys-shape-corner-medium); 
             margin-bottom: var(--md-sys-spacing-l);
-            border: 1px solid var(--md-sys-color-outline); /* Or none if elevation is enough */
+            border: 1px solid var(--md-sys-color-outline); 
         }
-        .subsection-card h4 { /* Title Medium */
+        .subsection-card h4 { 
             font-family: var(--md-sys-typescale-title-medium-font-family-name);
             font-weight: var(--md-sys-font-weight-medium);
             font-size: var(--md-sys-typescale-title-medium-font-size);
             color: var(--md-sys-color-on-surface-variant);
             margin-bottom: var(--md-sys-spacing-s); 
         }
-        .subsection-card p { /* Body Medium */
+        .subsection-card p { 
             font-family: var(--md-sys-typescale-body-medium-font-family-name);
             font-size: var(--md-sys-typescale-body-medium-font-size);
             color: var(--md-sys-color-on-surface-variant);
             margin-bottom: var(--md-sys-spacing-m); 
         }
-        .subsection-card .btn-view { /* M3 Filled Button */
+        .subsection-card .btn-view { 
             padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l);
             border-radius: var(--md-sys-shape-corner-full);
             font-family: var(--md-sys-typescale-label-large-font-family-name);
@@ -297,7 +293,6 @@
             transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
             border: none; cursor:pointer;
         }
-        /* Section specific subsection card button colors */
         #vr-content .subsection-card .btn-view { background-color: var(--section-vr-primary); color: var(--section-vr-on-primary); }
         #vr-content .subsection-card .btn-view:hover { background-color: color-mix(in srgb, var(--section-vr-primary) 90%, black); }
         #dm-content .subsection-card .btn-view { background-color: var(--section-dm-primary); color: var(--section-dm-on-primary); }
@@ -305,8 +300,7 @@
         #qr-content .subsection-card .btn-view { background-color: var(--section-qr-primary); color: var(--section-qr-on-primary); }
         #qr-content .subsection-card .btn-view:hover { background-color: color-mix(in srgb, var(--section-qr-primary) 90%, black); }
 
-        /* Focus Groups Cards */
-        .section-card-fg { /* M3 Card - Selectable */
+        .section-card-fg { 
             background-color: var(--md-sys-color-surface);
             border: 1px solid var(--md-sys-color-outline);
             border-radius: var(--md-sys-shape-corner-medium);
@@ -329,7 +323,7 @@
         .section-card-fg .material-symbols-outlined { font-size: 36px; margin-bottom: var(--md-sys-spacing-s); color: var(--section-fg-primary);}
         .section-card-fg.active .material-symbols-outlined { color: var(--section-fg-on-container); }
 
-        .btn-select-section-fg { /* M3 Filled Button */
+        .btn-select-section-fg { 
             background-color: var(--section-fg-primary); color: var(--section-fg-on-primary);
             padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l);
             border-radius: var(--md-sys-shape-corner-full);
@@ -343,10 +337,10 @@
         .section-card-fg.disabled .material-symbols-outlined { color: var(--md-sys-color-outline); }
         .section-card-fg.disabled .btn-select-section-fg { background-color: var(--md-sys-color-outline); color: var(--md-sys-color-surface); cursor: not-allowed; }
         
-        .practice-set-link-fg { /* M3 Chip or Filled Tonal Button */
+        .practice-set-link-fg { 
             background-color: var(--section-fg-container); color: var(--section-fg-on-container);
             border: 1px solid color-mix(in srgb, var(--section-fg-on-container) 30%, transparent );
-            border-radius: var(--md-sys-shape-corner-full); /* Chip like */
+            border-radius: var(--md-sys-shape-corner-full); 
             padding: var(--md-sys-spacing-xs) var(--md-sys-spacing-m);
             font-family: var(--md-sys-typescale-label-large-font-family-name);
             text-decoration: none; display: inline-block; text-align:center;
@@ -361,8 +355,7 @@
             opacity: 0.5; cursor: not-allowed; pointer-events: none;
         }
 
-        /* DM Worksheets list items */
-        .dm-subtopic-item { /* M3 List Item or Chip style */
+        .dm-subtopic-item { 
             background-color: var(--md-sys-color-surface);
             border: 1px solid var(--md-sys-color-outline);
             color: var(--md-sys-color-on-surface);
@@ -385,7 +378,7 @@
         .coming-soon-inline-small { font-size: 0.7rem; color: var(--md-sys-color-on-surface-variant); margin-left: 4px; font-weight: normal; }
 
         .dm-worksheets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--md-sys-spacing-m); }
-        .dm-worksheet-link { /* M3 Card or Filled Tonal Button */
+        .dm-worksheet-link { 
             background-color: var(--section-dm-container); color: var(--section-dm-on-container);
             border: 1px solid color-mix(in srgb, var(--section-dm-on-container) 30%, transparent );
             border-radius: var(--md-sys-shape-corner-medium);
@@ -398,20 +391,27 @@
         }
         .hidden { display: none !important; }
         
-        @media (max-width: 1024px) { /* For tablets and smaller */
+        @media (max-width: 1024px) { 
             .practice-content-wrapper { flex-direction: column; padding: var(--md-sys-spacing-m); gap: var(--md-sys-spacing-m); }
             .left-nav-menu { width: 100%; margin-bottom: var(--md-sys-spacing-m); }
         }
         @media (max-width: 768px) {
             .main-nav { justify-content: flex-start; }
-            .section-selection-container-fg { grid-template-columns: 1fr; } /* Stack focus group cards */
+            .section-selection-container-fg { grid-template-columns: 1fr; } 
         }
+         @media (max-width: 480px) {
+            .dashboard-header { padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); }
+            .dashboard-header .logo-small { max-width: 100px; }
+            .welcome-user { display: none; } 
+            .btn-logout { padding: var(--md-sys-spacing-xxs) var(--md-sys-spacing-s); font-size: var(--md-sys-typescale-label-large-font-size); }
+            .nav-tab { padding: var(--md-sys-spacing-s); }
+         }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
-   
+
     </head>
 <body>
     <div id="auth-redirect-message" class="fixed inset-0 flex items-center justify-center z-50 hidden" style="background-color: var(--md-sys-color-background);">
