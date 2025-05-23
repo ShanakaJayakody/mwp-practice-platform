@@ -6,6 +6,11 @@
     <title>User Settings - UCAT Platform</title>
     <link rel="icon" href="https://ik.imagekit.io/mwp/2.svg?updatedAt=1745982956185" type="image/svg+xml">
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
     <style>
         :root {
             /* M3 Color Palette - Light Theme */
@@ -94,9 +99,12 @@
             position: sticky; top: 0; z-index: 1000;
         }
         .dashboard-header .logo-small { max-width: 132px; }
-        /* Settings icon in header is less relevant on settings page itself, but keep for consistency if it's a shared component */
-        .settings-icon span { color: var(--md-sys-color-on-surface-variant); }
-        .settings-icon:hover span { color: var(--md-sys-color-primary); }
+        .settings-icon-header span { /* Renamed to avoid conflict if settings icon is different on settings page */
+            color: var(--md-sys-color-on-surface-variant); 
+            transition: color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+        }
+        .settings-icon-header:hover span { color: var(--md-sys-color-primary); }
+
 
         .main-nav {
             display: flex; justify-content: center;
@@ -105,7 +113,7 @@
             box-shadow: var(--md-sys-elevation-level1);
             position: sticky; top: 68px; /* Adjust based on actual header height */
             z-index: 999;
-            overflow-x: auto; /* For smaller screens */
+            overflow-x: auto; 
         }
         .nav-tab {
             padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l); margin: 0 var(--md-sys-spacing-xs);
@@ -119,7 +127,7 @@
             white-space: nowrap;
         }
         .nav-tab:hover { color: var(--md-sys-color-primary); }
-        .nav-tab.active { /* This class might be set by JS based on current page */
+        .nav-tab.active { 
             color: var(--md-sys-color-primary);
             border-bottom-color: var(--md-sys-color-primary);
         }
@@ -138,12 +146,12 @@
             color: var(--md-sys-color-on-surface-variant);
             display: flex; align-items: center;
         }
-         .welcome-user::before {
+        .welcome-user::before {
             content: ""; display: inline-block; width: 8px; height: 8px;
             background-color: var(--md-sys-color-success); /* Green for online state */
             border-radius: 50%; margin-right: var(--md-sys-spacing-xs);
         }
-        .btn-logout { /* M3 Filled Button with Error color */
+        .btn-logout { 
             background-color: var(--md-sys-color-error); color: var(--md-sys-color-on-error);
             padding: var(--md-sys-spacing-xs) var(--md-sys-spacing-m);
             font-family: var(--md-sys-typescale-label-large-font-family-name);
@@ -156,58 +164,58 @@
         
         /* Settings Page Specific Styles */
         .dashboard-content-area {
-            padding: var(--md-sys-spacing-xl); /* 32px */
+            padding: var(--md-sys-spacing-xl); 
             flex-grow: 1;
-            display: flex; /* Center the settings container */
+            display: flex; 
             justify-content: center;
-            align-items: flex-start; /* Align to top if content is shorter than viewport */
+            align-items: flex-start; 
         }
         
         .settings-container {
             width: 100%;
             max-width: 700px;
             background-color: var(--md-sys-color-surface);
-            padding: var(--md-sys-spacing-xl); /* 32px */
-            border-radius: var(--md-sys-shape-corner-medium); /* 12dp for card-like appearance */
+            padding: var(--md-sys-spacing-xl); 
+            border-radius: var(--md-sys-shape-corner-medium); 
             box-shadow: var(--md-sys-elevation-level1);
         }
 
-        .settings-container > h1 { /* Headline Medium */
+        .settings-container > h1 { 
             font-family: var(--md-sys-typescale-headline-medium-font-family-name);
             font-weight: var(--md-sys-font-weight-regular);
             font-size: var(--md-sys-typescale-headline-medium-font-size);
             line-height: var(--md-sys-typescale-headline-medium-line-height);
             color: var(--md-sys-color-on-surface);
-            margin-bottom: var(--md-sys-spacing-xl); /* 32px */
+            margin-bottom: var(--md-sys-spacing-xl); 
             text-align: center;
         }
 
         .settings-section {
-            margin-bottom: var(--md-sys-spacing-xl); /* 32px */
-            padding-bottom: var(--md-sys-spacing-l); /* 24px */
+            margin-bottom: var(--md-sys-spacing-xl); 
+            padding-bottom: var(--md-sys-spacing-l); 
             border-bottom: 1px solid var(--md-sys-color-outline);
         }
         .settings-section:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
 
-        .settings-section h2 { /* Title Large */
+        .settings-section h2 { 
             font-family: var(--md-sys-typescale-title-large-font-family-name);
             font-weight: var(--md-sys-font-weight-medium);
             font-size: var(--md-sys-typescale-title-large-font-size);
             line-height: var(--md-sys-typescale-title-large-line-height);
-            color: var(--md-sys-color-primary); /* Primary color for section titles */
-            margin-bottom: var(--md-sys-spacing-l); /* 24px */
+            color: var(--md-sys-color-primary); 
+            margin-bottom: var(--md-sys-spacing-l); 
         }
 
-        .input-group { margin-bottom: var(--md-sys-spacing-l); /* 24px */ }
+        .input-group { margin-bottom: var(--md-sys-spacing-l); }
 
-        .input-group label { /* Label Large */
+        .input-group label { 
             display: block;
             font-family: var(--md-sys-typescale-label-large-font-family-name);
             font-weight: var(--md-sys-font-weight-medium);
             font-size: var(--md-sys-typescale-label-large-font-size);
             line-height: var(--md-sys-typescale-label-large-line-height);
             color: var(--md-sys-color-on-surface-variant);
-            margin-bottom: var(--md-sys-spacing-xs); /* 8px */
+            margin-bottom: var(--md-sys-spacing-xs); 
         }
         /* M3 Text Field Inspired Styling */
         .input-group input[type="text"],
@@ -215,11 +223,11 @@
         .input-group input[type="password"],
         .input-group input[type="date"] {
             width: 100%;
-            padding: var(--md-sys-spacing-m); /* 16px */
-            background-color: color-mix(in srgb, var(--md-sys-color-primary) 4%, var(--md-sys-color-surface)); /* M3 Filled text field subtle bg */
+            padding: var(--md-sys-spacing-m); 
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 4%, var(--md-sys-color-surface)); 
             border: none; 
-            border-bottom: 1px solid var(--md-sys-color-on-surface-variant); /* Underline */
-            border-radius: var(--md-sys-shape-corner-extra-small) var(--md-sys-shape-corner-extra-small) 0 0; /* Top corners rounded */
+            border-bottom: 1px solid var(--md-sys-color-on-surface-variant); 
+            border-radius: var(--md-sys-shape-corner-extra-small) var(--md-sys-shape-corner-extra-small) 0 0; 
             font-size: var(--md-sys-typescale-body-large-font-size);
             color: var(--md-sys-color-on-surface);
             transition: border-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard), 
@@ -228,24 +236,25 @@
         }
         .input-group input[type="text"]:read-only,
         .input-group input[type="email"]:read-only {
-             background-color: var(--md-sys-color-surface-variant); /* More distinct for readonly */
+             background-color: var(--md-sys-color-surface-variant); 
              border-bottom: 1px solid var(--md-sys-color-outline);
              color: var(--md-sys-color-on-surface-variant);
              cursor: default;
         }
         .input-group input:focus {
             outline: none;
-            border-bottom: 2px solid var(--md-sys-color-primary); /* Thicker primary underline on focus */
+            border-bottom: 2px solid var(--md-sys-color-primary); 
             background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, var(--md-sys-color-surface));
-            margin-bottom: calc(var(--md-sys-spacing-l) - 1px); /* Adjust for thicker border to prevent layout shift*/
+            /* Adjust margin slightly if border thickness change causes layout shift */
+            /* margin-bottom: calc(var(--md-sys-spacing-l) - 1px); */ 
         }
-         .input-group input[type="date"]::-webkit-calendar-picker-indicator { /* Style date picker icon if possible */
+         .input-group input[type="date"]::-webkit-calendar-picker-indicator { 
             opacity: 0.6;
             cursor: pointer;
         }
 
 
-        .btn-save { /* M3 Filled Button */
+        .btn-save { 
             background-color: var(--md-sys-color-primary);
             color: var(--md-sys-color-on-primary);
             padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l); 
@@ -263,12 +272,12 @@
             box-shadow: var(--md-sys-elevation-level1);
         }
         .btn-save:disabled {
-            background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent); /* M3 disabled filled button */
+            background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent); 
             color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
             box-shadow: none; cursor: not-allowed;
         }
         
-        .message { /* M3 Banner/Snackbar like */
+        .message { 
             font-family: var(--md-sys-typescale-body-small-font-family-name);
             font-size: var(--md-sys-typescale-body-small-font-size);
             padding: var(--md-sys-spacing-m); 
@@ -286,7 +295,7 @@
             color: var(--md-sys-color-on-error-container); 
         }
         
-        #auth-redirect-message .auth-container { /* Styles for auth redirect message box */
+        #auth-redirect-message .auth-container { 
             background-color: var(--md-sys-color-surface);
             border-radius: var(--md-sys-shape-corner-large);
             box-shadow: var(--md-sys-elevation-level2);
@@ -300,7 +309,7 @@
             border-top-color: currentColor;
             width: 16px; height: 16px;
             animation: spin 1s linear infinite;
-            display: inline-block; /* margin-right handled by gap in .btn-save */
+            display: inline-block; 
             vertical-align: middle;
         }
         @keyframes spin {
@@ -326,6 +335,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+
+    <script defer src="js/settings-main.js"></script>
 </head>
 <body>
     <div id="auth-redirect-message" class="fixed inset-0 flex items-center justify-center z-50 hidden" style="background-color: var(--md-sys-color-background);">
@@ -382,7 +393,7 @@
                     <div class="input-group">
                         <label for="settings-email">Email Address</label>
                         <input type="email" id="settings-email" name="settings-email" placeholder="your.email@example.com" readonly>
-                        <p class="text-xs mt-1" style="color: var(--md-sys-color-on-surface-variant); font-size:var(--md-sys-typescale-body-small-font-size)">Email cannot be changed here. Contact support if needed.</p>
+                        <p class="mt-1" style="color: var(--md-sys-color-on-surface-variant); font-size:var(--md-sys-typescale-body-small-font-size)">Email cannot be changed here. Contact support if needed.</p>
                     </div>
                     <button id="save-profile-button" class="btn-save">
                         <span id="profile-spinner" class="spinner hidden"></span>
@@ -435,302 +446,5 @@
             </div>
         </main>
     </div>
-
-    <script>
-        // --- Firebase Configuration ---
-        const firebaseConfig = {
-          apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
-          authDomain: "mwp-qr-test-page.firebaseapp.com",
-          projectId: "mwp-qr-test-page",
-          storageBucket: "mwp-qr-test-page.appspot.com",
-          messagingSenderId: "309084045110",
-          appId: "1:309084045110:web:b09ca0fdff84b094963d97",
-          measurementId: "G-4M3ED641M9"
-        };
-
-        // Initialize Firebase
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const db = firebase.firestore();
-        const auth = firebase.auth();
-
-        // DOM Elements
-        const studentDisplayNameHeader = document.getElementById('student-display-name');
-        const dashboardWrapper = document.getElementById('dashboard-wrapper');
-        const authRedirectMessage = document.getElementById('auth-redirect-message');
-        const logoutButton = document.getElementById('logout-button');
-
-        const settingsNameInput = document.getElementById('settings-name');
-        const settingsEmailInput = document.getElementById('settings-email');
-        const saveProfileButton = document.getElementById('save-profile-button');
-        const profileSpinner = document.getElementById('profile-spinner');
-        const profileMessage = document.getElementById('profile-message');
-
-        const currentPasswordInput = document.getElementById('current-password');
-        const newPasswordInput = document.getElementById('new-password');
-        const confirmPasswordInput = document.getElementById('confirm-password');
-        const changePasswordButton = document.getElementById('change-password-button');
-        const passwordSpinner = document.getElementById('password-spinner');
-        const passwordMessage = document.getElementById('password-message');
-
-        const settingsExamDateInput = document.getElementById('settings-exam-date');
-        const daysRemainingDisplay = document.getElementById('days-remaining-display');
-        const saveExamDateButton = document.getElementById('save-exam-date-button');
-        const examDateSpinner = document.getElementById('exam-date-spinner');
-        const examDateMessage = document.getElementById('exam-date-message');
-
-
-        // UI Helper Functions
-        function setButtonLoading(button, spinner, isLoading) {
-            if (!button || !spinner) return;
-            button.disabled = isLoading;
-            spinner.classList.toggle('hidden', !isLoading);
-            button.classList.toggle('opacity-70', isLoading); 
-        }
-
-        function showMessageElement(element, text, type = 'success') {
-            if (!element) return;
-            element.innerHTML = ''; 
-            
-            const iconSpan = document.createElement('span');
-            iconSpan.classList.add('material-symbols-outlined');
-            iconSpan.style.marginRight = 'var(--md-sys-spacing-xs)';
-            iconSpan.style.fontSize = '1.25rem'; // Match button icon size
-
-            if (type === 'success') {
-                iconSpan.textContent = 'check_circle';
-                iconSpan.style.color = 'var(--md-sys-color-on-success-container)'; // Icon color consistent with text
-            } else {
-                iconSpan.textContent = 'error';
-                iconSpan.style.color = 'var(--md-sys-color-on-error-container)';
-            }
-            
-            const textSpan = document.createElement('span');
-            textSpan.textContent = text;
-
-            element.appendChild(iconSpan);
-            element.appendChild(textSpan);
-            
-            element.className = 'message'; 
-            element.classList.add(type);
-            element.classList.remove('hidden');
-            setTimeout(() => {
-                element.classList.add('hidden');
-            }, 5000);
-        }
-
-
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                dashboardWrapper.classList.remove('hidden');
-                if (authRedirectMessage) authRedirectMessage.classList.add('hidden');
-                
-                const displayName = user.displayName || user.email || 'Student';
-                if (studentDisplayNameHeader) studentDisplayNameHeader.textContent = displayName;
-                
-                if (settingsNameInput) settingsNameInput.value = user.displayName || '';
-                if (settingsEmailInput) settingsEmailInput.value = user.email || '';
-                
-                loadExamDate(user);
-
-            } else {
-                dashboardWrapper.classList.add('hidden');
-                if (authRedirectMessage) authRedirectMessage.classList.remove('hidden');
-                // Consider redirecting to login if this page strictly requires auth
-                // window.location.href = 'student_dashboard.html'; 
-            }
-        });
-
-        if(logoutButton){
-            logoutButton.addEventListener('click', () => {
-                if(confirm("Are you sure you want to log out?")){
-                    auth.signOut().then(() => {
-                        window.location.href = 'student_dashboard.html'; // Redirect to login
-                    }).catch(error => {
-                        console.error("Logout error:", error);
-                        showMessageElement(profileMessage, 'Error logging out: ' + error.message, 'error');
-                    });
-                }
-            });
-        }
-
-        // Profile Settings
-        if(saveProfileButton) {
-            saveProfileButton.addEventListener('click', async () => {
-                const user = auth.currentUser;
-                if (!user) return;
-
-                const newName = settingsNameInput.value.trim();
-                
-                if (!newName) {
-                    showMessageElement(profileMessage, 'Name cannot be empty.', 'error');
-                    return;
-                }
-                
-                setButtonLoading(saveProfileButton, profileSpinner, true);
-                
-                try {
-                    if (user.displayName !== newName) {
-                        await user.updateProfile({ displayName: newName });
-                    }
-                    // Update Firestore record if you store display name there too
-                    await db.collection('users').doc(user.uid).set({
-                        displayName: newName,
-                    }, { merge: true });
-
-                    showMessageElement(profileMessage, 'Profile updated successfully!', 'success');
-                    if (studentDisplayNameHeader) studentDisplayNameHeader.textContent = newName; // Update header immediately
-
-                } catch (error) {
-                    console.error("Error updating profile:", error);
-                    showMessageElement(profileMessage, 'Error updating profile: ' + error.message, 'error');
-                } finally {
-                    setButtonLoading(saveProfileButton, profileSpinner, false);
-                }
-            });
-        }
-
-        // Password Settings
-        if(changePasswordButton){
-            changePasswordButton.addEventListener('click', async () => {
-                const user = auth.currentUser;
-                if (!user) return;
-
-                const currentPassword = currentPasswordInput.value;
-                const newPassword = newPasswordInput.value;
-                const confirmPassword = confirmPasswordInput.value;
-
-                if (!currentPassword) {
-                    showMessageElement(passwordMessage, 'Please enter your current password.', 'error'); return;
-                }
-                if (newPassword.length < 6) {
-                    showMessageElement(passwordMessage, 'New password must be at least 6 characters.', 'error'); return;
-                }
-                if (newPassword !== confirmPassword) {
-                    showMessageElement(passwordMessage, 'New passwords do not match.', 'error'); return;
-                }
-
-                setButtonLoading(changePasswordButton, passwordSpinner, true);
-
-                try {
-                    const credential = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
-                    await user.reauthenticateWithCredential(credential);
-                    await user.updatePassword(newPassword);
-                    
-                    showMessageElement(passwordMessage, 'Password changed successfully!', 'success');
-                    currentPasswordInput.value = '';
-                    newPasswordInput.value = '';
-                    confirmPasswordInput.value = '';
-
-                } catch (error) {
-                    console.error("Error changing password:", error);
-                    let friendlyMessage = 'Error changing password. Please check your current password and try again.';
-                    if(error.code === 'auth/wrong-password'){
-                         friendlyMessage = 'Incorrect current password. Please try again.';
-                    }
-                    showMessageElement(passwordMessage, friendlyMessage, 'error');
-                } finally {
-                    setButtonLoading(changePasswordButton, passwordSpinner, false);
-                }
-            });
-        }
-
-        // Exam Date Settings
-        async function loadExamDate(user) {
-            if (!user || !db || !settingsExamDateInput || !daysRemainingDisplay) return;
-            try {
-                const docRef = db.collection('userPreferences').doc(user.uid);
-                const docSnap = await docRef.get();
-                if (docSnap.exists) {
-                    const preferences = docSnap.data();
-                    if (preferences.examDate) {
-                        settingsExamDateInput.value = preferences.examDate;
-                        updateDaysRemainingDisplay(preferences.examDate);
-                    } else {
-                        updateDaysRemainingDisplay(null);
-                    }
-                } else {
-                     updateDaysRemainingDisplay(null); // No preference document yet
-                }
-            } catch (error) {
-                console.error("Error loading exam date:", error);
-                showMessageElement(examDateMessage, 'Could not load exam date.', 'error');
-                updateDaysRemainingDisplay(null);
-            }
-        }
-        
-        function updateDaysRemainingDisplay(examDateStr) {
-            if (!daysRemainingDisplay) return;
-            if (!examDateStr) {
-                daysRemainingDisplay.value = 'Not set';
-                daysRemainingDisplay.style.color = 'var(--md-sys-color-on-surface-variant)';
-                return;
-            }
-            const examDate = new Date(examDateStr + "T00:00:00"); // Treat as local date
-            const today = new Date();
-            today.setHours(0,0,0,0); 
-
-            if (examDate < today) {
-                daysRemainingDisplay.value = 'Date has passed';
-                daysRemainingDisplay.style.color = 'var(--md-sys-color-error)';
-            } else {
-                const diffTime = examDate.getTime() - today.getTime(); 
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                daysRemainingDisplay.value = `${diffDays} day(s) remaining`;
-                daysRemainingDisplay.style.color = 'var(--md-sys-color-primary)';
-            }
-        }
-        
-        if(settingsExamDateInput){
-            settingsExamDateInput.addEventListener('change', () => {
-                updateDaysRemainingDisplay(settingsExamDateInput.value);
-            });
-        }
-
-        if(saveExamDateButton){
-            saveExamDateButton.addEventListener('click', async () => {
-                const user = auth.currentUser;
-                if (!user || !db) return;
-
-                const examDate = settingsExamDateInput.value;
-                if (!examDate) {
-                     try {
-                        await db.collection('userPreferences').doc(user.uid).update({ examDate: firebase.firestore.FieldValue.delete() });
-                        showMessageElement(examDateMessage, 'Exam date cleared.', 'success');
-                        updateDaysRemainingDisplay(null);
-                    } catch (error) {
-                        console.error("Error clearing exam date:", error);
-                        showMessageElement(examDateMessage, 'Error clearing exam date.', 'error');
-                    }
-                    return;
-                }
-                
-                setButtonLoading(saveExamDateButton, examDateSpinner, true);
-
-                try {
-                    await db.collection('userPreferences').doc(user.uid).set({
-                        examDate: examDate
-                    }, { merge: true });
-                    showMessageElement(examDateMessage, 'Exam date saved successfully!', 'success');
-                    updateDaysRemainingDisplay(examDate);
-                } catch (error) {
-                    console.error("Error saving exam date:", error);
-                    showMessageElement(examDateMessage, 'Error saving exam date: ' + error.message, 'error');
-                } finally {
-                     setButtonLoading(saveExamDateButton, examDateSpinner, false);
-                }
-            });
-        }
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.main-nav .nav-tab').forEach(tab => {
-                tab.classList.remove('active');
-                tab.setAttribute('aria-selected', 'false');
-            });
-            // No specific tab is "active" on the settings page itself by default.
-        });
-
-    </script>
-</body>
+    </body>
 </html>
