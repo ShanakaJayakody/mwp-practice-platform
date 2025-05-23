@@ -3,658 +3,427 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Student Dashboard</title>
+    <title>Home - UCAT Platform</title>
     <link rel="icon" href="https://ik.imagekit.io/mwp/2.svg?updatedAt=1745982956185" type="image/svg+xml">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            /* M3 Color System - Light Mode */
+            /* M3 Color Palette - Light Theme */
             --md-sys-color-primary: #1967D2;
             --md-sys-color-on-primary: #FFFFFF;
             --md-sys-color-primary-container: #D1E3FF;
             --md-sys-color-on-primary-container: #001E3A;
-            --md-sys-color-secondary: #4285F4;
+            --md-sys-color-secondary: #5E89C2; /* Example desaturated blue */
             --md-sys-color-on-secondary: #FFFFFF;
-            --md-sys-color-accent: #FF6D00;
-            --md-sys-color-on-accent: #FFFFFF;
-            --md-sys-color-background: #F8F9FA;
+            --md-sys-color-secondary-container: #D8E2FF;
+            --md-sys-color-on-secondary-container: #001A43;
+            --md-sys-color-tertiary: #7D5260; /* Example, M3 Tertiary */
+            --md-sys-color-on-tertiary: #FFFFFF;
+            --md-sys-color-tertiary-container: #FFD8E4;
+            --md-sys-color-on-tertiary-container: #31111D;
+            --md-sys-color-accent-cta: #FF6D00; 
+            --md-sys-color-on-accent-cta: #FFFFFF;
+            --md-sys-color-background: #F8F9FA; 
             --md-sys-color-on-background: #1F1F1F;
-            --md-sys-color-surface: #FFFFFF;
+            --md-sys-color-surface: #FFFFFF; 
             --md-sys-color-on-surface: #1F1F1F;
+            --md-sys-color-surface-variant: #E1E3E5; 
             --md-sys-color-on-surface-variant: #444746;
             --md-sys-color-outline: #747775;
             --md-sys-color-error: #D93025;
             --md-sys-color-on-error: #FFFFFF;
-            --md-sys-color-success: #1E8E3E;
+            --md-sys-color-success: #1E8E3E; /* From design doc */
             --md-sys-color-on-success: #FFFFFF;
-            --md-sys-color-warning: #F9AB00;
-            --md-sys-color-on-warning: #FFFFFF;
+            --md-sys-color-warning: #F9AB00; /* From design doc */
+            --md-sys-color-on-warning: #000000;
 
-            /* Legacy color mappings for backward compatibility */
-            --color-primary: var(--md-sys-color-primary);
-            --color-primary-dark: #0F4C9C;
-            --color-primary-light: var(--md-sys-color-primary-container);
-            --color-primary-bg: var(--md-sys-color-primary-container);
-            --color-success: var(--md-sys-color-success);
-            --color-warning: var(--md-sys-color-warning);
-            --color-danger: var(--md-sys-color-error);
-            --color-text: var(--md-sys-color-on-background);
-            --color-text-secondary: var(--md-sys-color-on-surface-variant);
-            --color-text-tertiary: #6B7280;
-            --color-bg: var(--md-sys-color-background);
-            --color-bg-secondary: #F1F3F4;
-            --color-border: var(--md-sys-color-outline);
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            --radius-sm: 0.375rem;
-            --radius: 0.5rem;
-            --radius-md: 0.75rem;
-            --radius-lg: 1rem;
-            --transition: 220ms cubic-bezier(0.4, 0, 0.2, 1);
-        }
+            /* M3 Typography */
+            --md-sys-font-family-name: 'Roboto', sans-serif;
+            --md-sys-typescale-display-large-font-size: 57px;
+            --md-sys-typescale-display-large-line-height: 64px;
+            --md-sys-typescale-display-medium-font-size: 45px;
+            --md-sys-typescale-display-medium-line-height: 52px;
+            --md-sys-typescale-headline-large-font-size: 32px;
+            --md-sys-typescale-headline-large-line-height: 40px;
+            --md-sys-typescale-headline-medium-font-size: 28px;
+            --md-sys-typescale-headline-medium-line-height: 36px;
+            --md-sys-typescale-headline-small-font-size: 24px;
+            --md-sys-typescale-headline-small-line-height: 32px;
+            --md-sys-typescale-title-large-font-size: 22px;
+            --md-sys-typescale-title-large-line-height: 28px;
+            --md-sys-typescale-title-medium-font-size: 16px;
+            --md-sys-typescale-title-medium-line-height: 24px;
+            --md-sys-typescale-title-small-font-size: 14px;
+            --md-sys-typescale-title-small-line-height: 20px;
+            --md-sys-typescale-body-large-font-size: 16px;
+            --md-sys-typescale-body-large-line-height: 24px;
+            --md-sys-typescale-body-medium-font-size: 14px;
+            --md-sys-typescale-body-medium-line-height: 20px;
+            --md-sys-typescale-label-large-font-size: 14px;
+            --md-sys-typescale-label-large-line-height: 20px;
+            --md-sys-font-weight-regular: 400;
+            --md-sys-font-weight-medium: 500;
+            --md-sys-font-weight-bold: 700;
 
-        /* Dark Mode Support */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                /* M3 Color System - Dark Mode */
-                --md-sys-color-primary: #AECBFA;
-                --md-sys-color-on-primary: #00325B;
-                --md-sys-color-primary-container: #00497E;
-                --md-sys-color-on-primary-container: #D1E3FF;
-                --md-sys-color-secondary: #A8C7FA;
-                --md-sys-color-on-secondary: #0A315E;
-                --md-sys-color-accent: #FFB74D;
-                --md-sys-color-on-accent: #542F00;
-                --md-sys-color-background: #1F1F1F;
-                --md-sys-color-on-background: #E3E3E3;
-                --md-sys-color-surface: #2B2B2B;
-                --md-sys-color-on-surface: #E3E3E3;
-                --md-sys-color-on-surface-variant: #C4C7C5;
-                --md-sys-color-outline: #8E918F;
-                --md-sys-color-error: #F2B8B5;
-                --md-sys-color-on-error: #601410;
-                --md-sys-color-success: #A5D6A7;
-                --md-sys-color-on-success: #0D3C1E;
-                --md-sys-color-warning: #FFD54F;
-                --md-sys-color-on-warning: #5D4037;
+            /* M3 Spacing */
+            --md-sys-spacing-unit: 0.5rem; /* 8px */
+            --md-sys-spacing-xs: 0.5rem;  /* 8px */
+            --md-sys-spacing-s: 0.75rem;   /* 12px */
+            --md-sys-spacing-m: 1rem;     /* 16px */
+            --md-sys-spacing-l: 1.5rem;   /* 24px */
+            --md-sys-spacing-xl: 2rem;    /* 32px */
+            --md-sys-spacing-xxl: 3rem;   /* 48px */
+            
+            /* M3 Shape */
+            --md-sys-shape-corner-extra-small: 0.25rem; /* 4dp */
+            --md-sys-shape-corner-small: 0.5rem; /* 8dp */
+            --md-sys-shape-corner-medium: 0.75rem; /* 12dp M3 Card default */
+            --md-sys-shape-corner-large: 1rem;    /* 16dp */
+            --md-sys-shape-corner-full: 9999px;
+            
+            /* M3 Elevation */
+            --md-sys-elevation-level0: none;
+            --md-sys-elevation-level1: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0,0,0,0.15); /* M3 Level 1 */
+            --md-sys-elevation-level2: 0px 1px 2px rgba(0,0,0,0.3), 0px 2px 6px 2px rgba(0,0,0,0.15); /* M3 Level 2 */
 
-                /* Updated legacy mappings for dark mode */
-                --color-primary-dark: #7BAAF7;
-                --color-bg-secondary: #383838;
-                --color-text-tertiary: #9AA0A6;
-                --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-                --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-                --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
-                --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
-            }
-        }
-
-        /* Manual dark mode class override */
-        .dark-theme {
-            --md-sys-color-primary: #AECBFA;
-            --md-sys-color-on-primary: #00325B;
-            --md-sys-color-primary-container: #00497E;
-            --md-sys-color-on-primary-container: #D1E3FF;
-            --md-sys-color-secondary: #A8C7FA;
-            --md-sys-color-on-secondary: #0A315E;
-            --md-sys-color-accent: #FFB74D;
-            --md-sys-color-on-accent: #542F00;
-            --md-sys-color-background: #1F1F1F;
-            --md-sys-color-on-background: #E3E3E3;
-            --md-sys-color-surface: #2B2B2B;
-            --md-sys-color-on-surface: #E3E3E3;
-            --md-sys-color-on-surface-variant: #C4C7C5;
-            --md-sys-color-outline: #8E918F;
-            --md-sys-color-error: #F2B8B5;
-            --md-sys-color-on-error: #601410;
-            --md-sys-color-success: #A5D6A7;
-            --md-sys-color-on-success: #0D3C1E;
-            --md-sys-color-warning: #FFD54F;
-            --md-sys-color-on-warning: #5D4037;
-
-            --color-primary-dark: #7BAAF7;
-            --color-bg-secondary: #383838;
-            --color-text-tertiary: #9AA0A6;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            /* Transitions */
+            --md-sys-motion-duration-short: 150ms;
+            --md-sys-motion-easing-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: var(--md-sys-font-family-name);
             background-color: var(--md-sys-color-background);
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            padding: 0;
             color: var(--md-sys-color-on-background);
-            line-height: 1.5;
+            line-height: var(--md-sys-typescale-body-large-line-height);
+            display: flex;
+            flex-direction: column; 
+            min-height: 100vh;
+            margin:0;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
 
         .dashboard-wrapper {
-            background-color: var(--md-sys-color-surface);
+            background-color: var(--md-sys-color-background); 
             width: 100%;
-            margin: 0;
-            min-height: 100vh;
+            flex-grow: 1; 
             display: flex;
             flex-direction: column;
-            overflow-x: hidden;
         }
 
         .dashboard-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 1.5rem;
-            background-color: var(--md-sys-color-surface);
-            border-bottom: 1px solid var(--md-sys-color-outline);
-            box-shadow: var(--shadow-sm);
+            padding: var(--md-sys-spacing-m) var(--md-sys-spacing-l);
+            background-color: var(--md-sys-color-surface); 
+            box-shadow: var(--md-sys-elevation-level1);
             position: sticky;
             top: 0;
-            z-index: 40;
+            z-index: 1000;
         }
-
-        .dashboard-header .logo-small {
-            max-width: 132px;
-            transition: all var(--transition);
-        }
-
-        .dashboard-header .logo-small:hover {
-            transform: scale(1.03);
-        }
+        .dashboard-header .logo-small { max-width: 132px; }
+        .settings-icon span { color: var(--md-sys-color-on-surface-variant); transition: color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard); }
+        .settings-icon:hover span { color: var(--md-sys-color-primary); }
 
         .main-nav {
             display: flex;
             justify-content: center;
             background-color: var(--md-sys-color-surface);
-            padding: 0.25rem 0;
-            border-bottom: 1px solid var(--md-sys-color-outline);
-            box-shadow: var(--shadow-sm);
+            padding: var(--md-sys-spacing-xxs) 0;
+            box-shadow: var(--md-sys-elevation-level1);
             position: sticky;
-            top: 61px;
-            z-index: 30;
+            top: 68px; /* Adjust based on actual header height. Initial was 61px, could be more with padding */
+            z-index: 999;
+            overflow-x: auto; /* Allow horizontal scroll on small screens */
         }
-
         .nav-tab {
-            padding: 0.875rem 1.5rem;
-            margin: 0 0.5rem;
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l);
+            margin: 0 var(--md-sys-spacing-xs);
             cursor: pointer;
-            font-weight: 500;
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            font-size: var(--md-sys-typescale-label-large-font-size);
             color: var(--md-sys-color-on-surface-variant);
             border-bottom: 2px solid transparent;
-            transition: color var(--transition), background-color var(--transition);
-            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+            transition: color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard), 
+                        border-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+            border-radius: var(--md-sys-shape-corner-small) var(--md-sys-shape-corner-small) 0 0;
             position: relative;
-            user-select: none;
             text-decoration: none;
+            display: inline-flex; align-items: center; gap: var(--md-sys-spacing-xs);
+            white-space: nowrap; /* Prevent tabs from wrapping */
         }
-        
-        .nav-tab::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -2px;
-            width: 100%;
-            height: 2px;
-            background-color: var(--md-sys-color-primary);
-            transform: scaleX(0);
-            transform-origin: center;
-            transition: transform 0.3s ease-out;
-        }
-
-        .nav-tab:hover {
-            color: var(--md-sys-color-primary);
-            background-color: var(--md-sys-color-primary-container);
-        }
-        
-        .nav-tab:hover::after {
-            transform: scaleX(1);
-        }
-
+        .nav-tab:hover { color: var(--md-sys-color-primary); }
         .nav-tab.active {
             color: var(--md-sys-color-primary);
-            background-color: var(--md-sys-color-primary-container);
+            border-bottom-color: var(--md-sys-color-primary);
         }
-        
-        .nav-tab.active::after {
-            transform: scaleX(1);
-        }
-
         .nav-tab-disabled {
             color: var(--md-sys-color-on-surface-variant);
-            cursor: not-allowed;
-            opacity: 0.7;
+            opacity: 0.38; cursor: not-allowed;
         }
-
         .nav-tab-disabled .coming-soon-inline {
-            font-size: 0.65rem;
-            color: var(--md-sys-color-on-surface-variant);
-            margin-left: 4px;
-            background-color: var(--color-bg-secondary);
-            padding: 0.1rem 0.4rem;
-            border-radius: 1rem;
-        }
-
-        .tests-dropdown-container {
-            position: relative;
-        }
-
-        .tests-dropdown-content {
-            opacity: 0;
-            visibility: hidden;
-            position: absolute;
-            background-color: var(--md-sys-color-surface);
-            min-width: 200px;
-            box-shadow: var(--shadow-md);
-            z-index: 50;
-            border-radius: var(--radius);
-            margin-top: 0.25rem;
-            border: 1px solid var(--md-sys-color-outline);
-            transform: translateY(-10px);
-            transition: all var(--transition);
-            overflow: hidden;
-        }
-
-        .tests-dropdown-container:hover .tests-dropdown-content {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .dropdown-item {
-            color: var(--md-sys-color-on-surface-variant);
-            padding: 0.75rem 1rem;
-            text-decoration: none;
-            display: block;
-            font-size: 0.9rem;
-            border-bottom: 1px solid var(--md-sys-color-outline);
-            transition: all var(--transition);
-        }
-
-        .dropdown-item:last-child {
-            border-bottom: none;
-        }
-
-        .dropdown-item:hover:not(.disabled) {
-            background-color: var(--md-sys-color-primary-container);
-            color: var(--md-sys-color-on-primary-container);
-            padding-left: 1.25rem;
+            font-size: 0.65rem; margin-left: var(--md-sys-spacing-xxs);
+            background-color: var(--md-sys-color-surface-variant); color: var(--md-sys-color-on-surface-variant);
+            padding: 0.1rem 0.4rem; border-radius: var(--md-sys-shape-corner-full);
         }
         
-        .dropdown-item.disabled {
-            color: var(--md-sys-color-on-surface-variant);
-            cursor: not-allowed;
-            background-color: var(--color-bg-secondary);
-            opacity: 0.7;
-        }
-
-        .dropdown-item.disabled .coming-soon-inline {
-            font-size: 0.65rem;
-            color: var(--md-sys-color-on-surface-variant);
-            margin-left: 4px;
-            background-color: rgba(255, 255, 255, 0.7);
-            padding: 0.1rem 0.4rem;
-            border-radius: 1rem;
-        }
-
         .welcome-user {
-            font-size: 0.9rem;
+            font-size: var(--md-sys-typescale-body-medium-font-size);
             color: var(--md-sys-color-on-surface-variant);
-            display: flex;
-            align-items: center;
+            display: flex; align-items: center;
+        }
+        .welcome-user::before { /* Online indicator dot */
+            content: ""; display: inline-block; width: 8px; height: 8px;
+            background-color: var(--md-sys-color-success); /* Green for online */
+            border-radius: 50%; margin-right: var(--md-sys-spacing-xs);
+        }
+        .btn-logout { /* M3 Filled button with Error color */
+            background-color: var(--md-sys-color-error); color: var(--md-sys-color-on-error);
+            padding: var(--md-sys-spacing-xs) var(--md-sys-spacing-m);
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-size: var(--md-sys-typescale-label-large-font-size);
+            border-radius: var(--md-sys-shape-corner-full);
+            transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+            border: none; cursor: pointer; display: inline-flex; align-items: center; gap: var(--md-sys-spacing-xs);
+        }
+        .btn-logout:hover { background-color: color-mix(in srgb, var(--md-sys-color-error) 90%, black); }
+        
+        .dashboard-content-area {
+            padding: var(--md-sys-spacing-l); /* 24px */
+            flex-grow: 1;
+            overflow-y: auto;
         }
 
-        .welcome-user::before {
-            content: "";
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background-color: var(--md-sys-color-success);
-            border-radius: 50%;
-            margin-right: 8px;
+        #home-content {
+            color: var(--md-sys-color-on-background);
         }
-        
-        .btn-logout {
-            background-color: var(--md-sys-color-error);
-            color: var(--md-sys-color-on-error);
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-            border-radius: var(--radius);
-            transition: all var(--transition);
-            border: none;
-            cursor: pointer;
+        #home-content .animated-welcome-text {
+            font-family: var(--md-sys-typescale-display-medium-font-family-name);
+            font-size: var(--md-sys-typescale-display-medium-font-size);
+            line-height: var(--md-sys-typescale-display-medium-line-height);
+            font-weight: var(--md-sys-font-weight-regular);
+            color: var(--md-sys-color-on-background); 
+        }
+        #home-content .animated-welcome-text .welcome-part1 { color: var(--md-sys-color-secondary); }
+        #home-content .animated-welcome-text .welcome-part2 { color: var(--md-sys-color-primary); }
+         @keyframes slideInFromLeft {
+            from { opacity: 0; transform: translateX(-30px); } 
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .animated-welcome-text { animation: slideInFromLeft 0.6s var(--md-sys-motion-easing-standard) forwards; opacity: 0; }
+
+        #home-content .subtitle-text { /* Replaced .text-lg */
+            font-size: var(--md-sys-typescale-title-large-font-size); /* Larger subtitle */
+            line-height: var(--md-sys-typescale-title-large-line-height);
+            color: var(--md-sys-color-on-surface-variant); 
+            margin-top: var(--md-sys-spacing-xs);
         }
 
-        .btn-logout:hover {
-            background-color: #B71C1C;
-            box-shadow: var(--shadow);
-        }
-        
-        .hidden {
-            display: none !important;
-        }
-        
-        .auth-message-container {
+        /* M3 Card Styling for Dashboard Widgets */
+        .info-card {
+            background-color: var(--md-sys-color-surface);
+            padding: var(--md-sys-spacing-l); /* 24px */
+            border-radius: var(--md-sys-shape-corner-medium); /* 12dp */
+            box-shadow: var(--md-sys-elevation-level1);
+            transition: box-shadow var(--md-sys-motion-duration-medium) var(--md-sys-motion-easing-standard);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 80vh;
             text-align: center;
-            padding: 2rem;
         }
+        .info-card:hover { box-shadow: var(--md-sys-elevation-level2); transform: translateY(-2px); }
+        .info-card .material-symbols-outlined {
+            font-size: 36px; 
+            margin-bottom: var(--md-sys-spacing-m); 
+        }
+        .info-card h3 { /* Title Medium */
+            font-family: var(--md-sys-typescale-title-medium-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            font-size: var(--md-sys-typescale-title-medium-font-size);
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: var(--md-sys-spacing-xs); 
+        }
+        .info-card p.metric { /* Display Small/Medium */
+            font-family: var(--md-sys-typescale-headline-medium-font-family-name); 
+            font-weight: var(--md-sys-font-weight-regular);
+            font-size: var(--md-sys-typescale-headline-medium-font-size);
+            /* Colors defined inline for specific metrics */
+        }
+        #home-total-activities.metric { color: var(--md-sys-color-primary); }
+        #home-average-score.metric { color: var(--md-sys-color-success); }
+        #home-time-practiced.metric { color: var(--md-sys-color-tertiary); } 
 
-        .dashboard-content-area {
-            padding: 1.5rem;
-            text-align: left;
-            flex-grow: 1;
-            background-color: var(--md-sys-color-background);
-            overflow-y: auto;
+
+        .action-card { /* For "Continue Your Journey" links - M3 Card */
+            display: block;
+            background-color: var(--md-sys-color-primary-container);
+            padding: var(--md-sys-spacing-l);
+            border-radius: var(--md-sys-shape-corner-medium);
+            transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
+                        transform var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
+                        box-shadow var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+            text-align: center;
+            color: var(--md-sys-color-on-primary-container);
+            text-decoration: none;
+            box-shadow: var(--md-sys-elevation-level0);
+        }
+        .action-card:hover {
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 20%, var(--md-sys-color-primary-container));
+            transform: translateY(-2px);
+            box-shadow: var(--md-sys-elevation-level1);
+        }
+        .action-card h3 { /* Title Medium */
+            font-family: var(--md-sys-typescale-title-medium-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            font-size: var(--md-sys-typescale-title-medium-font-size);
+            margin-bottom: var(--md-sys-spacing-xs);
+        }
+        .action-card p { /* Body Medium */
+            font-family: var(--md-sys-typescale-body-medium-font-family-name);
+            font-size: var(--md-sys-typescale-body-medium-font-size);
+            color: var(--md-sys-color-on-primary-container);
+            opacity: 0.8;
         }
         
-        /* Updated color applications for M3 system */
-        #home-content .text-blue-600 { color: var(--md-sys-color-primary); }
-        #home-content .text-green-600 { color: var(--md-sys-color-success); }
-        #home-content .text-yellow-600 { color: var(--md-sys-color-warning); }
-        #home-content .bg-blue-50 { background-color: var(--md-sys-color-primary-container); }
-        #home-content .hover\:bg-blue-100:hover { background-color: var(--color-primary-light); opacity:0.6; }
-        #home-content .text-blue-700 { color: var(--color-primary-dark); }
-        #home-content .bg-indigo-50 { background-color: #e0e7ff; }
-        #home-content .hover\:bg-indigo-100:hover { background-color: #c7d2fe; }
-        #home-content .text-indigo-700 { color: #4338ca; }
-        #home-content .text-indigo-600 { color: #4f46e5; }
-        #home-content .bg-green-500 { background-color: var(--md-sys-color-success); }
-        #home-content .hover\:bg-green-600:hover { background-color: #059669; }
+        #home-focus-groups-link.action-card { /* Example for a secondary action card */
+            background-color: var(--md-sys-color-secondary-container);
+            color: var(--md-sys-color-on-secondary-container);
+        }
+         #home-focus-groups-link.action-card:hover {
+            background-color: color-mix(in srgb, var(--md-sys-color-secondary) 20%, var(--md-sys-color-secondary-container));
+        }
 
+        /* Button for "View All Tests" - M3 Filled Button */
+        #home-view-all-tests-btn {
+            background-color: var(--md-sys-color-accent-cta); 
+            color: var(--md-sys-color-on-accent-cta);
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            font-size: var(--md-sys-typescale-label-large-font-size);
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l); 
+            border-radius: var(--md-sys-shape-corner-full);
+            box-shadow: var(--md-sys-elevation-level0);
+            transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
+                        box-shadow var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+            border: none; cursor:pointer; text-decoration: none; display: inline-flex; align-items:center; gap: var(--md-sys-spacing-xs);
+        }
+        #home-view-all-tests-btn:hover {
+            background-color: color-mix(in srgb, var(--md-sys-color-accent-cta) 92%, black );
+            box-shadow: var(--md-sys-elevation-level1);
+        }
+        
+        /* Calendar Styling (Basic M3 adaptation) */
         .setup-prep-card, .activity-calendar-card {
             background-color: var(--md-sys-color-surface);
-            padding: 1.5rem;
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow);
-            margin-bottom: 1.5rem;
-            border: 1px solid var(--md-sys-color-outline);
+            padding: var(--md-sys-spacing-l);
+            border-radius: var(--md-sys-shape-corner-medium);
+            box-shadow: var(--md-sys-elevation-level1);
+            margin-bottom: var(--md-sys-spacing-l);
         }
         .setup-prep-card h2, .activity-calendar-card h2 {
-            font-size: 1.25rem;
-            font-weight: 600;
+            font-family: var(--md-sys-typescale-title-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            font-size: var(--md-sys-typescale-title-large-font-size);
             color: var(--md-sys-color-on-surface);
-            margin-bottom: 1rem;
+            margin-bottom: var(--md-sys-spacing-m);
         }
-        .input-group {
-            margin-bottom: 1rem;
-        }
+        .input-group { margin-bottom: var(--md-sys-spacing-l); }
         .input-group label {
             display: block;
-            font-size: 0.875rem;
-            font-weight: 500;
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
             color: var(--md-sys-color-on-surface-variant);
-            margin-bottom: 0.25rem;
+            margin-bottom: var(--md-sys-spacing-xs);
         }
-        .input-group input[type="text"],
-        .input-group input[type="date"] {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--md-sys-color-outline);
-            border-radius: var(--radius-sm);
-            font-size: 0.9rem;
-            transition: border-color var(--transition);
-            background-color: var(--md-sys-color-surface);
-            color: var(--md-sys-color-on-surface);
+        .input-group input[type="text"], .input-group input[type="date"] {
+             background-color: color-mix(in srgb, var(--md-sys-color-primary) 4%, var(--md-sys-color-surface)); 
+             border: none;
+             border-bottom: 1px solid var(--md-sys-color-on-surface-variant);
+             border-radius: var(--md-sys-shape-corner-extra-small) var(--md-sys-shape-corner-extra-small) 0 0; 
+             padding: var(--md-sys-spacing-m);
+             width: 100%;
+             font-size: var(--md-sys-typescale-body-large-font-size);
+             color: var(--md-sys-color-on-surface);
         }
-        .input-group input[type="text"]:focus,
-        .input-group input[type="date"]:focus {
+         .input-group input[type="text"]:focus, .input-group input[type="date"]:focus {
+            border-bottom: 2px solid var(--md-sys-color-primary);
             outline: none;
-            border-color: var(--md-sys-color-primary);
-            box-shadow: 0 0 0 2px rgba(25, 103, 210, 0.2);
+            box-shadow: none;
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, var(--md-sys-color-surface));
+         }
+        .input-group input[type="text"]:read-only {
+             background-color: var(--md-sys-color-surface-variant);
+             color: var(--md-sys-color-on-surface-variant);
+             cursor: default;
+             border-bottom-color: var(--md-sys-color-outline);
         }
-        .days-remaining {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--md-sys-color-primary);
-            margin-left: 0.75rem;
+        .days-remaining, .consistency-score {
+             color: var(--md-sys-color-primary);
+             font-family: var(--md-sys-typescale-title-medium-font-family-name);
+             font-weight: var(--md-sys-font-weight-medium);
+             margin-top: var(--md-sys-spacing-xs);
         }
-        .consistency-score {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--md-sys-color-success);
-        }
-
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        .calendar-nav button {
-            background: none;
-            border: none;
-            color: var(--md-sys-color-primary);
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-        .calendar-nav button:hover {
-            color: var(--color-primary-dark);
-        }
-        .calendar-grid-container {
-            display: flex;
-            gap: 1.5rem;
-            overflow-x: auto;
-        }
-        .calendar-month {
-            flex-shrink: 0;
-        }
-        .calendar-month-label {
-            font-size: 1rem;
-            font-weight: 500;
-            text-align: center;
-            margin-bottom: 0.5rem;
-            color: var(--md-sys-color-on-surface);
-        }
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
-        }
-        .calendar-day-label {
-            font-size: 0.75rem;
-            text-align: center;
-            color: var(--md-sys-color-on-surface-variant);
-            padding-bottom: 4px;
-        }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--md-sys-spacing-m);}
+        .calendar-nav button { color: var(--md-sys-color-primary); background: none; border: none; cursor: pointer; padding: var(--md-sys-spacing-xs); border-radius: 50%; }
+        .calendar-nav button:hover { background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); }
+        #current-month-year { font-family: var(--md-sys-typescale-title-medium-font-family-name); font-weight: var(--md-sys-font-weight-medium); color: var(--md-sys-color-on-surface); }
+        
+        .calendar-grid-container { display: flex; gap: var(--md-sys-spacing-l); }
+        .calendar-month { flex: 1; }
+        .calendar-month-label { font-family: var(--md-sys-typescale-title-medium-font-family-name); color: var(--md-sys-color-on-surface-variant); margin-bottom: var(--md-sys-spacing-s); text-align: center; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: var(--md-sys-spacing-xs); }
+        .calendar-day-label, .calendar-day { text-align: center; padding: var(--md-sys-spacing-xs); border-radius: var(--md-sys-shape-corner-small); }
+        .calendar-day-label { font-family: var(--md-sys-typescale-label-large-font-family-name); color: var(--md-sys-color-on-surface-variant); font-weight: var(--md-sys-font-weight-medium); }
         .calendar-day {
-            width: 30px;
-            height: 30px;
-            border-radius: var(--radius-sm);
-            background-color: var(--color-bg-secondary);
-            border: 1px solid var(--md-sys-color-outline);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            color: var(--md-sys-color-on-surface);
+            background-color: var(--md-sys-color-surface-variant);
+            border: 1px solid var(--md-sys-color-outline-variant);
+            color: var(--md-sys-color-on-surface-variant);
+            font-size: var(--md-sys-typescale-body-medium-font-size);
+            aspect-ratio: 1 / 1; /* Make cells square */
+            display: flex; align-items: center; justify-content: center;
         }
         .calendar-day.empty { background-color: transparent; border: none; }
-        .calendar-day.today {
-            background-color: var(--md-sys-color-primary);
-            color: var(--md-sys-color-on-primary);
-            font-weight: bold;
-            border-color: var(--color-primary-dark);
-        }
-        .calendar-day.practice-some {
-            background-color: #a7f3d0;
-            border-color: #6ee7b7;
-            color: #065f46;
-        }
-        .calendar-day.practice-lots {
-            background-color: var(--md-sys-color-success);
-            border-color: var(--md-sys-color-success);
-            color: var(--md-sys-color-on-success);
-        }
-        .calendar-legend {
-            display: flex;
-            justify-content: flex-start;
-            gap: 1rem;
-            margin-top: 1rem;
-            font-size: 0.8rem;
-        }
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            color: var(--md-sys-color-on-surface-variant);
-        }
-        .legend-color-box {
-            width: 15px;
-            height: 15px;
-            border-radius: 3px;
-        }
-
-        /* Accent color applications for CTAs and important highlights */
-        .btn-accent {
-            background-color: var(--md-sys-color-accent);
-            color: var(--md-sys-color-on-accent);
-        }
-
-        .btn-accent:hover {
-            background-color: #E65100;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        /* Success indicators */
-        .success-indicator {
-            color: var(--md-sys-color-success);
-            background-color: rgba(30, 142, 62, 0.1);
-            padding: 0.5rem 1rem;
-            border-radius: var(--radius);
-            border: 1px solid var(--md-sys-color-success);
-        }
-
-        /* Warning indicators */
-        .warning-indicator {
-            color: var(--md-sys-color-warning);
-            background-color: rgba(249, 171, 0, 0.1);
-            padding: 0.5rem 1rem;
-            border-radius: var(--radius);
-            border: 1px solid var(--md-sys-color-warning);
-        }
-
-        /* Enhanced card styling with M3 principles */
-        .card {
-            background-color: var(--md-sys-color-surface);
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow);
-            transition: all var(--transition);
-            border: 1px solid var(--md-sys-color-outline);
-        }
-
-        .card:hover {
-            box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
-        }
-
-        .card-elevated {
-            background-color: var(--md-sys-color-surface);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
-            border: none;
-        }
+        .calendar-day.today { background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); border-color: var(--md-sys-color-primary); font-weight: var(--md-sys-font-weight-bold); }
+        .calendar-day.practice-some { background-color: var(--md-sys-color-secondary-container); border-color: var(--md-sys-color-secondary); color: var(--md-sys-color-on-secondary-container); }
+        .calendar-day.practice-lots { background-color: var(--md-sys-color-tertiary-container); border-color: var(--md-sys-color-tertiary); color: var(--md-sys-color-on-tertiary-container);}
+        .calendar-legend { display: flex; gap: var(--md-sys-spacing-m); margin-top: var(--md-sys-spacing-m); font-size: var(--md-sys-typescale-body-small-font-size); color: var(--md-sys-color-on-surface-variant); }
+        .legend-item { display: flex; align-items: center; gap: var(--md-sys-spacing-xs); }
+        .legend-color-box { width: 12px; height: 12px; border-radius: var(--md-sys-shape-corner-extra-small); }
+        
+        .hidden { display: none !important; } 
 
         @media (max-width: 768px) {
-            .dashboard-content-area {
-                padding: 1rem;
-            }
-            .nav-tab {
-                padding: 0.75rem 1rem;
-                margin: 0 0.25rem;
-                font-size: 0.9rem;
-            }
-            .main-nav {
-                overflow-x: auto;
-                justify-content: flex-start;
-                padding: 0.25rem 0.5rem;
-            }
-            .calendar-day {
-                width: 25px;
-                height: 25px;
-            }
-            .calendar-grid-container {
-                gap: 1rem;
-            }
+            .main-nav { justify-content: flex-start; } /* Keep tabs scrollable */
+            .dashboard-content-area { padding: var(--md-sys-spacing-m); }
+            #home-content .grid-cols-1.lg\:grid-cols-3 { grid-template-columns: 1fr; }
+            #home-content .grid-cols-1.md\:grid-cols-3 { grid-template-columns: 1fr; }
+            .calendar-grid-container { flex-direction: column; } /* Stack calendars on smaller screens */
+            #home-content .animated-welcome-text { font-size: var(--md-sys-typescale-headline-large-font-size); line-height: var(--md-sys-typescale-headline-large-line-height); }
+            #home-content .subtitle-text { font-size: var(--md-sys-typescale-title-medium-font-size); }
         }
-        @media (max-width: 480px) {
-            .dashboard-header {
-                padding: 0.75rem 1rem;
-            }
-            .logo-small {
-                max-width: 110px;
-            }
-            .welcome-user {
-                font-size: 0.8rem;
-            }
-            .btn-logout {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.75rem;
-            }
-            .grid-cols-1.md\:grid-cols-3 {
-                 grid-template-columns: 1fr;
-            }
-            .calendar-grid-container {
-                 flex-direction: column;
-            }
-            .calendar-month {
-                width: 100%;
-            }
-        }
-
-        /* Welcome Message Styling & Animation for home.html */
-        .animated-welcome-text {
-            position: relative;
-            opacity: 0; /* Initial state for animation */
-            white-space: nowrap;
-            display: inline-block;
-        }
-        .animated-welcome-text .welcome-part1 {
-            color: #85C1E9; /* Lighter blue for "Welcome " */
-        }
-        .animated-welcome-text .welcome-part2 {
-            color: #3498DB; /* Vibrant blue for "First Name" */
-        }
-
-        @keyframes slideInFromLeft {
-            0% {
-                transform: translateX(-60px);
-                opacity: 0;
-            }
-            100% {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        /* End Welcome Message Styling & Animation */
-
+         @media (max-width: 480px) {
+            .dashboard-header { padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); }
+            .dashboard-header .logo-small { max-width: 100px; }
+            .welcome-user { display: none; } 
+            .btn-logout { padding: var(--md-sys-spacing-xxs) var(--md-sys-spacing-s); font-size: var(--md-sys-typescale-label-large-font-size); }
+            .nav-tab { padding: var(--md-sys-spacing-s); }
+         }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
 <body>
-    <div id="auth-redirect-message" class="fixed inset-0 bg-gray-100 flex items-center justify-center z-50 hidden">
-        <div class="auth-container bg-white p-8 rounded-lg shadow-xl max-w-md w-full text-center">
+    <div id="auth-redirect-message" class="fixed inset-0 flex items-center justify-center z-50 hidden" style="background-color: var(--md-sys-color-background);">
+        <div class="auth-container bg-white p-8 rounded-lg shadow-xl max-w-md w-full text-center" style="background-color: var(--md-sys-color-surface); border-radius: var(--md-sys-shape-corner-large);">
             <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="mx-auto h-12 w-auto mb-6">
-            <h2 class="text-2xl font-bold text-gray-800 mb-3">Access Denied</h2>
-            <p class="text-gray-600 mb-6">You need to be logged in to view this page.</p>
-            <a href="student_dashboard.html" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
+            <h2 class="text-2xl font-bold mb-3" style="font-family: var(--md-sys-typescale-headline-small-font-family-name); color: var(--md-sys-color-on-surface);">Access Denied</h2>
+            <p class="mb-6" style="color: var(--md-sys-color-on-surface-variant);">You need to be logged in to view this page.</p>
+            <a href="student_dashboard.html" class="inline-block font-semibold py-2 px-6 rounded-full transition-colors" style="background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); font-family: var(--md-sys-typescale-label-large-font-family-name);">
                 Go to Login
             </a>
         </div>
@@ -668,167 +437,156 @@
             <div class="flex items-center">
                 <span class="welcome-user mr-4">Welcome, <span id="student-display-name" class="font-semibold">Student</span></span>
                 <a href="settings.html" aria-label="Account Settings" class="mr-4 settings-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
+                    <span class="material-symbols-outlined">settings</span>
                 </a>
                 <button id="logout-button" class="btn-logout" aria-label="Logout">
+                    <span class="material-symbols-outlined text-sm">logout</span>
                     <span>Logout</span>
                 </button>
             </div>
         </div>
 
         <nav class="main-nav" role="navigation" aria-label="Main Navigation">
-            <a href="home.html" id="nav-home" class="nav-tab active" role="button">Home</a>
-            <a href="practice.html" id="nav-practice-main" class="nav-tab" role="button">Practice</a>
-            <a href="student_dashboard.html#results" id="nav-results" class="nav-tab" role="button">Results</a>
-            <div id="nav-skills" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
-                <span>Skills</span> <span class="coming-soon-inline">Coming Soon</span>
+            <a href="home.html" id="nav-home" class="nav-tab active" role="tab" aria-selected="true">
+                <span class="material-symbols-outlined">home</span>Home
+            </a>
+            <a href="practice.html" id="nav-practice-main" class="nav-tab" role="tab" aria-selected="false">
+                 <span class="material-symbols-outlined">model_training</span>Practice
+            </a>
+            <a href="student_dashboard.html#results" id="nav-results" class="nav-tab" role="tab" aria-selected="false">
+                <span class="material-symbols-outlined">bar_chart</span>Results
+            </a>
+            <div id="nav-skills" class="nav-tab nav-tab-disabled" role="tab" aria-disabled="true">
+                 <span class="material-symbols-outlined">psychology</span>
+                <span>Skills</span> <span class="coming-soon-inline">Soon</span>
             </div>
         </nav>
 
         <main id="dashboard-content-area" class="dashboard-content-area">
-             <div id="auth-message-container" class="auth-message-container hidden">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-red-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                </svg>
-                <h2 class="text-2xl font-bold text-gray-700 mb-2">Access Denied</h2>
-                <p class="text-gray-500 mb-4">You need to be logged in to view this page.</p>
-                <a href="student_dashboard.html" class="text-blue-600 hover:text-blue-800 underline">Go to Login Page</a>
-            </div>
+            <div id="home-content" class="max-w-6xl mx-auto">
+                <div class="mb-10 text-left">
+                    <h1 class="animated-welcome-text">
+                        <span class="welcome-part1">Welcome </span><span id="home-student-first-name" class="welcome-part2">Student</span>
+                    </h1>
+                    <p class="subtitle-text">Ready to ace the UCAT? Here's your personalized dashboard.</p>
+                </div>
 
-            <div id="home-content" class="p-6 md:p-8 text-gray-700">
-                <div class="max-w-6xl mx-auto">
-                    <div class="mb-8 text-left">
-                        <h1 class="text-3xl md:text-4xl font-bold animated-welcome-text">
-                            <span class="welcome-part1">Welcome </span><span id="home-student-first-name" class="welcome-part2">Student</span>
-                        </h1>
-                        <p class="text-lg text-gray-500 mt-1">Ready to ace the UCAT? Here's your personalized dashboard.</p>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                        <div class="lg:col-span-1 setup-prep-card">
-                            <h2>Setup Your Prep</h2>
-                            <div class="input-group">
-                                <label for="user-name">Your Name:</label>
-                                <input type="text" id="user-name" name="user-name" readonly class="bg-gray-100">
-                            </div>
-                            <div class="input-group">
-                                <label for="exam-date">Date of Your Exam:</label>
-                                <div class="flex items-center">
-                                    <input type="date" id="exam-date" name="exam-date">
-                                    <span id="days-remaining" class="days-remaining ml-3"></span>
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <label>Daily Plan Consistency:</label>
-                                <p id="consistency-score" class="consistency-score">0 Day(s) Completed</p>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="lg:col-span-1 setup-prep-card">
+                        <h2>Setup Your Prep</h2>
+                        <div class="input-group">
+                            <label for="user-name">Your Name:</label>
+                            <input type="text" id="user-name" name="user-name" readonly>
+                        </div>
+                        <div class="input-group">
+                            <label for="exam-date">Date of Your Exam:</label>
+                            <div class="flex items-center">
+                                <input type="date" id="exam-date" name="exam-date">
+                                <span id="days-remaining" class="days-remaining ml-3"></span>
                             </div>
                         </div>
-
-                        <div class="lg:col-span-2 activity-calendar-card">
-                            <div class="calendar-header">
-                                <h2>Activity Calendar</h2>
-                                <div class="calendar-nav">
-                                    <button id="prev-month-btn">&lt;</button>
-                                    <span id="current-month-year" class="mx-2"></span>
-                                    <button id="next-month-btn">&gt;</button>
-                                </div>
-                            </div>
-                            <div id="calendar-grid-container" class="calendar-grid-container">
-                                <div class="calendar-month" id="current-calendar-month">
-                                     <div class="calendar-month-label" id="current-month-label"></div>
-                                     <div class="calendar-grid" id="current-month-grid"></div>
-                                </div>
-                                <div class="calendar-month" id="next-calendar-month">
-                                     <div class="calendar-month-label" id="next-month-label"></div>
-                                     <div class="calendar-grid" id="next-month-grid"></div>
-                                </div>
-                            </div>
-                            <div class="calendar-legend">
-                                <div class="legend-item">
-                                    <div class="legend-color-box" style="background-color: #a7f3d0;"></div>
-                                    <span>Some practice</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-color-box" style="background-color: #34d399;"></div>
-                                    <span>Lots of practice</span>
-                                </div>
-                            </div>
+                        <div class="input-group">
+                            <label>Daily Plan Consistency:</label>
+                            <p id="consistency-score" class="consistency-score">0 Day(s) Completed</p>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center">
-                            <svg class="w-12 h-12 text-blue-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-                            <h3 class="text-xl font-semibold text-gray-700 mb-1">Activities Completed</h3>
-                            <p id="home-total-activities" class="text-3xl font-bold text-blue-600">0</p>
+                    <div class="lg:col-span-2 activity-calendar-card">
+                        <div class="calendar-header">
+                            <h2>Activity Calendar</h2>
+                            <div class="calendar-nav">
+                                <button id="prev-month-btn" aria-label="Previous month"><span class="material-symbols-outlined">arrow_back_ios</span></button>
+                                <span id="current-month-year"></span>
+                                <button id="next-month-btn" aria-label="Next month"><span class="material-symbols-outlined">arrow_forward_ios</span></button>
+                            </div>
                         </div>
-                        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center">
-                            <svg class="w-12 h-12 text-green-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            <h3 class="text-xl font-semibold text-gray-700 mb-1">Average Score</h3>
-                            <p id="home-average-score" class="text-3xl font-bold text-green-600">0%</p>
+                        <div id="calendar-grid-container" class="calendar-grid-container">
+                            <div class="calendar-month" id="current-calendar-month">
+                                 <div class="calendar-month-label" id="current-month-label"></div>
+                                 <div class="calendar-grid" id="current-month-grid"></div>
+                            </div>
+                            <div class="calendar-month" id="next-calendar-month">
+                                 <div class="calendar-month-label" id="next-month-label"></div>
+                                 <div class="calendar-grid" id="next-month-grid"></div>
+                            </div>
                         </div>
-                        <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center">
-                            <svg class="w-12 h-12 text-yellow-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            <h3 class="text-xl font-semibold text-gray-700 mb-1">Time Practiced</h3>
-                            <p id="home-time-practiced" class="text-3xl font-bold text-yellow-600">0h 0m</p>
+                        <div class="calendar-legend">
+                            <div class="legend-item">
+                                <div class="legend-color-box" style="background-color: var(--md-sys-color-secondary-container);"></div>
+                                <span>Some practice</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color-box" style="background-color: var(--md-sys-color-tertiary-container);"></div>
+                                <span>Lots of practice</span>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="bg-white p-6 rounded-xl shadow-lg mb-12">
-                        <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Continue Your Journey</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <a href="QR Test 1.html" class="block bg-blue-50 hover:bg-blue-100 p-6 rounded-lg transition-colors duration-300 text-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                                <h3 class="text-xl font-semibold text-blue-700 mb-2">Practice QR Test 1</h3>
-                                <p class="text-blue-600">Sharpen your Quantitative Reasoning skills.</p>
-                            </a>
-                            <a href="practice.html#focus-groups-content" id="home-focus-groups-link" class="block bg-indigo-50 hover:bg-indigo-100 p-6 rounded-lg transition-colors duration-300 text-center focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">
-                                <h3 class="text-xl font-semibold text-indigo-700 mb-2">Explore Focus Groups</h3>
-                                <p class="text-indigo-600">Target specific areas like Verbal Reasoning.</p>
-                            </a>
-                        </div>
-                         <div class="mt-8 text-center">
-                            <button id="home-view-all-tests-btn" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 text-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
-                                View All Tests
-                            </button>
-                        </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                    <div class="info-card">
+                        <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">checklist</span>
+                        <h3>Activities Completed</h3>
+                        <p id="home-total-activities" class="metric">0</p>
                     </div>
+                    <div class="info-card">
+                         <span class="material-symbols-outlined" style="color: var(--md-sys-color-success);">military_tech</span>
+                        <h3>Average Score</h3>
+                        <p id="home-average-score" class="metric">0%</p>
+                    </div>
+                    <div class="info-card">
+                        <span class="material-symbols-outlined" style="color: var(--md-sys-color-tertiary);">timer</span>
+                        <h3>Time Practiced</h3>
+                        <p id="home-time-practiced" class="metric">0h 0m</p>
+                    </div>
+                </div>
 
-                    <div class="text-center text-gray-500">
-                        <p>"The best way to predict the future is to create it." - Peter Drucker</p>
+                <div class="p-6 rounded-xl shadow-lg mb-12" style="background-color: var(--md-sys-color-surface); border-radius: var(--md-sys-shape-corner-large); box-shadow: var(--md-sys-elevation-level1);">
+                    <h2 class="text-2xl font-semibold mb-6 text-center" style="font-family: var(--md-sys-typescale-headline-small-font-family-name); color: var(--md-sys-color-on-surface);">Continue Your Journey</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <a href="QR Test 1.html" class="action-card">
+                            <h3>Practice QR Test 1</h3>
+                            <p>Sharpen your Quantitative Reasoning skills.</p>
+                        </a>
+                        <a href="practice.html#focus-groups-content" id="home-focus-groups-link" class="action-card">
+                            <h3>Explore Focus Groups</h3>
+                            <p>Target specific areas like Verbal Reasoning.</p>
+                        </a>
                     </div>
+                     <div class="mt-8 text-center">
+                        <a href="practice.html" id="home-view-all-tests-btn">
+                           <span class="material-symbols-outlined">quiz</span> View All Tests
+                        </a>
+                    </div>
+                </div>
+
+                <div class="text-center" style="color: var(--md-sys-color-on-surface-variant); font-family: var(--md-sys-typescale-body-medium-font-family-name);">
+                    <p>"The best way to predict the future is to create it." - Peter Drucker</p>
                 </div>
             </div>
         </main>
     </div>
 
     <script>
-        console.log("Executing JavaScript from home.html -- TOP OF SCRIPT");
-
+        // --- Firebase Configuration ---
         const firebaseConfig = {
-            apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
-            authDomain: "mwp-qr-test-page.firebaseapp.com",
-            projectId: "mwp-qr-test-page",
-            storageBucket: "mwp-qr-test-page.appspot.com",
-            messagingSenderId: "309084045110",
-            appId: "1:309084045110:web:b09ca0fdff84b094963d97",
-            measurementId: "G-4M3ED641M9"
+          apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
+          authDomain: "mwp-qr-test-page.firebaseapp.com",
+          projectId: "mwp-qr-test-page",
+          storageBucket: "mwp-qr-test-page.appspot.com",
+          messagingSenderId: "309084045110",
+          appId: "1:309084045110:web:b09ca0fdff84b094963d97",
+          measurementId: "G-4M3ED641M9"
         };
-
-        let db; // Declare db in a wider scope
-
-        try {
-            if (!firebase.apps.length) {
-                firebase.initializeApp(firebaseConfig);
-            }
-            db = firebase.firestore(); // Assign the Firestore instance
-            console.log("Firebase and Firestore initialized successfully for home.html");
-        } catch (error) {
-            console.error("Firebase initialization error for home.html:", error);
+        
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
         }
-
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        
+        // DOM Elements
         const studentDisplayNameSpan = document.getElementById('student-display-name');
         const homeStudentFirstNameDisplay = document.getElementById('home-student-first-name');
         const userNameInput = document.getElementById('user-name');
@@ -837,7 +595,6 @@
         const consistencyScoreP = document.getElementById('consistency-score');
         const logoutButton = document.getElementById('logout-button');
         const homeContentDiv = document.getElementById('home-content');
-        const authMessageContainer = document.getElementById('auth-message-container');
         const dashboardWrapper = document.getElementById('dashboard-wrapper');
         const authRedirectMessage = document.getElementById('auth-redirect-message');
         const animatedWelcomeText = document.querySelector('#home-content .animated-welcome-text');
@@ -851,170 +608,176 @@
         const nextMonthLabel = document.getElementById('next-month-label');
 
         let currentCalendarDate = new Date();
-        let performanceData = [];
+        let performanceData = []; // Store all fetched performance data
 
-        firebase.auth().onAuthStateChanged(async user => {
+
+        auth.onAuthStateChanged(async user => {
             if (user) {
                 const displayName = user.displayName || user.email || 'Student';
                 const firstName = displayName.split(' ')[0];
 
                 studentDisplayNameSpan.textContent = displayName;
-                if (homeStudentFirstNameDisplay) {
-                    homeStudentFirstNameDisplay.textContent = firstName;
-                }
-                userNameInput.value = displayName;
+                if (homeStudentFirstNameDisplay) homeStudentFirstNameDisplay.textContent = firstName;
+                if (userNameInput) userNameInput.value = displayName;
                 
+                if(authRedirectMessage) authRedirectMessage.classList.add('hidden');
                 dashboardWrapper.classList.remove('hidden');
-                authMessageContainer.classList.add('hidden');
                 homeContentDiv.classList.remove('hidden');
 
                 if (animatedWelcomeText) {
-                    setTimeout(() => {
-                        animatedWelcomeText.style.animation = 'none';
-                        animatedWelcomeText.style.opacity = '0';
-                        animatedWelcomeText.style.transform = 'translateX(-60px)';
-                        animatedWelcomeText.offsetHeight;
-                        animatedWelcomeText.style.animation = 'slideInFromLeft 0.8s ease-out forwards';
-                        animatedWelcomeText.style.opacity = ''; 
-                        animatedWelcomeText.style.transform = '';
-                    }, 100);
+                    animatedWelcomeText.style.animation = 'none';
+                    animatedWelcomeText.offsetHeight; 
+                    animatedWelcomeText.style.animation = null; 
+                    animatedWelcomeText.style.animation = 'slideInFromLeft 0.6s var(--md-sys-motion-easing-standard) forwards';
                 }
 
                 await loadUserPreferences(user);
-                await loadPerformanceData(user);
-                loadHomeData(user);
+                await loadPerformanceData(user); 
+                updateHomeStats(); 
                 updateConsistencyScore();
                 renderCalendars();
 
             } else {
-                window.location.href = "student_dashboard.html";
+                // User is signed out
+                dashboardWrapper.classList.add('hidden');
+                homeContentDiv.classList.add('hidden');
+                if (authRedirectMessage) authRedirectMessage.classList.remove('hidden');
+                // Optional: redirect to login page explicitly
+                // window.location.href = "student_dashboard.html";
             }
         });
 
-        logoutButton.addEventListener('click', () => {
-            if (confirm("Are you sure you want to log out?")) {
-                firebase.auth().signOut().then(() => {
-                    window.location.href = "student_dashboard.html";
-                }).catch((error) => {
-                    console.error("Logout error:", error);
-                    alert("There was an error logging out. Please try again.");
-                });
-            }
-        });
+        if(logoutButton) {
+            logoutButton.addEventListener('click', () => {
+                if (confirm("Are you sure you want to log out?")) {
+                    auth.signOut().then(() => {
+                        window.location.href = "student_dashboard.html"; // Redirect to login after logout
+                    }).catch((error) => {
+                        console.error("Logout error:", error);
+                        alert("There was an error logging out. Please try again.");
+                    });
+                }
+            });
+        }
 
         async function loadUserPreferences(currentUser) {
-            if (!currentUser) return;
+            if (!currentUser || !db) return;
             const userPrefRef = db.collection('userPreferences').doc(currentUser.uid);
             try {
                 const doc = await userPrefRef.get();
                 if (doc.exists) {
                     const data = doc.data();
-                    if (data.examDate) {
+                    if (data.examDate && examDateInput) {
                         examDateInput.value = data.examDate;
                         updateDaysRemaining(data.examDate);
+                    } else {
+                         updateDaysRemaining(); // If no date, show "Not set"
                     }
                 } else {
-                    updateDaysRemaining();
+                    updateDaysRemaining(); // No preferences doc, show "Not set"
                 }
             } catch (error) {
                 console.error("Error loading user preferences:", error);
-                updateDaysRemaining();
+                updateDaysRemaining(); // On error, show "Not set"
             }
         }
+        
+        if(examDateInput){
+            examDateInput.addEventListener('change', async () => {
+                const currentUser = auth.currentUser;
+                if (!currentUser || !db) return;
 
-        examDateInput.addEventListener('change', async () => {
-            const currentUser = firebase.auth().currentUser;
-            if (!currentUser) return;
-
-            const selectedDate = examDateInput.value;
-            if (selectedDate) {
+                const selectedDate = examDateInput.value;
                 try {
-                    await db.collection('userPreferences').doc(currentUser.uid).set({ examDate: selectedDate }, { merge: true });
-                    updateDaysRemaining(selectedDate);
+                    if (selectedDate) {
+                        await db.collection('userPreferences').doc(currentUser.uid).set({ examDate: selectedDate }, { merge: true });
+                        updateDaysRemaining(selectedDate);
+                    } else {
+                        // If date is cleared, remove it from preferences
+                        await db.collection('userPreferences').doc(currentUser.uid).update({ examDate: firebase.firestore.FieldValue.delete() });
+                        updateDaysRemaining(); // Update display to "Not set"
+                    }
                 } catch (error) {
                     console.error("Error saving exam date:", error);
+                    // Optionally, show a user-friendly error message here
                 }
-            } else {
-                try {
-                    await db.collection('userPreferences').doc(currentUser.uid).update({ examDate: firebase.firestore.FieldValue.delete() });
-                    updateDaysRemaining();
-                } catch (error) {
-                    console.error("Error deleting exam date:", error);
-                }
-            }
-        });
+            });
+        }
+
 
         function updateDaysRemaining(selectedDateStr) {
+            if (!daysRemainingSpan) return;
             if (selectedDateStr) {
-                const examDate = new Date(selectedDateStr + "T00:00:00");
+                const examDate = new Date(selectedDateStr + "T00:00:00"); // Ensure it's parsed as local midnight
                 const today = new Date();
-                today.setHours(0,0,0,0);
+                today.setHours(0,0,0,0); 
 
                 if (examDate < today) {
                     daysRemainingSpan.textContent = "Date has passed";
-                    daysRemainingSpan.style.color = "var(--color-danger)";
+                    daysRemainingSpan.style.color = "var(--md-sys-color-error)";
                     return;
                 }
-                
-                const diffTime = Math.abs(examDate - today);
+                const diffTime = examDate.getTime() - today.getTime();
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                daysRemainingSpan.textContent = `${diffDays} day(s) remaining`;
-                daysRemainingSpan.style.color = "var(--color-primary)";
+                daysRemainingSpan.textContent = `${diffDays} day(s)`;
+                daysRemainingSpan.style.color = "var(--md-sys-color-primary)";
             } else {
-                daysRemainingSpan.textContent = "Set exam date";
-                daysRemainingSpan.style.color = "var(--color-text-tertiary)";
+                daysRemainingSpan.textContent = "Not set";
+                daysRemainingSpan.style.color = "var(--md-sys-color-on-surface-variant)";
             }
         }
 
         async function loadPerformanceData(currentUser) {
-            if (!currentUser) return;
-            performanceData = [];
-            const userEmail = currentUser.email;
-            const userName = currentUser.displayName || userEmail;
-            const seenIds = new Set();
+            if (!currentUser || !db) {
+                 performanceData = [];
+                 return;
+            }
+            performanceData = []; // Reset before loading
+            const userId = currentUser.uid;
             try {
-                const queries = [
-                    db.collection("performanceSubmissions").where("studentName", "==", userName).get(),
-                ];
-                if (userEmail) {
-                    queries.push(db.collection("performanceSubmissions").where("studentEmail", "==", userEmail).get());
-                }
-
-                const querySnapshots = await Promise.all(queries);
-                querySnapshots.forEach(snapshot => {
-                    snapshot.forEach(doc => {
-                        if (!seenIds.has(doc.id)) {
-                            seenIds.add(doc.id);
-                            performanceData.push(doc.data());
-                        }
-                    });
+                const querySnapshot = await db.collection("performanceSubmissions")
+                                          .where("userId", "==", userId) 
+                                          .get();
+                
+                querySnapshot.forEach(doc => {
+                    performanceData.push({ id: doc.id, ...doc.data() });
                 });
             } catch (error) {
-                console.error("Error loading performance data:", error);
+                console.error("Error loading performance data for home page:", error);
+                performanceData = []; 
             }
         }
 
         function updateConsistencyScore() {
+            if (!consistencyScoreP) return;
             if (performanceData.length === 0) {
-                consistencyScoreP.textContent = '0 Day(s) Completed';
+                consistencyScoreP.textContent = '0 Days Completed';
                 return;
             }
             const practiceDays = new Set();
             performanceData.forEach(result => {
                 if (result.submissionTimestamp) {
-                    const date = new Date(result.submissionTimestamp).toLocaleDateString();
-                    practiceDays.add(date);
+                    let dateStr;
+                    if (result.submissionTimestamp.toDate) { 
+                        dateStr = result.submissionTimestamp.toDate().toLocaleDateString();
+                    } else if (typeof result.submissionTimestamp === 'string') { 
+                        dateStr = new Date(result.submissionTimestamp).toLocaleDateString();
+                    } else if (typeof result.submissionTimestamp === 'number') { 
+                        dateStr = new Date(result.submissionTimestamp).toLocaleDateString();
+                    }
+                    if (dateStr) practiceDays.add(dateStr);
                 }
             });
             consistencyScoreP.textContent = `${practiceDays.size} Day(s) Completed`;
         }
 
-        async function loadHomeData(currentUser) {
-            if (!currentUser) return;
+        function updateHomeStats() {
             const homeTotalActivities = document.getElementById('home-total-activities');
             const homeAverageScore = document.getElementById('home-average-score');
             const homeTimePracticed = document.getElementById('home-time-practiced');
             
+            if (!homeTotalActivities || !homeAverageScore || !homeTimePracticed) return;
+
             homeTotalActivities.textContent = '0';
             homeAverageScore.textContent = '0%';
             homeTimePracticed.textContent = '0h 0m';
@@ -1027,16 +790,17 @@
 
                 performanceData.forEach(result => {
                     const score = parseFloat(result.score);
-                    const totalQuestions = parseFloat(result.totalQuestions);
-                    if (!isNaN(score) && !isNaN(totalQuestions) && totalQuestions > 0) {
-                        totalScoreSum += (score / totalQuestions) * 100;
+                    const totalPossible = parseFloat(result.totalPossibleScore || result.totalQuestions); 
+                    
+                    if (!isNaN(score) && !isNaN(totalPossible) && totalPossible > 0) {
+                        totalScoreSum += (score / totalPossible) * 100;
                         validScoresCount++;
                     }
-                    const timeTaken = result.timeTaken;
-                    if (timeTaken) {
+                    const timeTaken = result.timeTaken; 
+                    if (timeTaken && typeof timeTaken === 'string') {
                         let minutes = 0;
-                        const hourMatch = timeTaken.match(/(\d+)h/);
-                        const minMatch = timeTaken.match(/(\d+)m/);
+                        const hourMatch = timeTaken.match(/(\d+)\s*h/);
+                        const minMatch = timeTaken.match(/(\d+)\s*min/);
                         if (hourMatch) minutes += parseInt(hourMatch[1]) * 60;
                         if (minMatch) minutes += parseInt(minMatch[1]);
                         totalMinutesPracticed += minutes;
@@ -1053,32 +817,33 @@
         }
 
         function renderCalendars() {
-            const today = new Date();
-            renderMonth(currentCalendarDate, currentMonthGrid, currentMonthLabel, 0);
+            if(!currentMonthGrid || !nextMonthGrid || !currentMonthLabel || !nextMonthLabel || !currentMonthYearSpan) return;
+
+            renderMonth(currentCalendarDate, currentMonthGrid, currentMonthLabel);
             
             let nextMonthDate = new Date(currentCalendarDate);
             nextMonthDate.setMonth(currentCalendarDate.getMonth() + 1);
-            renderMonth(nextMonthDate, nextMonthGrid, nextMonthLabel, 1);
+            renderMonth(nextMonthDate, nextMonthGrid, nextMonthLabel);
 
             currentMonthYearSpan.textContent = currentCalendarDate.toLocaleDateString('default', { month: 'long', year: 'numeric' });
         }
 
-        function renderMonth(dateToRender, gridElement, labelElement, monthOffset) {
-            gridElement.innerHTML = '';
+        function renderMonth(dateToRender, gridElement, labelElement) {
+            gridElement.innerHTML = ''; 
             const month = dateToRender.getMonth();
             const year = dateToRender.getFullYear();
 
             labelElement.textContent = dateToRender.toLocaleDateString('default', { month: 'long' });
 
-            const firstDayOfMonth = new Date(year, month, 1).getDay();
+            const firstDayOfMonth = new Date(year, month, 1).getDay(); 
             const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
             const dayHeaders = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-
             dayHeaders.forEach(header => {
-                const dayLabel = document.createElement('div');
-                dayLabel.className = 'calendar-day-label';
-                dayLabel.textContent = header;
-                gridElement.appendChild(dayLabel);
+                const dayLabelEl = document.createElement('div');
+                dayLabelEl.className = 'calendar-day-label';
+                dayLabelEl.textContent = header;
+                gridElement.appendChild(dayLabelEl);
             });
 
             const startOffset = (firstDayOfMonth === 0) ? 6 : firstDayOfMonth - 1;
@@ -1105,23 +870,30 @@
 
                 const activityCount = getActivityCountForDate(cellDate);
                 if (activityCount > 0) {
-                    if (activityCount >= 2) {
+                    if (activityCount >= 2) { 
                         dayCell.classList.add('practice-lots');
-                    } else {
+                    } else { 
                         dayCell.classList.add('practice-some');
                     }
                 }
                 gridElement.appendChild(dayCell);
             }
         }
-
+        
         function getActivityCountForDate(date) {
             let count = 0;
-            const dateString = date.toLocaleDateString();
+            const dateString = date.toLocaleDateString(); 
             performanceData.forEach(result => {
                 if (result.submissionTimestamp) {
-                    const submissionDate = new Date(result.submissionTimestamp).toLocaleDateString();
-                    if (submissionDate === dateString) {
+                    let submissionDateStr;
+                     if (result.submissionTimestamp.toDate) { 
+                        submissionDateStr = result.submissionTimestamp.toDate().toLocaleDateString();
+                    } else if (typeof result.submissionTimestamp === 'string') { 
+                        submissionDateStr = new Date(result.submissionTimestamp).toLocaleDateString();
+                    } else if (typeof result.submissionTimestamp === 'number') { 
+                         submissionDateStr = new Date(result.submissionTimestamp).toLocaleDateString();
+                    }
+                    if (submissionDateStr === dateString) {
                         count++;
                     }
                 }
@@ -1129,40 +901,34 @@
             return count;
         }
 
-        prevMonthBtn.addEventListener('click', () => {
+
+        if(prevMonthBtn) prevMonthBtn.addEventListener('click', () => {
             currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
             renderCalendars();
         });
-
-        nextMonthBtn.addEventListener('click', () => {
+        if(nextMonthBtn) nextMonthBtn.addEventListener('click', () => {
             currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
             renderCalendars();
         });
-
         
-        document.getElementById('home-view-all-tests-btn').addEventListener('click', () => {
-            window.location.href = "student_dashboard.html#qr-tests-content";
-        });
+        const viewAllTestsBtn = document.getElementById('home-view-all-tests-btn');
+        if(viewAllTestsBtn) { // This is now an <a> tag
+            // Event listener might not be strictly necessary if href is set, but good for consistency or future JS actions
+            viewAllTestsBtn.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent default if it was a button, good practice for <a> if more JS logic
+                window.location.href = "practice.html"; 
+            });
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             const navHome = document.getElementById('nav-home');
             if (navHome) {
+                document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
                 navHome.classList.add('active');
                 navHome.setAttribute('aria-selected', 'true');
             }
-            firebase.auth().onAuthStateChanged(user => {
-                 if (!user) {
-                    dashboardWrapper.classList.add('hidden');
-                    homeContentDiv.classList.add('hidden');
-                    if (authRedirectMessage) authRedirectMessage.classList.remove('hidden'); 
-                 } else {
-                    if (authRedirectMessage) authRedirectMessage.classList.add('hidden');
-                    dashboardWrapper.classList.remove('hidden'); 
-                    homeContentDiv.classList.remove('hidden');
-                 }
-            });
+            // Auth check for initial visibility is handled by onAuthStateChanged
         });
-
     </script>
 </body>
-</html> 
+</html>
