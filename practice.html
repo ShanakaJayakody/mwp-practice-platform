@@ -8,654 +8,418 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            /* M3 Color System - Light Mode */
+            /* M3 Color Palette - Light Theme */
             --md-sys-color-primary: #1967D2;
             --md-sys-color-on-primary: #FFFFFF;
             --md-sys-color-primary-container: #D1E3FF;
             --md-sys-color-on-primary-container: #001E3A;
-            --md-sys-color-secondary: #4285F4;
+            --md-sys-color-secondary: #5E89C2; 
             --md-sys-color-on-secondary: #FFFFFF;
-            --md-sys-color-accent: #FF6D00;
-            --md-sys-color-on-accent: #FFFFFF;
-            --md-sys-color-background: #F8F9FA;
+            --md-sys-color-secondary-container: #D8E2FF;
+            --md-sys-color-on-secondary-container: #001A43;
+            --md-sys-color-tertiary: #7D5260;
+            --md-sys-color-on-tertiary: #FFFFFF;
+            --md-sys-color-tertiary-container: #FFD8E4;
+            --md-sys-color-on-tertiary-container: #31111D;
+            
+            /* Section specific theme colors (derived from design doc examples or M3 principles) */
+            --section-vr-primary: var(--md-sys-color-primary); /* Blue */
+            --section-vr-on-primary: var(--md-sys-color-on-primary);
+            --section-vr-container: var(--md-sys-color-primary-container);
+            --section-vr-on-container: var(--md-sys-color-on-primary-container);
+
+            --section-dm-primary: #6366F1; /* Indigo (DM) - As per existing file */
+            --section-dm-on-primary: #FFFFFF;
+            --section-dm-container: #E0E7FF; /* Lighter Indigo */
+            --section-dm-on-container: #3730A3; /* Darker Indigo */
+
+            --section-qr-primary: #1E8E3E; /* Green (QR) - From design doc success green */
+            --section-qr-on-primary: #FFFFFF;
+            --section-qr-container: #C8E6C9; /* Lighter Green */
+            --section-qr-on-container: #0D3C1E; /* Darker Green */
+
+            --section-fg-primary: #FF6D00; /* Orange (Focus Groups) - From design doc accent */
+            --section-fg-on-primary: #FFFFFF;
+            --section-fg-container: #FFDDBA;
+            --section-fg-on-container: #5F2000;
+
+
+            --md-sys-color-background: #F8F9FA; 
             --md-sys-color-on-background: #1F1F1F;
-            --md-sys-color-surface: #FFFFFF;
+            --md-sys-color-surface: #FFFFFF; 
             --md-sys-color-on-surface: #1F1F1F;
+            --md-sys-color-surface-variant: #E1E3E5; 
             --md-sys-color-on-surface-variant: #444746;
             --md-sys-color-outline: #747775;
             --md-sys-color-error: #D93025;
             --md-sys-color-on-error: #FFFFFF;
-            --md-sys-color-success: #1E8E3E;
-            --md-sys-color-on-success: #FFFFFF;
-            --md-sys-color-warning: #F9AB00;
-            --md-sys-color-on-warning: #FFFFFF;
-
-            /* Legacy color mappings for backward compatibility */
-            --color-primary: var(--md-sys-color-primary); /* Blue - VR */
-            --color-primary-dark: #0F4C9C;
-            --color-primary-light: var(--md-sys-color-primary-container);
-            --color-primary-bg: var(--md-sys-color-primary-container);
             
-            --color-dm: #6366f1; /* Indigo - DM */
-            --color-dm-dark: #4f46e5;
-            --color-dm-light: #a5b4fc;
-            --color-dm-bg: #eef2ff;
+            /* M3 Typography */
+            --md-sys-font-family-name: 'Roboto', sans-serif;
+            --md-sys-typescale-headline-small-font-size: 24px;
+            --md-sys-typescale-headline-small-line-height: 32px;
+            --md-sys-typescale-title-large-font-size: 22px;
+            --md-sys-typescale-title-large-line-height: 28px;
+            --md-sys-typescale-title-medium-font-size: 16px;
+            --md-sys-typescale-title-medium-line-height: 24px;
+            --md-sys-typescale-body-large-font-size: 16px;
+            --md-sys-typescale-body-large-line-height: 24px;
+            --md-sys-typescale-body-medium-font-size: 14px;
+            --md-sys-typescale-body-medium-line-height: 20px;
+            --md-sys-typescale-label-large-font-size: 14px;
+            --md-sys-typescale-label-large-line-height: 20px;
+            --md-sys-font-weight-regular: 400;
+            --md-sys-font-weight-medium: 500;
 
-            --color-qr: var(--md-sys-color-success); /* Green - QR */
-            --color-qr-dark: #059669;
-            --color-qr-light: #6ee7b7;
-            --color-qr-bg: #f0fdf4;
+            /* M3 Spacing */
+            --md-sys-spacing-unit: 0.5rem; /* 8px */
+            --md-sys-spacing-xxs: 0.25rem; /* 4px */
+            --md-sys-spacing-xs: 0.5rem;
+            --md-sys-spacing-s: 0.75rem;
+            --md-sys-spacing-m: 1rem;
+            --md-sys-spacing-l: 1.5rem;
+            --md-sys-spacing-xl: 2rem;
+            
+            /* M3 Shape */
+            --md-sys-shape-corner-small: 0.25rem; /* 4dp */
+            --md-sys-shape-corner-medium: 0.75rem; /* 12dp */
+            --md-sys-shape-corner-large: 1rem;    /* 16dp */
+            --md-sys-shape-corner-full: 9999px;
+            
+            /* M3 Elevation */
+            --md-sys-elevation-level0: none;
+            --md-sys-elevation-level1: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0,0,0,0.15);
+            --md-sys-elevation-level2: 0px 1px 2px rgba(0,0,0,0.3), 0px 2px 6px 2px rgba(0,0,0,0.15);
 
-            --color-fg: var(--md-sys-color-accent); /* Orange - Focus Groups */
-            --color-fg-dark: #ea580c;
-            --color-fg-light: #fb923c;
-            --color-fg-bg: #fff7ed;
-
-            --color-success: var(--md-sys-color-success);
-            --color-warning: var(--md-sys-color-warning);
-            --color-danger: var(--md-sys-color-error);
-            --color-text: var(--md-sys-color-on-background);
-            --color-text-secondary: var(--md-sys-color-on-surface-variant);
-            --color-text-tertiary: #6B7280;
-            --color-bg: var(--md-sys-color-background);
-            --color-bg-secondary: #F1F3F4;
-            --color-border: var(--md-sys-color-outline);
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --radius-sm: 0.375rem;
-            --radius: 0.5rem;
-            --radius-md: 0.75rem;
-            --transition: 220ms cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Dark Mode Support */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                /* M3 Color System - Dark Mode */
-                --md-sys-color-primary: #AECBFA;
-                --md-sys-color-on-primary: #00325B;
-                --md-sys-color-primary-container: #00497E;
-                --md-sys-color-on-primary-container: #D1E3FF;
-                --md-sys-color-secondary: #A8C7FA;
-                --md-sys-color-on-secondary: #0A315E;
-                --md-sys-color-accent: #FFB74D;
-                --md-sys-color-on-accent: #542F00;
-                --md-sys-color-background: #1F1F1F;
-                --md-sys-color-on-background: #E3E3E3;
-                --md-sys-color-surface: #2B2B2B;
-                --md-sys-color-on-surface: #E3E3E3;
-                --md-sys-color-on-surface-variant: #C4C7C5;
-                --md-sys-color-outline: #8E918F;
-                --md-sys-color-error: #F2B8B5;
-                --md-sys-color-on-error: #601410;
-                --md-sys-color-success: #A5D6A7;
-                --md-sys-color-on-success: #0D3C1E;
-                --md-sys-color-warning: #FFD54F;
-                --md-sys-color-on-warning: #5D4037;
-
-                /* Updated legacy mappings for dark mode */
-                --color-primary-dark: #7BAAF7;
-                --color-bg-secondary: #383838;
-                --color-text-tertiary: #9AA0A6;
-                --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-                --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-                --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
-            }
-        }
-
-        /* Manual dark mode class override */
-        .dark-theme {
-            --md-sys-color-primary: #AECBFA;
-            --md-sys-color-on-primary: #00325B;
-            --md-sys-color-primary-container: #00497E;
-            --md-sys-color-on-primary-container: #D1E3FF;
-            --md-sys-color-secondary: #A8C7FA;
-            --md-sys-color-on-secondary: #0A315E;
-            --md-sys-color-accent: #FFB74D;
-            --md-sys-color-on-accent: #542F00;
-            --md-sys-color-background: #1F1F1F;
-            --md-sys-color-on-background: #E3E3E3;
-            --md-sys-color-surface: #2B2B2B;
-            --md-sys-color-on-surface: #E3E3E3;
-            --md-sys-color-on-surface-variant: #C4C7C5;
-            --md-sys-color-outline: #8E918F;
-            --md-sys-color-error: #F2B8B5;
-            --md-sys-color-on-error: #601410;
-            --md-sys-color-success: #A5D6A7;
-            --md-sys-color-on-success: #0D3C1E;
-            --md-sys-color-warning: #FFD54F;
-            --md-sys-color-on-warning: #5D4037;
-
-            --color-primary-dark: #7BAAF7;
-            --color-bg-secondary: #383838;
-            --color-text-tertiary: #9AA0A6;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+            /* Transitions */
+            --md-sys-motion-duration-short: 150ms;
+            --md-sys-motion-easing-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: var(--md-sys-font-family-name);
             background-color: var(--md-sys-color-background);
             color: var(--md-sys-color-on-background);
-            line-height: 1.5;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            line-height: var(--md-sys-typescale-body-large-line-height);
+            display: flex; flex-direction: column; min-height: 100vh; margin:0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        .dashboard-wrapper { /* Renamed from practice-wrapper for consistency */
-            background-color: var(--md-sys-color-surface);
-            width: 100%;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
+        .dashboard-wrapper {
+            background-color: var(--md-sys-color-background); width: 100%;
+            flex-grow: 1; display: flex; flex-direction: column;
         }
 
-        /* Header and Main Nav styles copied from student_dashboard.html for consistency */
         .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            background-color: var(--md-sys-color-surface);
-            border-bottom: 1px solid var(--md-sys-color-outline);
-            box-shadow: var(--shadow-sm);
-            position: sticky;
-            top: 0;
-            z-index: 40;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: var(--md-sys-spacing-m) var(--md-sys-spacing-l);
+            background-color: var(--md-sys-color-surface); 
+            box-shadow: var(--md-sys-elevation-level1);
+            position: sticky; top: 0; z-index: 1000;
         }
-
-        .dashboard-header .logo-small {
-            max-width: 132px;
-            transition: all var(--transition);
-        }
-
-        .dashboard-header .logo-small:hover {
-            transform: scale(1.03);
-        }
+        .dashboard-header .logo-small { max-width: 132px; }
+        .settings-icon span { color: var(--md-sys-color-on-surface-variant); transition: color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard); }
+        .settings-icon:hover span { color: var(--md-sys-color-primary); }
         
-        .welcome-user {
-            font-size: 0.9rem;
-            color: var(--md-sys-color-on-surface-variant);
-            display: flex;
-            align-items: center;
-        }
-
-        .welcome-user::before {
-            content: "";
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background-color: var(--md-sys-color-success);
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-        
-        .btn-logout {
-            background-color: var(--md-sys-color-error);
-            color: var(--md-sys-color-on-error);
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-            border-radius: var(--radius);
-            transition: all var(--transition);
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-logout:hover {
-            background-color: #B71C1C;
-            box-shadow: var(--shadow);
-        }
-
         .main-nav {
-            display: flex;
-            justify-content: center;
+            display: flex; justify-content: center;
             background-color: var(--md-sys-color-surface);
-            padding: 0.25rem 0;
-            border-bottom: 1px solid var(--md-sys-color-outline);
-            box-shadow: var(--shadow-sm);
-            position: sticky;
-            top: 61px; /* Height of header */
-            z-index: 30;
+            padding: var(--md-sys-spacing-xxs) 0;
+            box-shadow: var(--md-sys-elevation-level1);
+            position: sticky; top: 68px; /* Adjust based on actual header height */
+            z-index: 999;
+            overflow-x: auto;
         }
-
         .nav-tab {
-            padding: 0.875rem 1.5rem;
-            margin: 0 0.5rem;
-            cursor: pointer;
-            font-weight: 500;
-            color: var(--md-sys-color-on-surface-variant);
-            border-bottom: 2px solid transparent;
-            transition: color var(--transition), background-color var(--transition);
-            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-            position: relative;
-            user-select: none;
-            text-decoration: none;
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l); margin: 0 var(--md-sys-spacing-xs);
+            cursor: pointer; font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium); font-size: var(--md-sys-typescale-label-large-font-size);
+            color: var(--md-sys-color-on-surface-variant); border-bottom: 2px solid transparent;
+            transition: color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard), 
+                        border-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+            border-radius: var(--md-sys-shape-corner-small) var(--md-sys-shape-corner-small) 0 0;
+            position: relative; text-decoration: none; display: inline-flex; align-items: center; gap: var(--md-sys-spacing-xs);
+            white-space: nowrap;
         }
-
-        .nav-tab::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -2px;
-            width: 100%;
-            height: 2px;
-            background-color: var(--md-sys-color-primary);
-            transform: scaleX(0);
-            transform-origin: center;
-            transition: transform 0.3s ease-out;
-        }
-
-        .nav-tab:hover {
-            color: var(--md-sys-color-primary);
-            background-color: var(--md-sys-color-primary-container);
-        }
-
-        .nav-tab:hover::after, .nav-tab.active::after {
-            transform: scaleX(1);
-        }
-
+        .nav-tab:hover { color: var(--md-sys-color-primary); }
         .nav-tab.active {
             color: var(--md-sys-color-primary);
-            background-color: var(--md-sys-color-primary-container);
+            border-bottom-color: var(--md-sys-color-primary);
         }
-        
         .nav-tab-disabled {
-            color: var(--md-sys-color-on-surface-variant);
-            cursor: not-allowed;
-            opacity: 0.7;
+            color: var(--md-sys-color-on-surface-variant); opacity: 0.38; cursor: not-allowed;
         }
-        
         .nav-tab-disabled .coming-soon-inline {
-            font-size: 0.65rem;
-            color: var(--md-sys-color-on-surface-variant);
-            margin-left: 4px;
-            background-color: var(--color-bg-secondary);
-            padding: 0.1rem 0.4rem;
-            border-radius: 1rem;
+            font-size: 0.65rem; margin-left: var(--md-sys-spacing-xxs);
+            background-color: var(--md-sys-color-surface-variant); color: var(--md-sys-color-on-surface-variant);
+            padding: 0.1rem 0.4rem; border-radius: var(--md-sys-shape-corner-full);
         }
+
+        .welcome-user {
+            font-size: var(--md-sys-typescale-body-medium-font-size);
+            color: var(--md-sys-color-on-surface-variant);
+            display: flex; align-items: center;
+        }
+        .welcome-user::before {
+            content: ""; display: inline-block; width: 8px; height: 8px;
+            background-color: var(--md-sys-color-success);
+            border-radius: 50%; margin-right: var(--md-sys-spacing-xs);
+        }
+        .btn-logout {
+            background-color: var(--md-sys-color-error); color: var(--md-sys-color-on-error);
+            padding: var(--md-sys-spacing-xs) var(--md-sys-spacing-m);
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-size: var(--md-sys-typescale-label-large-font-size);
+            border-radius: var(--md-sys-shape-corner-full);
+            transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+            border: none; cursor: pointer; display: inline-flex; align-items: center; gap: var(--md-sys-spacing-xs);
+        }
+        .btn-logout:hover { background-color: color-mix(in srgb, var(--md-sys-color-error) 90%, black); }
 
         .practice-content-wrapper {
             display: flex;
             flex-grow: 1;
-            padding: 1.5rem;
-            gap: 1.5rem;
+            padding: var(--md-sys-spacing-l); 
+            gap: var(--md-sys-spacing-l); 
         }
 
-        .left-nav-menu {
-            width: 240px; /* Fixed width for the left navigation */
+        .left-nav-menu { /* M3 Navigation Rail / Drawer style */
+            width: 256px; 
             flex-shrink: 0;
-            background-color: #ffffff;
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow);
-            padding: 1rem;
+            background-color: var(--md-sys-color-surface);
+            border-radius: var(--md-sys-shape-corner-medium); 
+            box-shadow: var(--md-sys-elevation-level1);
+            padding: var(--md-sys-spacing-m); 
         }
-
-        .left-nav-menu h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--color-text);
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--color-border);
+        .left-nav-menu h3 { /* Title Large */
+            font-family: var(--md-sys-typescale-title-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            font-size: var(--md-sys-typescale-title-large-font-size);
+            color: var(--md-sys-color-on-surface-variant);
+            margin-bottom: var(--md-sys-spacing-m);
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); 
         }
-
-        .left-nav-tab {
-            display: block;
-            padding: 0.75rem 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: var(--radius-sm);
-            color: var(--color-text-secondary);
-            font-weight: 500;
+        .left-nav-tab { /* M3 Navigation Drawer Item */
+            display: flex;
+            align-items: center;
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); 
+            margin-bottom: var(--md-sys-spacing-xs); 
+            border-radius: var(--md-sys-shape-corner-full); 
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            font-size: var(--md-sys-typescale-label-large-font-size);
+            color: var(--md-sys-color-on-surface-variant);
             cursor: pointer;
-            transition: all var(--transition);
+            transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
+                        color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+            text-decoration: none; /* Ensure links are not underlined by default */
         }
-
+        .left-nav-tab .material-symbols-outlined { margin-right: var(--md-sys-spacing-m); }
+        
         .left-nav-tab:hover {
-            background-color: var(--color-primary-bg);
-            color: var(--color-primary-dark);
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+            color: var(--md-sys-color-primary);
         }
-
         .left-nav-tab.active {
-            background-color: var(--color-primary);
-            color: white;
-            box-shadow: var(--shadow-sm);
+            background-color: var(--md-sys-color-primary-container); 
+            color: var(--md-sys-color-on-primary-container);
+            font-weight: var(--md-sys-font-weight-medium); /* M3 active nav items often don't change weight significantly, rely on bg/color */
         }
+        /* Section specific active colors for left nav */
+        .left-nav-tab[data-target="vr-content"].active { background-color: var(--section-vr-container); color: var(--section-vr-on-container); }
+        .left-nav-tab[data-target="dm-content"].active { background-color: var(--section-dm-container); color: var(--section-dm-on-container); }
+        .left-nav-tab[data-target="qr-content"].active { background-color: var(--section-qr-container); color: var(--section-qr-on-container); }
+        .left-nav-tab[data-target="focus-groups-content"].active { background-color: var(--section-fg-container); color: var(--section-fg-on-container); }
 
-        /* Specific active colors for left nav tabs */
-        .left-nav-tab[data-target="vr-content"].active {
-            background-color: var(--color-primary);
-        }
-        .left-nav-tab[data-target="dm-content"].active {
-            background-color: var(--color-dm);
-        }
-        .left-nav-tab[data-target="qr-content"].active {
-            background-color: var(--color-qr);
-        }
-        .left-nav-tab[data-target="focus-groups-content"].active {
-            background-color: var(--color-fg);
-        }
 
         .practice-main-content {
             flex-grow: 1;
-            background-color: #ffffff;
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow);
-            padding: 2rem;
+            background-color: var(--md-sys-color-surface);
+            border-radius: var(--md-sys-shape-corner-medium); 
+            box-shadow: var(--md-sys-elevation-level1);
+            padding: var(--md-sys-spacing-xl); 
+            overflow-y: auto; 
         }
-        
-        .section-content {
-            display: none; /* Hidden by default */
-        }
-
-        .section-content.active {
-            display: block; /* Shown when active */
-            animation: fadeInContent 0.5s ease-out;
-        }
-
+        .section-content { display: none; }
+        .section-content.active { display: block; animation: fadeInContent 0.3s var(--md-sys-motion-easing-standard); }
         @keyframes fadeInContent {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(8px); } 
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Section specific header colors */
-        #vr-content h2 {
-            color: var(--color-primary-dark);
-            border-bottom: 2px solid var(--color-primary-light);
-            padding-bottom: 0.5rem; margin-bottom: 1.5rem;
+        .section-content > h2 { /* Headline Small */
+            font-family: var(--md-sys-typescale-headline-small-font-family-name);
+            font-weight: var(--md-sys-font-weight-regular);
+            font-size: var(--md-sys-typescale-headline-small-font-size);
+            padding-bottom: var(--md-sys-spacing-s); 
+            margin-bottom: var(--md-sys-spacing-l); 
+            border-bottom: 1px solid var(--md-sys-color-outline);
         }
-        #dm-content h2 {
-            color: var(--color-dm-dark);
-            border-bottom: 2px solid var(--color-dm-light);
-            padding-bottom: 0.5rem; margin-bottom: 1.5rem;
-        }
-        #qr-content h2 {
-            color: var(--color-qr-dark);
-            border-bottom: 2px solid var(--color-qr-light);
-            padding-bottom: 0.5rem; margin-bottom: 1.5rem;
-        }
-        #focus-groups-content h2 {
-            color: var(--color-fg-dark);
-            border-bottom: 2px solid var(--color-fg-light);
-            padding-bottom: 0.5rem; margin-bottom: 1.5rem;
-        }
+        /* Section specific h2 colors */
+        #vr-content > h2 { color: var(--section-vr-primary); border-bottom-color: var(--section-vr-primary); }
+        #dm-content > h2 { color: var(--section-dm-primary); border-bottom-color: var(--section-dm-primary); }
+        #qr-content > h2 { color: var(--section-qr-primary); border-bottom-color: var(--section-qr-primary); }
+        #focus-groups-content > h2 { color: var(--section-fg-primary); border-bottom-color: var(--section-fg-primary); }
 
-        .subsection-card {
-            background-color: var(--color-bg-secondary);
-            padding: 1.5rem;
-            border-radius: var(--radius);
-            margin-bottom: 1.5rem;
-            border: 1px solid var(--color-border);
+        .subsection-card { /* M3 Card */
+            background-color: var(--md-sys-color-surface-variant); 
+            padding: var(--md-sys-spacing-l); 
+            border-radius: var(--md-sys-shape-corner-medium); 
+            margin-bottom: var(--md-sys-spacing-l);
+            border: 1px solid var(--md-sys-color-outline); /* Or none if elevation is enough */
         }
-        /* Default subsection card h4 - will be overridden by section specific styles */
-        .subsection-card h4 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--color-primary-dark); /* Default, overridden below */
-            margin-bottom: 1rem;
+        .subsection-card h4 { /* Title Medium */
+            font-family: var(--md-sys-typescale-title-medium-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            font-size: var(--md-sys-typescale-title-medium-font-size);
+            color: var(--md-sys-color-on-surface-variant);
+            margin-bottom: var(--md-sys-spacing-s); 
         }
-        .subsection-card p {
-            color: var(--color-text-secondary);
-            margin-bottom: 1rem;
+        .subsection-card p { /* Body Medium */
+            font-family: var(--md-sys-typescale-body-medium-font-family-name);
+            font-size: var(--md-sys-typescale-body-medium-font-size);
+            color: var(--md-sys-color-on-surface-variant);
+            margin-bottom: var(--md-sys-spacing-m); 
         }
-        /* Default subsection card button - will be overridden by section specific styles */
-        .subsection-card .btn-view {
-            background-color: var(--color-primary); /* Default, overridden below */
-            color: white;
-            padding: 0.6rem 1.2rem;
-            border-radius: var(--radius-sm);
-            text-decoration: none;
-            font-weight: 500;
-            transition: background-color var(--transition);
-            display: inline-block;
+        .subsection-card .btn-view { /* M3 Filled Button */
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l);
+            border-radius: var(--md-sys-shape-corner-full);
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            font-size: var(--md-sys-typescale-label-large-font-size);
+            text-decoration: none; display: inline-block;
+            transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+            border: none; cursor:pointer;
         }
-        .subsection-card .btn-view:hover {
-            background-color: var(--color-primary-dark); /* Default, overridden below */
-        }
+        /* Section specific subsection card button colors */
+        #vr-content .subsection-card .btn-view { background-color: var(--section-vr-primary); color: var(--section-vr-on-primary); }
+        #vr-content .subsection-card .btn-view:hover { background-color: color-mix(in srgb, var(--section-vr-primary) 90%, black); }
+        #dm-content .subsection-card .btn-view { background-color: var(--section-dm-primary); color: var(--section-dm-on-primary); }
+        #dm-content .subsection-card .btn-view:hover { background-color: color-mix(in srgb, var(--section-dm-primary) 90%, black); }
+        #qr-content .subsection-card .btn-view { background-color: var(--section-qr-primary); color: var(--section-qr-on-primary); }
+        #qr-content .subsection-card .btn-view:hover { background-color: color-mix(in srgb, var(--section-qr-primary) 90%, black); }
 
-        /* VR Section: Subsection Card Styles */
-        #vr-content .subsection-card h4 {
-            color: var(--color-primary-dark);
-        }
-        #vr-content .subsection-card .btn-view {
-            background-color: var(--color-primary);
-        }
-        #vr-content .subsection-card .btn-view:hover {
-            background-color: var(--color-primary-dark);
-        }
-
-        /* DM Section: Subsection Card Styles */
-        #dm-content .subsection-card h4 {
-            color: var(--color-dm-dark);
-        }
-        #dm-content .subsection-card .btn-view {
-            background-color: var(--color-dm);
-        }
-        #dm-content .subsection-card .btn-view:hover {
-            background-color: var(--color-dm-dark);
-        }
-
-        /* QR Section: Subsection Card Styles */
-        #qr-content .subsection-card h4 {
-            color: var(--color-qr-dark);
-        }
-        #qr-content .subsection-card .btn-view {
-            background-color: var(--color-qr);
-        }
-        #qr-content .subsection-card .btn-view:hover {
-            background-color: var(--color-qr-dark);
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .practice-content-wrapper {
-                flex-direction: column;
-                padding: 1rem;
-                gap: 1rem;
-            }
-            .left-nav-menu {
-                width: 100%;
-                margin-bottom: 1rem;
-            }
-            .main-nav {
-                overflow-x: auto;
-                justify-content: flex-start;
-            }
-        }
-
-        /* Styles for Focus Groups section content (adapted from focus_groups.html) */
-        .section-selection-container-fg {
-            display: flex;
-            justify-content: space-around;
-            gap: 1.5rem;
-            margin-bottom: 2.5rem; /* Added from original focus_groups for spacing */
-        }
-        .section-card-fg {
-            background-color: var(--color-bg-secondary); /* Slightly different from original for practice page context */
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-md);
-            padding: 1.5rem;
-            text-align: center;
-            flex: 1;
-            min-width: 180px; /* Adjusted min-width */
-            max-width: 280px; /* Adjusted max-width */
+        /* Focus Groups Cards */
+        .section-card-fg { /* M3 Card - Selectable */
+            background-color: var(--md-sys-color-surface);
+            border: 1px solid var(--md-sys-color-outline);
+            border-radius: var(--md-sys-shape-corner-medium);
+            padding: var(--md-sys-spacing-l);
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            transition: transform var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard), 
+                        box-shadow var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
+                        border-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
         }
-        .section-card-fg:hover, .section-card-fg.active {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-md);
-            border-color: var(--color-fg); /* Use Focus Group orange for active/hover */
+        .section-card-fg:hover:not(.disabled), .section-card-fg.active {
+            transform: translateY(-2px);
+            box-shadow: var(--md-sys-elevation-level2);
+            border-color: var(--section-fg-primary);
         }
-        .section-card-fg.active {
-            background-color: var(--color-fg-bg); /* Light orange for active card */
+        .section-card-fg.active { background-color: var(--section-fg-container); }
+        .section-card-fg h3 { font-family: var(--md-sys-typescale-title-large-font-family-name); color: var(--md-sys-color-on-surface); margin-bottom: var(--md-sys-spacing-s);}
+        .section-card-fg p { font-family: var(--md-sys-typescale-body-medium-font-family-name); color: var(--md-sys-color-on-surface-variant); margin-bottom: var(--md-sys-spacing-m);}
+        .section-card-fg.active h3, .section-card-fg.active p { color: var(--section-fg-on-container); }
+        .section-card-fg .material-symbols-outlined { font-size: 36px; margin-bottom: var(--md-sys-spacing-s); color: var(--section-fg-primary);}
+        .section-card-fg.active .material-symbols-outlined { color: var(--section-fg-on-container); }
+
+        .btn-select-section-fg { /* M3 Filled Button */
+            background-color: var(--section-fg-primary); color: var(--section-fg-on-primary);
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l);
+            border-radius: var(--md-sys-shape-corner-full);
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            font-size: var(--md-sys-typescale-label-large-font-size);
+            border: none; width: 100%; margin-top: auto; /* Push to bottom of card */
         }
-        .section-card-fg h3 {
-            font-size: 1.15rem; /* Slightly adjusted */
-            font-weight: 600;
-            color: var(--color-text);
-            margin-bottom: 0.75rem;
-        }
-        .section-card-fg p {
-            font-size: 0.875rem;
-            color: var(--color-text-secondary);
-            margin-bottom: 1rem;
-        }
-        .btn-select-section-fg {
-            background-color: var(--color-fg-dark);
-            color: white;
-            padding: 0.6rem 1.2rem;
-            border-radius: var(--radius-sm);
-            font-weight: 500;
-            transition: background-color 0.2s ease;
-            border: none; /* Ensure no default border */
-        }
-        .btn-select-section-fg:hover {
-            background-color: var(--color-fg); /* Lighter orange on hover */
-        }
-        .focus-ring-blue:focus-visible { /* Retaining for accessibility, though color name is now generic */
-            outline: 2px solid var(--color-fg-dark); 
-            outline-offset: 2px;
-        }
-        .section-card-fg.disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            border-color: var(--color-border);
-        }
-        .section-card-fg.disabled:hover {
-            transform: none;
-            box-shadow: none;
-            border-color: var(--color-border);
-        }
-        .section-card-fg.disabled button {
-            background-color: var(--color-text-tertiary); /* Use tertiary text color for disabled button */
-            cursor: not-allowed;
-        }
-        .section-card-fg.disabled button:hover {
-            background-color: var(--color-text-tertiary);
-        }
-        .practice-sets-container-fg {
-            margin-top: 2rem;
-        }
-        .practice-sets-grid-fg {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 1rem;
-            max-height: 50vh; 
-            overflow-y: auto;
-            padding: 0.5rem;
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius);
-            background-color: var(--color-bg); /* Add a light background to the grid area */
-        }
-        .practice-set-link-fg {
-            display: block;
-            padding: 1rem;
-            background-color: var(--color-fg-bg);
-            color: var(--color-fg-dark);
-            border-radius: var(--radius-sm);
-            text-align: center;
-            font-weight: 500;
-            text-decoration: none;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            border: 1px solid var(--color-fg-light);
+        .btn-select-section-fg:hover:not(:disabled) { background-color: color-mix(in srgb, var(--section-fg-primary) 90%, black); }
+        .section-card-fg.disabled { opacity: 0.5; cursor: not-allowed; }
+        .section-card-fg.disabled .material-symbols-outlined { color: var(--md-sys-color-outline); }
+        .section-card-fg.disabled .btn-select-section-fg { background-color: var(--md-sys-color-outline); color: var(--md-sys-color-surface); cursor: not-allowed; }
+        
+        .practice-set-link-fg { /* M3 Chip or Filled Tonal Button */
+            background-color: var(--section-fg-container); color: var(--section-fg-on-container);
+            border: 1px solid color-mix(in srgb, var(--section-fg-on-container) 30%, transparent );
+            border-radius: var(--md-sys-shape-corner-full); /* Chip like */
+            padding: var(--md-sys-spacing-xs) var(--md-sys-spacing-m);
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            text-decoration: none; display: inline-block; text-align:center;
         }
         .practice-set-link-fg:hover {
-            background-color: var(--color-fg-light);
-            color: white;
-            transform: translateY(-2px);
+            background-color: color-mix(in srgb, var(--section-fg-primary) 20%, var(--section-fg-container));
         }
-        /* End of Focus Groups specific styles */
+         .practice-set-link-fg.disabled {
+            background-color: var(--md-sys-color-surface-variant);
+            color: var(--md-sys-color-on-surface-variant);
+            border-color: var(--md-sys-color-outline);
+            opacity: 0.5; cursor: not-allowed; pointer-events: none;
+        }
 
-        /* DM Sub-topic and Worksheet Styles */
-        .dm-subtopic-item {
-            display: block;
-            padding: 0.5rem 0.75rem;
-            margin-bottom: 0.25rem;
-            border-radius: var(--radius-sm);
-            color: var(--color-text-secondary);
-            font-weight: 500;
-            cursor: pointer;
-            transition: all var(--transition);
-            border: 1px solid var(--color-border);
-            background-color: var(--color-bg);
+        /* DM Worksheets list items */
+        .dm-subtopic-item { /* M3 List Item or Chip style */
+            background-color: var(--md-sys-color-surface);
+            border: 1px solid var(--md-sys-color-outline);
+            color: var(--md-sys-color-on-surface);
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m);
+            border-radius: var(--md-sys-shape-corner-full); 
+            display: block; text-align: center; margin-bottom: var(--md-sys-spacing-xs); cursor:pointer;
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
         }
         .dm-subtopic-item:hover:not(.disabled) {
-            background-color: var(--color-dm-bg);
-            color: var(--color-dm-dark);
-            border-color: var(--color-dm-light);
+            background-color: color-mix(in srgb, var(--section-dm-primary) 8%, transparent );
+            color: var(--section-dm-primary);
+            border-color: var(--section-dm-primary);
         }
         .dm-subtopic-item.active {
-            background-color: var(--color-dm);
-            color: white;
-            border-color: var(--color-dm-dark);
+            background-color: var(--section-dm-container);
+            color: var(--section-dm-on-container);
+            border-color: var(--section-dm-primary);
         }
-        .dm-subtopic-item.disabled {
-            color: var(--color-text-tertiary);
-            background-color: var(--color-bg-secondary);
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-        .coming-soon-inline-small {
-            font-size: 0.6rem;
-            color: var(--color-text-tertiary);
-            margin-left: 4px;
-            background-color: var(--color-border);
-            padding: 0.05rem 0.3rem;
-            border-radius: 0.75rem;
-        }
-        .dm-worksheets-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 0.75rem;
-            padding: 0.5rem 0;
-        }
-        .dm-worksheet-link {
-            display: block;
-            padding: 0.75rem;
-            background-color: var(--color-dm-bg);
-            color: var(--color-dm-dark);
-            border-radius: var(--radius-sm);
-            text-align: center;
-            font-weight: 500;
-            text-decoration: none;
-            transition: background-color 0.2s ease, transform 0.1s ease, border-color 0.2s ease;
-            border: 1px solid var(--color-dm-light);
+        .dm-subtopic-item.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; background-color: var(--md-sys-color-surface-variant); }
+        .coming-soon-inline-small { font-size: 0.7rem; color: var(--md-sys-color-on-surface-variant); margin-left: 4px; font-weight: normal; }
+
+        .dm-worksheets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--md-sys-spacing-m); }
+        .dm-worksheet-link { /* M3 Card or Filled Tonal Button */
+            background-color: var(--section-dm-container); color: var(--section-dm-on-container);
+            border: 1px solid color-mix(in srgb, var(--section-dm-on-container) 30%, transparent );
+            border-radius: var(--md-sys-shape-corner-medium);
+            padding: var(--md-sys-spacing-m);
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            text-decoration: none; display: block; text-align: center;
         }
         .dm-worksheet-link:hover {
-            background-color: var(--color-dm-light);
-            color: var(--color-dm-dark);
-            transform: translateY(-2px);
-            border-color: var(--color-dm);
+             background-color: color-mix(in srgb, var(--section-dm-primary) 20%, var(--section-dm-container));
         }
-        /* End of DM Sub-topic Styles */
-
+        .hidden { display: none !important; }
+        
+        @media (max-width: 1024px) { /* For tablets and smaller */
+            .practice-content-wrapper { flex-direction: column; padding: var(--md-sys-spacing-m); gap: var(--md-sys-spacing-m); }
+            .left-nav-menu { width: 100%; margin-bottom: var(--md-sys-spacing-m); }
+        }
+        @media (max-width: 768px) {
+            .main-nav { justify-content: flex-start; }
+            .section-selection-container-fg { grid-template-columns: 1fr; } /* Stack focus group cards */
+        }
     </style>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
 <body>
-    <div id="auth-redirect-message" class="fixed inset-0 bg-gray-100 flex items-center justify-center z-50 hidden">
-        <!-- ... (Auth redirect message content - can be copied from home.html or student_dashboard.html if needed) ... -->
-         <div class="auth-container bg-white p-8 rounded-lg shadow-xl max-w-md w-full text-center">
+    <div id="auth-redirect-message" class="fixed inset-0 flex items-center justify-center z-50 hidden" style="background-color: var(--md-sys-color-background);">
+        <div class="p-8 rounded-lg shadow-xl max-w-md w-full text-center" style="background-color: var(--md-sys-color-surface); border-radius: var(--md-sys-shape-corner-large);">
             <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="mx-auto h-12 w-auto mb-6">
-            <h2 class="text-2xl font-bold text-gray-800 mb-3">Access Denied</h2>
-            <p class="text-gray-600 mb-6">You need to be logged in to view this page.</p>
-            <a href="student_dashboard.html" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
+            <h2 style="font-family: var(--md-sys-typescale-headline-small-font-family-name); color: var(--md-sys-color-on-surface); margin-bottom:var(--md-sys-spacing-s);">Access Denied</h2>
+            <p class="mb-6" style="color: var(--md-sys-color-on-surface-variant);">You need to be logged in to view this page.</p>
+            <a href="student_dashboard.html" class="inline-block font-semibold py-2 px-6 rounded-full transition-colors" style="background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); font-family: var(--md-sys-typescale-label-large-font-family-name);">
                 Go to Login
             </a>
         </div>
     </div>
 
     <div id="dashboard-wrapper" class="dashboard-wrapper hidden">
-        <!-- Header -->
         <div class="dashboard-header">
             <a href="home.html">
                 <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="logo-small" onerror="this.style.display='none'; this.onerror=null;">
@@ -663,40 +427,49 @@
             <div class="flex items-center">
                 <span class="welcome-user mr-4">Welcome, <span id="student-display-name" class="font-semibold">Student</span></span>
                  <a href="settings.html" aria-label="Account Settings" class="mr-4 settings-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
+                    <span class="material-symbols-outlined">settings</span>
                 </a>
                 <button id="logout-button" class="btn-logout" aria-label="Logout">
+                     <span class="material-symbols-outlined">logout</span>
                     <span>Logout</span>
                 </button>
             </div>
         </div>
 
-        <!-- Main Navigation -->
         <nav class="main-nav" role="navigation" aria-label="Main Navigation">
-            <a href="home.html" id="nav-home" class="nav-tab" role="button">Home</a>
-            <a href="practice.html" id="nav-practice-main" class="nav-tab active" role="button">Practice</a>
-            <a href="student_dashboard.html#results" id="nav-results" class="nav-tab" role="button">Results</a>
-            <div id="nav-skills" class="nav-tab nav-tab-disabled" role="button" aria-disabled="true">
-                <span>Skills</span> <span class="coming-soon-inline">Coming Soon</span>
+            <a href="home.html" id="nav-home" class="nav-tab" role="tab" aria-selected="false">
+                 <span class="material-symbols-outlined">home</span>Home
+            </a>
+            <a href="practice.html" id="nav-practice-main" class="nav-tab active" role="tab" aria-selected="true">
+                 <span class="material-symbols-outlined">model_training</span>Practice
+            </a>
+            <a href="student_dashboard.html#results" id="nav-results" class="nav-tab" role="tab" aria-selected="false">
+                 <span class="material-symbols-outlined">bar_chart</span>Results
+            </a>
+            <div id="nav-skills" class="nav-tab nav-tab-disabled" role="tab" aria-disabled="true">
+                 <span class="material-symbols-outlined">psychology</span>
+                <span>Skills</span> <span class="coming-soon-inline">Soon</span>
             </div>
         </nav>
 
-        <!-- Practice Content Area -->
         <div class="practice-content-wrapper">
             <aside class="left-nav-menu">
-                <h3>Sections</h3>
-                <a href="#" class="left-nav-tab active" data-target="vr-content">Verbal Reasoning</a>
-                <a href="#" class="left-nav-tab" data-target="dm-content">Decision Making</a>
-                <a href="#" class="left-nav-tab" data-target="qr-content">Quantitative Reasoning</a>
-                <a href="#" class="left-nav-tab" data-target="focus-groups-content">Focus Groups</a>
-                <!-- More sections can be added here -->
-            </aside>
+                <h3>Practice Sections</h3>
+                <a href="#" class="left-nav-tab active" data-target="vr-content">
+                    <span class="material-symbols-outlined">menu_book</span>Verbal Reasoning
+                </a>
+                <a href="#" class="left-nav-tab" data-target="dm-content">
+                    <span class="material-symbols-outlined">decision_auto</span>Decision Making
+                </a>
+                <a href="#" class="left-nav-tab" data-target="qr-content">
+                    <span class="material-symbols-outlined">calculate</span>Quantitative Reasoning
+                </a>
+                <a href="#" class="left-nav-tab" data-target="focus-groups-content">
+                    <span class="material-symbols-outlined">groups</span>Focus Groups
+                </a>
+                </aside>
 
             <main class="practice-main-content">
-                <!-- Verbal Reasoning Content -->
                 <section id="vr-content" class="section-content active">
                     <h2>Verbal Reasoning</h2>
                     <div class="subsection-card">
@@ -712,11 +485,10 @@
                     <div class="subsection-card">
                         <h4>VR Class Worksheets</h4>
                         <p>Access worksheets and materials from VR focused classes.</p>
-                        <a href="#" class="btn-view">View Worksheets</a>
+                        <a href="VR focus group16.html" class="btn-view">View Worksheets</a>
                     </div>
                 </section>
 
-                <!-- Decision Making Content -->
                 <section id="dm-content" class="section-content">
                     <h2>Decision Making</h2>
                      <div class="subsection-card">
@@ -734,76 +506,64 @@
                         <p>Review materials from Decision Making classes.</p>
                         <button id="dm-select-topic-btn" class="btn-view">Select Topic</button>
                         
-                        <div id="dm-subtopic-selection" class="hidden mt-4">
-                            <h5 class="text-md font-semibold mb-2" style="color: var(--color-dm-dark);">Select a Worksheet Topic:</h5>
+                        <div id="dm-subtopic-selection" class="hidden mt-4 space-y-2">
+                            <h5 class="text-md font-semibold mb-2" style="font-family: var(--md-sys-typescale-title-medium-font-family-name); color: var(--section-dm-on-container);">Select a Worksheet Topic:</h5>
                             <a href="#" class="dm-subtopic-item active" data-subtopic="syllogisms">Syllogisms</a>
                             <a href="#" class="dm-subtopic-item disabled" data-subtopic="logic-puzzles">Logic Puzzles <span class="coming-soon-inline-small">(Soon)</span></a>
-                            <a href="#" class="dm-subtopic-item disabled" data-subtopic="eval-arguments">Evaluating Arguments <span class="coming-soon-inline-small">(Soon)</span></a>
-                            <a href="#" class="dm-subtopic-item disabled" data-subtopic="interp-data">Interpreting Info (Data) <span class="coming-soon-inline-small">(Soon)</span></a>
-                            <a href="#" class="dm-subtopic-item disabled" data-subtopic="interp-narrative">Interpreting Info (Narrative) <span class="coming-soon-inline-small">(Soon)</span></a>
-                            <a href="#" class="dm-subtopic-item disabled" data-subtopic="venn">Venn Diagrams <span class="coming-soon-inline-small">(Soon)</span></a>
-                            <a href="#" class="dm-subtopic-item disabled" data-subtopic="probability">Probability <span class="coming-soon-inline-small">(Soon)</span></a>
                         </div>
 
                         <div id="dm-worksheet-display" class="hidden mt-4">
-                            <h5 id="dm-worksheet-list-title" class="text-md font-semibold mb-2" style="color: var(--color-dm-dark);">Worksheets:</h5>
+                            <h5 id="dm-worksheet-list-title" class="text-md font-semibold mb-2" style="font-family: var(--md-sys-typescale-title-medium-font-family-name); color: var(--section-dm-on-container);">Worksheets:</h5>
                             <div id="dm-worksheets-grid" class="dm-worksheets-grid">
-                                <!-- Worksheet links will be populated here -->
-                            </div>
-                            <button id="dm-back-to-topics-btn" class="btn-view mt-3" style="background-color: var(--color-dm);">Back to Topics</button>
+                                </div>
+                            <button id="dm-back-to-topics-btn" class="btn-view mt-3" style="background-color: var(--section-dm-primary); color: var(--section-dm-on-primary); width:auto;">Back to Topics</button>
                         </div>
                     </div>
                 </section>
 
-                <!-- Quantitative Reasoning Content -->
                 <section id="qr-content" class="section-content">
                     <h2>Quantitative Reasoning</h2>
                     <div class="subsection-card">
                         <h4>Practice QR Drills</h4>
                         <p>Improve your speed and accuracy with targeted QR drills.</p>
                         <a href="QR Test 1.html" class="btn-view">Go to QR Test 1</a>
-                         <a href="#" class="btn-view ml-2">More Drills</a>
+                         <a href="student_dashboard.html#results" class="btn-view ml-2" style="background-color: var(--md-sys-color-secondary); color: var(--md-sys-color-on-secondary);">More Drills</a>
                     </div>
                     <div class="subsection-card">
                         <h4>QR Timed Tests</h4>
                         <p>Take full Quantitative Reasoning timed sections.</p>
-                        <a href="student_dashboard.html#qr" class="btn-view">View Tests</a>
-                    </div>
-                    <div class="subsection-card">
-                        <h4>QR Class Worksheets</h4>
-                        <p>Access worksheets and problem sets from QR classes.</p>
-                        <a href="#" class="btn-view">View Worksheets</a>
+                        <a href="student_dashboard.html#results" class="btn-view">View Tests</a>
                     </div>
                 </section>
 
-                <!-- Focus Groups Content -->
                 <section id="focus-groups-content" class="section-content">
                     <h2>Focus Groups Timed Practice</h2>
                     
-                    <div class="section-selection-container-fg mb-10">
-                        <div id="select-vr-fg" class="section-card-fg" data-section="VR">
+                    <div class="section-selection-container-fg grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+                        <div id="select-vr-fg" class="section-card-fg text-center" data-section="VR">
+                            <span class="material-symbols-outlined">menu_book</span>
                             <h3>Verbal Reasoning</h3>
                             <p>Hone your VR skills with targeted practice sets.</p>
-                            <button class="btn-select-section-fg focus-ring-blue">Select VR</button>
+                            <button class="btn-select-section-fg">Select VR</button>
                         </div>
-                        <div id="select-dm-fg" class="section-card-fg disabled" data-section="DM">
+                        <div id="select-dm-fg" class="section-card-fg text-center disabled" data-section="DM">
+                             <span class="material-symbols-outlined">decision_auto</span>
                             <h3>Decision Making</h3>
-                            <p>Sharpen your DM abilities through various scenarios.</p>
-                            <button class="btn-select-section-fg focus-ring-blue" disabled>Coming Soon</button>
+                            <p>Sharpen your DM abilities (Coming Soon).</p>
+                            <button class="btn-select-section-fg" disabled>Coming Soon</button>
                         </div>
-                        <div id="select-qr-fg" class="section-card-fg disabled" data-section="QR">
+                        <div id="select-qr-fg" class="section-card-fg text-center disabled" data-section="QR">
+                            <span class="material-symbols-outlined">calculate</span>
                             <h3>Quantitative Reasoning</h3>
-                            <p>Master QR with numerous focused exercises.</p>
-                            <button class="btn-select-section-fg focus-ring-blue" disabled>Coming Soon</button>
+                            <p>Master QR exercises (Coming Soon).</p>
+                            <button class="btn-select-section-fg" disabled>Coming Soon</button>
                         </div>
                     </div>
 
                     <div id="practice-sets-container-fg" class="practice-sets-container-fg hidden">
-                        <h3 class="text-2xl font-semibold text-gray-700 mb-4 text-center">Practice Sets for <span id="current-section-title-fg"></span></h3>
-                        <div id="practice-sets-grid-fg" class="practice-sets-grid-fg">
-                            <!-- Practice sets will be loaded here by JavaScript -->
-                        </div>
-                        <p class="text-sm text-gray-500 mt-4 text-center">Scroll within the box above to see all practice sets.</p>
+                        <h3 class="text-xl font-semibold mb-4 text-center" style="font-family: var(--md-sys-typescale-title-large-font-family-name); color: var(--md-sys-color-on-surface);">Practice Sets for <span id="current-section-title-fg" style="color: var(--section-fg-primary);"></span></h3>
+                        <div id="practice-sets-grid-fg" class="practice-sets-grid-fg grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                            </div>
                     </div>
                 </section>
             </main>
@@ -811,7 +571,7 @@
     </div>
 
     <script>
-        // Firebase Configuration (copy from student_dashboard.html or home.html if not already linked via a separate JS file)
+        // --- Firebase Configuration ---
         const firebaseConfig = {
           apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
           authDomain: "mwp-qr-test-page.firebaseapp.com",
@@ -821,76 +581,62 @@
           appId: "1:309084045110:web:b09ca0fdff84b094963d97",
           measurementId: "G-4M3ED641M9"
         };
-
-        try {
-            if (!firebase.apps.length) {
-                firebase.initializeApp(firebaseConfig);
-            }
-            const db = firebase.firestore(); // eslint-disable-line no-unused-vars
-            console.log("Firebase initialized successfully for practice.html");
-        } catch (error) {
-            console.error("Firebase initialization error for practice.html:", error);
-        }
         
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        
+        // DOM Elements
         const studentDisplayNameSpan = document.getElementById('student-display-name');
         const logoutButton = document.getElementById('logout-button');
         const dashboardWrapper = document.getElementById('dashboard-wrapper');
         const authRedirectMessage = document.getElementById('auth-redirect-message');
 
-        // --- Authentication State Change ---
-        firebase.auth().onAuthStateChanged(user => {
+        auth.onAuthStateChanged(user => {
             if (user) {
-                studentDisplayNameSpan.textContent = user.displayName || user.email || 'Student';
-                dashboardWrapper.classList.remove('hidden');
-                authRedirectMessage.classList.add('hidden');
+                if(studentDisplayNameSpan) studentDisplayNameSpan.textContent = user.displayName || user.email || 'Student';
+                if(dashboardWrapper) dashboardWrapper.classList.remove('hidden');
+                if(authRedirectMessage) authRedirectMessage.classList.add('hidden');
             } else {
-                // User is not logged in, redirect to student_dashboard.html (login page)
-                window.location.href = 'student_dashboard.html';
+                if(dashboardWrapper) dashboardWrapper.classList.add('hidden');
+                if(authRedirectMessage) authRedirectMessage.classList.remove('hidden');
+                // Optional: Redirect to login
+                // window.location.href = 'student_dashboard.html'; 
             }
         });
 
-        // --- Logout ---
-        logoutButton.addEventListener('click', () => {
-            if (confirm("Are you sure you want to log out?")) {
-                firebase.auth().signOut()
-                    .then(() => {
-                        console.log("Logged out successfully");
-                        window.location.href = 'student_dashboard.html'; // Redirect to login/dashboard
-                    })
-                    .catch((error) => {
-                        console.error("Logout error:", error);
-                        alert("There was an error logging out. Please try again.");
-                    });
-            }
-        });
+        if(logoutButton) {
+            logoutButton.addEventListener('click', () => {
+                if (confirm("Are you sure you want to log out?")) {
+                    auth.signOut().then(() => {
+                        window.location.href = 'student_dashboard.html';
+                    }).catch(error => console.error("Logout error:", error));
+                }
+            });
+        }
         
-        // --- Left Navigation Tab Switching ---
         document.addEventListener('DOMContentLoaded', () => {
-            const leftNavTabs = document.querySelectorAll('.left-nav-tab');
-            const sectionContents = document.querySelectorAll('.section-content');
+            const leftNavTabs = document.querySelectorAll('.left-nav-menu .left-nav-tab');
+            const sectionContents = document.querySelectorAll('.practice-main-content .section-content');
             const navPracticeMain = document.getElementById('nav-practice-main');
 
             if(navPracticeMain) {
+                 document.querySelectorAll('.main-nav .nav-tab').forEach(tab => tab.classList.remove('active'));
                  navPracticeMain.classList.add('active');
+                 navPracticeMain.setAttribute('aria-selected', 'true');
             }
 
             function showSection(targetId) {
-                sectionContents.forEach(content => {
-                    content.classList.remove('active');
-                });
-                leftNavTabs.forEach(tab => {
-                    tab.classList.remove('active');
-                });
+                sectionContents.forEach(content => content.classList.remove('active'));
+                leftNavTabs.forEach(tab => tab.classList.remove('active'));
 
                 const targetContent = document.getElementById(targetId);
                 const activeTab = document.querySelector(`.left-nav-tab[data-target="${targetId}"]`);
 
-                if (targetContent) {
-                    targetContent.classList.add('active');
-                }
-                if (activeTab) {
-                    activeTab.classList.add('active');
-                }
+                if (targetContent) targetContent.classList.add('active');
+                if (activeTab) activeTab.classList.add('active');
             }
 
             leftNavTabs.forEach(tab => {
@@ -898,99 +644,66 @@
                     e.preventDefault();
                     const targetId = tab.dataset.target;
                     showSection(targetId);
+                    window.location.hash = targetId; // Update URL hash for direct linking
                 });
             });
 
-            // Show the first section by default (Verbal Reasoning)
-            if (leftNavTabs.length > 0) {
-                 showSection('vr-content');
+            // Handle hash linking on page load
+            const currentHash = window.location.hash.substring(1);
+            if (currentHash && document.getElementById(currentHash)) {
+                showSection(currentHash);
+            } else if (leftNavTabs.length > 0) {
+                showSection(leftNavTabs[0].dataset.target); // Show the first section by default
             }
 
-            // --- Focus Groups Section Logic (Adapted from focus_groups.html) ---
+            // Focus Groups Section Logic
             const selectVRCardFg = document.getElementById('select-vr-fg');
-            const selectDMCardFg = document.getElementById('select-dm-fg');
-            const selectQRCardFg = document.getElementById('select-qr-fg');
-            const allSectionCardsFg = document.querySelectorAll('.section-card-fg');
             const practiceSetsContainerFg = document.getElementById('practice-sets-container-fg');
             const currentSectionTitleSpanFg = document.getElementById('current-section-title-fg');
             const practiceSetsGridFg = document.getElementById('practice-sets-grid-fg');
+            const allSectionCardsFg = document.querySelectorAll('.section-card-fg');
 
-            function displayPracticeSetsFg(sectionName) {
+            function displayPracticeSetsFg(sectionName, sectionShortName, sets) {
                 if (!currentSectionTitleSpanFg || !practiceSetsGridFg || !practiceSetsContainerFg) return;
-
                 currentSectionTitleSpanFg.textContent = sectionName;
-                practiceSetsGridFg.innerHTML = ''; // Clear previous sets
+                practiceSetsGridFg.innerHTML = ''; 
 
-                const shortName = sectionName.includes("Verbal") ? "VR" :
-                                  sectionName.includes("Decision") ? "DM" :
-                                  sectionName.includes("Quantitative") ? "QR" : "";
-                
-                for (let i = 1; i <= 20; i++) { // Display 20 sets for example
+                sets.forEach(set => {
                     const setLink = document.createElement('a');
-                    let actualLink = "#";
-                    let comingSoon = true;
-
-                    if (shortName === "VR" && i === 16) {
-                        actualLink = "VR focus group16.html";
-                        comingSoon = false;
-                    }
-                    // Add more specific links here if other focus group tests are implemented
-                    // e.g., if (shortName === "QR" && i === 1) { actualLink = "QR focus group1.html"; comingSoon = false; }
-
-                    setLink.href = actualLink;
-                    setLink.classList.add('practice-set-link-fg', 'focus-ring-blue');
-                    setLink.textContent = `${shortName} Set ${i}`;
-
-                    if (comingSoon && actualLink === "#") {
-                        setLink.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            alert(`${sectionName} Practice Set ${i} is coming soon!`);
-                        });
+                    setLink.href = set.link;
+                    setLink.classList.add('practice-set-link-fg');
+                    setLink.textContent = `${sectionShortName} Set ${set.number}`;
+                    if (set.disabled) {
+                        setLink.classList.add('disabled');
+                        setLink.href = '#'; // Make unclickable
+                        setLink.setAttribute('aria-disabled', 'true');
                     }
                     practiceSetsGridFg.appendChild(setLink);
-                }
+                });
                 practiceSetsContainerFg.classList.remove('hidden');
             }
-
+            
             function setActiveSectionCardFg(selectedCard) {
                 allSectionCardsFg.forEach(card => card.classList.remove('active'));
-                if (selectedCard) {
-                    selectedCard.classList.add('active');
-                }
+                if (selectedCard) selectedCard.classList.add('active');
             }
 
             if (selectVRCardFg) {
-                selectVRCardFg.addEventListener('click', () => {
+                 selectVRCardFg.querySelector('.btn-select-section-fg').addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent card click from re-triggering if button inside card
                     if (!selectVRCardFg.classList.contains('disabled')) {
-                        displayPracticeSetsFg('Verbal Reasoning');
+                        const vrSets = [{ number: 16, link: "VR focus group16.html", disabled: false }];
+                         for(let i = 1; i <= 20; i++) {
+                            if (i !== 16) vrSets.push({ number: i, link: "#", disabled: true});
+                        }
+                        vrSets.sort((a,b) => a.number - b.number);
+                        displayPracticeSetsFg('Verbal Reasoning', 'VR', vrSets);
                         setActiveSectionCardFg(selectVRCardFg);
                     }
                 });
             }
-            if (selectDMCardFg) {
-                selectDMCardFg.addEventListener('click', () => {
-                    if (!selectDMCardFg.classList.contains('disabled')) {
-                        displayPracticeSetsFg('Decision Making');
-                        setActiveSectionCardFg(selectDMCardFg);
-                    }
-                });
-            }
-            if (selectQRCardFg) {
-                selectQRCardFg.addEventListener('click', () => {
-                    if (!selectQRCardFg.classList.contains('disabled')) {
-                        displayPracticeSetsFg('Quantitative Reasoning');
-                        setActiveSectionCardFg(selectQRCardFg);
-                    }
-                });
-            }
             
-            // Handle hash linking for Focus Groups section
-            const hash = window.location.hash;
-            if (hash === '#focus-groups-content') {
-                showSection('focus-groups-content');
-            }
-
-            // --- DM Class Worksheets Logic ---
+            // DM Class Worksheets Logic
             const dmSelectTopicBtn = document.getElementById('dm-select-topic-btn');
             const dmSubtopicSelectionDiv = document.getElementById('dm-subtopic-selection');
             const dmWorksheetDisplayDiv = document.getElementById('dm-worksheet-display');
@@ -1010,52 +723,45 @@
                 item.addEventListener('click', (e) => {
                     e.preventDefault();
                     if (item.classList.contains('disabled')) return;
-
                     dmSubtopicItems.forEach(i => i.classList.remove('active'));
                     item.classList.add('active');
-
-                    const subtopicName = item.textContent.replace(/<span.*<\/span>/, '').trim(); // Get name without soon badge
-                    dmWorksheetListTitle.textContent = `${subtopicName} Worksheets:`;
-                    
+                    const subtopicName = item.textContent.replace(/<span.*<\/span>/, '').trim();
+                    if(dmWorksheetListTitle) dmWorksheetListTitle.textContent = `${subtopicName} Worksheets:`;
                     populateDmWorksheets(subtopicName);
-
-                    dmSubtopicSelectionDiv.classList.add('hidden');
-                    dmWorksheetDisplayDiv.classList.remove('hidden');
+                    if(dmSubtopicSelectionDiv) dmSubtopicSelectionDiv.classList.add('hidden');
+                    if(dmWorksheetDisplayDiv) dmWorksheetDisplayDiv.classList.remove('hidden');
                 });
             });
 
             if (dmBackToTopicsBtn) {
                 dmBackToTopicsBtn.addEventListener('click', () => {
-                    dmWorksheetDisplayDiv.classList.add('hidden');
-                    dmSubtopicSelectionDiv.classList.remove('hidden');
-                    // dmSelectTopicBtn.classList.remove('hidden'); // Or keep it hidden, show subtopics directly
+                    if(dmWorksheetDisplayDiv) dmWorksheetDisplayDiv.classList.add('hidden');
+                    if(dmSubtopicSelectionDiv) dmSubtopicSelectionDiv.classList.remove('hidden');
                 });
             }
 
             function populateDmWorksheets(subtopicName) {
                 if (!dmWorksheetsGrid) return;
-                dmWorksheetsGrid.innerHTML = ''; // Clear previous worksheets
+                dmWorksheetsGrid.innerHTML = '';
                 
-                // Only create links if the subtopic is "Syllogisms" for now
                 if (subtopicName.toLowerCase() === "syllogisms") {
-                    for (let i = 1; i <= 5; i++) {
+                    const syllogismFiles = ["DM sylls 1.html", "DM sylls 2.html", "DM sylls 3.html", "DM sylls 4.html", "DM sylls 5.html"];
+                    syllogismFiles.forEach((file, i) => {
                         const worksheetLink = document.createElement('a');
-                        worksheetLink.href = `DM sylls ${i}.html`; // Link to the actual file
+                        worksheetLink.href = file;
                         worksheetLink.classList.add('dm-worksheet-link');
-                        worksheetLink.textContent = `${subtopicName} Worksheet ${i}`;
-                        // No alert needed as it's a direct link now
+                        worksheetLink.textContent = `${subtopicName} Worksheet ${i + 1}`;
                         dmWorksheetsGrid.appendChild(worksheetLink);
-                    }
+                    });
                 } else {
-                    // Placeholder for other subtopics
                     const placeholderText = document.createElement('p');
                     placeholderText.textContent = `Worksheets for ${subtopicName} are coming soon.`;
-                    placeholderText.classList.add('text-sm', 'text-gray-500');
+                    placeholderText.classList.add('text-sm', 'col-span-full');
+                    placeholderText.style.color = 'var(--md-sys-color-on-surface-variant)';
                     dmWorksheetsGrid.appendChild(placeholderText);
                 }
             }
-
         });
     </script>
 </body>
-</html> 
+</html>
