@@ -27,27 +27,26 @@
             --md-sys-color-tertiary-container: #FFD8E4;
             --md-sys-color-on-tertiary-container: #31111D;
             
-            /* Section specific theme colors (derived from design doc examples or M3 principles) */
-            --section-vr-primary: var(--md-sys-color-primary); /* Blue */
+            /* Section specific theme colors */
+            --section-vr-primary: var(--md-sys-color-primary);
             --section-vr-on-primary: var(--md-sys-color-on-primary);
             --section-vr-container: var(--md-sys-color-primary-container);
             --section-vr-on-container: var(--md-sys-color-on-primary-container);
 
-            --section-dm-primary: #6366F1; /* Indigo (DM) - As per existing file */
+            --section-dm-primary: #6366F1; 
             --section-dm-on-primary: #FFFFFF;
-            --section-dm-container: #E0E7FF; /* Lighter Indigo */
-            --section-dm-on-container: #3730A3; /* Darker Indigo */
+            --section-dm-container: #E0E7FF; 
+            --section-dm-on-container: #3730A3; 
 
-            --section-qr-primary: #1E8E3E; /* Green (QR) - From design doc success green */
+            --section-qr-primary: #1E8E3E; 
             --section-qr-on-primary: #FFFFFF;
-            --section-qr-container: #C8E6C9; /* Lighter Green */
-            --section-qr-on-container: #0D3C1E; /* Darker Green */
+            --section-qr-container: #C8E6C9; 
+            --section-qr-on-container: #0D3C1E; 
 
-            --section-fg-primary: #FF6D00; /* Orange (Focus Groups) - From design doc accent */
+            --section-fg-primary: #FF6D00; 
             --section-fg-on-primary: #FFFFFF;
             --section-fg-container: #FFDDBA;
             --section-fg-on-container: #5F2000;
-
 
             --md-sys-color-background: #F8F9FA; 
             --md-sys-color-on-background: #1F1F1F;
@@ -77,8 +76,8 @@
             --md-sys-font-weight-medium: 500;
 
             /* M3 Spacing */
-            --md-sys-spacing-unit: 0.5rem; /* 8px */
-            --md-sys-spacing-xxs: 0.25rem; /* 4px */
+            --md-sys-spacing-unit: 0.5rem; 
+            --md-sys-spacing-xxs: 0.25rem; 
             --md-sys-spacing-xs: 0.5rem;
             --md-sys-spacing-s: 0.75rem;
             --md-sys-spacing-m: 1rem;
@@ -86,9 +85,9 @@
             --md-sys-spacing-xl: 2rem;
             
             /* M3 Shape */
-            --md-sys-shape-corner-small: 0.25rem; /* 4dp */
-            --md-sys-shape-corner-medium: 0.75rem; /* 12dp */
-            --md-sys-shape-corner-large: 1rem;    /* 16dp */
+            --md-sys-shape-corner-small: 0.25rem; 
+            --md-sys-shape-corner-medium: 0.75rem; 
+            --md-sys-shape-corner-large: 1rem;    
             --md-sys-shape-corner-full: 9999px;
             
             /* M3 Elevation */
@@ -132,7 +131,7 @@
             background-color: var(--md-sys-color-surface);
             padding: var(--md-sys-spacing-xxs) 0;
             box-shadow: var(--md-sys-elevation-level1);
-            position: sticky; top: 68px; /* Adjust based on actual header height */
+            position: sticky; top: 68px; 
             z-index: 999;
             overflow-x: auto;
         }
@@ -140,25 +139,32 @@
             padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l); margin: 0 var(--md-sys-spacing-xs);
             cursor: pointer; font-family: var(--md-sys-typescale-label-large-font-family-name);
             font-weight: var(--md-sys-font-weight-medium); font-size: var(--md-sys-typescale-label-large-font-size);
-            color: var(--md-sys-color-on-surface-variant); border-bottom: 2px solid transparent;
+            border-bottom: 2px solid transparent;
             transition: color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard), 
                         border-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
-                        background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard); /* Added background-color transition */
+                        background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
             border-radius: var(--md-sys-shape-corner-small) var(--md-sys-shape-corner-small) 0 0;
             position: relative; text-decoration: none; display: inline-flex; align-items: center; gap: var(--md-sys-spacing-xs);
             white-space: nowrap;
+            /* Default inactive state for main nav tabs */
+            background-color: transparent;
+            color: var(--md-sys-color-on-surface-variant);
         }
         .nav-tab:hover { 
             color: var(--md-sys-color-primary); 
-            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); /* Added hover background */
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); 
         }
         .nav-tab.active {
             color: var(--md-sys-color-primary);
             border-bottom-color: var(--md-sys-color-primary);
-            background-color: transparent; /* Ensure active tab doesn't keep hover bg if border is primary indicator */
+            background-color: transparent; 
         }
         .nav-tab-disabled {
-            color: var(--md-sys-color-on-surface-variant); opacity: 0.38; cursor: not-allowed;
+            color: var(--md-sys-color-on-surface-variant) !important; /* Ensure override */
+            opacity: 0.38 !important; 
+            cursor: not-allowed !important;
+            background-color: transparent !important; /* Ensure disabled doesn't have odd background */
+            border-bottom-color: transparent !important;
         }
         .nav-tab-disabled .coming-soon-inline {
             font-size: 0.65rem; margin-left: var(--md-sys-spacing-xxs);
@@ -210,7 +216,7 @@
             margin-bottom: var(--md-sys-spacing-m);
             padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); 
         }
-        .left-nav-tab { /* M3 Navigation Drawer Item - Inactive State Defined Here */
+        .left-nav-tab { 
             display: flex;
             align-items: center;
             padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); 
@@ -220,30 +226,32 @@
             font-weight: var(--md-sys-font-weight-medium);
             font-size: var(--md-sys-typescale-label-large-font-size);
             
-            /* Explicit default/inactive state styling */
-            background-color: transparent; /* Ensures no inherited or strange background */
-            color: var(--md-sys-color-on-surface-variant); /* Default text color for inactive tabs */
+            /* Explicit default/inactive state styling - THIS IS THE FIX */
+            background-color: transparent !important; /* Ensure override default browser styles for <a> */
+            color: var(--md-sys-color-on-surface-variant) !important; /* Ensure override */
             
             cursor: pointer;
             transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
                         color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
-            text-decoration: none; 
+            text-decoration: none !important; /* Ensure no underline from browser defaults */
+            border: 1px solid transparent; /* To maintain layout consistency with potential borders on active/hover */
         }
-        .left-nav-tab .material-symbols-outlined { margin-right: var(--md-sys-spacing-m); }
+        .left-nav-tab .material-symbols-outlined { margin-right: var(--md-sys-spacing-m); vertical-align: middle; }
         
-        .left-nav-tab:hover { /* Hover state for all left-nav-tabs */
-            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
-            color: var(--md-sys-color-primary);
+        .left-nav-tab:hover { 
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent) !important;
+            color: var(--md-sys-color-primary) !important;
         }
-        .left-nav-tab.active { /* General active state styling, overridden by specific sections */
-            background-color: var(--md-sys-color-primary-container); 
-            color: var(--md-sys-color-on-primary-container);
+        .left-nav-tab.active { 
+            /* General active state - overridden by specific section styles */
+            background-color: var(--md-sys-color-primary-container) !important; 
+            color: var(--md-sys-color-on-primary-container) !important;
         }
-        /* Section specific active colors for left nav - These will override the general .active */
-        .left-nav-tab[data-target="vr-content"].active { background-color: var(--section-vr-container); color: var(--section-vr-on-container); }
-        .left-nav-tab[data-target="dm-content"].active { background-color: var(--section-dm-container); color: var(--section-dm-on-container); }
-        .left-nav-tab[data-target="qr-content"].active { background-color: var(--section-qr-container); color: var(--section-qr-on-container); }
-        .left-nav-tab[data-target="focus-groups-content"].active { background-color: var(--section-fg-container); color: var(--section-fg-on-container); }
+        /* Section specific active colors for left nav */
+        .left-nav-tab[data-target="vr-content"].active { background-color: var(--section-vr-container) !important; color: var(--section-vr-on-container) !important; }
+        .left-nav-tab[data-target="dm-content"].active { background-color: var(--section-dm-container) !important; color: var(--section-dm-on-container) !important; }
+        .left-nav-tab[data-target="qr-content"].active { background-color: var(--section-qr-container) !important; color: var(--section-qr-on-container) !important; }
+        .left-nav-tab[data-target="focus-groups-content"].active { background-color: var(--section-fg-container) !important; color: var(--section-fg-on-container) !important; }
 
 
         .practice-main-content {
@@ -341,7 +349,7 @@
             font-family: var(--md-sys-typescale-label-large-font-family-name);
             font-weight: var(--md-sys-font-weight-medium);
             font-size: var(--md-sys-typescale-label-large-font-size);
-            border: none; width: 100%; margin-top: auto; /* Push to bottom of card */
+            border: none; width: 100%; margin-top: auto; 
         }
         .btn-select-section-fg:hover:not(:disabled) { background-color: color-mix(in srgb, var(--section-fg-primary) 90%, black); }
         .section-card-fg.disabled { opacity: 0.5; cursor: not-allowed; }
