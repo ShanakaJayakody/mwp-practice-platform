@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DM Syllogisms Worksheet 2 - MedwithPurpose</title>
+    <title>DM Syllogisms Worksheet 1 - MedwithPurpose</title>
     <link rel="icon" href="https://ik.imagekit.io/mwp/2.svg?updatedAt=1745982956185" type="image/svg+xml">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -457,7 +457,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head> 
+</head>
 <body>
     <div id="app-container">
 
@@ -465,7 +465,7 @@
              <div class="text-center mb-6">
                 <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
                      alt="MedwithPurpose Logo" class="mx-auto h-11 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
-                <h1 class="text-2xl md:text-3xl font-bold text-blue-600">Decision Making Syllogisms Worksheet 2</h1>
+                <h1 class="text-2xl md:text-3xl font-bold text-blue-600">Decision Making Syllogisms Worksheet 1</h1>
                 <p class="text-gray-600 mt-2">Prepare for the UCAT DM section.</p>
                  <p class="text-sm text-gray-500 mt-4">
                      This section contains <strong>5 questions</strong> with 5 statements each. Maximum score is <strong>10 points</strong> (2 points per question). You have <strong>6 minutes</strong> to complete it.
@@ -578,7 +578,7 @@
              <div class="text-center mb-6 flex-shrink-0">
                 <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
                      alt="MedwithPurpose Logo" class="mx-auto h-11 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
-                 <h2 class="text-2xl md:text-3xl font-bold text-blue-600">DM Syllogisms Worksheet 2 Results</h2>
+                 <h2 class="text-2xl md:text-3xl font-bold text-blue-600">DM Syllogisms Worksheet 1 Results</h2>
              </div>
             <div class="bg-blue-50 p-4 rounded-lg mb-6 text-center flex-shrink-0">
                  <p class="text-lg font-semibold">Your Score: <span id="score" class="text-blue-700">0</span> / <span id="total-score-possible">10</span> Points</p>
@@ -626,7 +626,7 @@
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
         // --- Firebase Configuration ---
         const firebaseConfig = {
           apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
@@ -729,11 +729,11 @@
         let calcCurrentInput = '0';
         let calcPreviousInput = '';
         let calcOperator = null;
+        let calcMemory = 0;
         let calcShouldResetDisplay = false; 
         let calcMrcPressedOnce = false; 
         let isDraggingCalculator = false;
         let calculatorOffsetX, calculatorOffsetY;
-        let calcMemory = 0; // Add missing calculator memory variable
         
         // Add a debounce flag for submissions
         let isSubmittingReflection = false;
@@ -1424,7 +1424,7 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
             const performanceData = {
                 studentName: userName || 'Anonymous',
                 studentEmail: userEmail || '', // <--- ADD THIS LINE
-                examName: "DM Syllogisms Worksheet 2", 
+                examName: "DM Syllogisms Worksheet 1", // Updated examName
                 score: calculateScore(), // New function to calculate score
                 totalQuestions: questions.length, // Should be 5
                 totalPossibleScore: 10, // Explicitly add total possible score (2 points per question)
@@ -1560,6 +1560,225 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
              showReviewScreen();
          }
 
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const reflection = reflectionText.value.trim();
+            const focusRating = focusRatingInput.value;
+            const finalScore = scoreEl.textContent;
+            const totalQs = totalQuestionsResultsEl.textContent;
+            const timeTaken = timeTakenEl.textContent;
+            let y = 15;
+            const lineHeight = 7;
+            const pageHeight = doc.internal.pageSize.height;
+            const margin = 15;
+
+            doc.setFontSize(18);
+            doc.text("UCAT Quantitative Reasoning Results", margin, y);
+            y += lineHeight * 1.5;
+            doc.setFontSize(12);
+            doc.text(`Name: ${userName || 'N/A'}`, margin, y); y += lineHeight;
+            doc.text(`Goal: ${userGoal || 'N/A'} / ${totalQs}`, margin, y); y += lineHeight;
+            doc.text(`Focus Area: ${userFocusArea || 'N/A'}`, margin, y); y += lineHeight;
+            doc.text(`Final Score: ${finalScore} / ${totalQs}`, margin, y); y += lineHeight;
+            doc.text(`Time Taken: ${timeTaken}`, margin, y); y += lineHeight * 1.5;
+            doc.setFontSize(14);
+            doc.text("Focus Rating (1-5):", margin, y); y += lineHeight;
+            doc.setFontSize(10);
+            doc.text(focusRating || 'N/A', margin, y); y += lineHeight * 1.5;
+            doc.setFontSize(14);
+            doc.text("Main Takeaway:", margin, y); y += lineHeight;
+            doc.setFontSize(10);
+            const reflectionLines = doc.splitTextToSize(reflection || 'No reflection provided.', doc.internal.pageSize.width - margin * 2);
+            doc.text(reflectionLines, margin, y);
+            y += reflectionLines.length * (lineHeight * 0.7) + lineHeight;
+            doc.setFontSize(14);
+            doc.text("Detailed Results Summary:", margin, y); y += lineHeight * 1.5;
+            doc.setFontSize(10);
+
+            questions.forEach((qData, index) => {
+                const userAnswer = userAnswers[index];
+                const correctAnswer = qData.correctAnswer;
+                const isCorrect = userAnswer !== null && userAnswer !== undefined && userAnswer === correctAnswer;
+                const status = userAnswer === null || userAnswer === undefined ? "Not Answered" : (isCorrect ? "Correct" : "Incorrect");
+                const timeSpentSec = Math.round((questionTimes[index] || 0) / 1000);
+                const resultText = `Q${index + 1}: Your Ans: ${userAnswer || 'N/A'}, Correct: ${correctAnswer}, Status: ${status}, Time: ${timeSpentSec}s`;
+                
+                let textLines = doc.splitTextToSize(resultText, doc.internal.pageSize.width - margin * 2);
+                if (y + (textLines.length * (lineHeight * 0.7)) > pageHeight - margin) {
+                    doc.addPage();
+                    y = margin;
+                }
+                doc.text(textLines, margin, y);
+                y += textLines.length * (lineHeight * 0.7) + (lineHeight*0.3);
+            });
+            doc.save(`ucat_qr_results_${userName || 'user'}.pdf`);
+        }
+        
+        // Function to submit performance data to server
+        async function submitPerformanceData() {
+            // Prevent multiple submissions
+            if (isSubmittingReflection) {
+                console.log("Submission already in progress, ignoring duplicate call");
+                return;
+            }
+            
+            try {
+                isSubmittingReflection = true;
+                
+                // Get additional reflection data
+                const focusRating = document.getElementById('focus-rating').value || '';
+                const reflection = document.getElementById('reflection-text').value || '';
+                
+                if (typeof firebase !== 'undefined' && firebase.firestore) {
+                    const db = firebase.firestore();
+                    
+                    // Get current authenticated user data if available
+                    let userDisplayName = '';
+                    let userId = ''; // <--- Add this
+                    
+                    if (firebase.auth && firebase.auth().currentUser) {
+                        const currentUser = firebase.auth().currentUser;
+                        userDisplayName = currentUser.displayName || '';
+                        userId = currentUser.uid; // <--- Get the UID
+                        // Note: we're already storing userEmail from when the test started
+                    }
+                    
+                    // Instead of querying for existing document, create a new one with both test results and reflection
+                    const performanceData = {
+                        studentName: userName || userDisplayName || 'Anonymous',
+                        studentEmail: userEmail || '',
+                        userId: userId, // <--- Add userId here
+                        examName: "DM Syllogisms Worksheet 1", // Updated examName
+                        score: scoreEl.textContent,
+                        totalQuestions: totalQuestionsResultsEl.textContent, // Should be 5
+                        totalPossibleScore: 10, // Explicitly add total possible score (2 points per question)
+                        timeTaken: timeTakenEl.textContent,
+                        answers: userAnswers,
+                        questionTimes: questionTimes,
+                        flaggedQuestions: flaggedQuestions,
+                        goal: userGoal || '',
+                        focusArea: userFocusArea || '',
+                        focusRating: focusRating,
+                        reflection: reflection,
+                        submissionTimestamp: new Date().toISOString(),
+                        userAgent: navigator.userAgent,
+                        isReflection: true // Flag to indicate this is a reflection submission
+                    };
+                    
+                    // Add as a new document
+                    await db.collection("performanceSubmissions").add(performanceData);
+                    
+                    // Show success message
+                    const successNotice = document.createElement('div');
+                    successNotice.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow-lg z-50';
+                    successNotice.innerHTML = `
+                        <div class="flex items-center">
+                            <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="font-medium">Success!</span>
+                            <span class="ml-2">Your reflection has been saved.</span>
+                        </div>
+                    `;
+                    document.body.appendChild(successNotice);
+                    
+                    // Remove the notice after 5 seconds
+                    setTimeout(() => {
+                        successNotice.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                        setTimeout(() => {
+                            document.body.removeChild(successNotice);
+                        }, 500);
+                    }, 5000);
+                    
+                    // Update the button
+                    document.getElementById('submit-performance-button').disabled = true;
+                    document.getElementById('submit-performance-button').textContent = 'Reflection Saved ✓';
+                    document.getElementById('submit-performance-button').classList.add('bg-green-500');
+                } else {
+                    alert('Firebase is not initialized. Please configure Firebase first.');
+                    console.error('Firebase or Firestore is not available.');
+                }
+            } catch (error) {
+                console.error('Error saving reflection:', error);
+                alert('An error occurred while saving your reflection. Please try again.');
+            } finally {
+                // Reset the submission flag after a delay, just in case
+                setTimeout(() => {
+                    isSubmittingReflection = false;
+                }, 2000);
+            }
+        }
+        
+        // --- Calculator Functions ---
+        function updateCalcDisplay() {
+            // Ensure display doesn't overflow, use scientific notation for very long numbers
+            if (calcCurrentInput === 'Error') {
+                calcDisplay.textContent = 'Error';
+            } else if (calcCurrentInput.length > 12) {
+                // For long numbers, try scientific notation
+                try {
+                    const num = parseFloat(calcCurrentInput);
+                    if (isFinite(num)) {
+                        calcDisplay.textContent = num.toExponential(6);
+                    } else {
+                        calcDisplay.textContent = 'Error';
+                    }
+                } catch (e) {
+                    calcDisplay.textContent = calcCurrentInput.substring(0, 12);
+                }
+            } else {
+                calcDisplay.textContent = calcCurrentInput;
+            }
+            
+            // Show/hide memory indicator
+            const memIndicator = document.getElementById('calc-memory-indicator');
+            if (calcMemory !== 0) {
+                memIndicator.style.display = 'block';
+            } else {
+                memIndicator.style.display = 'none';
+            }
+        }
+
+        // Add specific event handler for equals button
+        document.querySelector('.calc-button.equals').addEventListener('click', (e) => {
+            console.log('Equals button clicked');
+            calculate();
+            e.stopPropagation(); // Prevent event bubbling
+        });
+
+        calcButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const value = button.dataset.calcValue;
+                const action = button.dataset.calcAction;
+                
+                console.log('Button clicked:', button.textContent, 'value:', value, 'action:', action);
+
+                if (value !== undefined) { 
+                    if (value === '.') { inputDecimal(); } 
+                    else { inputDigit(value); }
+                } else if (action) { 
+                    if (['+', '-', '*', '/'].includes(action)) { handleOperator(action); } 
+                    else if (action === 'equals') { 
+                        console.log('Equals action detected');
+                        calculate(); 
+                    } 
+                    else if (action === 'clear') { clearCalculator(); } 
+                    else if (['m+', 'm-', 'mrc'].includes(action)) { handleMemory(action); } 
+                    else if (['sqrt', 'percent', 'negate', 'backspace'].includes(action)) { handleSpecialFunction(action); }
+                }
+            });
+        });
+
+        function clearCalculator() {
+            calcCurrentInput = '0';
+            calcPreviousInput = '';
+            calcOperator = null;
+            calcShouldResetDisplay = false;
+            calcMrcPressedOnce = false; 
+            updateCalcDisplay();
+        }
+        
         function inputDigit(digit) {
             if (calcCurrentInput === 'Error') calcCurrentInput = '0'; // Clear error on new digit
             if (calcShouldResetDisplay) {
@@ -1838,6 +2057,7 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
                 document.onmousemove = null;
             }
         }
+
 
         // --- Event Listeners ---
         startButton.addEventListener('click', () => {
@@ -2229,7 +2449,7 @@ For example: an event with Catering Beta for 15 guests requiring 2.5 hours of se
                 });
             });
         }
-    });
+    }); // Closing bracket for DOMContentLoaded
     </script>
 </body>
-</html> 
+</html
