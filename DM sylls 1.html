@@ -326,7 +326,7 @@
             cursor: pointer;
         }
         .footer-bar button:not(#next-button):not(#end-practice-session-button-footer) {
-             background-color: transparent;
+            background-color: transparent;
              color: var(--md-sys-color-primary);
              border: none;
         }
@@ -349,13 +349,13 @@
         }
         .passage-column, .question-column {
             flex: 1; /* Each column takes half the space */
-            overflow-y: auto; 
+            overflow-y: auto;
             padding: 1rem;
             border: none; 
             border-radius: var(--md-sys-shape-corner-medium); /* M3 */
             background-color: var(--md-sys-color-surface-container-lowest); /* M3 */
-            height: 100%; 
-            position: relative; 
+             height: 100%; 
+             position: relative; 
             color: var(--md-sys-color-on-surface); /* M3 text color */
             font-family: var(--md-sys-typescale-body-large-font-family-name);
             font-size: var(--md-sys-typescale-body-large-font-size);
@@ -404,7 +404,7 @@
         .modal.flex { display: flex; }
         .modal-content .flex.justify-between.items-center h3 {\n            font-family: var(--md-sys-typescale-font-family-name);\n            font-size: 1.5rem; /* 24px */\n            font-weight: 600;\n            color: var(--md-sys-color-on-surface);\n        }\n        .modal-content #close-modal-button { /* Style as M3 Icon button */\n            font-size: 1.5rem; /* Icon size */\n            color: var(--md-sys-color-on-surface-variant);\n            background: transparent; border: none; padding: 0.5rem;\n            border-radius: var(--md-sys-shape-corner-full);\n            cursor:pointer;\n        }\n         .modal-content #close-modal-button:hover {\n            background-color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 8%, transparent);\n         }\n
 
-        button, .button { 
+        button, .button {
             transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
             border-radius: var(--md-sys-shape-corner-full); 
             padding: 0.625rem 1.5rem; 
@@ -466,7 +466,7 @@
             font-weight: 600; 
             color: var(--md-sys-color-on-primary); 
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease; 
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             padding: 0.25rem;
         }
@@ -523,13 +523,13 @@
                 grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); 
                 gap: 0.5rem;
                 max-width: 450px;
-            }
-            .result-summary-box { width: 50px; height: 50px; }
+             }
+             .result-summary-box { width: 50px; height: 50px; }
             .time-display-in-box { font-size: 0.75rem; }
             .syllogism-options { flex-direction: column; }
         }
          @media (max-width: 480px) {\n             #review-grid { grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); } \n             .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: 0.8rem; }\n             button, .button { padding: 0.4rem 0.8rem; }\n             .footer-bar button { padding: 0.4rem 0.6rem; }\n             .review-grid-button { font-size: 0.75rem; border-radius: var(--md-sys-shape-corner-small); }\n             #results-details-grid { \n                grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); \n                gap: 0.5rem;\n                max-width: 100%; \n                padding-left: 0.5rem; padding-right: 0.5rem;\n             }\n             .result-summary-box { width: 45px; height: 45px; border-radius: var(--md-sys-shape-corner-small); }\n             .time-display-in-box { font-size: 0.65rem; }\n             .question-number-label { font-size: 0.65rem; }\n             .syllogism-button { font-size: 0.875rem; padding: 0.625rem 1rem; }\n         }\n    </style>
-</head>
+</head> 
 <body>
     <div id="app-container">
 
@@ -568,7 +568,7 @@
                 </div>
             </div>
             <div class="secondary-toolbar">
-                <div> 
+                 <div>
                     <label for="reflection-text" class="block text-md font-semibold text-gray-700 mb-1">Main takeaway from this practice:</label>
                     <textarea id="reflection-text" name="reflection-text" rows="3" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Reflect on your performance, strategies, or areas for improvement..."></textarea>
                  </div>
@@ -599,7 +599,7 @@
     </div>
 
     <script>
-document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
         // --- Firebase Configuration ---
         const firebaseConfig = {
           apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
