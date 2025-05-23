@@ -8,19 +8,42 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            --color-primary: #3b82f6;
-            --color-primary-dark: #2563eb;
-            --color-primary-light: #93c5fd;
-            --color-primary-bg: #eff6ff;
-            --color-success: #10b981;
-            --color-warning: #f59e0b;
-            --color-danger: #ef4444;
-            --color-text: #1f2937;
-            --color-text-secondary: #4b5563;
-            --color-text-tertiary: #6b7280;
-            --color-bg: #f9fafb;
-            --color-bg-secondary: #f3f4f6;
-            --color-border: #e5e7eb;
+            /* M3 Color System - Light Mode */
+            --md-sys-color-primary: #1967D2;
+            --md-sys-color-on-primary: #FFFFFF;
+            --md-sys-color-primary-container: #D1E3FF;
+            --md-sys-color-on-primary-container: #001E3A;
+            --md-sys-color-secondary: #4285F4;
+            --md-sys-color-on-secondary: #FFFFFF;
+            --md-sys-color-accent: #FF6D00;
+            --md-sys-color-on-accent: #FFFFFF;
+            --md-sys-color-background: #F8F9FA;
+            --md-sys-color-on-background: #1F1F1F;
+            --md-sys-color-surface: #FFFFFF;
+            --md-sys-color-on-surface: #1F1F1F;
+            --md-sys-color-on-surface-variant: #444746;
+            --md-sys-color-outline: #747775;
+            --md-sys-color-error: #D93025;
+            --md-sys-color-on-error: #FFFFFF;
+            --md-sys-color-success: #1E8E3E;
+            --md-sys-color-on-success: #FFFFFF;
+            --md-sys-color-warning: #F9AB00;
+            --md-sys-color-on-warning: #FFFFFF;
+
+            /* Legacy color mappings for backward compatibility */
+            --color-primary: var(--md-sys-color-primary);
+            --color-primary-dark: #0F4C9C;
+            --color-primary-light: var(--md-sys-color-primary-container);
+            --color-primary-bg: var(--md-sys-color-primary-container);
+            --color-success: var(--md-sys-color-success);
+            --color-warning: var(--md-sys-color-warning);
+            --color-danger: var(--md-sys-color-error);
+            --color-text: var(--md-sys-color-on-background);
+            --color-text-secondary: var(--md-sys-color-on-surface-variant);
+            --color-text-tertiary: #6B7280;
+            --color-bg: var(--md-sys-color-background);
+            --color-bg-secondary: #F1F3F4;
+            --color-border: var(--md-sys-color-outline);
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -32,22 +55,90 @@
             --transition: 220ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                /* M3 Color System - Dark Mode */
+                --md-sys-color-primary: #AECBFA;
+                --md-sys-color-on-primary: #00325B;
+                --md-sys-color-primary-container: #00497E;
+                --md-sys-color-on-primary-container: #D1E3FF;
+                --md-sys-color-secondary: #A8C7FA;
+                --md-sys-color-on-secondary: #0A315E;
+                --md-sys-color-accent: #FFB74D;
+                --md-sys-color-on-accent: #542F00;
+                --md-sys-color-background: #1F1F1F;
+                --md-sys-color-on-background: #E3E3E3;
+                --md-sys-color-surface: #2B2B2B;
+                --md-sys-color-on-surface: #E3E3E3;
+                --md-sys-color-on-surface-variant: #C4C7C5;
+                --md-sys-color-outline: #8E918F;
+                --md-sys-color-error: #F2B8B5;
+                --md-sys-color-on-error: #601410;
+                --md-sys-color-success: #A5D6A7;
+                --md-sys-color-on-success: #0D3C1E;
+                --md-sys-color-warning: #FFD54F;
+                --md-sys-color-on-warning: #5D4037;
+
+                /* Updated legacy mappings for dark mode */
+                --color-primary-dark: #7BAAF7;
+                --color-bg-secondary: #383838;
+                --color-text-tertiary: #9AA0A6;
+                --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+                --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+                --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+                --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            }
+        }
+
+        /* Manual dark mode class override */
+        .dark-theme {
+            --md-sys-color-primary: #AECBFA;
+            --md-sys-color-on-primary: #00325B;
+            --md-sys-color-primary-container: #00497E;
+            --md-sys-color-on-primary-container: #D1E3FF;
+            --md-sys-color-secondary: #A8C7FA;
+            --md-sys-color-on-secondary: #0A315E;
+            --md-sys-color-accent: #FFB74D;
+            --md-sys-color-on-accent: #542F00;
+            --md-sys-color-background: #1F1F1F;
+            --md-sys-color-on-background: #E3E3E3;
+            --md-sys-color-surface: #2B2B2B;
+            --md-sys-color-on-surface: #E3E3E3;
+            --md-sys-color-on-surface-variant: #C4C7C5;
+            --md-sys-color-outline: #8E918F;
+            --md-sys-color-error: #F2B8B5;
+            --md-sys-color-on-error: #601410;
+            --md-sys-color-success: #A5D6A7;
+            --md-sys-color-on-success: #0D3C1E;
+            --md-sys-color-warning: #FFD54F;
+            --md-sys-color-on-warning: #5D4037;
+
+            --color-primary-dark: #7BAAF7;
+            --color-bg-secondary: #383838;
+            --color-text-tertiary: #9AA0A6;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--color-bg);
+            background-color: var(--md-sys-color-background);
             display: flex;
             justify-content: center;
             align-items: flex-start;
             min-height: 100vh;
             padding: 0;
-            color: var(--color-text);
+            color: var(--md-sys-color-on-background);
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
 
         .dashboard-wrapper {
-            background-color: #ffffff;
+            background-color: var(--md-sys-color-surface);
             width: 100%;
             margin: 0;
             min-height: 100vh;
@@ -58,12 +149,13 @@
 
         /* New Menu Bar Box Style */
         .menu-bar-boxed-container {
-            background-color: #ffffff;
+            background-color: var(--md-sys-color-surface);
             border-radius: 18px; /* Pronounced rounded corners like the image */
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); /* Soft, slightly spread shadow */
+            box-shadow: var(--shadow-lg);
             margin: 1.5rem auto; /* Space around and center */
             max-width: 1320px; /* Control width, adjust as needed */
             overflow: hidden; /* Clip content to rounded corners */
+            border: 1px solid var(--md-sys-color-outline);
         }
 
         /* Dashboard Header */
@@ -72,7 +164,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem 1.5rem;
-            background-color: #ffffff; /* Retain white background */
+            background-color: var(--md-sys-color-surface);
         }
 
         .dashboard-header .logo-small {
@@ -85,18 +177,18 @@
         }
         
         .settings-icon {
-            color: var(--color-text-secondary);
+            color: var(--md-sys-color-on-surface-variant);
             transition: color var(--transition);
         }
         .settings-icon:hover {
-            color: var(--color-primary);
+            color: var(--md-sys-color-primary);
         }
 
         /* Main Navigation */
         .main-nav {
             display: flex;
             justify-content: center;
-            background-color: #ffffff; /* Retain white background */
+            background-color: var(--md-sys-color-surface);
             padding: 0.25rem 0;
         }
 
@@ -105,7 +197,7 @@
             margin: 0 0.5rem;
             cursor: pointer;
             font-weight: 500;
-            color: var(--color-text-secondary);
+            color: var(--md-sys-color-on-surface-variant);
             border-bottom: 2px solid transparent; /* Keep for spacing */
             transition: color var(--transition), background-color var(--transition), border-color var(--transition);
             border-radius: var(--radius-sm) var(--radius-sm) 0 0;
@@ -121,15 +213,15 @@
             bottom: -2px; /* Aligns with the original border-bottom space */
             width: 100%;
             height: 2px;
-            background-color: var(--color-primary);
+            background-color: var(--md-sys-color-primary);
             transform: scaleX(0);
             transform-origin: center; /* Underline grows from the center */
             transition: transform 0.3s ease-out;
         }
 
         .nav-tab:hover {
-            color: var(--color-primary);
-            background-color: var(--color-primary-bg);
+            color: var(--md-sys-color-primary);
+            background-color: var(--md-sys-color-primary-container);
         }
         
         .nav-tab:hover::after {
@@ -137,8 +229,8 @@
         }
 
         .nav-tab.active {
-            color: var(--color-primary);
-            background-color: var(--color-primary-bg);
+            color: var(--md-sys-color-primary);
+            background-color: var(--md-sys-color-primary-container);
         }
         
         .nav-tab.active::after {
@@ -146,14 +238,14 @@
         }
 
         .nav-tab-disabled {
-            color: var(--color-text-tertiary);
+            color: var(--md-sys-color-on-surface-variant);
             cursor: not-allowed;
             opacity: 0.7;
         }
 
         .nav-tab-disabled .coming-soon-inline {
             font-size: 0.65rem;
-            color: var(--color-text-tertiary);
+            color: var(--md-sys-color-on-surface-variant);
             margin-left: 4px;
             background-color: var(--color-bg-secondary);
             padding: 0.1rem 0.4rem;
@@ -169,13 +261,13 @@
             opacity: 0;
             visibility: hidden;
             position: absolute;
-            background-color: #ffffff;
+            background-color: var(--md-sys-color-surface);
             min-width: 200px;
             box-shadow: var(--shadow-md);
             z-index: 50;
             border-radius: var(--radius);
             margin-top: 0.25rem;
-            border: 1px solid var(--color-border);
+            border: 1px solid var(--md-sys-color-outline);
             transform: translateY(-10px);
             transition: all var(--transition);
             overflow: hidden;
@@ -188,12 +280,12 @@
         }
 
         .dropdown-item {
-            color: var(--color-text-secondary);
+            color: var(--md-sys-color-on-surface-variant);
             padding: 0.75rem 1rem;
             text-decoration: none;
             display: block;
             font-size: 0.9rem;
-            border-bottom: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--md-sys-color-outline);
             transition: all var(--transition);
         }
 
@@ -202,13 +294,13 @@
         }
 
         .dropdown-item:hover:not(.disabled) {
-            background-color: var(--color-primary-bg);
-            color: var(--color-primary-dark);
+            background-color: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-primary);
             padding-left: 1.25rem;
         }
         
         .dropdown-item.disabled {
-            color: var(--color-text-tertiary);
+            color: var(--md-sys-color-on-surface-variant);
             cursor: not-allowed;
             background-color: var(--color-bg-secondary);
             opacity: 0.7;
@@ -216,7 +308,7 @@
 
         .dropdown-item.disabled .coming-soon-inline {
             font-size: 0.65rem;
-            color: var(--color-text-tertiary);
+            color: var(--md-sys-color-on-surface-variant);
             margin-left: 4px;
             background-color: rgba(255, 255, 255, 0.7);
             padding: 0.1rem 0.4rem;
@@ -225,7 +317,7 @@
 
         .welcome-user {
             font-size: 0.9rem;
-            color: var(--color-text-secondary);
+            color: var(--md-sys-color-on-surface-variant);
             display: flex;
             align-items: center;
         }
@@ -235,13 +327,13 @@
             display: inline-block;
             width: 8px;
             height: 8px;
-            background-color: var(--color-success);
+            background-color: var(--md-sys-color-success);
             border-radius: 50%;
             margin-right: 8px;
         }
         
         .btn-logout {
-            background-color: var(--color-danger);
+            background-color: var(--md-sys-color-error);
             color: white;
             padding: 0.5rem 1rem;
             font-size: 0.875rem;
@@ -265,7 +357,7 @@
         .settings-container {
             max-width: 700px;
             margin: 0 auto;
-            background-color: #ffffff;
+            background-color: var(--md-sys-color-surface);
             padding: 2rem;
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-md);
@@ -274,7 +366,7 @@
         .settings-section {
             margin-bottom: 2.5rem;
             padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--md-sys-color-outline);
         }
         .settings-section:last-child {
             margin-bottom: 0;
@@ -285,7 +377,7 @@
         .settings-section h2 {
             font-size: 1.5rem; /* 24px */
             font-weight: 600;
-            color: var(--color-text);
+            color: var(--md-sys-color-on-surface);
             margin-bottom: 1.25rem; /* 20px */
         }
 
@@ -297,7 +389,7 @@
             display: block;
             font-size: 0.875rem; /* 14px */
             font-weight: 500;
-            color: var(--color-text-secondary);
+            color: var(--md-sys-color-on-surface-variant);
             margin-bottom: 0.375rem; /* 6px */
         }
 
@@ -307,27 +399,27 @@
         .input-group input[type="date"] {
             width: 100%;
             padding: 0.75rem 1rem; /* 12px 16px */
-            border: 1px solid var(--color-border);
+            border: 1px solid var(--md-sys-color-outline);
             border-radius: var(--radius); /* 0.5rem */
             font-size: 1rem; /* 16px */
-            color: var(--color-text);
-            background-color: var(--color-bg-secondary);
+            color: var(--md-sys-color-on-surface);
+            background-color: var(--md-sys-color-background);
             transition: border-color var(--transition), box-shadow var(--transition);
         }
         .input-group input[type="text"]:read-only,
         .input-group input[type="email"]:read-only {
-             background-color: var(--color-bg);
+             background-color: var(--md-sys-color-background);
              cursor: default;
         }
         
         .input-group input:focus {
             outline: none;
-            border-color: var(--color-primary);
+            border-color: var(--md-sys-color-primary);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); /* Primary focus ring */
         }
 
         .btn-save {
-            background-color: var(--color-primary);
+            background-color: var(--md-sys-color-primary);
             color: white;
             padding: 0.6rem 1.2rem;
             border-radius: var(--radius);
@@ -338,10 +430,10 @@
             min-width: 120px;
         }
         .btn-save:hover {
-            background-color: var(--color-primary-dark);
+            background-color: var(--md-sys-color-primary-dark);
         }
         .btn-save:disabled {
-            background-color: var(--color-text-tertiary);
+            background-color: var(--md-sys-color-on-surface-variant);
             cursor: not-allowed;
         }
         
@@ -353,14 +445,14 @@
             text-align: center;
         }
         .message.success {
-            background-color: var(--color-success-bg, #d1fae5); /* Adding a fallback */
-            color: var(--color-success-dark, #065f46); /* Adding a fallback */
-            border: 1px solid var(--color-success, #10b981);
+            background-color: var(--md-sys-color-success-bg, #d1fae5); /* Adding a fallback */
+            color: var(--md-sys-color-success-dark, #065f46); /* Adding a fallback */
+            border: 1px solid var(--md-sys-color-success, #10b981);
         }
         .message.error {
-            background-color: var(--color-danger-bg, #fee2e2); /* Adding a fallback */
-            color: var(--color-danger-dark, #991b1b); /* Adding a fallback */
-            border: 1px solid var(--color-danger, #ef4444);
+            background-color: var(--md-sys-color-danger-bg, #fee2e2); /* Adding a fallback */
+            color: var(--md-sys-color-danger-dark, #991b1b); /* Adding a fallback */
+            border: 1px solid var(--md-sys-color-danger, #ef4444);
         }
         
         #auth-redirect-message {
@@ -396,7 +488,7 @@
         .spinner {
             border: 3px solid rgba(0, 0, 0, 0.1);
             border-radius: 50%;
-            border-top: 3px solid var(--color-primary);
+            border-top: 3px solid var(--md-sys-color-primary);
             width: 16px; /* Smaller spinner */
             height: 16px;
             animation: spin 1s linear infinite;
