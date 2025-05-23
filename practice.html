@@ -27,26 +27,27 @@
             --md-sys-color-tertiary-container: #FFD8E4;
             --md-sys-color-on-tertiary-container: #31111D;
             
-            /* Section specific theme colors */
-            --section-vr-primary: var(--md-sys-color-primary);
+            /* Section specific theme colors (derived from design doc examples or M3 principles) */
+            --section-vr-primary: var(--md-sys-color-primary); /* Blue */
             --section-vr-on-primary: var(--md-sys-color-on-primary);
             --section-vr-container: var(--md-sys-color-primary-container);
             --section-vr-on-container: var(--md-sys-color-on-primary-container);
 
-            --section-dm-primary: #6366F1; 
+            --section-dm-primary: #6366F1; /* Indigo (DM) - As per existing file */
             --section-dm-on-primary: #FFFFFF;
-            --section-dm-container: #E0E7FF; 
-            --section-dm-on-container: #3730A3; 
+            --section-dm-container: #E0E7FF; /* Lighter Indigo */
+            --section-dm-on-container: #3730A3; /* Darker Indigo */
 
-            --section-qr-primary: #1E8E3E; 
+            --section-qr-primary: #1E8E3E; /* Green (QR) - From design doc success green */
             --section-qr-on-primary: #FFFFFF;
-            --section-qr-container: #C8E6C9; 
-            --section-qr-on-container: #0D3C1E; 
+            --section-qr-container: #C8E6C9; /* Lighter Green */
+            --section-qr-on-container: #0D3C1E; /* Darker Green */
 
-            --section-fg-primary: #FF6D00; 
+            --section-fg-primary: #FF6D00; /* Orange (Focus Groups) - From design doc accent */
             --section-fg-on-primary: #FFFFFF;
             --section-fg-container: #FFDDBA;
             --section-fg-on-container: #5F2000;
+
 
             --md-sys-color-background: #F8F9FA; 
             --md-sys-color-on-background: #1F1F1F;
@@ -141,15 +142,20 @@
             font-weight: var(--md-sys-font-weight-medium); font-size: var(--md-sys-typescale-label-large-font-size);
             color: var(--md-sys-color-on-surface-variant); border-bottom: 2px solid transparent;
             transition: color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard), 
-                        border-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+                        border-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
+                        background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard); /* Added background-color transition */
             border-radius: var(--md-sys-shape-corner-small) var(--md-sys-shape-corner-small) 0 0;
             position: relative; text-decoration: none; display: inline-flex; align-items: center; gap: var(--md-sys-spacing-xs);
             white-space: nowrap;
         }
-        .nav-tab:hover { color: var(--md-sys-color-primary); }
+        .nav-tab:hover { 
+            color: var(--md-sys-color-primary); 
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); /* Added hover background */
+        }
         .nav-tab.active {
             color: var(--md-sys-color-primary);
             border-bottom-color: var(--md-sys-color-primary);
+            background-color: transparent; /* Ensure active tab doesn't keep hover bg if border is primary indicator */
         }
         .nav-tab-disabled {
             color: var(--md-sys-color-on-surface-variant); opacity: 0.38; cursor: not-allowed;
@@ -188,7 +194,7 @@
             gap: var(--md-sys-spacing-l); 
         }
 
-        .left-nav-menu { /* M3 Navigation Rail / Drawer style */
+        .left-nav-menu { 
             width: 256px; 
             flex-shrink: 0;
             background-color: var(--md-sys-color-surface);
@@ -196,7 +202,7 @@
             box-shadow: var(--md-sys-elevation-level1);
             padding: var(--md-sys-spacing-m); 
         }
-        .left-nav-menu h3 { /* Title Large */
+        .left-nav-menu h3 { 
             font-family: var(--md-sys-typescale-title-large-font-family-name);
             font-weight: var(--md-sys-font-weight-medium);
             font-size: var(--md-sys-typescale-title-large-font-size);
@@ -204,7 +210,7 @@
             margin-bottom: var(--md-sys-spacing-m);
             padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); 
         }
-        .left-nav-tab { /* M3 Navigation Drawer Item */
+        .left-nav-tab { /* M3 Navigation Drawer Item - Inactive State Defined Here */
             display: flex;
             align-items: center;
             padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); 
@@ -213,7 +219,11 @@
             font-family: var(--md-sys-typescale-label-large-font-family-name);
             font-weight: var(--md-sys-font-weight-medium);
             font-size: var(--md-sys-typescale-label-large-font-size);
-            color: var(--md-sys-color-on-surface-variant);
+            
+            /* Explicit default/inactive state styling */
+            background-color: transparent; /* Ensures no inherited or strange background */
+            color: var(--md-sys-color-on-surface-variant); /* Default text color for inactive tabs */
+            
             cursor: pointer;
             transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
                         color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
@@ -221,14 +231,15 @@
         }
         .left-nav-tab .material-symbols-outlined { margin-right: var(--md-sys-spacing-m); }
         
-        .left-nav-tab:hover {
+        .left-nav-tab:hover { /* Hover state for all left-nav-tabs */
             background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
             color: var(--md-sys-color-primary);
         }
-        .left-nav-tab.active {
+        .left-nav-tab.active { /* General active state styling, overridden by specific sections */
             background-color: var(--md-sys-color-primary-container); 
             color: var(--md-sys-color-on-primary-container);
         }
+        /* Section specific active colors for left nav - These will override the general .active */
         .left-nav-tab[data-target="vr-content"].active { background-color: var(--section-vr-container); color: var(--section-vr-on-container); }
         .left-nav-tab[data-target="dm-content"].active { background-color: var(--section-dm-container); color: var(--section-dm-on-container); }
         .left-nav-tab[data-target="qr-content"].active { background-color: var(--section-qr-container); color: var(--section-qr-on-container); }
@@ -411,7 +422,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
-
+   
     </head>
 <body>
     <div id="auth-redirect-message" class="fixed inset-0 flex items-center justify-center z-50 hidden" style="background-color: var(--md-sys-color-background);">
