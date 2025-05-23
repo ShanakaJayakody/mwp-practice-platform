@@ -3,507 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UCAT DM Syllogisms Worksheet 1 - MedwithPurpose</title>
+    <title>DM Syllogisms Worksheet 2 - MedwithPurpose</title>
     <link rel="icon" href="https://ik.imagekit.io/mwp/2.svg?updatedAt=1745982956185" type="image/svg+xml">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Firebase SDK -->
     <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
-    <style id="m3-styles">
-        /* M3 Base Styles from DM sylls 2.html */
-        :root {
-          /* Brand Colors - DM Theme (Indigo/Purple) */
-          --md-sys-color-primary: #6750A4; /* M3 Purple */
-          --md-sys-color-on-primary: #FFFFFF;
-          --md-sys-color-primary-container: #EADDFF;
-          --md-sys-color-on-primary-container: #21005D;
-
-          --md-sys-color-secondary: #625B71; /* M3 Neutral Purple-ish */
-          --md-sys-color-on-secondary: #FFFFFF;
-          --md-sys-color-secondary-container: #E8DEF8;
-          --md-sys-color-on-secondary-container: #1D192B;
-
-          --md-sys-color-tertiary: #7D5260; /* M3 Tertiary Pink-ish */
-          --md-sys-color-on-tertiary: #FFFFFF;
-          --md-sys-color-tertiary-container: #FFD8E4;
-          --md-sys-color-on-tertiary-container: #31111D;
-
-          /* Neutral Colors */
-          --md-sys-color-background: #FFFBFE; /* M3 Surface Tone Background */
-          --md-sys-color-on-background: #1C1B1F;
-          --md-sys-color-surface: #FFFBFE; 
-          --md-sys-color-on-surface: #1C1B1F;
-          --md-sys-color-surface-variant: #E7E0EC;
-          --md-sys-color-on-surface-variant: #49454F;
-          --md-sys-color-surface-container-lowest: #FFFFFF;
-          --md-sys-color-surface-container-low: #F7F2FA;
-          --md-sys-color-surface-container: #F3EDF7;
-          --md-sys-color-surface-container-high: #ECE6F0;
-          --md-sys-color-surface-container-highest: #E6E0E9;
-
-          --md-sys-color-outline: #79747E;
-          --md-sys-color-outline-variant: #CAC4D0;
-
-          /* Utility Colors */
-          --md-sys-color-error: #B3261E; 
-          --md-sys-color-on-error: #FFFFFF;
-          --md-sys-color-error-container: #F9DEDC;
-          --md-sys-color-on-error-container: #410E0B;
-          --md-sys-color-success: #1E8E3E; /* Added for consistency */
-          --md-sys-color-on-success: #FFFFFF;
-          --md-sys-color-success-container: #C8E6C9;
-          --md-sys-color-on-success-container: #0D3C1E;
-          --md-sys-color-warning-container: #FFDDB3; /* For flagged in results */
-          --md-sys-color-on-warning-container: #2B1700;
-          --md-sys-color-scrim: #000000;
-          --md-sys-color-scrim-rgb: 0,0,0;
-
-          /* Shape */
-          --md-sys-shape-corner-none: 0px;
-          --md-sys-shape-corner-extra-small: 4px;
-          --md-sys-shape-corner-small: 8px;
-          --md-sys-shape-corner-medium: 12px;
-          --md-sys-shape-corner-large: 16px;
-          --md-sys-shape-corner-extra-large: 28px;
-          --md-sys-shape-corner-full: 9999px;
-
-          /* Typography - Using Inter as base */
-          --md-sys-typescale-font-family-name: 'Inter', sans-serif;
-          --md-sys-typescale-display-large-font-size: 3.5625rem; 
-          --md-sys-typescale-display-large-line-height: 4rem; 
-          --md-sys-typescale-display-large-font-weight: 400;
-          --md-sys-typescale-headline-large-font-size: 2rem; 
-          --md-sys-typescale-headline-large-line-height: 2.5rem; 
-          --md-sys-typescale-headline-large-font-weight: 700; 
-          --md-sys-typescale-title-large-font-size: 1.375rem; 
-          --md-sys-typescale-title-large-line-height: 1.75rem; 
-          --md-sys-typescale-title-large-font-weight: 700;
-          --md-sys-typescale-body-large-font-size: 1rem; 
-          --md-sys-typescale-body-large-line-height: 1.5rem; 
-          --md-sys-typescale-body-large-font-weight: 400;
-          --md-sys-typescale-label-large-font-size: 0.875rem; 
-          --md-sys-typescale-label-large-line-height: 1.25rem; 
-          --md-sys-typescale-label-large-font-weight: 600;
-        }
-        /* M3 Button Component Styles from DM sylls 2.html */
-        .m3-button {
-          font-family: var(--md-sys-typescale-label-large-font-family-name);
-          font-size: var(--md-sys-typescale-label-large-font-size);
-          font-weight: var(--md-sys-typescale-label-large-font-weight);
-          line-height: var(--md-sys-typescale-label-large-line-height);
-          padding: 0.625rem 1.5rem; 
-          border-radius: var(--md-sys-shape-corner-full);
-          border: none;
-          cursor: pointer;
-          text-align: center;
-          text-decoration: none;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          min-height: 2.5rem; 
-          transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
-        }
-        .m3-button:hover:not(:disabled) { box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06); }
-        .m3-button:active:not(:disabled) { transform: scale(0.97); box-shadow: none; }
-        .m3-button:disabled { cursor: not-allowed; box-shadow: none; }
-        .m3-button .material-symbols-outlined { font-size: 1.125rem; margin-right: 0.5rem; }
-        .m3-button.icon-only .material-symbols-outlined { margin-right: 0; }
-
-        .m3-button-filled {
-          background-color: var(--md-sys-color-primary);
-          color: var(--md-sys-color-on-primary);
-        }
-        .m3-button-filled:hover:not(:disabled) { background-color: color-mix(in srgb, var(--md-sys-color-primary) 92%, var(--md-sys-color-on-primary) 8%); }
-        .m3-button-filled:disabled {
-          background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
-          color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
-        }
-        .m3-button-filled-error {
-          background-color: var(--md-sys-color-error);
-          color: var(--md-sys-color-on-error);
-        }
-        .m3-button-filled-error:hover:not(:disabled) { background-color: color-mix(in srgb, var(--md-sys-color-error) 92%, var(--md-sys-color-on-error) 8%);}
-
-        .m3-button-outlined {
-          background-color: transparent;
-          color: var(--md-sys-color-primary);
-          border: 1px solid var(--md-sys-color-outline);
-        }
-        .m3-button-outlined:hover:not(:disabled) { background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); }
-        .m3-button-outlined:disabled {
-          border-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
-          color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
-        }
-
-        .m3-button-text {
-          background-color: transparent;
-          color: var(--md-sys-color-primary);
-          padding: 0.625rem 0.75rem; 
-        }
-        .m3-button-text:hover:not(:disabled) { background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); }
-        .m3-button-text:disabled { color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent); }
-        
-        .m3-icon-button {
-          display: inline-flex; align-items: center; justify-content: center;
-          width: 2.5rem; height: 2.5rem; 
-          padding: 0.5rem; 
-          border-radius: var(--md-sys-shape-corner-full);
-          background-color: transparent;
-          color: var(--md-sys-color-on-surface-variant);
-          border: none; cursor: pointer;
-        }
-        .m3-icon-button .material-symbols-outlined { font-size: 1.5rem; margin: 0; }
-        .m3-icon-button:hover:not(:disabled) { background-color: color-mix(in srgb, currentColor 12%, transparent); }
-        .m3-icon-button:disabled { color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent); background-color: transparent; }
-        .m3-icon-button.selected {
-            background-color: color-mix(in srgb, var(--md-sys-color-primary) 12%, transparent);
-            color: var(--md-sys-color-primary);
-        }
-        .m3-icon-button.selected .material-symbols-outlined {
-            font-variation-settings: 'FILL' 1;
-        }
-
-        .m3-dialog-scrim {
-          position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-          background-color: rgba(var(--md-sys-color-scrim-rgb), 0.4);
-          display: flex; align-items: center; justify-content: center;
-          z-index: 100;
-        }
-        .m3-dialog {
-          background-color: var(--md-sys-color-surface-container-high);
-          color: var(--md-sys-color-on-surface);
-          border-radius: var(--md-sys-shape-corner-extra-large);
-          padding: 1.5rem;
-          width: calc(100% - 3.5rem);
-          max-width: 35rem;
-          box-shadow: 0px 8px 12px 6px rgba(0,0,0,0.15), 0px 4px 8px rgba(0,0,0,0.3);
-          display: flex; flex-direction: column;
-          max-height: calc(100% - 3.5rem);
-        }
-        .m3-dialog-title {
-          font-family: var(--md-sys-typescale-font-family-name);
-          font-size: 1.5rem; 
-          font-weight: 600;
-          line-height: 2rem; 
-          color: var(--md-sys-color-on-surface);
-          margin-bottom: 1rem; 
-        }
-        .m3-dialog-content {
-          font-family: var(--md-sys-typescale-body-large-font-family-name);
-          color: var(--md-sys-color-on-surface-variant);
-          margin-bottom: 1.5rem; 
-          overflow-y: auto;
-        }
-        .m3-dialog-actions { display: flex; justify-content: flex-end; gap: 0.5rem; }
-
-        /* Typography helpers */
-        .m3-body-large {
-          font-family: var(--md-sys-typescale-body-large-font-family-name);
-          font-size: var(--md-sys-typescale-body-large-font-size);
-          font-weight: var(--md-sys-typescale-body-large-font-weight);
-          line-height: var(--md-sys-typescale-body-large-line-height);
-          color: var(--md-sys-color-on-surface);
-        }
-        .m3-title-large {
-          font-family: var(--md-sys-typescale-title-large-font-family-name);
-          font-size: var(--md-sys-typescale-title-large-font-size);
-          font-weight: var(--md-sys-typescale-title-large-font-weight);
-          line-height: var(--md-sys-typescale-title-large-line-height);
-          color: var(--md-sys-color-on-surface);
-        }
-        .m3-label-large {
-          font-family: var(--md-sys-typescale-label-large-font-family-name);
-          font-size: var(--md-sys-typescale-label-large-font-size);
-          font-weight: var(--md-sys-typescale-label-large-font-weight);
-          line-height: var(--md-sys-typescale-label-large-line-height);
-        }
-
-        /* Material Symbols base style */
-        .material-symbols-outlined {
-          font-family: 'Material Symbols Outlined';
-          font-weight: normal; font-style: normal;
-          font-size: 24px; line-height: 1;
-          letter-spacing: normal; text-transform: none;
-          display: inline-block; white-space: nowrap; word-wrap: normal;
-          direction: ltr;
-          -webkit-font-smoothing: antialiased;
-          text-rendering: optimizeLegibility;
-          -moz-osx-font-smoothing: grayscale;
-          font-feature-settings: 'liga';
-          vertical-align: middle; /* Added for better alignment */
-        }
-    </style>
     <style>
-        /* Custom styles for DM Syllogisms page, based on DM Sylls 2.html */
+        /* Custom styles for better UI/UX */
         html, body {
             height: 100%;
             margin: 0;
             padding: 0;
-            overflow: hidden; 
+            overflow: hidden; /* Prevent scrolling on body */
         }
         body {
-            font-family: var(--md-sys-typescale-font-family-name);
+            font-family: 'Inter', sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: var(--md-sys-color-background);
+            background-color: #f0f2f5; /* Light background like UCAT */
         }
         #app-container {
             display: flex;
             flex-direction: column;
-            height: calc(100vh - 2rem); 
+            height: calc(100vh - 2rem); /* Full height minus padding */
             width: 100%;
-            max-width: 1400px; /* Max width for large screens */
-            background-color: var(--md-sys-color-surface);
-            border: 1px solid var(--md-sys-color-outline-variant);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* M3 Elevation 1-2 */
-            border-radius: var(--md-sys-shape-corner-large); 
-            margin: 1rem; 
-            overflow: hidden; 
-            position: relative; 
+            background-color: #ffffff;
+            border: 1px solid #d1d5db; /* Border like UCAT */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-radius: 0.375rem; /* Slightly rounded corners */
+            margin: 1rem; /* Add some margin */
+            overflow: hidden; /* Prevent content overflow from container */
+            position: relative; /* For calculator positioning */
         }
-        
-        .header-bar { 
+        /* Header and Footer */
+        .header-bar { /* Topmost bar */
             flex-shrink: 0;
-            background-color: var(--md-sys-color-primary); 
-            color: var(--md-sys-color-on-primary); 
-            padding: 0.75rem 1.5rem; 
+            background-color: #005A8C; /* Slightly darker blue for top bar */
+            color: white;
+            padding: 0.5rem 1.5rem; /* Adjusted padding */
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 20; 
+            z-index: 20; /* Ensure it's above the secondary bar if overlapping */
         }
 
-        .secondary-toolbar { 
+        .secondary-toolbar { /* New toolbar for calculator and flag */
             flex-shrink: 0;
-            background-color: var(--md-sys-color-surface-container); 
-            color: var(--md-sys-color-on-surface-variant); 
-            padding: 0.5rem 1.5rem; 
+            background-color: #007BBD; /* Lighter blue for secondary bar */
+            color: white;
+            padding: 0.5rem 1.5rem; /* Consistent padding */
             display: flex;
-            justify-content: flex-end; /* Only flag button here */
+            justify-content: space-between; /* Align items */
             align-items: center;
-            border-bottom: 1px solid var(--md-sys-color-outline-variant); 
+            border-bottom: 1px solid #005A8C; /* Optional: a subtle separator */
             z-index: 19;
         }
-        
+
+        /* Specific text colors within header/footer */
+        .header-bar span, .header-bar div, .secondary-toolbar span, .secondary-toolbar div {
+             color: white;
+        }
         #timer {
-             background-color: color-mix(in srgb, var(--md-sys-color-on-primary) 15%, transparent); 
-             color: var(--md-sys-color-on-primary); 
-             font-family: var(--md-sys-typescale-label-large-font-family-name);
-             font-size: var(--md-sys-typescale-label-large-font-size);
-             font-weight: var(--md-sys-typescale-label-large-font-weight);
-             padding: 0.375rem 0.75rem; 
-             border-radius: var(--md-sys-shape-corner-small); 
+             background-color: rgba(255, 255, 255, 0.2); 
+             color: white;
+             font-weight: bold;
+             padding: 0.25rem 0.75rem; 
+             border-radius: 0.25rem; 
         }
         
+        /* Buttons in secondary toolbar */
+        .secondary-toolbar-button {
+            background-color: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 0.3rem 0.7rem;
+            font-size: 0.8rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            margin-left: 0.5rem; /* Spacing between buttons */
+        }
+        .secondary-toolbar-button:hover:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: white;
+        }
+        .secondary-toolbar-button.active { /* For calculator button when active */
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: white;
+        }
+
+
+         /* Footer Button Styling */
         .footer-bar {
             flex-shrink: 0;
-            background-color: var(--md-sys-color-surface-container); 
-            color: var(--md-sys-color-on-surface); 
+            background-color: #005A8C; /* Match top bar color */
+            color: white;
             padding: 0.75rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: 1px solid var(--md-sys-color-outline-variant);
         }
-        
+        .footer-bar button {
+            background-color: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.5); 
+            padding: 0.4rem 0.8rem; 
+            font-size: 0.8rem; 
+            border-radius: 0.375rem;
+             transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .footer-bar button:hover:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.15); 
+            border-color: white;
+        }
+         .footer-bar button:disabled {
+             opacity: 0.5;
+             cursor: not-allowed;
+             border-color: rgba(255, 255, 255, 0.3);
+         }
+         .footer-bar button#next-button {
+             background-color: #ffffff; 
+             color: #006DAA; 
+             border: 1px solid white;
+             font-weight: 500;
+         }
+         .footer-bar button#next-button:hover:not(:disabled) {
+             background-color: #f0f0f0; 
+         }
+         #flag-button.flagged {
+             background-color: #facc15; 
+             border-color: #facc15;
+             color: #422006; 
+          }
+          #flag-button.flagged:hover {
+             background-color: #f59e0b; 
+             border-color: #f59e0b;
+          }
+
+        /* Main Content Area */
         .main-content-area {
             flex-grow: 1; 
-            display: block; /* Single column for syllogisms */
+            display: block;
             overflow: hidden; 
-            padding: 1.5rem; /* Increased padding */
-            background-color: var(--md-sys-color-surface); 
+            padding: 1rem; 
         }
-        .question-column { /* Takes full width */
-            width: 100%;
-            max-width: 800px; /* Max width for readability */
-            margin: 0 auto; /* Center the content */
-            overflow-y: auto; 
+        .question-column {
+             width: 100%;
+            overflow-y: auto;
             padding: 1rem;
-            border: none; 
-            border-radius: var(--md-sys-shape-corner-medium); 
-            background-color: var(--md-sys-color-surface-container-lowest); 
-            height: 100%; 
-            position: relative; 
-            color: var(--md-sys-color-on-surface); 
-            font-family: var(--md-sys-typescale-body-large-font-family-name);
-            font-size: var(--md-sys-typescale-body-large-font-size);
-            line-height: var(--md-sys-typescale-body-large-line-height);
-        }
-        .question-column h4 { 
-            font-family: var(--md-sys-typescale-title-large-font-family-name);
-            font-size: var(--md-sys-typescale-title-large-font-size);
-            font-weight: var(--md-sys-typescale-title-large-font-weight);
-            color: var(--md-sys-color-on-surface-variant);
-            margin-bottom: 0.75rem;
-        }
-        .question-column p#question-text { /* This ID is not used for Syllogisms structure */
-            font-size: 1.125rem; 
-            line-height: 1.625rem;
-            margin-bottom: 1.25rem;
-        }
-        .premises-container {
-            background-color: var(--md-sys-color-surface-container);
-            padding: 1rem;
-            border-radius: var(--md-sys-shape-corner-medium);
-            margin-bottom: 1.5rem;
-            border: 1px solid var(--md-sys-color-outline-variant);
-        }
-        .premises-container h3 {
-            font-family: var(--md-sys-typescale-title-medium-font-family-name);
-            font-weight: var(--md-sys-font-weight-medium);
-            color: var(--md-sys-color-on-surface-variant);
-            margin-bottom: 0.5rem;
-        }
-        .premises-container p {
-            font-family: var(--md-sys-typescale-body-large-font-family-name);
-            color: var(--md-sys-color-on-surface);
-            line-height: 1.6;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+             background-color: #fff;
+             height: 100%; 
+             position: relative; 
         }
 
-        .syllogism-options-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
+        .selected-answer {
+            background-color: #bfdbfe !important; 
+            border-color: #3b82f6 !important; 
         }
-        .syllogism-options-header h5 {
-            font-family: var(--md-sys-typescale-title-medium-font-family-name);
-            font-weight: var(--md-sys-font-weight-medium);
-            color: var(--md-sys-color-on-surface);
-        }
-        .syllogism-options-header p {
-            font-family: var(--md-sys-typescale-body-medium-font-family-name);
-            color: var(--md-sys-color-on-surface-variant);
-        }
-        .drag-buttons-container {
-            display: flex;
-            gap: 0.5rem;
-        }
-        .drag-button { /* M3 Filled Tonal Button style */
-            padding: 0.5rem 1rem;
-            border-radius: var(--md-sys-shape-corner-full);
-            font-family: var(--md-sys-typescale-label-large-font-family-name);
-            font-weight: var(--md-sys-font-weight-medium);
-            cursor: grab;
-            user-select: none;
-            transition: background-color 0.2s ease, box-shadow 0.2s ease;
-            border: 1px solid transparent; /* Base border */
-        }
-        .drag-button:active { cursor: grabbing; }
-        .drag-button.dragging { opacity: 0.7; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-
-        #yes-button {
-            background-color: var(--md-sys-color-primary-container);
-            color: var(--md-sys-color-on-primary-container);
-            border-color: var(--md-sys-color-primary-container);
-        }
-        #yes-button:hover { background-color: color-mix(in srgb, var(--md-sys-color-primary) 12%, var(--md-sys-color-primary-container));}
-
-        #no-button {
-            background-color: var(--md-sys-color-error-container);
-            color: var(--md-sys-color-on-error-container);
-            border-color: var(--md-sys-color-error-container);
-        }
-        #no-button:hover { background-color: color-mix(in srgb, var(--md-sys-color-error) 12%, var(--md-sys-color-error-container));}
+        .nav-answered { background-color: #a7f3d0; }
+        .nav-current { border: 2px solid #3b82f6 !important; font-weight: bold; }
+        .nav-flagged, .review-flagged { border: 2px solid #f59e0b !important; position: relative; }
         
-        .statement-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.75rem 1rem;
-            margin-bottom: 0.5rem;
-            border: 1px solid var(--md-sys-color-outline-variant);
-            border-radius: var(--md-sys-shape-corner-medium);
-            background-color: var(--md-sys-color-surface-container-lowest);
-            transition: background-color 0.2s ease, border-color 0.2s ease;
-        }
-        .statement-row.drag-over {
-            background-color: var(--md-sys-color-secondary-container);
-            border-color: var(--md-sys-color-secondary);
-        }
-        .statement-text {
-            flex-grow: 1;
-            font-family: var(--md-sys-typescale-body-large-font-family-name);
-            color: var(--md-sys-color-on-surface);
-        }
-        .statement-answer-box {
-            width: 4.5rem; /* 72px */
-            height: 2.25rem; /* 36px */
-            border: 2px dashed var(--md-sys-color-outline-variant);
-            border-radius: var(--md-sys-shape-corner-small);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--md-sys-typescale-label-large-font-family-name);
-            font-weight: var(--md-sys-font-weight-medium);
-            color: var(--md-sys-color-on-surface-variant);
-            margin-left: 1rem;
-            transition: background-color 0.2s ease, border-color 0.2s ease;
-        }
-        .statement-answer-box.answered-yes {
-            background-color: var(--md-sys-color-primary-container);
-            color: var(--md-sys-color-on-primary-container);
-            border-style: solid;
-            border-color: var(--md-sys-color-primary);
-        }
-        .statement-answer-box.answered-no {
-            background-color: var(--md-sys-color-error-container);
-            color: var(--md-sys-color-on-error-container);
-            border-style: solid;
-            border-color: var(--md-sys-color-error);
-        }
-        
-        .nav-answered { background-color: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); border-color: var(--md-sys-color-secondary);}
-        .nav-current { border: 2px solid var(--md-sys-color-primary) !important; font-weight: bold; background-color: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
-        .nav-flagged, .review-flagged { 
-            border: 2px solid var(--md-sys-color-tertiary) !important; 
-            position: relative; 
-            background-color: var(--md-sys-color-tertiary-container); 
-            color: var(--md-sys-color-on-tertiary-container); 
-        }
-        
-        .modal { 
-            display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; 
-            overflow: auto; 
-            background-color: rgba(var(--md-sys-color-scrim-rgb), 0.4); 
-            align-items: center; justify-content: center; 
-        }
-        .modal-content { 
-            background-color: var(--md-sys-color-surface-container-high); 
-            color: var(--md-sys-color-on-surface); 
-            margin: auto; padding: 1.5rem; 
-            border: none; 
-            width: calc(100% - 3.5rem); max-width: 35rem; 
-            border-radius: var(--md-sys-shape-corner-extra-large); 
-            box-shadow: 0px 8px 12px 6px rgba(0,0,0,0.15), 0px 4px 8px rgba(0,0,0,0.3); 
-        }
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
+        .modal-content { background-color: #fefefe; margin: auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 600px; border-radius: 0.5rem; }
         .modal.flex { display: flex; }
-        .modal-content .flex.justify-between.items-center h3 {
-            font-family: var(--md-sys-typescale-font-family-name);
-            font-size: 1.5rem; 
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface);
+
+        button, .button {
+            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+            border-radius: 0.375rem; padding: 0.5rem 1rem; font-size: 0.875rem; font-weight: 500;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); cursor: pointer;
         }
-        .modal-content #close-modal-button { 
-            font-size: 1.5rem; 
-            color: var(--md-sys-color-on-surface-variant);
-            background: transparent; border: none; padding: 0.5rem;
-            border-radius: var(--md-sys-shape-corner-full);
-            cursor:pointer;
-        }
-         .modal-content #close-modal-button:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 8%, transparent);
-         }
+        button:active, .button:active { transform: scale(0.98); }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .primary-button { background-color: #3b82f6; color: white; border: 1px solid transparent; }
+        .primary-button:hover:not(:disabled) { background-color: #2563eb; }
+        .secondary-button { background-color: white; color: #374151; border: 1px solid #d1d5db; }
+        .secondary-button:hover:not(:disabled) { background-color: #f9fafb; }
+        .danger-button { background-color: #ef4444; color: white; border: 1px solid transparent; }
+        .danger-button:hover:not(:disabled) { background-color: #dc2626; }
         
+        .option-label {
+            display: block; padding: 0.75rem 1rem; border: 1px solid #d1d5db; 
+            border-radius: 0.375rem; margin-bottom: 0.5rem; cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            background-color: #ffffff; 
+        }
+        .option-label:hover:not(.selected-answer) { background-color: #f3f4f6; border-color: #a5b4fc; }
+        input[type="radio"] { display: none; }
+
         #results-details-grid {
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); 
+            grid-template-columns: repeat(10, 1fr); 
             gap: 0.75rem; 
             padding-top: 0.5rem; 
             max-width: 950px; 
@@ -512,94 +208,255 @@
         }
         .result-summary-item { display: flex; flex-direction: column; align-items: center; text-align: center; }
         .result-summary-box {
-            width: 60px; 
-            height: 60px; 
+            width: 68px; 
+            height: 68px; 
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            border-radius: var(--md-sys-shape-corner-medium); 
+            border-radius: 0.375rem; 
             font-weight: 600; 
+            color: white; 
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease; 
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            padding: 0.25rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .result-summary-box:hover { transform: translateY(-2px); box-shadow: 0 3px 6px rgba(0,0,0,0.15); }
-        .correct-box { background-color: var(--md-sys-color-success-container); border: 1px solid var(--md-sys-color-success); color: var(--md-sys-color-on-success-container); }
-        .partially-correct-box { background-color: var(--md-sys-color-warning-container); border: 1px solid var(--md-sys-color-tertiary); color: var(--md-sys-color-on-warning-container); }
-        .incorrect-box { background-color: var(--md-sys-color-error-container); border: 1px solid var(--md-sys-color-error); color: var(--md-sys-color-on-error-container); }
-        .not-answered-box { background-color: var(--md-sys-color-surface-variant); border: 1px solid var(--md-sys-color-outline); color: var(--md-sys-color-on-surface-variant); }
-        .time-display-in-box { font-size: 0.8rem; line-height: 1; }
-        .question-number-label { margin-top: 0.25rem; font-size: 0.75rem; font-weight: 500; color: var(--md-sys-color-on-surface-variant); }
+        .result-summary-box:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+        .correct-box { background-color: #22c55e; border: 2px solid #16a34a; }
+        .incorrect-box { background-color: #ef4444; border: 2px solid #dc2626; }
+        .not-answered-box { background-color: #9ca3af; border: 2px solid #6b7280; }
+        .time-display-in-box { font-size: 1rem; }
+        .question-number-label { margin-top: 0.5rem; font-size: 0.875rem; color: #4b5563; font-weight: 500; }
         
         .explanation-box {
-             background-color: var(--md-sys-color-surface-container-high); 
-             border: 1px solid var(--md-sys-color-outline-variant); 
-             padding: 0.75rem 1rem; 
-             margin-top: 0.75rem; border-radius: var(--md-sys-shape-corner-medium); 
-             font-family: var(--md-sys-typescale-body-large-font-family-name);
-             color: var(--md-sys-color-on-surface-variant); 
+             background-color: #fef3c7; border: 1px solid #fcd34d; padding: 0.5rem 0.75rem; 
+             margin-top: 0.75rem; border-radius: 0.375rem; font-size: 0.875rem; color: #78350f; 
         }
         .review-grid-button {
-             padding: 0.5rem 0.25rem; border: 1px solid var(--md-sys-color-outline); 
-             border-radius: var(--md-sys-shape-corner-medium); 
+             padding: 0.5rem 0.25rem; border: 1px solid #d1d5db; border-radius: 0.375rem;
              text-align: center; transition: background-color 0.2s ease, border-color 0.2s ease;
-             font-family: var(--md-sys-typescale-label-large-font-family-name);
-             cursor: pointer;
-             background-color: var(--md-sys-color-surface-container);
-             color: var(--md-sys-color-on-surface-variant);
+             font-size: 0.875rem; line-height: 1.25rem; cursor: pointer;
         }
-        .review-grid-button-answered { background-color: var(--md-sys-color-secondary-container); border-color: var(--md-sys-color-secondary); color: var(--md-sys-color-on-secondary-container); }
-        .review-grid-button-unanswered { background-color: var(--md-sys-color-surface-variant); border-color: var(--md-sys-color-outline); color: var(--md-sys-color-on-surface-variant); }
+        .review-grid-button-answered { background-color: #dcfce7; border-color: #86efac; color: #15803d; }
+        .review-grid-button-unanswered { background-color: #f3f4f6; border-color: #d1d5db; color: #4b5563; }
         .review-grid-button:hover { filter: brightness(95%); }
 
-        /* No calculator for DM Syllogisms */
-        #calculator-ui { display: none !important; }
+        /* Calculator Styles */
+        #calculator-ui {
+            display: none; 
+            position: absolute;
+            top: 100px; 
+            left: 50%;
+            width: 225px;
+            background-color: #0077b6; /* Bright blue background matching image */
+            border: 1px solid #005a8c;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            padding: 12px;
+            z-index: 1000; 
+            cursor: grab;
+            transform: translateX(-50%); /* Center horizontally */
+        }
+        #calculator-ui.visible { display: block; }
+        .calculator-header {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            color: white; 
+            margin-bottom: 8px; 
+            font-size: 0.9rem; 
+            padding: 0 3px;
+        }
+        .calculator-header .title { font-weight: 600; }
+        .calculator-header .close-calc-btn {
+            background: none; 
+            border: none; 
+            color: white; 
+            font-size: 1.1rem; 
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .calculator-decorative-text {
+            color: white;
+            font-size: 0.65rem;
+            text-align: center;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        #calc-display-container {
+            background-color: #FFFFFF;
+            border: 1px solid #cccccc; 
+            border-radius: 4px; 
+            padding: 8px 12px;
+            margin-bottom: 12px; 
+            text-align: right; 
+            min-height: 36px;
+            display: flex; 
+            align-items: center; 
+            justify-content: flex-end;
+            position: relative; /* Add position relative to properly position the memory indicator */
+        }
+        #calc-display {
+            font-family: 'Courier New', Courier, monospace; 
+            font-size: 1.6rem;
+            color: #000000; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            white-space: nowrap; 
+            max-width: 100%;
+        }
+        #calc-memory-indicator {
+            position: absolute;
+            left: 6px;
+            top: 4px;
+            color: #2D3748;
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: none;
+        }
+        .calc-buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+        }
+        .calc-button {
+            border: none;
+            border-radius: 4px;
+            padding: 10px 0;
+            font-size: 1rem;
+            font-weight: 500; 
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .calc-button:active { transform: scale(0.95); }
+
+        /* Number buttons (0-9, .) */
+        .calc-button-num {
+            background-color: #FFFFFF;
+            color: #000000;
+        }
+        .calc-button-num:hover { background-color: #F0F0F0; }
+
+        /* Function and Operator buttons (Red background, white text) */
+        .calc-button-red {
+            background-color: #d62828; /* Bright red matching image */
+            color: white;
+        }
+        .calc-button-red:hover { background-color: #e63946; }
+        
+        .calc-button.equals {
+            grid-row: span 1; /* Only span 1 row */
+            grid-column: 4; /* Position in 4th column */
+            grid-row-start: 5; /* Start at row 5, below the + button */
+        }
+
 
         @media (max-width: 1024px) {
             #results-details-grid { 
-                grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
+                grid-template-columns: repeat(8, 1fr);
                 max-width: 760px;
             }
-            .result-summary-box { width: 55px; height: 55px; }
         }
         
         @media (max-width: 768px) {
-            #app-container { height: auto; margin: 0.5rem; border-radius:var(--md-sys-shape-corner-medium); }
+            #app-container { height: auto; margin: 0.5rem; }
             .main-content-area { flex-direction: column; padding: 0.5rem; gap: 0.5rem; }
-            .question-column { flex-basis: auto; width: 100%; height: auto; max-height: none; padding: 0.75rem; }
+            .question-column { flex-basis: auto; width: 100%; height: auto; max-height: 35vh; padding: 0.75rem; }
             .header-bar, .secondary-toolbar, .footer-bar { padding: 0.5rem 1rem; }
-            .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: var(--md-sys-typescale-label-large-font-size); }
-            .footer-bar button { padding: 0.5rem 0.75rem; }
-            #review-grid { grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); } 
+            .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: 0.8rem; }
+            button, .button { padding: 0.4rem 0.8rem; }
+            .footer-bar button { padding: 0.3rem 0.6rem; font-size: 0.75rem; }
+            #review-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } 
             .review-grid-button { font-size: 0.8rem; }
             #results-details-grid { 
-                grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); 
-                gap: 0.5rem;
+                grid-template-columns: repeat(5, 1fr); 
+                gap: 0.75rem;
                 max-width: 450px;
             }
-            .result-summary-box { width: 50px; height: 50px; }
-            .time-display-in-box { font-size: 0.75rem; }
-            .question-number-label { font-size: 0.65rem; }
+            .result-summary-box { width: 60px; height: 60px; }
+            .time-display-in-box { font-size: 0.9rem; }
+             #calculator-ui { width: 210px; top: 90px; padding: 10px;} 
+            .calc-button { padding: 8px 0; font-size: 0.8rem;}
+            #calc-display { font-size: 1.4rem; }
         }
          @media (max-width: 480px) {
-             #review-grid { grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); } 
-             .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: 0.8rem; }
-             .footer-bar button { padding: 0.4rem 0.6rem; font-size: 0.7rem; }
-             .review-grid-button { font-size: 0.75rem; border-radius: var(--md-sys-shape-corner-small); }
+             #review-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } 
+             .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: 0.75rem; }
+             button, .button { padding: 0.3rem 0.6rem; }
+             .footer-bar button { padding: 0.25rem 0.5rem; font-size: 0.7rem; }
+             .option-label { padding: 0.5rem 0.75rem; font-size: 0.8rem;}
+             .review-grid-button { font-size: 0.75rem; }
              #results-details-grid { 
-                grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); 
+                grid-template-columns: repeat(3, 1fr); 
                 gap: 0.5rem;
-                max-width: 100%; 
-                padding-left: 0.5rem; padding-right: 0.5rem;
+                max-width: 220px;
              }
-             .result-summary-box { width: 45px; height: 45px; border-radius: var(--md-sys-shape-corner-small); }
-             .time-display-in-box { font-size: 0.65rem; }
-             .question-number-label { font-size: 0.65rem; }
+             .result-summary-box { width: 50px; height: 50px; }
+             .time-display-in-box { font-size: 0.8rem; }
+             .question-number-label { font-size: 0.8rem; }
+             #calculator-ui { width: 90%; max-width: 200px; top: 85px; padding: 8px; } 
+             .calc-button { padding: 7px 0; font-size: 0.75rem;}
+             #calc-display { font-size: 1.3rem; }
          }
-        .hidden { display: none !important; }
+
+        /* Statement answer boxes and Yes/No buttons */
+        .statement-row {
+            transition: all 0.2s ease;
+            border-radius: 0.375rem;
+            cursor: pointer;
+        }
+        .statement-row:hover {
+            background-color: #f9fafb;
+        }
+        .statement-row.selected {
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+        }
+        .statement-answer-box {
+            transition: all 0.2s ease;
+            font-weight: 600;
+            font-size: 1rem;
+            user-select: none;
+            background-color: #f5f5f5;
+            color: #4b5563;
+        }
+        .drag-button {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        #yes-button {
+            background-color: #a7f3d0;
+            border-color: #10b981;
+            color: #047857;
+        }
+        #yes-button:hover {
+            background-color: #6ee7b7;
+            transform: translateY(-1px);
+        }
+        #no-button {
+            background-color: #fca5a5;
+            border-color: #ef4444;
+            color: #b91c1c;
+        }
+        #no-button:hover {
+            background-color: #f87171;
+            transform: translateY(-1px);
+        }
+        .drag-button[draggable=true] {
+            cursor: grab;
+        }
+        .drag-button.opacity-50 {
+            opacity: 0.5;
+        }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head> 
 <body>
     <div id="app-container">
@@ -608,121 +465,168 @@
              <div class="text-center mb-6">
                 <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
                      alt="MedwithPurpose Logo" class="mx-auto h-11 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
-                <h1 class="m3-headline-large" id="worksheet-title-setup">DM Syllogisms Worksheet 1</h1>
-                <p class="m3-body-large text-[var(--md-sys-color-on-surface-variant)] mt-2">Prepare for the UCAT DM section.</p>
-                 <p class="m3-label-large text-[var(--md-sys-color-on-surface-variant)] mt-4">
-                     This section contains <strong id="setup-question-count" class="text-[var(--md-sys-color-primary)]">5 questions</strong> with 5 statements each. Maximum score is <strong class="text-[var(--md-sys-color-primary)]">10 points</strong>. You have <strong id="setup-time-limit" class="text-[var(--md-sys-color-primary)]">6 minutes</strong> to complete it.
+                <h1 class="text-2xl md:text-3xl font-bold text-blue-600">Decision Making Syllogisms Worksheet 2</h1>
+                <p class="text-gray-600 mt-2">Prepare for the UCAT DM section.</p>
+                 <p class="text-sm text-gray-500 mt-4">
+                     This section contains <strong>5 questions</strong> with 5 statements each. Maximum score is <strong>10 points</strong> (2 points per question). You have <strong>6 minutes</strong> to complete it.
                  </p>
             </div>
             <div class="space-y-4 w-full max-w-md">
                 <div>
-                    <label for="goal" class="block m3-label-large text-[var(--md-sys-color-on-surface-variant)] mb-1">Goal (Score out of 10):</label>
-                    <input type="number" id="goal" name="goal" min="0" max="10" class="mt-1 block w-full px-3 py-2 border border-[var(--md-sys-color-outline)] rounded-md shadow-sm focus:outline-none focus:ring-[var(--md-sys-color-primary)] focus:border-[var(--md-sys-color-primary)] sm:text-sm bg-[var(--md-sys-color-surface-container-lowest)] text-[var(--md-sys-color-on-surface)] m3-body-large" placeholder="e.g., 8">
+                    <label for="goal" class="block text-sm font-medium text-gray-700">Goal (Score out of 10):</label>
+                    <input type="number" id="goal" name="goal" min="0" max="10" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., 8">
                 </div>
                 <div>
-                    <label for="focus-area" class="block m3-label-large text-[var(--md-sys-color-on-surface-variant)] mb-1">Area of Focus / Intention For Practice:</label>
-                    <input type="text" id="focus-area" name="focus-area" class="mt-1 block w-full px-3 py-2 border border-[var(--md-sys-color-outline)] rounded-md shadow-sm focus:outline-none focus:ring-[var(--md-sys-color-primary)] focus:border-[var(--md-sys-color-primary)] sm:text-sm bg-[var(--md-sys-color-surface-container-lowest)] text-[var(--md-sys-color-on-surface)] m3-body-large" placeholder="e.g., Identifying conclusions, Speed">
+                    <label for="focus-area" class="block text-sm font-medium text-gray-700">Area of Focus / Intention For Practice:</label>
+                    <input type="text" id="focus-area" name="focus-area" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., Calculations, Speed">
                 </div>
             </div>
             <div class="mt-8 text-center space-y-3">
-                <button id="start-button" class="m3-button m3-button-filled text-lg px-8 py-3"><span class="material-symbols-outlined">play_arrow</span>Begin</button>
-                <button onclick="window.location.href='practice.html'" class="m3-button m3-button-outlined text-lg px-8 py-3"><span class="material-symbols-outlined">arrow_back</span>Return to Practice</button>
+                <button id="start-button" class="primary-button text-lg px-8 py-3">Begin</button>
+                <button onclick="window.location.href='student_dashboard.html'" class="secondary-button text-lg px-8 py-3">Return to Dashboard</button>
             </div>
         </div>
 
         <div id="practice-session-screen" class="hidden flex flex-col h-full">
             <div class="header-bar">
-                <span id="practice-session-title" class="m3-title-large">DM Syllogisms Worksheet 1</span>
+                <span id="practice-session-title" class="font-semibold">Quantitative Reasoning</span>
                 <div class="flex items-center space-x-4">
-                    <div id="timer" class="m3-label-large">06:00</div>
-                    <span class="m3-label-large">Question <span id="question-number-info">1</span> of 5</span>
+                    <div id="timer" class="text-base px-3 py-1 rounded-md">26:00</div>
+                    <span class="text-sm">Question <span id="question-number-info">1</span> of 5</span>
                 </div>
             </div>
             <div class="secondary-toolbar">
-                <button id="flag-button" class="m3-icon-button">
-                    <span class="material-symbols-outlined">flag</span>
-                </button>
-            </div>
-
-            <div class="main-content-area">
-                <div class="question-column">
-                    {/* Content dynamically inserted by JS */}
+                <div> <button id="calculator-toggle-button" class="secondary-toolbar-button">Calculator (Alt+C)</button>
+                </div>
+                <div> <button id="flag-button" class="secondary-toolbar-button">Flag for Review</button>
                 </div>
             </div>
 
+            <div class="main-content-area">
+                <div class="question-column w-full">
+                    <!-- Content will be dynamically inserted here by JavaScript -->
+                    </div>
+            </div>
+
             <div class="footer-bar">
-                 <button id="back-to-results-button" class="m3-button m3-button-text hidden mr-auto"><span class="material-symbols-outlined">arrow_back</span>Back to Results</button>
-                 <button id="end-practice-session-button-footer" class="m3-button m3-button-text"><span class="material-symbols-outlined">stop_circle</span>End Session</button>
+                 <button id="back-to-results-button" class="hidden mr-auto">← Back to Results</button>
+                 <button id="end-practice-session-button-footer">End Practice Session</button>
                  <div class="flex items-center space-x-2 ml-auto">
-                     <button id="prev-button" class="m3-button m3-button-outlined icon-only" disabled aria-label="Previous Question"><span class="material-symbols-outlined">chevron_left</span></button>
-                     <button id="navigator-button" class="m3-button m3-button-outlined"><span class="material-symbols-outlined">grid_view</span>Navigator</button>
-                     <button id="next-button" class="m3-button m3-button-filled icon-only" aria-label="Next Question"><span class="material-symbols-outlined">chevron_right</span></button>
+                     <button id="prev-button" disabled>← Previous (Alt+P)</button>
+                     <button id="navigator-button">Navigator</button>
+                     <button id="next-button">Next (Alt+N) →</button>
                  </div>
             </div>
         </div>
         
-        <div id="review-screen" class="hidden p-6 md:p-8 flex-col items-center h-full overflow-y-auto">
-             <div class="w-full max-w-3xl mb-4 flex justify-between items-center">
-                 <h2 class="m3-dialog-title">Review Your Answers</h2>
-                 <button id="filter-flagged-button" class="m3-button m3-button-text"><span class="material-symbols-outlined">filter_list</span>Show Flagged Only</button>
-             </div>
-             <p class="m3-body-large text-[var(--md-sys-color-on-surface-variant)] text-center mb-6">Click a number to jump. Answered questions are in a colored container. Flagged questions have a warning-colored border.</p>
-            <div id="review-grid" class="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-10 gap-3 mb-6 w-full max-w-2xl"></div>
-            <div class="mt-auto pt-6">
-                <button id="end-practice-session-button" class="m3-button m3-button-filled-error text-lg px-8 py-3">
-                    <span class="material-symbols-outlined">check_circle</span>Submit & View Results
-                </button>
+        <div id="calculator-ui">
+            <div class="calculator-header" id="calculator-drag-header">
+                <span class="title">Calculator</span>
+                <button class="close-calc-btn" id="close-calculator-button">×</button>
+            </div>
+            <div class="calculator-decorative-text">TEXAS INSTRUMENTS TI-108</div>
+            <div id="calc-display-container">
+                <span id="calc-memory-indicator" style="position: absolute; left: 6px; top: 50%; transform: translateY(-50%); color: #2D3748; font-weight: bold; font-size: 0.9rem; display: none;">M</span>
+                <div id="calc-display">0</div>
+            </div>
+            <div class="calc-buttons-grid">
+                <button class="calc-button calc-button-red" data-calc-action="negate">+/-</button>
+                <button class="calc-button calc-button-red" data-calc-action="sqrt">√</button>
+                <button class="calc-button calc-button-red" data-calc-action="percent">%</button>
+                <button class="calc-button calc-button-red operator" data-calc-value="/">÷</button>
+                
+                <button class="calc-button calc-button-red" data-calc-action="mrc">MRC</button>
+                <button class="calc-button calc-button-red" data-calc-action="m-">M-</button>
+                <button class="calc-button calc-button-red" data-calc-action="m+">M+</button>
+                <button class="calc-button calc-button-red operator" data-calc-value="*">×</button>
+
+                <button class="calc-button calc-button-num" data-calc-value="7">7</button>
+                <button class="calc-button calc-button-num" data-calc-value="8">8</button>
+                <button class="calc-button calc-button-num" data-calc-value="9">9</button>
+                <button class="calc-button calc-button-red operator" data-calc-value="-">-</button>
+
+                <button class="calc-button calc-button-num" data-calc-value="4">4</button>
+                <button class="calc-button calc-button-num" data-calc-value="5">5</button>
+                <button class="calc-button calc-button-num" data-calc-value="6">6</button>
+                <button class="calc-button calc-button-red operator" data-calc-value="+">+</button>
+                
+                <button class="calc-button calc-button-num" data-calc-value="1">1</button>
+                <button class="calc-button calc-button-num" data-calc-value="2">2</button>
+                <button class="calc-button calc-button-num" data-calc-value="3">3</button>
+                <button class="calc-button calc-button-red equals" data-calc-action="equals">=</button>
+
+                <button class="calc-button calc-button-red" data-calc-action="clear">ON/C</button>
+                <button class="calc-button calc-button-num" data-calc-value="0">0</button>
+                <button class="calc-button calc-button-num" data-calc-value=".">.</button>
             </div>
         </div>
 
-        <div id="results-screen" class="hidden p-6 md:p-8 flex-col h-full">
+
+        <div id="review-screen" class="hidden p-6 md:p-8 flex flex-col items-center h-full overflow-y-auto">
+             <div class="w-full max-w-3xl mb-4 flex justify-between items-center">
+                 <h2 class="text-2xl font-bold text-blue-600">Review Your Answers</h2>
+                 <button id="filter-flagged-button" class="secondary-button text-sm">Show Flagged Only</button>
+             </div>
+             <p class="text-center text-gray-600 mb-6">Click on a question number to review it. Green indicates answered, Yellow border indicates flagged.</p>
+            <div id="review-grid" class="grid grid-cols-4 gap-3 mb-6 w-full max-w-xs sm:max-w-sm md:max-w-md"></div>
+            <div class="mt-auto pt-6">
+                <button id="end-practice-session-button" class="danger-button text-lg px-8 py-3">Submit</button>
+            </div>
+        </div>
+
+        <div id="results-screen" class="hidden p-6 md:p-8 flex flex-col h-full">
              <div class="text-center mb-6 flex-shrink-0">
                 <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
-                     alt="MedwithPurpose Logo" class="mx-auto h-12 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
-                 <h2 class="m3-headline-large text-[var(--md-sys-color-primary)]">DM Syllogisms Worksheet 1 Results</h2>
+                     alt="MedwithPurpose Logo" class="mx-auto h-11 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
+                 <h2 class="text-2xl md:text-3xl font-bold text-blue-600">DM Syllogisms Worksheet 2 Results</h2>
              </div>
-            <div class="p-4 rounded-lg mb-6 text-center flex-shrink-0" style="background-color: var(--md-sys-color-primary-container);">
-                 <p class="m3-title-large font-semibold" style="color: var(--md-sys-color-on-primary-container);">Your Score: <span id="score" class="text-[var(--md-sys-color-primary)]">0</span> / <span id="total-score-possible">10</span> Points</p>
-                 <p class="m3-body-large" style="color: var(--md-sys-color-on-primary-container);">Time Taken: <span id="time-taken"></span></p>
+            <div class="bg-blue-50 p-4 rounded-lg mb-6 text-center flex-shrink-0">
+                 <p class="text-lg font-semibold">Your Score: <span id="score" class="text-blue-700">0</span> / <span id="total-score-possible">10</span> Points</p>
+                 <p class="text-gray-600">Time Taken: <span id="time-taken"></span></p>
             </div>
-            <h3 class="m3-title-large font-semibold mb-2 flex-shrink-0">Detailed Results Summary:</h3>
-            <p class="m3-body-medium text-[var(--md-sys-color-on-surface-variant)] mb-4 flex-shrink-0">Click on a question box below to review it.</p>
+            <h3 class="text-xl font-semibold mb-2 flex-shrink-0">Detailed Results Summary:</h3>
+            <p class="text-sm text-gray-500 mb-4 flex-shrink-0">Click on a question box below to review it.</p>
             <div id="results-details-grid" class="overflow-y-auto flex-grow"></div>
-            <div class="mt-6 flex-shrink-0 border-t pt-4" style="border-color: var(--md-sys-color-outline-variant);">
-                 <div class="p-3 rounded-md mb-4 text-center" style="background-color: var(--md-sys-color-secondary-container); border: 1px solid var(--md-sys-color-outline-variant);">
-                    <p class="m3-body-medium" style="color: var(--md-sys-color-on-secondary-container);">Your test results have been submitted. You can add a reflection below.</p>
+            <div class="mt-6 flex-shrink-0 border-t pt-4">
+                 <div class="p-3 bg-blue-50 border border-blue-100 rounded-md mb-4 text-center">
+                    <p class="text-blue-800 text-sm">Your test results for 5 questions have been submitted. You can add a reflection below if you'd like.</p>
                  </div>
                  <div class="mb-4">
-                    <label for="focus-rating" class="block m3-label-large text-[var(--md-sys-color-on-surface-variant)] mb-1">My focus (1-5):</label>
-                    <input type="number" id="focus-rating" name="focus-rating" min="1" max="5" class="mt-1 block w-20 px-3 py-2 border border-[var(--md-sys-color-outline)] rounded-md shadow-sm focus:outline-none focus:ring-[var(--md-sys-color-primary)] focus:border-[var(--md-sys-color-primary)] sm:text-sm bg-[var(--md-sys-color-surface-container-lowest)] text-[var(--md-sys-color-on-surface)]" placeholder="1-5">
+                    <label for="focus-rating" class="block text-md font-semibold text-gray-700 mb-1">My focus out of 5 (1 very low, 5 very high):</label>
+                    <input type="number" id="focus-rating" name="focus-rating" min="1" max="5" class="mt-1 block w-20 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="1-5">
                  </div>
                  <div>
-                    <label for="reflection-text" class="block m3-label-large text-[var(--md-sys-color-on-surface-variant)] mb-1">Main takeaway:</label>
-                    <textarea id="reflection-text" name="reflection-text" rows="3" class="block w-full px-3 py-2 border border-[var(--md-sys-color-outline)] rounded-md shadow-sm focus:outline-none focus:ring-[var(--md-sys-color-primary)] focus:border-[var(--md-sys-color-primary)] sm:text-sm bg-[var(--md-sys-color-surface-container-lowest)] text-[var(--md-sys-color-on-surface)]" placeholder="Reflect on your performance..."></textarea>
+                    <label for="reflection-text" class="block text-md font-semibold text-gray-700 mb-1">Main takeaway from this practice:</label>
+                    <textarea id="reflection-text" name="reflection-text" rows="3" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Reflect on your performance, strategies, or areas for improvement..."></textarea>
                  </div>
             </div>
               <div class="mt-6 text-center flex-shrink-0 flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4">
-                <button onclick="window.location.href='student_dashboard.html'" class="m3-button m3-button-outlined px-6 py-2 w-full sm:w-auto"><span class="material-symbols-outlined">dashboard</span>Dashboard</button>
-                <button onclick="window.location.reload()" class="m3-button m3-button-outlined px-6 py-2 w-full sm:w-auto"><span class="material-symbols-outlined">refresh</span>Try Again</button>
-                <button id="submit-performance-button" class="m3-button m3-button-filled px-6 py-2 w-full sm:w-auto"><span class="material-symbols-outlined">send</span>Submit Reflections</button>
-                <button id="download-pdf-button" class="m3-button m3-button-filled px-6 py-2 w-full sm:w-auto"><span class="material-symbols-outlined">download</span>Download PDF</button>
+                <button onclick="window.location.href='student_dashboard.html'" class="secondary-button px-6 py-2 w-full sm:w-auto">Return to Dashboard</button>
+                <button onclick="window.location.reload()" class="secondary-button px-6 py-2 w-full sm:w-auto">Try Again</button>
+                <div class="w-full sm:w-auto relative group">
+                    <button id="submit-performance-button" class="primary-button px-6 py-2 w-full">Submit Reflections</button>
+                    <div class="absolute left-0 right-0 -top-10 bg-blue-100 text-blue-800 text-xs p-1 rounded border border-blue-200 opacity-0 group-hover:opacity-100 transition-opacity">
+                        ↓ Optional: Submit your reflection on this practice session
+                    </div>
+                </div>
+                <button id="download-pdf-button" class="primary-button px-6 py-2 w-full sm:w-auto">Download Results PDF</button>
             </div>
         </div>
 
-        <div id="navigator-modal" class="modal m3-dialog-scrim">
-            <div class="modal-content m3-dialog">
+        <div id="navigator-modal" class="modal">
+            <div class="modal-content bg-white p-6 rounded-lg shadow-xl">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="m3-dialog-title">Question Navigator</h3>
-                    <button id="close-modal-button" class="m3-icon-button"><span class="material-symbols-outlined">close</span></button>
+                    <h3 class="text-xl font-semibold text-gray-800">Question Navigator</h3>
+                    <button id="close-modal-button" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
                 </div>
-                 <p class="m3-dialog-content">Click a number to jump. Answered questions are colored. Flagged questions have a warning-colored border.</p>
-                <div id="navigator-grid" class="grid grid-cols-5 gap-2 mt-4"> {/* Adjusted to 5 columns for 5 questions */}
-                </div>
+                 <p class="text-sm text-gray-600 mb-4">Click a number to jump. Green: answered, Yellow border: flagged.</p>
+                <div id="navigator-grid" class="grid grid-cols-4 gap-3"> </div>
             </div>
         </div>
     </div>
 
     <script>
+    document.addEventListener('DOMContentLoaded', function() {
         // --- Firebase Configuration ---
         const firebaseConfig = {
           apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
@@ -733,97 +637,81 @@
           appId: "1:309084045110:web:b09ca0fdff84b094963d97",
           measurementId: "G-4M3ED641M9"
         };
-        
         // Initialize Firebase
-        if (typeof firebase !== 'undefined' && !firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        } else if (typeof firebase === 'undefined') {
-            console.error("Firebase SDK not loaded. Ensure Firebase scripts are in <head> with defer attribute.");
-        }
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore(); // Initialize Firestore
+
+        // Check for review mode from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const reviewParam = urlParams.get('review');
         
-        let db, auth;
-        if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
-            db = firebase.firestore();
-            auth = firebase.auth();
-        } else {
-            console.error("Firebase not initialized. DB and Auth objects will be undefined.");
-        }
-        
-        // --- Data for DM Syllogisms Worksheet 1 ---
-        const questions = [
-            { 
-                premises: [
-                    "All oranges in the bowl are sweet.",
-                    "This fruit is an orange in the bowl."
-                ],
-                statements: [
-                    "This fruit is sweet.",
-                    "Some sweet fruits in the bowl are oranges.",
-                    "No non-sweet fruits in the bowl are oranges.",
-                    "All sweet fruits in the bowl are oranges.",
-                    "Some fruits in the bowl are not sweet."
-                ],
-                correctAnswers: ["Y", "N", "Y", "N", "N"]
-            },
-            { 
-                premises: [
-                    "No penguin can fly."
-                ],
-                statements: [
-                    "Some penguins can fly.",
-                    "If something can fly, it is not a penguin.",
-                    "All penguins cannot fly.",
-                    "Some creatures that cannot fly are penguins.",
-                    "All creatures that cannot fly are penguins."
-                ],
-                correctAnswers: ["N", "Y", "Y", "N", "N"]
-            },
-            { 
-                premises: [
-                    "Every burger on the menu contains bread."
-                ],
-                statements: [
-                    "Some bread items on the menu are burgers.",
-                    "All bread items on the menu are burgers.",
-                    "Some burgers on the menu do not contain bread.",
-                    "No burgers on the menu lack bread.",
-                    "Some menu items lack bread."
-                ],
-                correctAnswers: ["N", "N", "N", "Y", "N"]
-            },
-            { 
-                premises: [
-                    "Some books in the library are new."
-                ],
-                statements: [
-                    "All books in the library are new.",
-                    "Some books in the library are not new.",
-                    "At least one new item in the library is a book.",
-                    "No new items in the library are books.",
-                    "There is at least one book in the library."
-                ],
-                correctAnswers: ["N", "N", "Y", "N", "Y"]
-            },
-            { 
-                premises: [
-                    "All dogs at the shelter are vaccinated."
-                ],
-                statements: [
-                    "Some vaccinated animals at the shelter are dogs.",
-                    "Some dogs at the shelter are not vaccinated.",
-                    "All vaccinated animals at the shelter are dogs.",
-                    "No dogs at the shelter are unvaccinated.",
-                    "Some animals at the shelter are not vaccinated."
-                ],
-                correctAnswers: ["N", "N", "N", "Y", "N"]
+        // Check if user is logged in via Firebase
+        firebase.auth().onAuthStateChanged(user => {
+          if (user) {
+                console.log("User is logged in:", user.displayName, user.email);
+          } else {
+                console.log("No user is logged in");
             }
-        ];
+        });
+        
+        // Expose startTest function to global window object so it can be called from onclick
+        window.startTest = function() {
+            console.log("startTest() function called directly");
+            
+            // Get user info from Firebase Auth if available
+            if (firebase.auth && firebase.auth().currentUser) {
+                const currentUser = firebase.auth().currentUser;
+                userName = currentUser.displayName || currentUser.email || '';
+                // Store email to be used later in submission
+                userEmail = currentUser.email || '';
+                console.log("Using user info from Firebase:", userName, userEmail);
+            } else {
+                userName = '';
+                userEmail = '';
+                console.log("No user logged in - using empty user info");
+            }
+            
+            userGoal = document.getElementById('goal').value.trim();
+            userFocusArea = document.getElementById('focus-area').value.trim();
+            timeLeft = 360; // 6 minutes in seconds
+            
+            // Make sure arrays are properly initialized with the correct length
+            if (userAnswers.length !== questions.length) {
+                userAnswers = new Array(questions.length).fill(null);
+            } else {
+                userAnswers.fill(null);
+            }
+            
+            if (questionTimes.length !== questions.length) {
+                questionTimes = new Array(questions.length).fill(0);
+            } else {
+                questionTimes.fill(0);
+            }
+            
+            if (flaggedQuestions.length !== questions.length) {
+                flaggedQuestions = new Array(questions.length).fill(false);
+            } else {
+                flaggedQuestions.fill(false);
+            }
+            
+            questionStartTime = null;
+            currentQuestionIndex = 0;
+            isReviewingFromResults = false;
+            isFilteringFlagged = false;
+            currentlyDisplayedPassageIndex = -1;
+            practiceSessionEndTime = null;
+            showPracticeSessionScreen();
+            startTimer();
+            loadQuestion(0);
+            populateNavigator();
+        };
         
         // --- State Variables ---
+        // Define all state variables before any functions are called to avoid reference errors
         let currentQuestionIndex = 0;
-        let userAnswers = new Array(questions.length).fill(null).map(() => new Array(5).fill(null)); // For 5 statements per question
+        let userAnswers = [];
         let timerInterval;
-        let timeLeft = 360; // 6 minutes for 5 questions
+        let timeLeft = 360; // 6 minutes in seconds 
         let practiceSessionStartTime;
         let practiceSessionEndTime;
         let userName = '';
@@ -832,13 +720,25 @@
         let userFocusArea = '';
         let isReviewingFromResults = false;
         let questionStartTime = null;
-        let questionTimes = new Array(questions.length).fill(0);
-        let flaggedQuestions = new Array(questions.length).fill(false);
+        let questionTimes = [];
+        let flaggedQuestions = [];
         let isFilteringFlagged = false;
-        let isSubmittingReflection = false;
+        let currentlyDisplayedPassageIndex = -1;
 
+        // Calculator State
+        let calcCurrentInput = '0';
+        let calcPreviousInput = '';
+        let calcOperator = null;
+        let calcShouldResetDisplay = false; 
+        let calcMrcPressedOnce = false; 
+        let isDraggingCalculator = false;
+        let calculatorOffsetX, calculatorOffsetY;
+        let calcMemory = 0; // Add missing calculator memory variable
+        
+        // Add a debounce flag for submissions
+        let isSubmittingReflection = false;
+        
         // --- Elements ---
-        // (Elements are largely the same as DM Sylls 2, ensure IDs match)
         const appContainer = document.getElementById('app-container');
         const setupScreen = document.getElementById('setup-screen');
         const practiceSessionScreen = document.getElementById('practice-session-screen');
@@ -859,7 +759,7 @@
         const reviewGrid = document.getElementById('review-grid');
         const navigatorGrid = document.getElementById('navigator-grid');
         const scoreEl = document.getElementById('score');
-        const totalScorePossibleEl = document.getElementById('total-score-possible'); // Added for clarity
+        const totalQuestionsResultsEl = document.getElementById('total-questions-results');
         const timeTakenEl = document.getElementById('time-taken');
         const resultsDetailsGrid = document.getElementById('results-details-grid');
         const goalInput = document.getElementById('goal');
@@ -871,28 +771,146 @@
         const reflectionText = document.getElementById('reflection-text');
         const downloadPdfButton = document.getElementById('download-pdf-button');
         const focusRatingInput = document.getElementById('focus-rating');
-        const worksheetTitleSetupEl = document.getElementById('worksheet-title-setup');
+        const calculatorToggleButton = document.getElementById('calculator-toggle-button');
+        const calculatorUI = document.getElementById('calculator-ui');
+        const calcDisplay = document.getElementById('calc-display');
+        const calcButtons = document.querySelectorAll('.calc-button');
+        const closeCalculatorButton = document.getElementById('close-calculator-button');
+        const calculatorDragHeader = document.getElementById('calculator-drag-header');
 
+        // --- Data ---
+        const passages = [
+            `The table shows the fees for different membership types and activities at a fitness centre.
+            
+<img src="https://ik.imagekit.io/mwp/qrtest1a" alt="Fitness centre pricing table">`,
+            `The table below displays details for 4 different inter-city bus services offered by a transport company.
+            
+<img src="https://ik.imagekit.io/mwp/qrtest1b" alt="Inter-city bus services table">`,
+            `Of the total number of students visiting the university library one day, 3/5 borrowed at least one item. Of those who borrowed items, 1/4 borrowed a non-fiction book. Students who didn't borrow any items obviously didn't borrow non-fiction books.`,
+            `A sports-drink powder states that 25 g of powder is needed per 600 mL of water. A coach wants to prepare 7.2 litres of the drink for a tournament, using exactly the recommended concentration.`,
+            `David paid a $17.00 library fine for an overdue book. The fine policy states that the initial fine is calculated based on the book type, this amount is then increased by 10% if the book is over a week late, and finally, a 25% administration fee is added to the resulting total. David's book was over a week late.`,
+            `The library analysed the types of items borrowed last week. E-books are a format option available only for Fiction and Science category items. The total items borrowed per category were:
+Fiction: 800 items
+Science: 500 items
+History: 300 items
+Journals: 400 items
 
-        // --- Functions (Copied from DM Sylls 2, with minor adjustments for titles/counts) ---
-        // (startTimer, stopTimer, formatTimeSeconds, formatTimeDifference, recordTimeSpent,
-        // toggleFlag, updateFlagButtonAppearance, loadQuestion, showNextQuestion, showPrevQuestion,
-        // showSetupScreen, showPracticeSessionScreen, showReviewScreen, populateNavigator,
-        // updateNavigatorButtons, updateNavigatorHighlight, showResultsScreen, revisitQuestionFromResults,
-        // endPracticeSessionAndShowResults, calculateScore, submitDataToFirebase, 
-        // handleEndPracticeSessionFooterClick, generatePDF, submitPerformanceData, initDragAndDrop,
-        // handleKeyboardShortcuts, initializeApp, loadPastTestForReview)
+If one-fifth of the Fiction items borrowed were e-books and three-tenths of the Science items borrowed were e-books, how many e-books were borrowed in total last week?`,
+            `A university library tracks estimated reading hours generated by books loaned from different subject sections last month. The data is below:
 
-        // Ensure all functions from DM Sylls 2.html's script are here.
-        // For brevity, I'm not re-listing all of them but they should be identical
-        // except for minor text changes (e.g., worksheet title).
+<img src="https://ik.imagekit.io/mwp/qrtest1c" alt="University library reading hours by subject" style="margin-top: 12px;">`,
+            `Here is a comparison of two key departments within TechCorp Industries, based on last year's performance data:
 
+<img src="https://ik.imagekit.io/mwp/qrtest1d?updatedAt=1747196268019" alt="TechCorp Industries department comparison" style="margin-top: 12px;">`,
+            `The table below shows the results of a survey asking participants about their preferred type of vacation.
+
+<img src="https://ik.imagekit.io/mwp/qrtest1e" alt="Vacation preferences survey results" style="margin-top: 12px;">`,
+            `Peter purchased 14 new baseball cards for his collection. This increased the size of his collection by 35%.`,
+            `Sarah added 3 new plants to her garden. This increased the number of plants in her garden by 15%.`,
+            `At a cinema, movie tickets normally cost $15 each. There is a special offer where you can buy 4 tickets for $50.`,
+            `<img src="https://ik.imagekit.io/mwp/qrtest1f" alt="Square patio with central square fountain">`,
+            `Alex is a diligent salesperson and has been tracking their monthly sales achieved against the average of their team (as percentages of the monthly target). The team is relatively small - the team only contains 8 members, including Alex.
+
+<img src="https://ik.imagekit.io/mwp/qrtest1i" alt="Alex's sales performance compared to team average" style="margin-top: 12px;">`,
+            `The following table shows the fare for multiple different catering services.
+
+<img src="https://ik.imagekit.io/mwp/qrtest1g?updatedAt=1747199491069" alt="Catering services pricing table" style="margin-top: 12px; margin-bottom: 12px;">
+
+For example: an event with Catering Beta for 15 guests requiring 2.5 hours of service, with a Weekend Surcharge rate of x1.4 applied, would cost: 1.4×(175.00+(15×10.50)+(2.5×25.00))=$553.00`,
+            `The following table explains the timezone difference across multiple locations.
+
+<img src="https://ik.imagekit.io/mwp/qrtest1h?updatedAt=1747199651751" alt="Timezone difference chart" style="margin-top: 12px;">`
+        ];
+        const questions = [
+            {
+                premises: [
+                    "All oranges in the bowl are sweet.",
+                    "This fruit is an orange in the bowl."
+                ],
+                statements: [
+                    "This fruit is sweet.",
+                    "Some sweet fruits in the bowl are oranges.",
+                    "No non-sweet fruits in the bowl are oranges.",
+                    "All sweet fruits in the bowl are oranges.",
+                    "Some fruits in the bowl are not sweet."
+                ],
+                correctAnswers: ["Y", "N", "Y", "N", "N"]
+            },
+            {
+                premises: [
+                    "No penguin can fly."
+                ],
+                statements: [
+                    "Some penguins can fly.",
+                    "If something can fly, it is not a penguin.",
+                    "All penguins cannot fly.",
+                    "Some creatures that cannot fly are penguins.",
+                    "All creatures that cannot fly are penguins."
+                ],
+                correctAnswers: ["N", "Y", "Y", "N", "N"]
+            },
+            {
+                premises: [
+                    "Every burger on the menu contains bread."
+                ],
+                statements: [
+                    "Some bread items on the menu are burgers.",
+                    "All bread items on the menu are burgers.",
+                    "Some burgers on the menu do not contain bread.",
+                    "No burgers on the menu lack bread.",
+                    "Some menu items lack bread."
+                ],
+                correctAnswers: ["N", "N", "N", "Y", "N"]
+            },
+            {
+                premises: [
+                    "Some books in the library are new."
+                ],
+                statements: [
+                    "All books in the library are new.",
+                    "Some books in the library are not new.",
+                    "At least one new item in the library is a book.",
+                    "No new items in the library are books.",
+                    "There is at least one book in the library."
+                ],
+                correctAnswers: ["N", "N", "Y", "N", "Y"]
+            },
+            {
+                premises: [
+                    "All dogs at the shelter are vaccinated."
+                ],
+                statements: [
+                    "Some vaccinated animals at the shelter are dogs.",
+                    "Some dogs at the shelter are not vaccinated.",
+                    "All vaccinated animals at the shelter are dogs.",
+                    "No dogs at the shelter are unvaccinated.",
+                    "Some animals at the shelter are not vaccinated."
+                ],
+                correctAnswers: ["N", "N", "N", "Y", "N"]
+            }
+        ];
+
+        // Now initialize arrays with questions.length
+        userAnswers = new Array(questions.length).fill(null);
+        questionTimes = new Array(questions.length).fill(0);
+        flaggedQuestions = new Array(questions.length).fill(false);
+
+        // Check for review mode and initialize appropriate screen
+        if (reviewParam) {
+            // We're in review mode - load the past test data
+            loadPastTestForReview(reviewParam);
+        } else {
+            // Regular test mode - continue with normal setup
+            showSetupScreen();
+        }
+
+        // --- Functions ---
         function startTimer() {
             practiceSessionStartTime = new Date();
             clearInterval(timerInterval);
             timerEl.textContent = formatTimeSeconds(timeLeft);
-            timerEl.classList.remove('text-[var(--md-sys-color-on-surface-variant)]'); // Assuming this was a placeholder
-            timerEl.classList.add('text-[var(--md-sys-color-on-primary)]');
+            timerEl.classList.remove('text-gray-300');
+            timerEl.classList.add('text-white', 'bg-opacity-20', 'bg-white');
             timerInterval = setInterval(() => {
                 timeLeft--;
                 timerEl.textContent = formatTimeSeconds(timeLeft);
@@ -905,10 +923,10 @@
         function stopTimer() {
             clearInterval(timerInterval);
             practiceSessionEndTime = practiceSessionEndTime || new Date();
-            timerEl.classList.add('text-[var(--md-sys-color-on-surface-variant)]');
-            timerEl.classList.remove('text-[var(--md-sys-color-on-primary)]');
+            timerEl.classList.remove('text-white', 'bg-opacity-20', 'bg-white');
+            timerEl.classList.add('text-gray-300');
         }
-        
+
         function formatTimeSeconds(totalSeconds) {
              if (totalSeconds < 0) totalSeconds = 0;
              const minutes = Math.floor(totalSeconds / 60);
@@ -923,13 +941,13 @@
             const seconds = totalSeconds % 60;
             return `${minutes} min ${seconds < 10 ? '0' : ''}${seconds} sec`;
         }
-        
+
         function recordTimeSpent(index) {
             if (questionStartTime && index >= 0 && index < questions.length) {
                 const timeSpent = Date.now() - questionStartTime;
                 questionTimes[index] = (questionTimes[index] || 0) + timeSpent;
             }
-            questionStartTime = null; // Reset for the next question
+            questionStartTime = null;
         }
 
         function toggleFlag() {
@@ -937,149 +955,164 @@
             const index = currentQuestionIndex;
             flaggedQuestions[index] = !flaggedQuestions[index];
             updateFlagButtonAppearance();
-            updateNavigatorButtons(); // Update navigator appearance
+            updateNavigatorButtons();
         }
 
         function updateFlagButtonAppearance() {
             const isFlagged = flaggedQuestions[currentQuestionIndex];
-            // flagButton.textContent = isFlagged ? 'Unflag' : 'Flag for Review'; // Text content not needed if using icon only
-            flagButton.classList.toggle('selected', isFlagged); // M3 selected state for icon button
-            const flagIcon = flagButton.querySelector('.material-symbols-outlined');
-            if (flagIcon) {
-                 flagIcon.textContent = isFlagged ? 'flag' : 'outlined_flag'; // Or 'flag' vs 'flag_outline'
-                 if(isFlagged) {
-                    flagIcon.style.fontVariationSettings = "'FILL' 1";
-                    flagButton.style.backgroundColor = 'var(--md-sys-color-tertiary-container)';
-                    flagButton.style.color = 'var(--md-sys-color-on-tertiary-container)';
-                 } else {
-                    flagIcon.style.fontVariationSettings = "'FILL' 0";
-                    flagButton.style.backgroundColor = 'transparent';
-                    flagButton.style.color = 'var(--md-sys-color-on-surface-variant)';
-                 }
-            }
+            flagButton.textContent = isFlagged ? 'Unflag' : 'Flag for Review';
+            flagButton.classList.toggle('flagged', isFlagged);
         }
-        
+
         function loadQuestion(index, reviewMode = false) {
             if (index < 0 || index >= questions.length) return;
             if (!isReviewingFromResults && !reviewMode) {
                 recordTimeSpent(currentQuestionIndex);
             }
-            currentQuestionIndex = index;
-            isReviewingFromResults = reviewMode; // Set review mode state
-
             const question = questions[index];
             const questionContainer = document.querySelector('.question-column');
-            if (!questionContainer) return;
-
-            let premisesHtml = `<div class="premises-container"><h3>Premises</h3>`;
-            question.premises.forEach(premise => {
-                premisesHtml += `<p class="mb-1">${premise}</p>`;
-            });
-            premisesHtml += '</div>';
-
-            let statementsHtml = `
-                <h4 class="m3-title-large">Question ${index + 1}</h4>
-                <div class="syllogism-options-header">
-                    <div>
-                        <h5 class="m3-title-medium">Conclusions</h5>
-                        <p class="m3-body-medium">Drag 'Yes' or 'No' to the box, or click a statement then a button.</p>
+            
+            // Update layout for syllogism questions
+            if (questionContainer) {
+                questionContainer.style.width = '100%';
+                questionContainer.style.flex = '1';
+                questionContainer.style.marginTop = '0';
+                
+                // Create HTML for premises and statements
+                let premisesHtml = '<div class="p-4 bg-gray-50 rounded-md mb-4" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 1.25rem; line-height: 1.5;">';
+                premisesHtml += '<h3 class="font-semibold mb-2">Premises</h3>';
+                
+                question.premises.forEach(premise => {
+                    premisesHtml += `<p class="mb-2">${premise}</p>`;
+                });
+                
+                premisesHtml += '</div>';
+                
+                // Create HTML for statements section with Yes/No buttons on the right
+                let statementsHtml = `
+                    <h4 class="text-md font-semibold mb-3 bg-white pb-1">Question ${index + 1}</h4>
+                    <div class="flex justify-between items-center mb-3">
+                        <div>
+                            <h5 class="font-medium mb-2">Conclusions</h5>
+                            <p class="text-sm text-gray-600">Drag 'Yes' or 'No' onto the statement row.</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button id="yes-button" class="drag-button px-6 py-2 bg-green-100 border border-green-500 rounded-md text-green-700 font-medium">Yes</button>
+                            <button id="no-button" class="drag-button px-6 py-2 bg-red-100 border border-red-500 rounded-md text-red-700 font-medium">No</button>
+                        </div>
                     </div>
-                    <div class="drag-buttons-container">
-                        <button id="yes-button" class="drag-button">Yes</button>
-                        <button id="no-button" class="drag-button">No</button>
-                    </div>
-                </div>
-                <div id="statements-container" class="space-y-2"></div>
-                <div id="review-explanation-container" class="mt-4"></div>
-            `;
-            questionContainer.innerHTML = premisesHtml + statementsHtml;
+                    <div id="statements-container" class="space-y-3"></div>
+                    <div id="review-explanation-container"></div>
+                `;
+                
+                questionContainer.innerHTML = premisesHtml + statementsHtml;
+            }
+            
+            currentQuestionIndex = index;
+            isReviewingFromResults = reviewMode;
             
             questionNumberInfoEl.textContent = `${index + 1} of ${questions.length}`;
-            questionContainer.scrollTop = 0;
-
+            if (questionContainer) questionContainer.scrollTop = 0;
+            
+            // Add the statements with answer boxes
             const statementsContainer = document.getElementById('statements-container');
             if (statementsContainer) {
+                statementsContainer.innerHTML = '';
+                
                 question.statements.forEach((statement, i) => {
                     const statementId = `q${index}_statement${i}`;
                     const rowDiv = document.createElement('div');
-                    rowDiv.className = 'statement-row';
+                    rowDiv.className = 'statement-row flex items-center mb-3 border border-gray-200 rounded-md p-3 bg-white';
                     rowDiv.dataset.statementIndex = i;
-                    
-                    let userAnswerDisplay = '...';
-                    let answerBoxClass = '';
-
-                    if (userAnswers[index] && userAnswers[index][i]) {
-                        userAnswerDisplay = userAnswers[index][i] === 'Y' ? 'Yes' : (userAnswers[index][i] === 'N' ? 'No' : '...');
-                        if (userAnswers[index][i] === 'Y') answerBoxClass = 'answered-yes';
-                        if (userAnswers[index][i] === 'N') answerBoxClass = 'answered-no';
-                    }
-
                     rowDiv.innerHTML = `
-                        <div class="statement-text">
-                            <span class="font-medium">${String.fromCharCode(65 + i)}.</span> ${statement}
+                        <div class="flex-grow statement-text">
+                            <span class="font-medium">${i + 1}.</span> ${statement}
                         </div>
-                        <div class="statement-answer-box ${answerBoxClass}" data-statement-index="${i}">
-                            ${userAnswerDisplay}
+                        <div class="flex-shrink-0 ml-4 relative">
+                            <div class="statement-answer-box w-16 h-10 border border-gray-300 rounded flex items-center justify-center bg-gray-50" 
+                                 data-statement-index="${i}">
+                                ${userAnswers[index] && userAnswers[index][i] ? userAnswers[index][i] : '...'}
+                            </div>
                         </div>
                     `;
+                    
                     statementsContainer.appendChild(rowDiv);
-
+                    
+                    // If in review mode, show correct/incorrect indicators
                     if (reviewMode) {
                         const answerBox = rowDiv.querySelector('.statement-answer-box');
-                        const userAnswer = userAnswers[index] ? userAnswers[index][i] : null;
+                        const userAnswer = userAnswers[index] && userAnswers[index][i] ? userAnswers[index][i] : null;
                         const correctAnswer = question.correctAnswers[i];
-                        answerBox.classList.remove('answered-yes', 'answered-no'); // Clear previous dynamic classes
-
+                        
+                        answerBox.classList.remove('border-gray-300', 'bg-gray-50');
+                        
                         if (userAnswer === correctAnswer) {
-                            answerBox.classList.add('correct-box'); // Use results screen styling
-                            answerBox.textContent = userAnswer === 'Y' ? 'Yes' : 'No';
+                            answerBox.classList.add('border-green-500', 'bg-green-50', 'text-green-700');
                         } else {
-                            answerBox.classList.add('incorrect-box');
-                            answerBox.textContent = userAnswer === 'Y' ? 'Yes' : (userAnswer === 'N' ? 'No' : 'N/A');
-                            const correctAnsDiv = document.createElement('div');
-                            correctAnsDiv.className = 'text-xs text-gray-600 mt-1';
-                            correctAnsDiv.textContent = `Correct: ${correctAnswer === 'Y' ? 'Yes' : 'No'}`;
-                            rowDiv.querySelector('.statement-answer-box').insertAdjacentElement('afterend', correctAnsDiv);
+                            answerBox.classList.add('border-red-500', 'bg-red-50', 'text-red-700');
+                            
+                            // Show correct answer
+                            const correctDiv = document.createElement('div');
+                            correctDiv.className = 'mt-1 text-xs text-gray-600';
+                            correctDiv.textContent = `Correct answer: ${correctAnswer}`;
+                            rowDiv.querySelector('.flex-shrink-0').appendChild(correctDiv);
                         }
                     }
                 });
-                if (!reviewMode) initDragAndDrop();
+                
+                // Add drag and drop functionality if not in review mode
+                if (!reviewMode) {
+                    initDragAndDrop();
+                }
             }
-
+            
             prevButton.disabled = index === 0;
-            nextButton.disabled = index === questions.length - 1 && !reviewMode; // Disable next on last question unless in review
-             if (!reviewMode && index === questions.length - 1) {
-                nextButton.innerHTML = `<span class="material-symbols-outlined">done_all</span>Finish & Review`;
+            if (!reviewMode && index === questions.length - 1) {
+                 nextButton.textContent = 'Finish & Review';
+                 nextButton.disabled = false;
+            } else if (!reviewMode) {
+                 nextButton.textContent = 'Next (Alt+N) →';
+                 nextButton.disabled = false;
             } else {
-                nextButton.innerHTML = `<span class="material-symbols-outlined">chevron_right</span>Next`;
+                 nextButton.disabled = index === questions.length - 1;
+                 if (!nextButton.disabled) nextButton.textContent = 'Next →';
             }
-
             updateFlagButtonAppearance();
             if (reviewMode) {
                 backToResultsButton.classList.remove('hidden');
                 endPracticeSessionButtonFooter.classList.add('hidden');
-                if (practiceSessionTitleEl) practiceSessionTitleEl.textContent = "Reviewing Worksheet 1";
+                practiceSessionTitleEl.textContent = "Reviewing Question";
+                prevButton.disabled = index === 0;
+                navigatorButton.disabled = false;
                 flagButton.disabled = true;
-                flagButton.classList.add('opacity-50', 'cursor-not-allowed');
             } else {
                 backToResultsButton.classList.add('hidden');
                 endPracticeSessionButtonFooter.classList.remove('hidden');
-                if (practiceSessionTitleEl) practiceSessionTitleEl.textContent = "DM Syllogisms Worksheet 1";
+                practiceSessionTitleEl.textContent = "Decision Making";
+                navigatorButton.disabled = false;
                 flagButton.disabled = false;
-                flagButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                prevButton.disabled = index === 0;
             }
             updateNavigatorHighlight();
-            if (!isReviewingFromResults && !reviewMode) {
+            if (!isReviewingFromResults) {
                 questionStartTime = Date.now();
             }
         }
 
+         // This function is replaced by the drag and drop functionality for Yes/No answers
+
         function showNextQuestion() {
+            // Hide calculator if it's open
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator();
+            }
+            
             if (isReviewingFromResults) {
                 if (currentQuestionIndex < questions.length - 1) {
                     loadQuestion(currentQuestionIndex + 1, true);
                 }
-            } else {
+            }
+            else if (!isReviewingFromResults) {
                  recordTimeSpent(currentQuestionIndex);
                  if (currentQuestionIndex === questions.length - 1) {
                      showReviewScreen();
@@ -1090,113 +1123,136 @@
         }
 
         function showPrevQuestion() {
+            // Hide calculator if it's open
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator();
+            }
+            
              if (isReviewingFromResults) {
                  if (currentQuestionIndex > 0) {
                      loadQuestion(currentQuestionIndex - 1, true);
                  }
-             } else if (currentQuestionIndex > 0) { // Not in review mode
+             }
+             else if (currentQuestionIndex > 0 && !isReviewingFromResults) {
                  recordTimeSpent(currentQuestionIndex);
                  loadQuestion(currentQuestionIndex - 1);
             }
         }
 
         function showSetupScreen() {
-            userName = ''; userEmail = ''; userGoal = ''; userFocusArea = '';
-            if (auth && auth.currentUser) {
-                const currentUser = auth.currentUser;
+            userName = '';
+            userEmail = '';
+            userGoal = '';
+            userFocusArea = '';
+            
+            // Check for Firebase auth user
+            if (firebase.auth && firebase.auth().currentUser) {
+                const currentUser = firebase.auth().currentUser;
                 userName = currentUser.displayName || currentUser.email || '';
                 userEmail = currentUser.email || '';
             }
             
-            if (setupScreen) setupScreen.classList.remove('hidden');
-            if (practiceSessionScreen) practiceSessionScreen.classList.add('hidden');
-            if (reviewScreen) { reviewScreen.classList.add('hidden'); reviewScreen.classList.remove('flex');}
-            if (resultsScreen) resultsScreen.classList.add('hidden');
-            if (appContainer) appContainer.classList.remove('flex', 'flex-col'); // Reset app container style if needed
+            setupScreen.classList.remove('hidden');
+            practiceSessionScreen.classList.add('hidden');
+            reviewScreen.classList.add('hidden');
+            reviewScreen.classList.remove('flex');
+            resultsScreen.classList.add('hidden');
+            appContainer.classList.remove('flex', 'flex-col');
+            currentlyDisplayedPassageIndex = -1;
             
-            if (worksheetTitleSetupEl) worksheetTitleSetupEl.textContent = "DM Syllogisms Worksheet 1";
-            if (setupQuestionCountEl) setupQuestionCountEl.textContent = questions.length;
-            if (setupTimeLimitEl) setupTimeLimitEl.textContent = `${timeLeft / 60} minutes`;
+            if (setupQuestionCountEl) setupQuestionCountEl.textContent = "5"; // Change to 5 questions
+            if (setupTimeLimitEl) setupTimeLimitEl.textContent = `6 minutes`; // Change to 6 minutes
             if (goalInput) {
-                goalInput.max = questions.length * 2; // Max score is 2 per question
+                goalInput.max = 10; // Change max goal to 10
                 goalInput.value = userGoal;
                 const goalLabel = document.querySelector('label[for="goal"]');
-                if (goalLabel) goalLabel.textContent = `Goal (Score out of ${questions.length * 2}):`;
+                if (goalLabel) goalLabel.textContent = `Goal (Score out of 10):`; // Change label
             }
-            if (focusAreaInput) focusAreaInput.value = userFocusArea;
+            if (focusAreaInput) {
+                focusAreaInput.value = userFocusArea;
+            }
         }
 
+        // Ensure we call updateTimerVisibility when returning to practice screen
         function showPracticeSessionScreen() {
-            if (setupScreen) setupScreen.classList.add('hidden');
-            if (practiceSessionScreen) {
-                practiceSessionScreen.classList.remove('hidden');
-                practiceSessionScreen.classList.add('flex');
-            }
-            if (reviewScreen) reviewScreen.classList.add('hidden');
-            if (resultsScreen) resultsScreen.classList.add('hidden');
-            if (appContainer) appContainer.classList.add('flex', 'flex-col');
+            setupScreen.classList.add('hidden');
+            practiceSessionScreen.classList.remove('hidden');
+            practiceSessionScreen.classList.add('flex');
+            reviewScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            appContainer.classList.add('flex', 'flex-col');
+            currentlyDisplayedPassageIndex = -1;
             updateTimerVisibility();
         }
 
+        // Ensure the timer visuals are maintained when switching between screens
         function updateTimerVisibility() {
-            if (!timerEl) return;
-            if (timerInterval) { // Timer is running
-                timerEl.classList.remove('text-[var(--md-sys-color-on-surface-variant)]');
-                timerEl.classList.add('text-[var(--md-sys-color-on-primary)]');
-            } else { // Timer is stopped or not started
-                timerEl.classList.add('text-[var(--md-sys-color-on-surface-variant)]');
-                timerEl.classList.remove('text-[var(--md-sys-color-on-primary)]');
+            if (timerInterval) {
+                timerEl.classList.remove('text-gray-300');
+                timerEl.classList.add('text-white', 'bg-opacity-20', 'bg-white');
+            } else {
+                timerEl.classList.add('text-gray-300');
+                timerEl.classList.remove('text-white', 'bg-opacity-20', 'bg-white');
             }
         }
 
+        // Review screen - keep timer running
         function showReviewScreen(filterFlagged = false) {
             recordTimeSpent(currentQuestionIndex);
-            updateTimerVisibility(); // Keep timer display consistent
-            if (practiceSessionScreen) practiceSessionScreen.classList.add('hidden');
-            if (reviewScreen) { reviewScreen.classList.remove('hidden'); reviewScreen.classList.add('flex');}
-            if (resultsScreen) resultsScreen.classList.add('hidden');
-            if (setupScreen) setupScreen.classList.add('hidden');
-            if (appContainer) appContainer.classList.add('flex', 'flex-col');
+            // Don't stop timer here - let it continue running
+            updateTimerVisibility();
+            practiceSessionScreen.classList.add('hidden');
+            reviewScreen.classList.remove('hidden');
+            reviewScreen.classList.add('flex');
+            resultsScreen.classList.add('hidden');
+            setupScreen.classList.add('hidden');
+            appContainer.classList.add('flex', 'flex-col');
+            
+            // Hide calculator if it's visible
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator();
+            }
             
             reviewGrid.innerHTML = '';
             questions.forEach((_, index) => {
-                 if (filterFlagged && !flaggedQuestions[index]) return;
+                 if (filterFlagged && !flaggedQuestions[index]) {
+                     return;
+                 }
                 const button = document.createElement('button');
                 button.textContent = index + 1;
                 button.className = 'review-grid-button';
                 button.dataset.questionIndex = index;
-                // Check if any statement for this question has an answer
-                const hasAnswer = userAnswers[index] && userAnswers[index].some(ans => ans !== null);
-                if (hasAnswer) {
+                if (userAnswers[index] !== null && userAnswers[index] !== undefined) {
                     button.classList.add('review-grid-button-answered');
                 } else {
                      button.classList.add('review-grid-button-unanswered');
                 }
-                if (flaggedQuestions[index]) button.classList.add('review-flagged');
+                if (flaggedQuestions[index]) {
+                    button.classList.add('review-flagged');
+                }
+                // Using event delegation, so no individual onclick handler
                 reviewGrid.appendChild(button);
             });
-            if(filterFlaggedButton) filterFlaggedButton.innerHTML = `<span class="material-symbols-outlined">${filterFlagged ? 'checklist' : 'filter_list'}</span> ${filterFlagged ? 'Show All' : 'Flagged Only'}`;
+             filterFlaggedButton.textContent = filterFlagged ? 'Show All Questions' : 'Show Flagged Only';
         }
 
         function populateNavigator() {
-            if (!navigatorGrid) return;
             navigatorGrid.innerHTML = '';
             questions.forEach((_, index) => {
                 const button = document.createElement('button');
                 button.textContent = index + 1;
-                button.className = 'm3-button m3-button-outlined'; // Use M3 button style
-                button.style.minWidth = '40px'; // Ensure buttons are reasonably sized
-                button.style.padding = '0.5rem';
+                button.classList.add('py-2', 'px-1', 'border', 'border-gray-300', 'rounded-md', 'text-center', 'transition', 'duration-150', 'ease-in-out', 'text-sm', 'hover:bg-gray-100');
                 button.dataset.questionIndex = index;
-
-                const hasAnswer = userAnswers[index] && userAnswers[index].some(ans => ans !== null);
-                if (hasAnswer) button.classList.add('nav-answered');
+                if (userAnswers[index]) button.classList.add('nav-answered');
                 if (index === currentQuestionIndex) button.classList.add('nav-current');
                 if (flaggedQuestions[index]) button.classList.add('nav-flagged');
-                
                 button.onclick = () => {
-                    if(navigatorModal) navigatorModal.classList.remove('flex');
-                    if(navigatorModal) navigatorModal.classList.add('hidden');
+                    navigatorModal.classList.remove('flex');
+                    navigatorModal.classList.add('hidden');
+                    // Hide calculator if it's open
+                    if (calculatorUI.classList.contains('visible')) {
+                        toggleCalculator();
+                    }
                     const targetIndex = parseInt(button.dataset.questionIndex, 10);
                     loadQuestion(targetIndex, isReviewingFromResults);
                 };
@@ -1204,8 +1260,16 @@
             });
         }
 
-        function updateNavigatorButtons() { // Simplified, relies on populateNavigator to rebuild for now
-            populateNavigator(); // Rebuild to reflect current state
+        function updateNavigatorButtons() {
+            if (!navigatorGrid) return;
+            const buttons = navigatorGrid.querySelectorAll('button');
+            buttons.forEach(button => {
+                const index = parseInt(button.dataset.questionIndex, 10);
+                button.classList.remove('nav-answered', 'nav-current', 'nav-flagged');
+                if (userAnswers[index]) button.classList.add('nav-answered');
+                if (index === currentQuestionIndex) button.classList.add('nav-current');
+                if (flaggedQuestions[index]) button.classList.add('nav-flagged');
+            });
         }
 
          function updateNavigatorHighlight() {
@@ -1223,323 +1287,640 @@
             recordTimeSpent(currentQuestionIndex);
             stopTimer();
 
-            if(practiceSessionScreen) practiceSessionScreen.classList.add('hidden');
-            if(reviewScreen) {reviewScreen.classList.add('hidden'); reviewScreen.classList.remove('flex');}
-            if(resultsScreen) {resultsScreen.classList.remove('hidden'); resultsScreen.classList.add('flex');}
-            if(setupScreen) setupScreen.classList.add('hidden');
-            if(appContainer) appContainer.classList.add('flex', 'flex-col');
+            practiceSessionScreen.classList.add('hidden');
+            reviewScreen.classList.add('hidden');
+            reviewScreen.classList.remove('flex');
+            resultsScreen.classList.remove('hidden');
+            resultsScreen.classList.add('flex');
+            setupScreen.classList.add('hidden');
+            appContainer.classList.add('flex', 'flex-col');
 
             let totalScore = 0;
             resultsDetailsGrid.innerHTML = ''; 
 
+            // Add partially-correct-box style if not already defined
+            if (!document.getElementById('partially-correct-style')) {
+                const style = document.createElement('style');
+                style.id = 'partially-correct-style';
+                style.textContent = `
+                    .partially-correct-box { 
+                        background-color: #fb923c; /* Orange color */
+                        border: 2px solid #ea580c;
+                        color: white; 
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
             questions.forEach((qData, index) => {
-                let correctStatements = 0;
-                if (userAnswers[index]) {
-                    qData.statements.forEach((_, statementIndex) => {
-                        if (userAnswers[index][statementIndex] === qData.correctAnswers[statementIndex]) {
-                            correctStatements++;
-                        }
-                    });
+                // Count correct answers for this question
+                let correctCount = 0;
+                
+                // For debugging
+                console.log(`Question ${index + 1} - userAnswers:`, userAnswers[index]);
+                console.log(`Question ${index + 1} - correctAnswers:`, qData.correctAnswers);
+                
+                qData.statements.forEach((statement, statementIndex) => {
+                    // In this app, Yes/No answers are stored as "Yes" and "No", but correctAnswers are "Y" and "N"
+                    // We need to convert the user's answer to match the format of correctAnswers
+                    let userAnswer = userAnswers[index] && userAnswers[index][statementIndex] ? userAnswers[index][statementIndex] : null;
+                    const correctAnswer = qData.correctAnswers[statementIndex];
+                    
+                    // Convert "Yes"/"No" to "Y"/"N" for comparison
+                    if (userAnswer === "Yes") userAnswer = "Y";
+                    if (userAnswer === "No") userAnswer = "N";
+                    
+                    console.log(`Q${index + 1}.${statementIndex + 1}: User: "${userAnswer}", Correct: "${correctAnswer}", Match: ${userAnswer === correctAnswer}`);
+                    
+                    if (userAnswer === correctAnswer) {
+                        correctCount++;
+                    }
+                });
+                
+                // Apply scoring rules
+                let questionScore = 0;
+                let boxClass = '';
+                
+                if (correctCount === 5) {
+                    questionScore = 2;
+                    boxClass = 'correct-box';
+                } else if (correctCount === 4) {
+                    questionScore = 1;
+                    boxClass = 'partially-correct-box';
+                } else {
+                    questionScore = 0;
+                    boxClass = 'incorrect-box';
                 }
                 
-                let questionScore = 0;
-                let boxClass = 'not-answered-box';
-                if (userAnswers[index] && userAnswers[index].some(ans => ans !== null)) { // If at least one statement was answered
-                    if (correctStatements === 5) { questionScore = 2; boxClass = 'correct-box'; }
-                    else if (correctStatements === 4) { questionScore = 1; boxClass = 'partially-correct-box'; }
-                    else { questionScore = 0; boxClass = 'incorrect-box'; }
-                }
                 totalScore += questionScore;
 
+                const timeSpentMs = questionTimes[index] || 0;
+                const timeSpentSec = Math.round(timeSpentMs / 1000);
+
                 const summaryItem = document.createElement('div');
-                summaryItem.className = 'result-summary-item';
+                summaryItem.classList.add('result-summary-item');
+
                 const summaryBox = document.createElement('div');
-                summaryBox.className = `result-summary-box ${boxClass}`;
+                summaryBox.classList.add('result-summary-box', boxClass);
                 summaryBox.dataset.index = index;
                 summaryBox.title = `Click to review Question ${index + 1}`;
-                summaryBox.innerHTML = `<span class="time-display-in-box">${correctStatements}/5</span>`;
+
+                // Show score instead of time in the summary box
+                const scoreDisplay = document.createElement('span');
+                scoreDisplay.classList.add('time-display-in-box');
+                scoreDisplay.textContent = `${correctCount}/5`;
+                summaryBox.appendChild(scoreDisplay);
+
                 const numberLabel = document.createElement('div');
-                numberLabel.className = 'question-number-label';
+                numberLabel.classList.add('question-number-label');
                 numberLabel.textContent = `Q${index + 1}`;
-                summaryBox.onclick = () => revisitQuestionFromResults(index);
+
+                summaryBox.addEventListener('click', () => {
+                    revisitQuestionFromResults(index);
+                });
+
                 summaryItem.appendChild(summaryBox);
                 summaryItem.appendChild(numberLabel);
                 resultsDetailsGrid.appendChild(summaryItem);
             });
 
-            if(scoreEl) scoreEl.textContent = totalScore;
-            if(totalScorePossibleEl) totalScorePossibleEl.textContent = questions.length * 2; // Max 2 points per question
-            if(timeTakenEl) timeTakenEl.textContent = formatTimeDifference(practiceSessionEndTime - practiceSessionStartTime);
+            scoreEl.textContent = totalScore;
+            const timeDiff = practiceSessionEndTime - practiceSessionStartTime;
+            timeTakenEl.textContent = formatTimeDifference(timeDiff);
             
+            // Update total score possible on results screen (10 points maximum: 5 questions × 2 points)
+            const totalScorePossibleEl = document.getElementById('total-score-possible');
+            if (totalScorePossibleEl) {
+                totalScorePossibleEl.textContent = "10";
+            } else {
+                const scoreDisplayParent = scoreEl.parentElement;
+                if (scoreDisplayParent) {
+                     scoreDisplayParent.innerHTML = `Your Score: <span id="score" class="text-blue-700">${totalScore}</span> / 10 Points`;
+                }
+            }
+            
+            // Make sure the submit performance button has an event listener
             const submitButton = document.getElementById('submit-performance-button');
             if (submitButton) {
                 submitButton.disabled = false;
-                submitButton.innerHTML = '<span class="material-symbols-outlined">send</span>Submit Reflections';
+                submitButton.textContent = 'Submit Reflections';
+                submitButton.classList.remove('bg-green-500');
             }
         }
 
+
         function revisitQuestionFromResults(index) {
-            if(resultsScreen) resultsScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            resultsScreen.classList.remove('flex');
             showPracticeSessionScreen();
-            loadQuestion(index, true); // true for reviewMode
+            loadQuestion(index, true);
         }
 
+        // Only stop timer when showing final results
         function endPracticeSessionAndShowResults() {
             stopTimer();
-            const finalScore = calculateScore();
+
+            // Gather data to submit to Firebase
             const performanceData = {
                 studentName: userName || 'Anonymous',
-                studentEmail: userEmail || '',
-                userId: auth && auth.currentUser ? auth.currentUser.uid : '',
-                examName: "DM Syllogisms Worksheet 1",
-                score: finalScore,
-                totalQuestions: questions.length,
-                totalPossibleScore: questions.length * 2,
+                studentEmail: userEmail || '', // <--- ADD THIS LINE
+                examName: "DM Syllogisms Worksheet 2", 
+                score: calculateScore(), // New function to calculate score
+                totalQuestions: questions.length, // Should be 5
+                totalPossibleScore: 10, // Explicitly add total possible score (2 points per question)
                 timeTaken: formatTimeDifference(practiceSessionEndTime - practiceSessionStartTime),
                 answers: userAnswers,
                 questionTimes: questionTimes,
                 flaggedQuestions: flaggedQuestions,
                 goal: userGoal || '',
                 focusArea: userFocusArea || '',
-                submissionTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                focusRating: '', // No reflection data available at this point
+                reflection: '',  // No reflection data available at this point
+                submissionTimestamp: new Date().toISOString(),
                 userAgent: navigator.userAgent
             };
-            submitDataToFirebase(performanceData); // Submit before showing results
+
+            // Submit data to Firebase
+            submitDataToFirebase(performanceData);
+            
+            // Show results
             showResultsScreen();
         }
 
+        // Function to calculate the score
         function calculateScore() {
             let score = 0;
             questions.forEach((qData, index) => {
                 if (!userAnswers[index]) return;
+                
+                // Count correct answers for this question
                 let correctCount = 0;
-                qData.statements.forEach((_, statementIndex) => {
-                    if (userAnswers[index][statementIndex] === qData.correctAnswers[statementIndex]) {
+                qData.correctAnswers.forEach((correctAnswer, statementIndex) => {
+                    const userAnswer = userAnswers[index][statementIndex];
+                    if (userAnswer === correctAnswer) {
                         correctCount++;
                     }
                 });
-                if (correctCount === 5) score += 2;
-                else if (correctCount === 4) score += 1;
+                
+                // Apply scoring rules:
+                // 5/5 correct = 2 points
+                // 4/5 correct = 1 point
+                // 3 or fewer correct = 0 points
+                if (correctCount === 5) {
+                    score += 2;
+                } else if (correctCount === 4) {
+                    score += 1;
+                }
             });
             return score;
         }
 
-        async function submitDataToFirebase(data) {
-            if (!db || !auth) { console.error("Firebase (db or auth) not initialized for submission."); return; }
-            try {
-                await db.collection("performanceSubmissions").add(data);
-                console.log("Performance data submitted to Firebase.");
-                // Optional: Show a temporary success message on the results screen
-            } catch (error) {
-                console.error("Error submitting to Firebase:", error);
+        // Function to submit data to Firebase
+        function submitDataToFirebase(data) {
+            // Only submit if Firebase is initialized
+            if (typeof firebase !== 'undefined' && firebase.firestore) {
+                try {
+                    const db = firebase.firestore();
+                    let userId = ''; // <--- Add this
+                    if (firebase.auth && firebase.auth().currentUser) {
+                        userId = firebase.auth().currentUser.uid; // <--- Get the UID
+                    }
+                    
+                    const dataToSubmit = {
+                        ...data, // Spread existing data
+                        userId: userId // <--- Add userId here
+                    };
+
+                    db.collection("performanceSubmissions").add(dataToSubmit) // Use dataToSubmit
+                      .then(() => {
+                          console.log("Performance data submitted to Firebase with userId");
+                          
+                          // Show a success notification that will be displayed on the results screen
+                          setTimeout(() => {
+                              const successNotice = document.createElement('div');
+                              successNotice.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow-lg z-50';
+                              successNotice.innerHTML = `
+                                  <div class="flex items-center">
+                                      <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                      </svg>
+                                      <span class="font-medium">Success!</span>
+                                      <span class="ml-2">Your test results have been submitted to the admin dashboard.</span>
+                                  </div>
+                              `;
+                              document.body.appendChild(successNotice);
+                              
+                              // Remove the notice after 5 seconds
+                              setTimeout(() => {
+                                  successNotice.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                                  setTimeout(() => {
+                                      document.body.removeChild(successNotice);
+                                  }, 500);
+                              }, 5000);
+                          }, 500); // Small delay to ensure results screen is visible
+                      })
+                      .catch((error) => {
+                          console.error("Error submitting to Firebase:", error);
+                          
+                          // Show error notification
+                          setTimeout(() => {
+                              const errorNotice = document.createElement('div');
+                              errorNotice.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded shadow-lg z-50';
+                              errorNotice.innerHTML = `
+                                  <div class="flex items-center">
+                                      <svg class="h-6 w-6 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                      </svg>
+                                      <span class="font-medium">Error!</span>
+                                      <span class="ml-2">Could not submit your results. You can try adding a reflection.</span>
+                                  </div>
+                              `;
+                              document.body.appendChild(errorNotice);
+                              
+                              // Remove the notice after 5 seconds
+                              setTimeout(() => {
+                                  errorNotice.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                                  setTimeout(() => {
+                                      document.body.removeChild(errorNotice);
+                                  }, 500);
+                              }, 5000);
+                          }, 500);
+                      });
+                } catch (error) {
+                    console.error("Error accessing Firebase:", error);
+                }
+            } else {
+                console.error("Firebase is not initialized");
             }
         }
 
         function handleEndPracticeSessionFooterClick() {
              recordTimeSpent(currentQuestionIndex);
+             // Remove stopTimer() call to keep timer running
              showReviewScreen();
          }
 
-        function generatePDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            const reflection = reflectionText ? reflectionText.value.trim() : 'N/A';
-            const focusRating = focusRatingInput ? focusRatingInput.value : 'N/A';
-            const finalScore = scoreEl ? scoreEl.textContent : 'N/A';
-            const totalPossible = totalScorePossibleEl ? totalScorePossibleEl.textContent : (questions.length * 2);
-            const timeTaken = timeTakenEl ? timeTakenEl.textContent : 'N/A';
-            let y = 15;
-            const lineHeight = 7;
-            const pageHeight = doc.internal.pageSize.height;
-            const margin = 15;
+        function inputDigit(digit) {
+            if (calcCurrentInput === 'Error') calcCurrentInput = '0'; // Clear error on new digit
+            if (calcShouldResetDisplay) {
+                calcCurrentInput = digit;
+                calcShouldResetDisplay = false;
+            } else {
+                // Prevent excessively long numbers before decimal
+                if (calcCurrentInput.includes('.') && calcCurrentInput.split('.')[1].length >= 8) return; // Limit to 8 decimal places
+                if (!calcCurrentInput.includes('.') && calcCurrentInput.length >= 10 && calcCurrentInput !== '0') return; // Limit to 10 integer digits
 
-            doc.setFontSize(18);
-            doc.text("UCAT DM Syllogisms Worksheet 1 Results", margin, y);
-            y += lineHeight * 1.5;
-            doc.setFontSize(12);
-            doc.text(`Name: ${userName || 'N/A'}`, margin, y); y += lineHeight;
-            doc.text(`Goal: ${userGoal || 'N/A'} / ${totalPossible}`, margin, y); y += lineHeight;
-            doc.text(`Focus Area: ${userFocusArea || 'N/A'}`, margin, y); y += lineHeight;
-            doc.text(`Final Score: ${finalScore} / ${totalPossible}`, margin, y); y += lineHeight;
-            doc.text(`Time Taken: ${timeTaken}`, margin, y); y += lineHeight * 1.5;
-            doc.setFontSize(14);
-            doc.text("Focus Rating (1-5):", margin, y); y += lineHeight;
-            doc.setFontSize(10);
-            doc.text(focusRating || 'N/A', margin, y); y += lineHeight * 1.5;
-            doc.setFontSize(14);
-            doc.text("Main Takeaway:", margin, y); y += lineHeight;
-            doc.setFontSize(10);
-            const reflectionLines = doc.splitTextToSize(reflection || 'No reflection provided.', doc.internal.pageSize.width - margin * 2);
-            doc.text(reflectionLines, margin, y);
-            y += reflectionLines.length * (lineHeight * 0.7) + lineHeight;
-            doc.setFontSize(14);
-            doc.text("Detailed Results Summary:", margin, y); y += lineHeight * 1.5;
-            doc.setFontSize(10);
-
-            questions.forEach((qData, index) => {
-                let resultText = `Q${index + 1}: `;
-                let correctCount = 0;
-                if (userAnswers[index]) {
-                    qData.statements.forEach((stmt, stmtIdx) => {
-                        const uAns = userAnswers[index][stmtIdx];
-                        const cAns = qData.correctAnswers[stmtIdx];
-                        if (uAns === cAns) correctCount++;
-                        resultText += `S${stmtIdx+1}: ${uAns || 'N/A'} (Correct: ${cAns}) | `;
-                    });
-                } else {
-                    resultText += "Not Answered";
-                }
-                resultText += ` (${correctCount}/5 correct)`;
-                
-                let textLines = doc.splitTextToSize(resultText, doc.internal.pageSize.width - margin * 2);
-                if (y + (textLines.length * (lineHeight * 0.7)) > pageHeight - margin) {
-                    doc.addPage();
-                    y = margin;
-                }
-                doc.text(textLines, margin, y);
-                y += textLines.length * (lineHeight * 0.7) + (lineHeight*0.3);
-            });
-            doc.save(`ucat_dm_syllogisms_1_results_${userName || 'user'}.pdf`);
+                calcCurrentInput = calcCurrentInput === '0' ? digit : calcCurrentInput + digit;
+            }
+            updateCalcDisplay();
+            calcMrcPressedOnce = false; 
         }
-        
-        async function submitPerformanceData() {
-            if (isSubmittingReflection) return;
-            if (!auth || !auth.currentUser || !db) {
-                alert("You must be logged in to submit reflections.");
+
+        function inputDecimal() {
+            if (calcCurrentInput === 'Error') calcCurrentInput = '0';
+            if (calcShouldResetDisplay) {
+                calcCurrentInput = '0.';
+                calcShouldResetDisplay = false;
+            } else if (!calcCurrentInput.includes('.')) {
+                calcCurrentInput += '.';
+            }
+            updateCalcDisplay();
+            calcMrcPressedOnce = false;
+        }
+
+        function handleOperator(nextOperator) {
+            if (calcCurrentInput === 'Error') return;
+            const inputValue = parseFloat(calcCurrentInput);
+            if (calcOperator && !calcShouldResetDisplay) { 
+                calculate();
+                if (calcCurrentInput === 'Error') return; // Stop if calculation resulted in error
+                calcPreviousInput = calcCurrentInput; 
+            } else {
+                calcPreviousInput = calcCurrentInput;
+            }
+            calcOperator = nextOperator;
+            calcShouldResetDisplay = true;
+            calcMrcPressedOnce = false;
+        }
+
+        function calculate() {
+            if (!calcOperator || calcPreviousInput === '' || calcCurrentInput === 'Error') return;
+            const prev = parseFloat(calcPreviousInput);
+            const current = parseFloat(calcCurrentInput);
+            if (isNaN(prev) || isNaN(current)) {
+                calcCurrentInput = 'Error'; // Should not happen if inputs are validated
+                updateCalcDisplay();
                 return;
             }
-            isSubmittingReflection = true;
-            const submitButton = document.getElementById('submit-performance-button');
-            if(submitButton) submitButton.disabled = true;
-            if(submitButton) submitButton.innerHTML = `<span class="material-symbols-outlined animate-spin">progress_activity</span> Submitting...`;
 
-            const focusRatingVal = focusRatingInput ? focusRatingInput.value : '';
-            const reflectionVal = reflectionText ? reflectionText.value.trim() : '';
-            
-            // Find the most recent submission for THIS specific worksheet by this user to update it.
-            // This assumes we have a unique examName for each worksheet.
-            const examNameForQuery = "DM Syllogisms Worksheet 1"; 
+            let result = 0;
+            switch (calcOperator) {
+                case '+': result = prev + current; break;
+                case '-': result = prev - current; break;
+                case '*': result = prev * current; break;
+                case '/': 
+                    if (current === 0) {
+                        result = 'Error';
+                    } else {
+                        result = prev / current;
+                    }
+                    break;
+                default: return;
+            }
 
-            try {
-                const querySnapshot = await db.collection("performanceSubmissions")
-                    .where("userId", "==", auth.currentUser.uid)
-                    .where("examName", "==", examNameForQuery)
-                    .orderBy("submissionTimestamp", "desc")
-                    .limit(1)
-                    .get();
-
-                if (!querySnapshot.empty) {
-                    const docToUpdate = querySnapshot.docs[0];
-                    await db.collection("performanceSubmissions").doc(docToUpdate.id).update({
-                        focusRating: focusRatingVal,
-                        reflection: reflectionVal,
-                        reflectionTimestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    if(submitButton) submitButton.innerHTML = `<span class="material-symbols-outlined">check_circle</span> Reflections Saved!`;
-                    if(submitButton) submitButton.style.backgroundColor = 'var(--md-sys-color-success)'; // M3 Success color
-                    console.log("Reflection updated for existing submission.");
+            if (result === 'Error') {
+                calcCurrentInput = 'Error';
+            } else {
+                // Check if result is a valid number and not Infinity or NaN
+                if (!isFinite(result)) {
+                    calcCurrentInput = 'Error';
                 } else {
-                    // This case should ideally not happen if endPracticeSessionAndShowResults always submits initial data.
-                    // But as a fallback, create a new entry if no prior submission for this worksheet is found.
-                    console.warn("No prior submission found for this worksheet to update reflection. Creating new entry.");
-                    const fallbackData = {
-                        studentName: userName || auth.currentUser.displayName || 'Anonymous',
-                        studentEmail: userEmail || auth.currentUser.email || '',
-                        userId: auth.currentUser.uid,
-                        examName: examNameForQuery,
-                        score: scoreEl ? scoreEl.textContent : 'N/A',
-                        totalQuestions: questions.length,
-                        totalPossibleScore: questions.length * 2,
-                        timeTaken: timeTakenEl ? timeTakenEl.textContent : 'N/A',
-                        answers: userAnswers, // These might be empty if page was reloaded on results
-                        questionTimes: questionTimes, // Same as above
-                        flaggedQuestions: flaggedQuestions, // Same as above
-                        goal: userGoal || '',
-                        focusArea: userFocusArea || '',
-                        focusRating: focusRatingVal,
-                        reflection: reflectionVal,
-                        submissionTimestamp: firebase.firestore.FieldValue.serverTimestamp(), // New timestamp for this entry
-                        userAgent: navigator.userAgent,
-                        isReflectionOnly: true // Flag to indicate this was primarily a reflection submission
-                    };
-                    await db.collection("performanceSubmissions").add(fallbackData);
-                    if(submitButton) submitButton.innerHTML = `<span class="material-symbols-outlined">check_circle</span> Reflections Saved!`;
-                     if(submitButton) submitButton.style.backgroundColor = 'var(--md-sys-color-success)';
+                    // Format result: if it's a very small or large number, handle differently
+                    try {
+                        // Handle large numbers better - use toFixed for numbers that are too large
+                        if (Math.abs(result) > 1e10) {
+                            let resultStr = result.toExponential(6);
+                            calcCurrentInput = resultStr;
+                        } else if (Math.abs(result) < 1e-6 && result !== 0) {
+                            // Small numbers in scientific notation
+                            let resultStr = result.toExponential(6);
+                            calcCurrentInput = resultStr;
+                        } else {
+                            // Normal sized numbers - keep precision but remove trailing zeros
+                            let resultStr = parseFloat(result.toPrecision(10)).toString();
+                            calcCurrentInput = resultStr;
+                        }
+                    } catch (e) {
+                        // Fallback if formatting fails
+                        calcCurrentInput = String(result);
+                    }
+                    
+                    // Additional safety - if we end up with an invalid display value, show Error
+                    if (calcCurrentInput === 'NaN' || calcCurrentInput === 'Infinity' || calcCurrentInput === '-Infinity') {
+                        calcCurrentInput = 'Error';
+                    }
                 }
-            } catch (error) {
-                console.error('Error saving reflection:', error);
-                alert('An error occurred while saving your reflection. Please try again.');
-                if(submitButton) submitButton.disabled = false;
-                if(submitButton) submitButton.innerHTML = `<span class="material-symbols-outlined">send</span>Submit Reflections`;
-            } finally {
-                setTimeout(() => { isSubmittingReflection = false; }, 2000);
+            }
+            calcOperator = null;
+            calcShouldResetDisplay = true; 
+            updateCalcDisplay();
+        }
+
+        function handleMemory(action) {
+            const currentValue = parseFloat(calcCurrentInput);
+            if (calcCurrentInput === 'Error' && action !== 'mrc') return;
+
+            switch (action) {
+                case 'm+':
+                    if (!isNaN(currentValue)) calcMemory += currentValue;
+                    updateCalcDisplay();
+                    break;
+                case 'm-':
+                    if (!isNaN(currentValue)) calcMemory -= currentValue;
+                    updateCalcDisplay();
+                    break;
+                case 'mrc':
+                    if (calcMrcPressedOnce) { 
+                        calcMemory = 0;
+                        calcMrcPressedOnce = false;
+                        // Optionally, could also clear display to 0 here
+                    } else { 
+                        calcCurrentInput = String(parseFloat(calcMemory.toPrecision(10))); // Show memory with precision
+                        calcMrcPressedOnce = true;
+                        calcShouldResetDisplay = true; 
+                    }
+                    break;
+            }
+            if (action !== 'mrc') { // For M+ and M-, display doesn't change immediately
+                calcShouldResetDisplay = true; // Next number input should overwrite current display
+                calcMrcPressedOnce = false; 
+            } else {
+                updateCalcDisplay(); // For MRC, update display immediately
+            }
+        }
+
+        function handleSpecialFunction(func) {
+            if (calcCurrentInput === 'Error' && func !== 'clear') return;
+            const currentValue = parseFloat(calcCurrentInput);
+
+            switch (func) {
+                case 'sqrt':
+                    if (currentValue < 0 || isNaN(currentValue)) {
+                        calcCurrentInput = 'Error';
+                    } else {
+                        try {
+                            const sqrtResult = Math.sqrt(currentValue);
+                            if (!isFinite(sqrtResult)) {
+                                calcCurrentInput = 'Error';
+                            } else {
+                                calcCurrentInput = String(parseFloat(sqrtResult.toPrecision(10)));
+                            }
+                        } catch (e) {
+                            calcCurrentInput = 'Error';
+                        }
+                    }
+                    break;
+                case 'percent':
+                    if (isNaN(currentValue)) { calcCurrentInput = 'Error'; break; }
+                    if (calcPreviousInput !== '' && calcOperator) {
+                        const prev = parseFloat(calcPreviousInput);
+                        if (isNaN(prev)) { calcCurrentInput = 'Error'; break; }
+                        
+                        try {
+                            const percentResult = prev * (currentValue / 100);
+                            if (!isFinite(percentResult)) {
+                                calcCurrentInput = 'Error';
+                            } else {
+                                calcCurrentInput = String(parseFloat(percentResult.toPrecision(10)));
+                            }
+                        } catch (e) {
+                            calcCurrentInput = 'Error';
+                        }
+                    } else { 
+                        try {
+                            const percentResult = currentValue / 100;
+                            if (!isFinite(percentResult)) {
+                                calcCurrentInput = 'Error';
+                            } else {
+                                calcCurrentInput = String(parseFloat(percentResult.toPrecision(10)));
+                            }
+                        } catch (e) {
+                            calcCurrentInput = 'Error';
+                        }
+                    }
+                    break;
+                case 'negate':
+                     if (calcCurrentInput !== '0' && !isNaN(currentValue)) { 
+                        calcCurrentInput = String(currentValue * -1);
+                    }
+                    break;
+                case 'backspace':
+                    if (calcCurrentInput === 'Error' || calcShouldResetDisplay) {
+                        calcCurrentInput = '0';
+                        calcShouldResetDisplay = false;
+                    } else if (calcCurrentInput.length > 1) {
+                        calcCurrentInput = calcCurrentInput.slice(0, -1);
+                    } else {
+                        calcCurrentInput = '0';
+                    }
+                    break;
+                case 'clear':
+                    clearCalculator();
+                    return; // Skip further processing
+            }
+            updateCalcDisplay();
+            if (func !== 'backspace' && func !== 'negate' && func !== 'clear') { 
+                calcShouldResetDisplay = true;
+            }
+            calcMrcPressedOnce = false;
+        }
+
+
+        function toggleCalculator() {
+            const isVisible = calculatorUI.classList.toggle('visible');
+            calculatorToggleButton.classList.toggle('active', isVisible);
+            if (isVisible) {
+                clearCalculator(); 
             }
         }
         
-        function initDragAndDrop() {
-            const yesButton = document.getElementById('yes-button');
-            const noButton = document.getElementById('no-button');
-            const statementRows = document.querySelectorAll('.statement-row');
-            
-            if (!yesButton || !noButton || !statementRows.length) return;
-            
-            let draggedValue = null;
-            
-            [yesButton, noButton].forEach(button => {
-                button.setAttribute('draggable', true);
-                button.addEventListener('dragstart', function(e) {
-                    draggedValue = this.textContent; // "Yes" or "No"
-                    e.dataTransfer.setData('text/plain', draggedValue);
-                    this.classList.add('dragging');
-                });
-                button.addEventListener('dragend', function() {
-                    this.classList.remove('dragging');
-                });
-            });
-            
-            statementRows.forEach(row => {
-                const answerBox = row.querySelector('.statement-answer-box');
-                row.addEventListener('dragover', function(e) {
-                    e.preventDefault(); 
-                    this.classList.add('drag-over');
-                });
-                row.addEventListener('dragleave', function() {
-                    this.classList.remove('drag-over');
-                });
-                row.addEventListener('drop', function(e) {
-                    e.preventDefault();
-                    this.classList.remove('drag-over');
-                    const value = e.dataTransfer.getData('text/plain');
-                    answerBox.textContent = value;
-                    answerBox.classList.remove('answered-yes', 'answered-no');
-                    answerBox.classList.add(value === 'Yes' ? 'answered-yes' : 'answered-no');
-                    
-                    const statementIndex = parseInt(this.dataset.statementIndex);
-                    if (!userAnswers[currentQuestionIndex]) {
-                        userAnswers[currentQuestionIndex] = new Array(questions[currentQuestionIndex].statements.length).fill(null);
-                    }
-                    userAnswers[currentQuestionIndex][statementIndex] = (value === 'Yes' ? 'Y' : 'N');
-                    updateNavigatorButtons();
-                });
+        // Draggable Calculator Logic
+        function makeDraggable(element, handle) {
+            let currentX, currentY;
 
-                // Click to clear answer
-                answerBox.addEventListener('click', function() {
-                    if (isReviewingFromResults) return; // Don't allow clearing in review mode
-                    this.textContent = '...';
-                    this.classList.remove('answered-yes', 'answered-no');
-                    const statementIndex = parseInt(this.dataset.statementIndex);
-                     if (userAnswers[currentQuestionIndex]) {
-                        userAnswers[currentQuestionIndex][statementIndex] = null;
-                    }
-                    updateNavigatorButtons();
-                });
+            handle.onmousedown = function(event) {
+                event.preventDefault();
+                isDraggingCalculator = true;
+                calculatorUI.style.cursor = 'grabbing';
+
+                // Get the initial mouse cursor position
+                currentX = event.clientX;
+                currentY = event.clientY;
+
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            };
+
+            function elementDrag(event) {
+                event.preventDefault();
+                if (!isDraggingCalculator) return;
+
+                // Calculate the new cursor position
+                const dx = currentX - event.clientX;
+                const dy = currentY - event.clientY;
+                currentX = event.clientX;
+                currentY = event.clientY;
+
+                // Set the element's new position
+                let newTop = element.offsetTop - dy;
+                let newLeft = element.offsetLeft - dx;
+
+                // Constrain within app-container (optional, can be complex)
+                const appRect = appContainer.getBoundingClientRect();
+                const calcRect = element.getBoundingClientRect();
+                
+                // Simple boundary check (relative to viewport for now, as appContainer might scroll)
+                // For more robust boundary, calculate relative to appContainer's scroll position
+                if (newLeft < 0) newLeft = 0;
+                if (newTop < 0) newTop = 0;
+                if (newLeft + calcRect.width > window.innerWidth) newLeft = window.innerWidth - calcRect.width;
+                if (newTop + calcRect.height > window.innerHeight) newTop = window.innerHeight - calcRect.height;
+
+
+                element.style.top = newTop + "px";
+                element.style.left = newLeft + "px";
+            }
+
+            function closeDragElement() {
+                isDraggingCalculator = false;
+                calculatorUI.style.cursor = 'grab';
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+
+        // --- Event Listeners ---
+        startButton.addEventListener('click', () => {
+            console.log("Start button event listener triggered, calling window.startTest()");
+            window.startTest();
+        });
+
+        nextButton.addEventListener('click', showNextQuestion);
+        prevButton.addEventListener('click', showPrevQuestion);
+        endPracticeSessionButton.addEventListener('click', endPracticeSessionAndShowResults);
+        endPracticeSessionButtonFooter.addEventListener('click', handleEndPracticeSessionFooterClick);
+        backToResultsButton.addEventListener('click', () => { isReviewingFromResults = false; showResultsScreen(); });
+        navigatorButton.addEventListener('click', () => { 
+            // Hide calculator if it's open
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator(); 
+            }
+            recordTimeSpent(currentQuestionIndex); 
+            updateNavigatorButtons(); 
+            navigatorModal.classList.remove('hidden'); 
+            navigatorModal.classList.add('flex'); 
+        });
+        closeModalButton.addEventListener('click', () => { navigatorModal.classList.remove('flex'); navigatorModal.classList.add('hidden'); if (!isReviewingFromResults) questionStartTime = Date.now(); });
+        navigatorModal.addEventListener('click', (event) => { if (event.target === navigatorModal) closeModalButton.click(); });
+        flagButton.addEventListener('click', toggleFlag);
+        filterFlaggedButton.addEventListener('click', () => { isFilteringFlagged = !isFilteringFlagged; showReviewScreen(isFilteringFlagged); });
+        downloadPdfButton.addEventListener('click', generatePDF);
+        document.getElementById('submit-performance-button').addEventListener('click', submitPerformanceData);
+
+        calculatorToggleButton.addEventListener('click', toggleCalculator);
+        closeCalculatorButton.addEventListener('click', toggleCalculator);
+        makeDraggable(calculatorUI, calculatorDragHeader);
+
+        // Add a direct event listener for the equals button to ensure it works
+        const equalsButton = document.querySelector('.calc-button.equals');
+        if (equalsButton) {
+            equalsButton.addEventListener('click', function(e) {
+                console.log('Equals button clicked directly');
+                calculate();
             });
         }
 
+        // Add direct event listeners for all calculator buttons to ensure they work
+        calcButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const value = button.dataset.calcValue;
+                const action = button.dataset.calcAction;
+                console.log('Calculator button clicked:', button.textContent, 'Value:', value, 'Action:', action);
+                
+                if (value !== undefined) { 
+                    if (value === '.') { inputDecimal(); } 
+                    else { inputDigit(value); }
+                } else if (action) { 
+                    if (['+', '-', '*', '/'].includes(action)) { handleOperator(action); } 
+                    else if (action === 'equals') { 
+                        console.log('Equals action triggered');
+                        calculate(); 
+                    } 
+                    else if (action === 'clear') { clearCalculator(); } 
+                    else if (['m+', 'm-', 'mrc'].includes(action)) { handleMemory(action); } 
+                    else if (['sqrt', 'percent', 'negate', 'backspace'].includes(action)) { handleSpecialFunction(action); }
+                }
+            });
+        });
+
         function handleKeyboardShortcuts(e) {
-             const isPracticeSessionVisible = practiceSessionScreen && !practiceSessionScreen.classList.contains('hidden');
-             const isModalVisible = navigatorModal && navigatorModal.classList.contains('flex');
+             const isPracticeSessionVisible = !practiceSessionScreen.classList.contains('hidden');
+             const isModalVisible = navigatorModal.classList.contains('flex');
              const isInputFocused = document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA');
+             const isCalcVisible = calculatorUI.classList.contains('visible');
+
+             if (isCalcVisible && !isInputFocused) { 
+                if (e.key >= '0' && e.key <= '9') { e.preventDefault(); inputDigit(e.key); return; }
+                if (e.key === '.') { e.preventDefault(); inputDecimal(); return; }
+                if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') { e.preventDefault(); handleOperator(e.key); return; }
+                if (e.key === 'Enter' || e.key === '=') { e.preventDefault(); calculate(); return; }
+                if (e.key === 'Backspace') { e.preventDefault(); handleSpecialFunction('backspace'); return; }
+                if (e.key === 'Escape') { e.preventDefault(); toggleCalculator(); return; } 
+                if (e.key.toLowerCase() === 'p') { e.preventDefault(); handleMemory('m+'); return; }
+                if (e.key.toLowerCase() === 'm') { e.preventDefault(); handleMemory('m-'); return; }
+                if (e.key.toLowerCase() === 'c' && !e.altKey && !e.metaKey && !e.ctrlKey) { e.preventDefault(); handleMemory('mrc'); return; } 
+                if (e.key.toLowerCase() === 'x') { e.preventDefault(); handleSpecialFunction('sqrt'); return; }
+             }
              
              if (isModalVisible || isInputFocused) return; 
              if (!isPracticeSessionVisible) return; 
@@ -1550,48 +1931,305 @@
 
              if (altOrOption) {
                  switch (code) { 
-                     case 'keyn': e.preventDefault(); if (nextButton && !nextButton.disabled) nextButton.click(); return;
-                     case 'keyp': e.preventDefault(); if (prevButton && !prevButton.disabled) prevButton.click(); return;
-                     case 'keyf': e.preventDefault(); if (!isReviewingFromResults && flagButton && !flagButton.disabled) flagButton.click(); return;
+                     case 'keyn': e.preventDefault(); if (!nextButton.disabled) nextButton.click(); return;
+                     case 'keyp': e.preventDefault(); if (!prevButton.disabled) prevButton.click(); return;
+                     case 'keyf': e.preventDefault(); if (!isReviewingFromResults && !flagButton.disabled) flagButton.click(); return;
+                     case 'keyc': e.preventDefault(); toggleCalculator(); return; 
                      default: return; 
+                 }
+             } else { 
+                 if (['a', 'b', 'c', 'd', 'e'].includes(key) && !isReviewingFromResults && !isCalcVisible) { 
+                     // This code is not applicable for syllogism questions with Yes/No answers
+                     // So we'll just return without any action
+                     return;
                  }
              }
         }
         document.addEventListener('keydown', handleKeyboardShortcuts);
 
+        // --- Initial Load ---
+        // Only initialize the setup screen if we're not in review mode
+        if (!urlParams.has('review')) {
+            showSetupScreen();
+        }
+
+        updateCalcDisplay(); 
+
+        // Update the review grid button click handler to not restart the timer
+        reviewGrid.addEventListener('click', (e) => {
+            if (e.target.classList.contains('review-grid-button')) {
+                reviewScreen.classList.add('hidden');
+                reviewScreen.classList.remove('flex');
+                showPracticeSessionScreen();
+                const index = parseInt(e.target.dataset.questionIndex);
+                if (!isNaN(index) && index >= 0 && index < questions.length) {
+                    // Hide calculator if it's open
+                    if (calculatorUI.classList.contains('visible')) {
+                        toggleCalculator();
+                    }
+                    loadQuestion(index);
+                    updateTimerVisibility();
+                }
+            }
+        });
+
+        // Add keyboard event listeners for Enter key on the appropriate pages
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && !event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
+                const isInputOrTextareaFocused = document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA';
+                
+                // Only handle Enter key if no input or textarea is focused
+                if (!isInputOrTextareaFocused) {
+                    // Check which screen is active
+                    if (!setupScreen.classList.contains('hidden')) {
+                        // Begin test button on setup screen
+                        startButton.click();
+                        event.preventDefault();
+                    } else if (!reviewScreen.classList.contains('hidden')) {
+                        // End practice session button on review screen
+                        endPracticeSessionButton.click();
+                        event.preventDefault();
+                    }
+                }
+            }
+        });
+
+        // Make sure the submit button has the right event listener
+        const submitPerformanceBtn = document.getElementById('submit-performance-button');
+        if (submitPerformanceBtn) {
+            // Remove any existing listeners (just in case)
+            submitPerformanceBtn.removeEventListener('click', submitPerformanceData);
+            // Add the listener
+            submitPerformanceBtn.addEventListener('click', submitPerformanceData);
+        }
+
+        // Function to handle loading a past test for review
+        function loadPastTestForReview(resultId) {
+            setupScreen.classList.add('hidden');
+            
+            // Show a loading indicator
+            const loadingEl = document.createElement('div');
+            loadingEl.className = 'fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50';
+            loadingEl.innerHTML = `
+                <div class="text-center p-6 bg-white shadow-xl rounded-lg">
+                    <div class="spinner mx-auto mb-4"></div>
+                    <p class="text-gray-700 font-medium">Loading your test results...</p>
+                </div>
+            `;
+            document.body.appendChild(loadingEl);
+            
+            // Fetch the result from Firestore
+            db.collection("performanceSubmissions").doc(resultId)
+                .get()
+                .then((doc) => {
+                    if (!doc.exists) {
+                        alert("The requested test result could not be found.");
+                        window.location.href = "student_dashboard.html";
+                        return;
+                    }
+                    
+                    const resultData = doc.data();
+                    
+                    // Store the data in the appropriate variables
+                    userName = resultData.studentName || '';
+                    userGoal = resultData.goal || '';
+                    userFocusArea = resultData.focusArea || '';
+                    userAnswers = resultData.answers || new Array(questions.length).fill(null);
+                    questionTimes = resultData.questionTimes || new Array(questions.length).fill(0);
+                    flaggedQuestions = resultData.flaggedQuestions || new Array(questions.length).fill(false);
+                    practiceSessionStartTime = new Date(resultData.submissionTimestamp || Date.now());
+                    practiceSessionEndTime = new Date(practiceSessionStartTime.getTime() + 26 * 60 * 1000); // Estimate end time
+                    isReviewingFromResults = true;
+                    
+                    // Remove loading indicator
+                    document.body.removeChild(loadingEl);
+                    
+                    // Show the results screen with the data
+                    showResultsScreen();
+                    
+                    // Add a "Return to Results" button to the header
+                    const headerBar = document.querySelector('.header-bar');
+                    if (headerBar) {
+                        const returnButtonContainer = document.createElement('div');
+                        returnButtonContainer.className = 'absolute left-4';
+                        returnButtonContainer.innerHTML = `
+                            <button id="return-to-dashboard-results" class="bg-blue-500 text-white px-3 py-1 rounded text-sm flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                </svg>
+                                Return to Results
+                            </button>
+                        `;
+                        headerBar.style.position = 'relative';
+                        headerBar.appendChild(returnButtonContainer);
+                        
+                        // Add event listener to the return button
+                        document.getElementById('return-to-dashboard-results').addEventListener('click', () => {
+                            window.location.href = "student_dashboard.html";
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error loading test result:", error);
+                    alert("There was an error loading the test result. Please try again.");
+                    window.location.href = "student_dashboard.html";
+                });
+        }
+        
+        // Add a direct click event listener to the Start button to ensure it works
+        document.getElementById('start-button').addEventListener('click', function() {
+            console.log("Start button clicked via direct listener");
+            // Get user info from Firebase Auth if available
+            if (firebase.auth && firebase.auth().currentUser) {
+                const currentUser = firebase.auth().currentUser;
+                userName = currentUser.displayName || currentUser.email || '';
+                // Store email to be used later in submission
+                userEmail = currentUser.email || '';
+                console.log("Using user info from Firebase:", userName, userEmail);
+            } else {
+                userName = '';
+                userEmail = '';
+                console.log("No user logged in - using empty user info");
+            }
+            
+            userGoal = goalInput.value.trim();
+            userFocusArea = focusAreaInput.value.trim();
+            timeLeft = 360; // 6 minutes
+            userAnswers = new Array(questions.length).fill(null);
+            questionTimes = new Array(questions.length).fill(0);
+            flaggedQuestions = new Array(questions.length).fill(false);
+            questionStartTime = null;
+            currentQuestionIndex = 0;
+            isReviewingFromResults = false;
+            isFilteringFlagged = false;
+            currentlyDisplayedPassageIndex = -1;
+            practiceSessionEndTime = null;
+            showPracticeSessionScreen();
+            startTimer();
+            loadQuestion(0);
+            populateNavigator();
+        });
+        
+        // Function to initialize the application - moved to the end to ensure all functions are defined
         function initializeApp() {
-            userAnswers = new Array(questions.length).fill(null).map(() => new Array(5).fill(null));
+            // Initialize arrays with questions.length
+            userAnswers = new Array(questions.length).fill(null);
             questionTimes = new Array(questions.length).fill(0);
             flaggedQuestions = new Array(questions.length).fill(false);
             
-            const urlParams = new URLSearchParams(window.location.search);
-            const reviewParam = urlParams.get('review');
-            if (reviewParam && db && auth) { // Ensure db and auth are available
+            // Check for review mode and initialize appropriate screen
+            if (reviewParam) {
+                // We're in review mode - load the past test data
                 loadPastTestForReview(reviewParam);
             } else {
+                // Regular test mode - continue with normal setup
                 showSetupScreen();
             }
         }
         
-        // Ensure DOM is ready and Firebase is potentially loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            if (typeof firebase === 'undefined' || !firebase.apps.length) {
-                console.error("Firebase SDKs not loaded when DOMContentLoaded. Retrying init or showing error.");
-                // Attempt to re-initialize or show a persistent error
-                if (typeof firebase !== 'undefined' && !firebase.apps.length) {
-                     firebase.initializeApp(firebaseConfig);
-                     db = firebase.firestore();
-                     auth = firebase.auth();
-                     console.log("Firebase initialized on DOMContentLoaded.");
-                } else {
-                    // Show critical error if Firebase still not loaded
-                    const appContainerEl = document.getElementById('app-container');
-                    if (appContainerEl) appContainerEl.innerHTML = "<p class='m3-body-large text-center p-8 text-[var(--md-sys-color-error)]'>Error: Critical application services failed to load. Please check your internet connection and refresh the page. If the problem persists, contact support.</p>";
-                    return; // Stop further script execution
-                }
-            }
-            initializeApp(); // Now call initializeApp
-        });
+        // Actually initialize the app now that all functions and DOM elements are defined
+        initializeApp();
+
+        // Initialize drag and drop functionality
+        function initDragAndDrop() {
+            const yesButton = document.getElementById('yes-button');
+            const noButton = document.getElementById('no-button');
+            const statementRows = document.querySelectorAll('.statement-row');
+            
+            if (!yesButton || !noButton) return;
+            
+            let draggedValue = null;
+            
+            // Make buttons draggable
+            [yesButton, noButton].forEach(button => {
+                button.setAttribute('draggable', true);
+                
+                button.addEventListener('dragstart', function(e) {
+                    draggedValue = this.textContent;
+                    e.dataTransfer.setData('text/plain', draggedValue);
+                    this.classList.add('opacity-50');
+                });
+                
+                button.addEventListener('dragend', function() {
+                    this.classList.remove('opacity-50');
+                });
+                
+                // Click functionality as alternative to drag
+                button.addEventListener('click', function() {
+                    const selectedRow = document.querySelector('.statement-row.selected');
+                    if (selectedRow) {
+                        const statementIndex = parseInt(selectedRow.dataset.statementIndex);
+                        const answerBox = selectedRow.querySelector('.statement-answer-box');
+                        
+                        answerBox.textContent = this.textContent;
+                        selectedRow.classList.remove('selected', 'border-blue-500', 'bg-blue-50');
+                        
+                        // Update userAnswers array
+                        if (!userAnswers[currentQuestionIndex]) {
+                            userAnswers[currentQuestionIndex] = [];
+                        }
+                        // Store the answer format expected by the scoring system (Y/N)
+                        if (this.textContent === "Yes") {
+                            userAnswers[currentQuestionIndex][statementIndex] = "Y";
+                        } else if (this.textContent === "No") {
+                            userAnswers[currentQuestionIndex][statementIndex] = "N";
+                        } else {
+                            userAnswers[currentQuestionIndex][statementIndex] = this.textContent;
+                        }
+                        
+                        updateNavigatorButtons();
+                    }
+                });
+            });
+            
+            // Make entire statement rows droppable
+            statementRows.forEach(row => {
+                row.addEventListener('click', function() {
+                    // Clear any previous selections
+                    document.querySelectorAll('.statement-row.selected').forEach(el => {
+                        el.classList.remove('selected', 'border-blue-500', 'bg-blue-50');
+                    });
+                    
+                    // Select this row
+                    this.classList.add('selected', 'border-blue-500', 'bg-blue-50');
+                });
+                
+                row.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('border-blue-500', 'bg-blue-50');
+                });
+                
+                row.addEventListener('dragleave', function() {
+                    this.classList.remove('border-blue-500', 'bg-blue-50');
+                });
+                
+                row.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('border-blue-500', 'bg-blue-50');
+                    
+                    const value = e.dataTransfer.getData('text/plain');
+                    const answerBox = this.querySelector('.statement-answer-box');
+                    answerBox.textContent = value;
+                    
+                    // Update userAnswers array
+                    const statementIndex = parseInt(this.dataset.statementIndex);
+                    if (!userAnswers[currentQuestionIndex]) {
+                        userAnswers[currentQuestionIndex] = [];
+                    }
+                    // Convert to Y/N format for consistency with scoring
+                    if (value === "Yes") {
+                        userAnswers[currentQuestionIndex][statementIndex] = "Y";
+                    } else if (value === "No") {
+                        userAnswers[currentQuestionIndex][statementIndex] = "N";
+                    } else {
+                        userAnswers[currentQuestionIndex][statementIndex] = value;
+                    }
+                    
+                    updateNavigatorButtons();
+                });
+            });
+        }
+    });
     </script>
 </body>
-</html>
+</html> 
