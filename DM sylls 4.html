@@ -626,33 +626,37 @@
     </div>
 
     <script>
-document.addEventListener('DOMContentLoaded', function() {
-        // --- Firebase Configuration ---
-        const firebaseConfig = {
-          apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
-          authDomain: "mwp-qr-test-page.firebaseapp.com",
-          projectId: "mwp-qr-test-page",
-          storageBucket: "mwp-qr-test-page.appspot.com", 
-          messagingSenderId: "309084045110",
-          appId: "1:309084045110:web:b09ca0fdff84b094963d97",
-          measurementId: "G-4M3ED641M9"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore(); // Initialize Firestore
-
-        // Check for review mode from URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const reviewParam = urlParams.get('review');
-        
-        // Check if user is logged in via Firebase
-        firebase.auth().onAuthStateChanged(user => {
-          if (user) {
-                console.log("User is logged in:", user.displayName, user.email);
-          } else {
-                console.log("No user is logged in");
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Firebase Configuration ---
+            const firebaseConfig = {
+              apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
+              authDomain: "mwp-qr-test-page.firebaseapp.com",
+              projectId: "mwp-qr-test-page",
+              storageBucket: "mwp-qr-test-page.appspot.com",
+              messagingSenderId: "309084045110",
+              appId: "1:309084045110:web:b09ca0fdff84b094963d97",
+              measurementId: "G-4M3ED641M9"
+            };
+            // Initialize Firebase
+            // --- CORRECTED INITIALIZATION ---
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
             }
-        });
+            const db = firebase.firestore(); // Initialize Firestore
+            const auth = firebase.auth(); // Initialize Auth
+    
+            // Check for review mode from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const reviewParam = urlParams.get('review');
+    
+            // Check if user is logged in via Firebase
+            auth.onAuthStateChanged(user => { // Use the 'auth' const
+              if (user) {
+                    console.log("User is logged in:", user.displayName, user.email);
+              } else {
+                    console.log("No user is logged in");
+                }
+            });
         
         // Expose startTest function to global window object so it can be called from onclick
         window.startTest = function() {
