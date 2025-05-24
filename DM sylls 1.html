@@ -627,30 +627,41 @@
 
     <script>
 document.addEventListener('DOMContentLoaded', function() {
-        // --- Firebase Configuration ---
-        const firebaseConfig = {
+
+// --- Firebase Configuration ---
+const firebaseConfig = {
           apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
           authDomain: "mwp-qr-test-page.firebaseapp.com",
           projectId: "mwp-qr-test-page",
-          storageBucket: "mwp-qr-test-page.appspot.com", 
+          storageBucket: "mwp-qr-test-page.appspot.com",
           messagingSenderId: "309084045110",
           appId: "1:309084045110:web:b09ca0fdff84b094963d97",
           measurementId: "G-4M3ED641M9"
         };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore(); // Initialize Firestore
 
-        // Check for review mode from URL parameters
+        // --- CORRECTED INITIALIZATION ---
+        // Ensure Firebase is initialized only once
+        if (!firebase.apps.length) { // GOOD: This check prevents re-initialization errors.
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore(); // GOOD: Get Firestore instance after potential initialization.
+        const auth = firebase.auth();   // GOOD: Get Auth instance after potential initialization.
+
+        // Check for review mode from URL parameters (This is specific to your app's logic, not Firebase init)
         const urlParams = new URLSearchParams(window.location.search);
         const reviewParam = urlParams.get('review');
-        
+
         // Check if user is logged in via Firebase
-        firebase.auth().onAuthStateChanged(user => {
+        // MINOR REFINEMENT: It's good practice to use the 'auth' constant you just defined.
+        auth.onAuthStateChanged(user => { // Changed from firebase.auth() to auth
           if (user) {
                 console.log("User is logged in:", user.displayName, user.email);
+                // Page-specific logic to handle a logged-in user would go here
+                // (e.g., hide login form, show user-specific content)
           } else {
                 console.log("No user is logged in");
+                // Page-specific logic to handle a logged-out user would go here
+                // (e.g., show login form, redirect to login page)
             }
         });
         

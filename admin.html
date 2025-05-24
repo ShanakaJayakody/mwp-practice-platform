@@ -413,16 +413,15 @@
     </div>
 
     <script>
-        // Firebase Configuration (already in HTML)
-        if (!firebase.apps.length) {
-            const firebaseConfig = {
-                apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
-                authDomain: "mwp-qr-test-page.firebaseapp.com",
-                projectId: "mwp-qr-test-page",
-                storageBucket: "YOUR_STORAGE_BUCKET",
-                messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-                appId: "YOUR_APP_ID",
-                measurementId: "YOUR_MEASUREMENT_ID" // Optional
+// --- Firebase Configuration ---
+const firebaseConfig = {
+          apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
+          authDomain: "mwp-qr-test-page.firebaseapp.com",
+          projectId: "mwp-qr-test-page",
+          storageBucket: "mwp-qr-test-page.appspot.com",
+          messagingSenderId: "309084045110",
+          appId: "1:309084045110:web:b09ca0fdff84b094963d97",
+          measurementId: "G-4M3ED641M9"
             };
             firebase.initializeApp(firebaseConfig);
         }
