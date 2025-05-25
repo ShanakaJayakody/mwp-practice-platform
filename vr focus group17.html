@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UCAT VR Focus Group 16 - MedwithPurpose</title>
+    <title>UCAT VR Focus Group 17 - MedwithPurpose</title>
     <link rel="icon" href="https://ik.imagekit.io/mwp/2.svg?updatedAt=1745982956185" type="image/svg+xml">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -311,7 +311,7 @@
     <!-- Loading Overlay -->
     <div id="loading-overlay">
         <div class="spinner"></div>
-        <p>Loading VR Focus Group 16...</p>
+        <p>Loading VR Focus Group 17...</p>
     </div>
 
     <!-- Main App Container -->
@@ -321,7 +321,7 @@
             <div class="text-center mb-6">
                 <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
                      alt="MedwithPurpose Logo" class="mx-auto h-11 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
-                <h1 class="text-2xl md:text-3xl font-bold text-blue-600">Verbal Reasoning Focus Group 16</h1>
+                <h1 class="text-2xl md:text-3xl font-bold text-blue-600">Verbal Reasoning Focus Group 17</h1>
                 <p class="text-gray-600 mt-2">Practice your verbal reasoning skills with this focused VR test.</p>
                 <p class="text-sm text-gray-500 mt-4">
                     This section contains <strong id="setup-question-count">16 questions</strong> and you have <strong id="setup-time-limit">10 minutes</strong> to complete it.
@@ -348,7 +348,7 @@
         <div id="practice-session-screen" class="hidden flex flex-col h-full">
             <!-- Header Bar -->
             <div class="header-bar">
-                <div class="text-lg font-bold">VR Focus Group 16</div>
+                <div class="text-lg font-bold">VR Focus Group 17</div>
                 <div id="timer">10:00</div>
             </div>
             
@@ -507,182 +507,198 @@
         // --- Test Data: Passages and Questions ---
         const passages = [
             {
-                text: "<p class='mb-4'>For decades, the Brentworth Quarter was a symbol of urban decay, its once-bustling factories now silent shells. Young architect, Elara Vance, however, saw potential amidst the dereliction. In the early 2010s, inspired by a visit to a thriving innovation park in Germany, she championed a radical plan: to transform Brentworth into a dedicated hub for augmented reality (AR) startups. \"Many dismissed the vision as impractical,\" recalls Marcus Thorne, a city council member at the time. Funding was scarce, and the local workforce lacked the specific skills. Yet, the initiative persevered. Today, Brentworth is a global leader in AR development, attracting talent and investment worldwide. Last year alone, companies within the hub secured over £150 million in venture capital.</p><p class='mb-4'>The city of Silverdale, previously the dominant tech centre in the region, has seen its growth stagnate, as larger corporations proved slow to adapt to niche technological shifts. AR hub developers face unique challenges: they must provide cutting-edge infrastructure, foster a collaborative ecosystem, and constantly adapt to rapidly evolving technology. But Brentworth's readily available, repurposable industrial spaces offered a cost-effective advantage that newer developments couldn't match, so entrepreneurs flocked to the revitalized district. This transformation has not only created thousands of high-skilled jobs but has also reversed the population decline in the surrounding neighbourhoods, with new cafes and services flourishing.</p><p class='mb-4'>\"Our next goal is to establish an accredited AR training institute right here,\" states Dr. Jian Li, director of the Brentworth Hub Association. \"Silverdale still holds significant prestige, but we aim to achieve a 'Centre of Excellence' designation within three years.\" A further hurdle is the current public unfamiliarity with many AR applications. Early tech adoption was often seen as purely for entertainment. To Brentworth, however, AR represents the future of industry, education, and daily life.</p>",
+                text: "<p class='mb-4'>In Keynesian economics, the "paradox of thrift" refers to a counterintuitive idea: that while saving is beneficial to individuals, an increase in collective saving during a downturn can actually reduce overall economic growth. This occurs because one person's spending is another's income. If many households simultaneously cut back on spending to increase savings, businesses experience reduced demand, leading them to cut costs, lay off workers, or lower wages. As incomes fall, total savings in the economy may paradoxically decline, despite each household trying to save more.</p><p class='mb-4'>This concept was first articulated by John Maynard Keynes during the Great Depression of the 1930s. Keynes argued that during periods of economic slack, active government intervention—through fiscal stimulus and public investment—was essential to counteract the fall in aggregate demand caused by rising private saving.</p><p class='mb-4'>The paradox does not apply in the same way during times of full employment. When an economy is at or near its productive capacity, increased saving can lead to more investment in capital goods rather than reduced demand. Classical economists, in contrast to Keynesians, believe that savings naturally find their way into productive investment through interest rate adjustments, making recessions self-correcting over time.</p><p class='mb-4'>Critics of the paradox argue that it ignores long-term benefits of saving, such as improved capital accumulation and resilience against future shocks. However, empirical studies of past recessions in the U.S. and Japan show that abrupt increases in household savings rates often coincide with declining GDP and consumer confidence, particularly in liquidity traps where interest rates are near zero and monetary policy loses its effectiveness.</p>",
                 questions: [
                     {
-                        text: "Which of the following best describes Elara Vance's initial approach to the Brentworth Quarter project?",
+                        text: "The passage suggests that the "paradox of thrift" is most pronounced and counterproductive when:",
                         options: [
-                            "Cautiously optimistic, seeking broad consensus before acting.",
-                            "Pragmatically focused on leveraging existing local skills.",
-                            "Visionary and tenacious, despite initial scepticism and resource limitations.",
-                            "Primarily driven by a desire to emulate German innovation parks precisely."
+                            "Individual households prioritize long-term financial security over immediate spending, thereby bolstering capital accumulation for future growth.",
+                            "A collective increase in the propensity to save during an economic downturn unintentionally deepens the recessionary impact due to falling aggregate demand.",
+                            "Government intervention through fiscal stimulus fully counteracts any attempts by households to increase savings, leading to economic stagnation.",
+                            "Classical economic theories about interest rate adjustments prove effective in rapidly converting increased savings into productive investments during a slump."
                         ],
-                        correctAnswer: "C"
+                        correctAnswer: "B",
+                        explanation: "A is tricky because it mentions long-term benefits of saving, which are acknowledged as a critique of the paradox  but doesn't describe when the paradox itself is most pronounced or counterproductive as per Keynesian view. The paradox specifically addresses issues during a downturn.\nB is the best answer. It accurately captures the core of the paradox: collective saving during a downturn leads to reduced spending (one person's spending is another's income ), which reduces demand, hurts businesses, and can paradoxically lower overall savings as incomes fall. The phrase "counterintuitive idea"  supports this.\nC is incorrect because the passage states Keynes argued for government intervention to counteract the fall in aggregate demand caused by rising private saving, not that it leads to stagnation by fully counteracting savings attempts in this manner. The goal is to boost the economy, not cause stagnation.\nD describes the Classical economists' view, which contrasts with the Keynesian paradox of thrift. The paradox operates precisely when these adjustments don't effectively occur, especially during a downturn with slack."
                     },
                     {
-                        text: "The passage suggests that Silverdale's decline as the dominant tech centre was primarily due to:",
+                        text: "The passage implies that Keynes's advocacy for active government intervention during periods of economic slack is primarily rooted in the understanding that:",
                         options: [
-                            "A sudden exodus of talent to the more affordable Brentworth Quarter.",
-                            "An inability of its established entities to embrace specialized technological advancements.",
-                            "Brentworth actively undercutting Silverdale's operational costs.",
-                            "A general downturn in the regional tech industry affecting all centres."
+                            "Private savings, if unchecked, inherently lead to a misallocation of resources that only public investment can rectify.",
+                            "Without external stimulus, the cumulative effect of individual rational decisions to save more can trap the economy in a low-income, low-demand state.",
+                            "The primary role of government is to educate households on the counterproductive nature of saving during recessions.",
+                            "Interest rate mechanisms, while theoretically sound, are often too slow to respond, necessitating quicker fiscal action by the government."
                         ],
-                        correctAnswer: "B"
+                        correctAnswer: "B",
+                        explanation: "A is too strong and general. While Keynes advocated for public investment, the passage doesn't state private savings inherently lead to misallocation that only public investment can fix. His argument is specific to periods of slack and falling aggregate demand.\nB is the best answer. It infers Keynes's reasoning: individual efforts to save more, while rational for each household, lead to reduced aggregate demand. This fall in demand can cause incomes to fall, potentially reducing total savings. Government intervention is "essential to counteract the fall in aggregate demand", implying it breaks this negative cycle.\nC is not supported. While education could be a policy, Keynes's argument presented here is for "fiscal stimulus and public investment", which are direct economic actions, not primarily educational campaigns.\nD touches on a related concept (effectiveness of monetary policy, especially in liquidity traps ), but the passage frames Keynes's argument for intervention as a direct response to the fall in aggregate demand caused by rising private saving, rather than solely a comment on the speed of interest rate mechanisms. The core issue is the demand shortfall."
                     },
                     {
-                        text: "What is the primary implication of Dr. Jian Li's statement regarding the AR training institute and the \"Centre of Excellence\" designation?",
+                        text: "Which of the following scenarios, if empirically demonstrated, would most substantially challenge the central tenet of the Keynesian "paradox of thrift" as described in the passage?",
                         options: [
-                            "Brentworth currently lacks the necessary prestige to attract skilled AR professionals.",
-                            "The hub aims to become self-sufficient in talent development and achieve recognized leadership status.",
-                            "Silverdale is actively preventing Brentworth from gaining international recognition.",
-                            "The main purpose of the training institute is to address public unfamiliarity with AR."
+                            "Evidence showing that increased government spending during recessions often leads to higher national debt without a proportionate increase in GDP.",
+                            "Studies indicating that economies with higher average household savings rates consistently experience more stable, albeit slower, long-term growth.",
+                            "Data revealing that during economic downturns, a surge in collective household saving is frequently and swiftly followed by a significant rise in business investment and subsequent economic recovery, even without government stimulus.",
+                            "Observations that consumer confidence is more closely tied to perceived job security than to current savings levels or government fiscal policies."
                         ],
-                        correctAnswer: "B"
+                        correctAnswer: "C",
+                        explanation: "A critiques government intervention (Keynes's proposed solution ) rather than the paradox of thrift itself. The paradox describes what happens when individuals save more during a downturn.\nB addresses the long-term benefits of saving, which is a known criticism but doesn't directly refute the paradoxical effect during a downturn. The paradox primarily concerns the short-to-medium term effects in a recessionary environment.\nC is the best answer because it directly contradicts the mechanism of the paradox. The paradox argues that increased collective saving in a downturn reduces demand, leading to lower growth or even declining savings. If increased saving instead swiftly led to more investment and recovery without stimulus, it would align more with Classical economic views  (savings finding their way into productive investment) and undermine the Keynesian claim that such saving is problematic in a downturn. It also challenges the idea that this doesn't happen when an economy is not at full employment.\nD introduces consumer confidence, which is mentioned in relation to declining GDP and savings, but the statement itself doesn't directly weaken the core logic of the paradox (how increased saving impacts demand and income). The paradox's mechanics could still hold true regardless of the primary driver of consumer confidence."
                     },
                     {
-                        text: "The author's overall tone regarding the Brentworth Quarter's transformation can best be described as:",
+                        text: "Based on the distinctions made in the passage, the negative consequences of the "paradox of thrift" are implied to be most subdued or potentially reversed when:",
                         options: [
-                            "Critically analytical, questioning the long-term viability of the AR hub.",
-                            "Cautiously optimistic, acknowledging success but highlighting overwhelming future risks.",
-                            "Objectively informative, presenting facts without discernible positive or negative bias.",
-                            "Largely positive and admiring of the initiative's success and future aspirations."
+                            "An economy is experiencing a liquidity trap, with interest rates near zero, rendering monetary policy ineffective.",
+                            "The economy is operating with significant unused productive capacity and high unemployment.",
+                            "Increased household savings are primarily driven by widespread fear of future economic instability rather than confidence in investment opportunities.",
+                            "The economy is functioning near its maximum output, allowing increased savings to be channeled into capital formation without depressing overall demand."
                         ],
-                        correctAnswer: "D"
+                        correctAnswer: "D",
+                        explanation: "A describes a situation (liquidity trap) where the paradox of thrift might be particularly relevant, and where Keynesian stimulus is often argued to be necessary. This is when the paradox is applicable.\nB describes a period of "economic slack", precisely the conditions under which Keynes argued the paradox of thrift is a significant problem.\nC describes a motivation for saving (fear) that often occurs during downturns, where the paradox is most applicable. The reason for saving doesn't inherently change the mechanism of the paradox if it leads to a collective reduction in spending during a slump.\nD is the best answer. The passage explicitly states, "The paradox does not apply in the same way during times of full employment. When an economy is at or near its productive capacity, increased saving can lead to more investment in capital goods rather than reduced demand."  This implies the negative consequences are subdued or reversed in such a scenario."
                     }
                 ]
             },
             {
-                text: "<p class='mb-4'>Imagine a coastal ecosystem showing early signs of stress – slightly declining fish stocks, occasional algal blooms. A resource manager, wary of past interventions that proved harmful, decides to wait for more definitive data before acting. This is \"precautionary inaction.\" However, the ecosystem rapidly deteriorates, a critical tipping point is crossed, and recovery becomes vastly more expensive and uncertain. The manager has made an error of under-response, where the cost of inaction outweighed the initial risk of a measured intervention.</p><p class='mb-4'>Conversely, consider a newly detected, non-native insect species in a local forest. Alarmed by potential devastation seen in other regions with different invasive species, authorities launch an immediate, wide-scale pesticide spraying campaign. Later analysis reveals this particular insect was benign, posing no significant threat, and the pesticide inadvertently harmed native pollinator populations. This is \"over-intervention,\" an error of over-response, where the action taken was disproportionate to the actual threat, leading to unintended negative consequences.</p><p class='mb-4'>Learning to differentiate between genuine threats requiring urgent action and minor fluctuations or misidentified risks is critical in environmental stewardship. It involves balancing the risk of doing too little against the risk of doing too much. The scientist who dismisses early warnings of coral bleaching as \"natural variation\" without deeper investigation, or the activist who demands a complete halt to a well-regulated local fishery based on isolated incidents, may both be failing to accurately assess the balance of evidence and potential outcomes.</p>",
+                text: "<p class='mb-4'>Wangari Maathai's life defied expectations — of her time, her gender, and even her profession. Born in rural Kenya in 1940, she came of age in a country still under British colonial rule. Against a backdrop of systemic gender bias and minimal access to education for girls, she earned a scholarship to study biology in the United States during the Kennedy-era African Airlift program. She would go on to earn a doctorate in veterinary anatomy — the first woman in East or Central Africa to do so.</p><p class='mb-4'>But it was not her academic credentials that made her a global icon. In 1977, Maathai founded the Green Belt Movement, a grassroots environmental initiative that began by simply planting trees. What set her apart was the belief that environmental degradation, poverty, and disenfranchisement were not separate issues but symptoms of the same systemic failure. Her campaign taught rural women to plant trees, restore ecosystems, and earn income — an act as politically charged as it was ecologically sound in a nation marred by authoritarianism and corruption.</p><p class='mb-4'>Despite imprisonment, smear campaigns, and violent pushback, Maathai remained steadfast. She once said, "Until you dig a hole, you plant a tree, you water it and make it survive, you haven't done a thing." Her approach combined scientific rigor with civic resistance and was recognized when she became the first African woman awarded the Nobel Peace Prize in 2004.</p><p class='mb-4'>To reduce Maathai's life to environmental activism alone would be to overlook the philosophical core of her work: that sustainable change must be rooted in dignity, participation, and ecology — not just policy.</p>",
                 questions: [
                     {
-                        text: "According to the passage, \"precautionary inaction\" becomes problematic when:",
+                        text: "The passage suggests that the most significant underlying challenge Wangari Maathai encountered in establishing and expanding the Green Belt Movement stemmed from:",
                         options: [
-                            "It is based on a desire to avoid repeating any past intervention mistakes.",
-                            "The delay in action leads to significantly more challenging or costly remediation.",
-                            "Authorities lack the resources for immediate, wide-scale intervention.",
-                            "It prioritizes data collection over the concerns of environmental activists."
+                            "A general lack of awareness among rural Kenyan women regarding the long-term benefits of environmental conservation.",
+                            "The inherent difficulty of large-scale reforestation in a country with limited resources and challenging climatic conditions.",
+                            "The movement's direct confrontation with entrenched systems of power that benefited from or were indifferent to environmental degradation, poverty, and disenfranchisement.",
+                            "The initial skepticism from international organizations regarding the feasibility of a grassroots movement led by women in a patriarchal society."
                         ],
-                        correctAnswer: "B"
+                        correctAnswer: "C",
+                        explanation: "A is unlikely. The passage states her campaign "taught rural women to plant trees, restore ecosystems, and earn income", suggesting they were receptive once empowered, rather than lacking awareness being the primary challenge from Maathai's perspective.\nB might have been a practical difficulty, but the passage emphasizes other types of challenges more strongly. The text highlights "imprisonment, smear campaigns, and violent pushback"  and describes her work as "politically charged... in a nation marred by authoritarianism and corruption".\nC is the best answer. The passage states her belief that "environmental degradation, poverty, and disenfranchisement were not separate issues but symptoms of the same systemic failure". Her campaign was "politically charged" in a nation with "authoritarianism and corruption", and she faced "imprisonment, smear campaigns, and violent pushback". This all points to a clash with existing power structures that perpetuated these systemic failures.\nD is not mentioned in the passage. While she did achieve international recognition later, the passage doesn't discuss initial skepticism from international organizations as a key challenge. The focus is on internal Kenyan challenges related to power and systemic issues."
                     },
                     {
-                        text: "The author implies that effective environmental stewardship primarily requires:",
+                        text: "The passage portrays Wangari Maathai's approach to tree planting primarily as:",
                         options: [
-                            "Prioritizing immediate action whenever a potential threat is identified.",
-                            "A willingness to accept a certain level of environmental degradation as natural.",
-                            "A nuanced judgment in assessing risks and the appropriate scale of response.",
-                            "Deferring to scientific consensus over activist demands in all situations."
+                            "A pragmatic, albeit limited, first step towards addressing the complex issue of deforestation in Kenya.",
+                            "An act of profound socio-political and ecological significance, aimed at empowering marginalized communities and healing both land and society.",
+                            "A scientifically-driven method focused exclusively on ecological restoration, with social benefits being a secondary, indirect outcome.",
+                            "A symbolic gesture of resistance, more valuable for its political statement than for its tangible environmental impact."
                         ],
-                        correctAnswer: "C"
+                        correctAnswer: "B",
+                        explanation: "A understates the depth of Maathai's vision. While pragmatic, the passage emphasizes it was far more than a "limited first step"; it was tied to systemic change.\nB is the best answer. The passage highlights her belief that environmental degradation, poverty, and disenfranchisement were interconnected symptoms of systemic failure. Her campaign taught women to plant trees to restore ecosystems and earn income, an act described as "politically charged as it was ecologically sound". The final paragraph reinforces this by stating her work showed "sustainable change must be rooted in dignity, participation, and ecology not just policy." This points to a holistic vision of empowerment and restoration.\nC is incorrect because it suggests social benefits were secondary. The passage clearly links the act of planting trees to earning income for rural women and describes it as "politically charged", indicating social and political empowerment were integral, not secondary. Her philosophy connected ecology with dignity and participation [unnumbered final paragraph].\nD is partially true (it was an act of resistance ) but incomplete. It downplays the tangible environmental and economic benefits and the core belief in interconnectedness. The act was both politically charged/symbolic and ecologically sound and empowering."
                     },
                     {
-                        text: "Which of the following scenarios, if true, would be an example of \"over-intervention\" as described in the passage?",
+                        text: "The predominant tone of the final paragraph ("To reduce Maathai's life to environmental activism alone would be to overlook the philosophical core of her work: that sustainable change must be rooted in dignity, participation, and ecology not just policy.") can best be characterized as:",
                         options: [
-                            "A city invests in reinforcing its sea walls after climate models predict a significant rise in sea levels over 50 years.",
-                            "Following a single unconfirmed report of a rare bird in a development zone, all construction is halted indefinitely.",
-                            "Farmers reduce pesticide use after studies show a minor, localized decline in a common insect species.",
-                            "A community starts a water conservation program during a prolonged and severe drought."
+                            "Cautiously optimistic, suggesting potential but acknowledging significant hurdles.",
+                            "Assertively respectful, aiming to correct a potential oversimplification of her profound legacy.",
+                            "Objectively analytical, breaking down the components of her activism without personal judgment.",
+                            "Somewhat critical, implying that focusing solely on policy is a common but flawed approach."
                         ],
-                        correctAnswer: "B"
+                        correctAnswer: "B",
+                        explanation: "A is not the primary tone. While her work implies hope, the paragraph itself is more focused on defining the true nature of her legacy rather than expressing optimism about future hurdles.\nB is the best answer. The paragraph begins with a corrective statement ("To reduce Maathai's life to environmental activism alone would be to overlook...") and then asserts the "philosophical core of her work" with strong, positive framing ("rooted in dignity, participation, and ecology"). This shows deep respect and a clear intention to ensure her legacy is understood in its full depth.\nC is incorrect. The paragraph is not merely objective; it makes a clear value judgment about the importance of understanding the "philosophical core" and warns against a narrow interpretation.\nD has an element of truth in that it points out a broader flaw ("not just policy"), but the tone is more about elevating Maathai's holistic approach than simply criticizing policy-focused views. The primary aim is to define Maathai's unique contribution positively and respectfully."
                     },
                     {
-                        text: "The author's primary purpose in this passage is to:",
+                        text: "Which of the following hypothetical discoveries would most effectively bolster the author's concluding assertion about Wangari Maathai's unique legacy being rooted in a philosophy that integrates dignity, participation, and ecology?",
                         options: [
-                            "Advocate for stricter regulations on environmental interventions.",
-                            "Critique the indecisiveness of resource managers in coastal ecosystems.",
-                            "Explain two types of decision-making errors in environmental management and stress the need for balance.",
-                            "Persuade scientists and activists to collaborate more effectively on environmental issues."
+                            "A comparative analysis showing that reforestation projects achieve higher tree survival rates when managed by scientifically trained forestry experts rather than local community groups.",
+                            "Previously unpublished diaries of Maathai revealing her primary motivation was to achieve international political leverage for Kenya through environmentalism.",
+                            "Longitudinal studies of communities involved in the Green Belt Movement demonstrating sustained improvements in local governance, women's empowerment, and ecological health, attributed by participants to the movement's holistic principles.",
+                            "Evidence that Maathai's academic work in veterinary anatomy directly informed her tree-planting techniques, making them uniquely effective."
                         ],
-                        correctAnswer: "C"
+                        correctAnswer: "C",
+                        explanation: "A would weaken, not strengthen, the author's claim about the importance of "participation" and the grassroots nature of her movement.\nB would contradict the portrayal of her motivations as arising from a deep-seated belief in the interconnectedness of environmental, social, and political issues  and the emphasis on grassroots empowerment. It would suggest a more cynical, top-down motivation.\nC is the best answer. The author's claim is that Maathai's legacy is her philosophical core where "sustainable change must be rooted in dignity, participation, and ecology not just policy" [unnumbered final paragraph]. Evidence of sustained, holistic improvements (governance, women's empowerment, ecological health) directly linked by participants to these integrated principles would strongly support this assertion of a unique and effective philosophical approach.\nD highlights a specific skill but doesn't necessarily strengthen the claim about her unique philosophical legacy concerning dignity, participation, and the interconnectedness of broader social issues with ecology. While her scientific rigor was part of her approach, the author's final point is about a broader philosophy."
                     }
                 ]
             },
             {
-                text: "<p class='mb-4'>Dr. Aris Thorne (born 17 March 1935) is a theoretical physicist renowned for his foundational mathematical frameworks. He is most celebrated for his pivotal, though often behind-the-scenes, work with experimentalist Dr. Lena Hanson on the chroniton particle theory. In 1958, Thorne, then a junior researcher at the Cavendish Institute, published a speculative paper on temporal energy fields, which caught Hanson's attention. Hanson, based at CERN, was grappling with anomalous data from her particle collision experiments. Though their initial correspondence was met with scepticism by the broader physics community, they began a fruitful, if sometimes remote, collaboration that spanned decades. Thorne and Hanson were jointly awarded the Nobel Prize in Physics in 1987 for their combined theoretical and experimental work establishing the existence of chronitons.</p><p class='mb-4'>Their partnership, though producing over fifty co-authored papers, had periods of divergence. Between 1969 and 1973, Thorne focused on cosmological models, publishing his solo treatise \"Temporal Mechanics,\" while Hanson led a large international team at the newly commissioned Stanford Linear Accelerator Center (SLAC), refining detection methods for ephemeral particles. Their direct collaboration resumed intensively in the late 1970s when Hanson's team observed consistent particle decay patterns that perfectly matched Thorne's revised chroniton equations, published in his 1978 paper \"Quantum Time.\" Thorne rarely engaged in direct experimental oversight but provided critical theoretical guidance for Hanson's large-scale projects, such as the \"Chronos Array\" detector in the early 1980s and the \"Temporal Echo\" experiment, which involved a global network of observatories. Hanson, in turn, provided the empirical data that validated and refined Thorne's abstract models.</p><p class='mb-4'>At Thorne's 80th birthday symposium at Cambridge in 2015, Hanson, via video link, highlighted their symbiotic relationship. \"Without Aris's equations,\" she stated, \"my team would have been searching in the dark. His theoretical insights were the map.\" Thorne and Hanson's final joint publication was a review article in \"Physics Today\" in 2005, summarizing two decades of chroniton research. Their latest independent accolades include Hanson receiving the National Medal of Science in 2011 and Thorne being knighted for services to theoretical physics in 2013.</p>",
+                text: "<p class='mb-4'>The Murray–Darling Basin, stretching across four Australian states and one territory, supports over a third of the nation's agricultural output. In New South Wales, the Basin's rivers are vital not just for irrigation, but also for cultural heritage, Indigenous livelihoods, and ecosystems that depend on regular flooding cycles. However, water extraction has long outpaced sustainable levels.</p><p class='mb-4'>In 2012, the Murray–Darling Basin Plan was introduced to rebalance environmental and economic demands by capping water usage and returning a portion to the environment. This reform, while praised for its ambition, has been politically fraught. Farmers argue the reductions limit their viability, while ecologists warn the cuts don't go far enough. The plan's target of returning 2,750 gigalitres to the river system has faced repeated delays, with accusations of water hoarding, illegal diversions, and weak enforcement undermining public trust.</p><p class='mb-4'>Meanwhile, climate change has compounded pressures. Rainfall in the southern Basin has declined significantly over the past two decades, and longer droughts have become more frequent. A 2020 report by the CSIRO warned that even with full compliance, current water-sharing models may not protect against ecological collapse under projected warming scenarios.</p><p class='mb-4'>Policymakers now face a difficult balancing act: protect food production and rural communities, honour Indigenous water rights, and sustain a fragile river system. As the next major review of the Plan approaches, calls are growing for a more adaptive model — one that accounts not just for annual rainfall, but for long-term climate variability and enforceable environmental safeguards.</p>",
                 questions: [
                     {
-                        text: "The passage suggests that the initial collaboration between Thorne and Hanson was characterized by:",
+                        text: "The passage as a whole suggests that the Murray-Darling Basin Plan, despite its ambitious goals, is primarily characterized by:",
                         options: [
-                            "Immediate recognition and support from the wider scientific community.",
-                            "Hanson taking the lead in developing the foundational theoretical concepts.",
-                            "Overcoming external doubts through a persistent, mutually beneficial partnership.",
-                            "A primary focus on cosmological models rather than particle physics."
+                            "A fundamental flaw in its initial scientific assessment of sustainable water extraction levels, rendering its targets unachievable.",
+                            "A complex and ongoing struggle to reconcile competing legitimate interests amidst escalating environmental pressures and implementation difficulties.",
+                            "A general consensus among stakeholders that, while imperfect, the Plan is the only viable path towards ecological sustainability for the Basin.",
+                            "A successful rebalancing of environmental and economic demands, though facing minor delays in achieving its final water recovery targets."
                         ],
-                        correctAnswer: "C"
+                        correctAnswer: "B",
+                        explanation: "A is too strong and specific. While there are warnings about ecological collapse even with compliance under warming scenarios, the passage doesn't explicitly state the initial scientific assessment was fundamentally flawed, but rather that current models may not be sufficient for future projections. The main issue highlighted is the multifaceted struggle.\nB is the best answer. The passage describes the plan as "politically fraught", with farmers and ecologists having conflicting views. It faces "repeated delays, with accusations of water hoarding, illegal diversions, and weak enforcement". Climate change "compounded pressures". Policymakers face a "difficult balancing act". This all points to a complex, ongoing struggle.\nC is incorrect. The passage clearly states that "Farmers argue the reductions limit their viability, while ecologists warn the cuts don't go far enough", indicating a lack of consensus.\nD is overly optimistic and downplays the severity of the issues. The delays are "repeated," accusations undermine public trust, and a CSIRO report warns of potential ecological collapse. This is more than "minor delays.""
                     },
                     {
-                        text: "What can be inferred about Dr. Thorne's primary role in the major experimental projects like the \"Chronos Array\"?",
+                        text: "The author implies that climate change's primary effect on the Murray-Darling Basin's water management challenges is to:",
                         options: [
-                            "He was responsible for the day-to-day management and operational oversight of the experiments.",
-                            "His involvement was minimal once his initial theoretical papers were published.",
-                            "He provided the essential conceptual and mathematical direction that underpinned the experimental design.",
-                            "He secured most of the funding and international support for these large-scale projects."
+                            "Necessitate a complete overhaul of agricultural practices towards drought-resistant crops, a solution not yet considered by policymakers.",
+                            "Create new opportunities for water storage and diversion technologies that could offset declining rainfall.",
+                            "Significantly worsen the pre-existing imbalance between water supply and demand, making the Basin Plan's objectives even harder to achieve.",
+                            "Shift the focus of the Basin Plan from water quantity to water quality, as declining flows concentrate pollutants."
                         ],
-                        correctAnswer: "C"
+                        correctAnswer: "C",
+                        explanation: "A is too prescriptive and makes a claim about solutions not considered, which isn't supported. While adapting agriculture might be a response, the passage doesn't state it's "not yet considered" or the primary effect implied.\nB is not directly supported. While technology could be part of a response, the passage focuses on the negative impacts of climate change (declining rainfall, more droughts ) rather than opportunities it creates for new storage.\nC is the best answer. The passage states, "climate change has compounded pressures. Rainfall in the southern Basin has declined significantly... and longer droughts have become more frequent."  Furthermore, a report warned that "even with full compliance, current water-sharing models may not protect against ecological collapse under projected warming scenarios."  This implies climate change exacerbates the existing challenges of the Plan by reducing water availability and making its goals more difficult.\nD might be a consequence of reduced flows, but the passage's direct statements about climate change focus on reduced rainfall and increased drought frequency, which primarily affect water quantity and overall ecological health. The idea of shifting focus to water quality is not explicitly implied as the primary effect."
                     },
                     {
-                        text: "The \"periods of divergence\" between 1969 and 1973 suggest that Thorne and Hanson:",
+                        text: "The concluding sentences of the passage ("As the next major review of the Plan approaches, calls are growing for a more adaptive model one that accounts not just for annual rainfall, but for long-term climate variability and enforceable environmental safeguards." ) suggest that the author views the most critical need for the Basin's future as:",
                         options: [
-                            "Had a fundamental disagreement that temporarily halted their collaboration on chronitons.",
-                            "Independently pursued specialized research interests that later proved complementary.",
-                            "Competed to achieve breakthroughs in different areas of particle physics.",
-                            "Paused their joint work due to a lack of significant experimental results at the time."
+                            "A stricter enforcement mechanism for the existing water recovery targets, regardless of climatic changes.",
+                            "The development of water management strategies that are flexible and responsive to evolving, long-term environmental conditions.",
+                            "A significant increase in the overall water recovery target to create a buffer against future climate impacts.",
+                            "A political resolution between farmers and ecologists to agree on a fixed, universally accepted water allocation formula."
                         ],
-                        correctAnswer: "B"
+                        correctAnswer: "B",
+                        explanation: "A focuses only on enforcement, but the call is for a "more adaptive model" that also accounts for "long-term climate variability", implying more than just stricter enforcement of current static targets.\nB is the best answer. The call for "a more adaptive model one that accounts not just for annual rainfall, but for long-term climate variability and enforceable environmental safeguards"  directly points to the need for strategies that can adjust to changing conditions, particularly long-term climate trends.\nC, while potentially a part of an adaptive strategy, is a specific measure (increasing targets). The author's concluding point is broader, emphasizing the nature of the model (adaptive, accounting for variability) rather than a single specific change to targets.\nD describes an ideal outcome (political resolution), but the author's specific suggestion in the conclusion is about the type of model needed for water management, which implies a system that can function even with ongoing, complex stakeholder interactions by being adaptive to scientific realities."
                     },
                     {
-                        text: "Hanson's quote, \"His theoretical insights were the map,\" primarily emphasizes:",
+                        text: "Which of the following findings would cast the most serious doubt on the fundamental premise underlying the Murray-Darling Basin Plan's current strategy of rebalancing demands by capping usage and returning water to the environment?",
                         options: [
-                            "The navigational challenges faced by experimental physicists in new research frontiers.",
-                            "Thorne's ability to predict the exact outcomes of her experiments.",
-                            "The indispensable guiding framework Thorne's theories provided for her empirical investigations.",
-                            "The visual and schematic nature of Thorne's mathematical equations."
+                            "Evidence that the economic impact on agricultural communities due to water reductions has been more severe than initially projected by the Plan's architects.",
+                            "Scientific consensus that the targeted 2,750 gigalitres, even if fully returned, represents only a small fraction of the water needed for genuine long-term ecological restoration.",
+                            "Research demonstrating that the dominant factor in the Basin's ecological decline is widespread land-clearing and soil degradation, which persist regardless of river flow volumes.",
+                            "Reports showing that illegal water diversions have increased significantly since the Plan's implementation, offsetting any water returned to the environment."
                         ],
-                        correctAnswer: "C"
+                        correctAnswer: "C",
+                        explanation: "A highlights a negative consequence and a challenge for the Plan's balancing act, but it doesn't necessarily weaken the premise that returning water to the environment is beneficial or necessary for ecological health. It points to a socio-economic trade-off.\nB suggests the Plan's targets might be insufficient, which is a critique of its scale rather than its fundamental premise. It implies more water, following the same premise, might be needed.\nC is the best answer because it challenges the core assumption that manipulating water flow (capping usage, returning water to the environment ) is the primary lever for addressing ecological decline. If other factors (land-clearing, soil degradation) are dominant and unaffected by river flows, then the Plan's main strategy might be misdirected or largely ineffective in achieving its ecological goals.\nD points to a failure of implementation and enforcement, which undermines the Plan's effectiveness, but not necessarily the scientific or ecological rationale for returning water to the environment if it could be successfully implemented."
                     }
                 ]
             },
             {
-                text: "<p class='mb-4'>\"Colleagues, friends: I speak to you today with a profound sense of the responsibility we share, deeply grateful for the dedication you demonstrate daily, and ever mindful of the trust our community places in us. I acknowledge the tireless efforts of my predecessor, Dr. Evans, particularly his stewardship during the initial phases of this challenging transition.</p><p class='mb-4'>Countless medical professionals have dedicated their careers within these walls, through periods of stability and through waves of unprecedented demand. Yet, it is in times of systemic pressure, when resources are strained and the path forward seems uncertain, that our true strength is revealed – not solely through advanced technology or new protocols, but because We, the caregivers, remain committed to the core principles of healing and compassion, enshrined in our professional ethics. So it has always been. So it must continue with each one of us.</p><p class='mb-4'>That our healthcare system is navigating a profound crisis is no secret. We are confronted by escalating operational costs, a nationwide shortage of specialized staff, and the complex health needs of an aging population. Waiting lists lengthen, burnout is a stark reality, and every shift brings fresh evidence that the current models of care delivery are being tested to their limits, sometimes impacting the very communities we strive to serve.</p><p class='mb-4'>These are the tangible pressures, documented in reports and spreadsheets. Less quantifiable, but equally significant, is the erosion of morale that can creep in—a weariness that whispers of insurmountable obstacles, that suggests we must temper our aspirations for patient care. Today, I say to you: the challenges are immense, they are complex, and they demand our utmost ingenuity. They will not be overcome swiftly, nor without significant effort. But hear this: they will be addressed. In this moment, we choose resilience over resignation, collaborative innovation over siloed efforts. In this moment, we reaffirm our commitment to excellence, to compassion, and to the unwavering pursuit of our patients' well-being, pushing past the frustrations and the systemic impediments that have, for too long, hindered our progress.\"</p>",
+                text: "<p class='mb-4'>Recent studies have shed light on the complex underground relationships between trees and fungi, known as mycorrhizal networks. These symbiotic connections involve fungi attaching to tree roots and extending vast networks of filaments, called hyphae, into the soil. Through these filaments, trees and fungi engage in a mutual exchange: fungi receive sugars produced by the trees through photosynthesis, while trees gain improved access to water and nutrients, especially phosphorus and nitrogen.</p><p class='mb-4'>More surprisingly, researchers have found that these networks may allow trees to communicate and even transfer resources to one another. In some documented cases, older trees have sent carbon-rich compounds to saplings that were shaded and unable to photosynthesise effectively. This phenomenon, often referred to as the "wood wide web," has led to a reconsideration of forest ecology, shifting the perception of trees from solitary organisms to members of interdependent communities.</p><p class='mb-4'>However, this view is not without critics. Some scientists caution that attributing intentionality or communication to trees anthropomorphises what could be basic chemical signaling. Others point to the variability in findings depending on tree species, climate, and soil composition. Nevertheless, many agree that mycorrhizal networks play a critical—if not fully understood—role in forest resilience and nutrient cycling.</p>",
                 questions: [
                     {
-                        text: "The speaker implies that the \"true strength\" of the caregivers is most evident when:",
+                        text: "The passage implies that the transfer of resources from mature trees to saplings through mycorrhizal networks is significant primarily because it:",
                         options: [
-                            "New medical technologies and protocols are successfully implemented.",
-                            "They adhere strictly to their professional code of ethics during routine operations.",
-                            "External pressures and resource limitations test their fundamental commitment.",
-                            "The hospital receives positive feedback from the community for its services."
+                            "Confirms that trees possess a form of altruistic intentionality, actively deciding to aid weaker individuals.",
+                            "Suggests that forest ecosystems may possess a higher degree of collective resilience and interconnected support than previously understood.",
+                            "Provides a complete explanation for how all saplings in dense forests survive despite limited access to sunlight.",
+                            "Indicates that fungi primarily act as passive conduits for resources dictated entirely by the needs of the trees."
                         ],
-                        correctAnswer: "C"
+                        correctAnswer: "B",
+                        explanation: "A is a problematic interpretation. The passage notes "Some scientists caution that attributing intentionality or communication to trees anthropomorphises what could be basic chemical signaling". So, attributing altruistic intentionality is a debated point, not a confirmed implication of significance.\nB is the best answer. The finding that older trees send resources to shaded saplings  has led to "a reconsideration of forest ecology, shifting the perception of trees from solitary organisms to members of interdependent communities". This interdependence and resource sharing point towards collective resilience and support. The passage also mentions that many agree these networks "play a critical... role in forest resilience".\nC is an overstatement. The passage says this transfer happens "In some documented cases"  and that networks "may allow" this. It does not claim it's a complete explanation for all sapling survival or that it happens universally in all conditions.\nD misrepresents the relationship. The relationship is symbiotic and involves a "mutual exchange"  where fungi also benefit (receiving sugars). Fungi are not just passive conduits; they extend vast networks and improve tree access to water and nutrients."
                     },
                     {
-                        text: "According to the speaker, the \"erosion of morale\" is particularly dangerous because it:",
+                        text: "Regarding the concept of trees "communicating" via mycorrhizal networks, the passage leads the reader to infer that:",
                         options: [
-                            "Directly leads to increased operational costs and staff shortages.",
-                            "Is more difficult to address than tangible pressures like waiting lists.",
-                            "Threatens the caregivers' ambition and resolve in providing quality patient care.",
-                            "Is primarily caused by a lack of recognition from hospital management."
+                            "The scientific community has largely dismissed the idea as an over-interpretation of basic biological processes.",
+                            "While direct resource transfer is documented, the notion of intentional communication remains a subject of ongoing debate and requires careful interpretation.",
+                            "The "wood wide web" is now unequivocally accepted as evidence of sophisticated, language-like interactions between trees.",
+                            "Any signaling observed is purely a byproduct of nutrient exchange, with no adaptive significance for the trees involved."
                         ],
-                        correctAnswer: "C"
+                        correctAnswer: "B",
+                        explanation: "A is too strong. The passage states "this view is not without critics"  and that "many agree that mycorrhizal networks play a critical... role". This doesn't suggest a wholesale dismissal, but rather caution and debate.\nB is the best answer. Researchers found networks "may allow trees to communicate and even transfer resources", and there are "documented cases" of resource transfer. However, "Some scientists caution that attributing intentionality or communication to trees anthropomorphises what could be basic chemical signaling". This directly supports the idea of documented transfer but debated "communication."\nC is incorrect. The term "wood wide web" is mentioned, but the passage immediately follows with critiques regarding "intentionality or communication", indicating it's not unequivocally accepted as sophisticated, language-like interaction.\nD is contradicted by the implications of resource sharing for sapling survival  and the general role in "forest resilience", which suggest adaptive significance. The debate is more about the nature and intentionality of any communication, not the absence of adaptive significance of the interactions."
                     },
                     {
-                        text: "When the speaker says, \"In this moment, we choose resilience over resignation, collaborative innovation over siloed efforts,\" they are primarily aiming to:",
+                        text: "Based on the description of the tree-fungi relationship, it can be most reasonably inferred that:",
                         options: [
-                            "Announce a new set of mandatory operational guidelines for all staff.",
-                            "Criticize past approaches that relied too heavily on individual efforts.",
-                            "Inspire a proactive and unified mindset among the staff to confront challenges.",
-                            "Promise an immediate solution to the ongoing healthcare crisis."
+                            "The fungi are entirely dependent on the trees for survival, while the trees could likely thrive without the fungi, albeit less efficiently.",
+                            "The interaction is a clear instance of commensalism, where one species benefits significantly and the other is largely unaffected.",
+                            "While both species derive benefits, the passage does not provide enough information to determine if these benefits are always quantitatively equal or if one partner consistently gains more.",
+                            "The primary driver of the relationship is the trees' need for enhanced nutrient uptake, with the fungi's sugar acquisition being a secondary, less critical outcome."
                         ],
-                        correctAnswer: "C"
+                        correctAnswer: "C",
+                        explanation: "A is not fully supported. While fungi receive sugars, the passage doesn't state they are entirely dependent or that trees could "likely thrive" without them. It says trees "gain improved access to water and nutrients", implying a significant benefit.\nB is incorrect. The passage describes a "symbiotic" connection  and a "mutual exchange" where fungi receive sugars and trees gain access to water and nutrients. This points to mutualism (both benefit), not commensalism.\nC is the best answer. The passage clearly states it's a "mutual exchange": "fungi receive sugars... while trees gain improved access to water and nutrients". Both benefit. However, the passage does not specify whether these benefits are always equal or if the balance might shift depending on species, climate, or soil composition (which are mentioned as sources of variability in findings ).\nD proposes a hierarchy of importance not explicitly stated. The passage presents the exchange as mutual ("fungi receive sugars... while trees gain..." ) without indicating one side of the exchange is secondary or less critical to the symbiotic relationship itself."
                     },
                     {
-                        text: "What is the underlying message the speaker wishes to convey about the current healthcare crisis?",
+                        text: "The author's reference to the "wood wide web" and the subsequent discussion primarily serves to illustrate:",
                         options: [
-                            "The crisis is largely a result of outdated ethical principles in modern medicine.",
-                            "While severe and multifaceted, the crisis can be navigated through collective resolve and innovation.",
-                            "The primary responsibility for resolving the crisis lies with external policymakers and funders.",
-                            "The current challenges are unprecedented and may require a permanent reduction in service aspirations."
+                            "The universal acceptance among ecologists of trees as highly social and cooperative organisms.",
+                            "A pivotal conceptual evolution in understanding forest dynamics, moving from a view of isolated individuals to one of interconnected communities, though nuances are still debated.",
+                            "The primary mechanism by which all forests achieve resilience against environmental stressors.",
+                            "A controversial theory that, while popular in some circles, lacks substantial empirical support from the broader scientific community."
                         ],
-                        correctAnswer: "B"
+                        correctAnswer: "B",
+                        explanation: "A is an overstatement. While the perception is shifting, the passage notes critics who caution against anthropomorphizing trees or overstating communication, implying acceptance isn't universal or without caveats.\nB is the best answer. The discovery of these networks and phenomena like resource sharing "has led to a reconsideration of forest ecology, shifting the perception of trees from solitary organisms to members of interdependent communities". This is a pivotal conceptual evolution. The mention of critics  and variability  acknowledges that nuances are still debated, even if "many agree" on the critical role of these networks.\nC is too strong. The passage says mycorrhizal networks "play a critical... role in forest resilience", but not that they are the primary mechanism by which all forests achieve resilience. It's a contributing factor.\nD is too negative and doesn't reflect the passage's overall tone. While there are critics of certain interpretations (like intentional communication ), the passage states that "many agree that mycorrhizal networks play a critical-if not fully understood-role in forest resilience and nutrient cycling". This suggests more than a fringe theory lacking substantial support; rather, it's an area of active research and evolving understanding."
                     }
                 ]
             }
@@ -1068,7 +1084,7 @@
                         studentName: userName || userDisplayName || 'Anonymous',
                         studentEmail: userEmail || '',
                         userId: userId,
-                        examName: "VR Focus Group 16",
+                        examName: "VR Focus Group 17",
                         score: score.toString(),
                         totalQuestions: (passages.length * 4).toString(),
                         timeTaken: formattedTime,
