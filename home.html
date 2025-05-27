@@ -21,28 +21,35 @@
 
         .dashboard-header .logo-small { max-width: 132px; }
 
-        #home-content .animated-welcome-text {
-            font-family: var(--md-sys-typescale-display-medium-font-family-name);
-            font-size: var(--md-sys-typescale-display-medium-font-size);
-            line-height: var(--md-sys-typescale-display-medium-line-height);
-            font-weight: var(--md-sys-typescale-display-medium-font-weight);
-            color: var(--md-sys-color-on-background);
-        }
-        #home-content .animated-welcome-text .welcome-part1 { color: var(--md-sys-color-secondary); }
-        #home-content .animated-welcome-text .welcome-part2 { color: var(--md-sys-color-primary); }
-         @keyframes slideInFromLeft {
-            from { opacity: 0; transform: translateX(-30px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        .animated-welcome-text { animation: slideInFromLeft 0.6s var(--m3-sys-motion-easing-standard) forwards; opacity: 0; }
+#home-content .animated-welcome-text {
+    font-family: var(--md-sys-typescale-display-medium-font-family-name);
+    font-size: var(--md-sys-typescale-display-medium-font-size);
+    line-height: var(--md-sys-typescale-display-medium-line-height);
+    font-weight: var(--md-sys-typescale-display-medium-font-weight);
+    /* Apply the gradient here */
+    background-image: linear-gradient(to right, var(--md-sys-color-secondary) 20%, var(--md-sys-color-primary) 80%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent; /* Fallback for browsers that don&#39;t support text-fill-color */
+    -webkit-text-fill-color: transparent;
+    animation: slideInFromLeft 0.6s var(--m3-sys-motion-easing-standard) forwards; opacity: 0;
+}
+#home-content .animated-welcome-text .welcome-part1 { /* Removed specific color as gradient is applied to the whole element now */ }
+#home-content .animated-welcome-text .welcome-part2 { /* Removed specific color */ }
+ @keyframes slideInFromLeft {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+.animated-welcome-text { opacity: 0; }
 
-        #home-content .subtitle-text {
-            font-family: var(--md-sys-typescale-title-large-font-family-name);
-            font-size: var(--md-sys-typescale-title-large-font-size);
-            line-height: var(--md-sys-typescale-title-large-line-height);
-            color: var(--md-sys-color-on-surface-variant);
-            margin-top: var(--md-sys-spacing-xs);
-        }
+#home-content .subtitle-text {
+    font-family: var(--md-sys-typescale-title-large-font-family-name);
+    font-size: var(--md-sys-typescale-title-large-font-size);
+    line-height: var(--md-sys-typescale-title-large-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+    margin-top: var(--md-sys-spacing-xs);
+}
+
 
         .info-card-home {
             background-color: var(--md-sys-color-surface-container-highest);
