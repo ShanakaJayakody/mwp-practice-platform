@@ -6,303 +6,479 @@
     <title>Student Dashboard - UCAT Platform</title>
     <link rel="icon" href="https://ik.imagekit.io/mwp/2.svg?updatedAt=1745982956185" type="image/svg+xml">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="m3_styles.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-
     <style>
-        /* Existing styles from the original file are now refined or replaced by m3_styles.css */
-        /* Any page-specific overrides can go here if m3_styles.css is not sufficient */
-        body {
-            font-family: var(--md-sys-typescale-font-family-name); /* Ensure M3 font is applied */
-            background-color: var(--md-sys-color-background);
-            color: var(--md-sys-color-on-background);
-            display: flex;
-            justify-content: center; /* Center auth form initially */
-            align-items: flex-start; /* Align dashboard to top when visible */
-            min-height: 100vh;
-            padding: 0; /* Reset padding */
+        :root {
+            /* M3 Color Palette - Light Theme (Examples from Design Doc) */
+            --md-sys-color-primary: #1967D2; /* Primary P40 */
+            --md-sys-color-on-primary: #FFFFFF; /* Primary P100 */
+            --md-sys-color-primary-container: #D1E3FF; /* Primary P90 */
+            --md-sys-color-on-primary-container: #001E3A; /* Primary P10 */
+            --md-sys-color-secondary: #4285F4; /* Secondary P40 (desaturated version of #4285F4 might be used, e.g. #5E89C2 if desaturated) */
+            --md-sys-color-on-secondary: #FFFFFF;
+            --md-sys-color-secondary-container: #D6E3FF; /* Example, derived */
+            --md-sys-color-on-secondary-container: #001A43; /* Example, derived */
+            --md-sys-color-accent-cta: #FF6D00; /* Tertiary P40 - Orange */
+            --md-sys-color-on-accent-cta: #FFFFFF;
+            --md-sys-color-accent-cta-container: #FFDDBA; /* Example, derived */
+            --md-sys-color-on-accent-cta-container: #381E00; /* Example, derived */
+            --md-sys-color-background: #F8F9FA; /* Neutral N99 (Light Mode Background) */
+            --md-sys-color-on-background: #1F1F1F; /* Neutral N10 (Default text on Background) */
+            --md-sys-color-surface: #FFFFFF; /* Neutral N98 (Card backgrounds, sheet backgrounds) */
+            --md-sys-color-on-surface: #1F1F1F; /* Neutral N10 (Default text on Surface) */
+            --md-sys-color-surface-variant: #E1E3E5; /* Neutral Variant N90 (e.g. for dividers, outlines) */
+            --md-sys-color-on-surface-variant: #444746; /* Neutral Variant N30 (Lower emphasis text) */
+            --md-sys-color-outline: #747775; /* Neutral Variant N50 */
+            --md-sys-color-error: #D93025; /* Error P40 */
+            --md-sys-color-on-error: #FFFFFF;
+            --md-sys-color-error-container: #FAD2CF; /* Example, derived */
+            --md-sys-color-on-error-container: #410001; /* Example, derived */
+            --md-sys-color-success-container: #C8E6C9; /* Custom for success messages */
+            --md-sys-color-on-success-container: #0D3C1E; /* Custom for success messages */
+
+
+            /* M3 Typography */
+            --md-sys-font-family-name: 'Roboto', sans-serif;
+            /* Body Large (Main content text) */
+            --md-sys-typescale-body-large-font-family-name: var(--md-sys-font-family-name);
+            --md-sys-typescale-body-large-font-weight: 400; /* Regular */
+            --md-sys-typescale-body-large-font-size: 16px; /* 1rem based on 16px root */
+            --md-sys-typescale-body-large-line-height: 24px; /* 1.5rem */
+            --md-sys-typescale-body-large-letter-spacing: 0.5px;
+            /* Title Medium (List item titles, smaller card titles) */
+            --md-sys-typescale-title-medium-font-family-name: var(--md-sys-font-family-name);
+            --md-sys-typescale-title-medium-font-weight: 500; /* Medium */
+            --md-sys-typescale-title-medium-font-size: 16px;
+            --md-sys-typescale-title-medium-line-height: 24px;
+            --md-sys-typescale-title-medium-letter-spacing: 0.15px;
+            /* Label Large (Button text) */
+            --md-sys-typescale-label-large-font-family-name: var(--md-sys-font-family-name);
+            --md-sys-typescale-label-large-font-weight: 500; /* Medium */
+            --md-sys-typescale-label-large-font-size: 14px;
+            --md-sys-typescale-label-large-line-height: 20px;
+            --md-sys-typescale-label-large-letter-spacing: 0.1px;
+            /* Headline Small (Sub-headings) */
+            --md-sys-typescale-headline-small-font-family-name: var(--md-sys-font-family-name);
+            --md-sys-typescale-headline-small-font-weight: 400; /* Regular */
+            --md-sys-typescale-headline-small-font-size: 24px;
+            --md-sys-typescale-headline-small-line-height: 32px;
+             /* Body Small (Helper/error text) */
+            --md-sys-typescale-body-small-font-family-name: var(--md-sys-font-family-name);
+            --md-sys-typescale-body-small-font-weight: 400;
+            --md-sys-typescale-body-small-font-size: 12px;
+            --md-sys-typescale-body-small-line-height: 16px;
+
+
+            /* M3 Spacing (Base unit: 8dp, using rem based on 16px root: 8px = 0.5rem) */
+            --md-sys-spacing-unit: 0.5rem; /* 8px */
+            --md-sys-spacing-xxs: 0.25rem; /* 4px (0.5 * unit) */
+            --md-sys-spacing-xs: 0.5rem;  /* 8px (1 * unit) */
+            --md-sys-spacing-s: 0.75rem;   /* 12px (1.5 * unit) */
+            --md-sys-spacing-m: 1rem;     /* 16px (2 * unit) */
+            --md-sys-spacing-l: 1.5rem;   /* 24px (3 * unit) */
+            --md-sys-spacing-xl: 2rem;    /* 32px (4 * unit) */
+            --md-sys-spacing-xxl: 3rem;   /* 48px (6 * unit) */
+            
+            /* M3 Shape */
+            --md-sys-shape-corner-extra-small: 0.25rem; /* 4dp */
+            --md-sys-shape-corner-small: 0.5rem; /* 8dp */
+            --md-sys-shape-corner-medium: 0.75rem; /* 12dp (M3 Card default is more like 12dp) */
+            --md-sys-shape-corner-large: 1rem;    /* 16dp */
+            --md-sys-shape-corner-extra-large: 1.75rem; /* 28dp */
+            --md-sys-shape-corner-full: 9999px; /* Pill shape */
+            
+            /* M3 Shadows (Examples - TailwindCSS provides utility classes that can be mapped) */
+            --md-sys-elevation-level0: none;
+            --md-sys-elevation-level1: 0px 1px 2px rgba(0,0,0,0.3), 0px 1px 3px 1px rgba(0,0,0,0.15); /* M3 Level 1 */
+            --md-sys-elevation-level2: 0px 1px 2px rgba(0,0,0,0.3), 0px 2px 6px 2px rgba(0,0,0,0.15); /* M3 Level 2 */
+            --md-sys-elevation-level3: 0px 4px 8px 3px rgba(0,0,0,0.3), 0px 1px 3px rgba(0,0,0,0.15); /* M3 Level 3 */
+
+            
+            /* Transitions */
+            --md-sys-motion-duration-short: 100ms;
+            --md-sys-motion-duration-medium: 250ms;
+            --md-sys-motion-easing-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
         }
 
-        /* Auth Container - M3 Card styling */
-        .auth-container { /* This class is used in JS for the auth redirect message too */
+        body {
+            font-family: var(--md-sys-font-family-name);
+            background-color: var(--md-sys-color-background);
+            color: var(--md-sys-color-on-background);
+            line-height: var(--md-sys-typescale-body-large-line-height);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Auth Container Styles - M3 Inspired */
+        .auth-container {
             background-color: var(--md-sys-color-surface);
-            border-radius: var(--md-sys-shape-corner-large);
+            border-radius: var(--md-sys-shape-corner-large); /* More pronounced rounding */
             box-shadow: var(--md-sys-elevation-level2);
             padding: var(--md-sys-spacing-xl); /* 32px */
             width: 100%;
-            max-width: 480px; /* Consistent max-width */
+            max-width: 480px;
             text-align: center;
-            margin: var(--md-sys-spacing-xl) auto; /* Centering for auth state */
-            animation: fadeIn 0.3s var(--m3-sys-motion-easing-standard);
+            margin: var(--md-sys-spacing-xl) auto;
+            animation: fadeIn 0.3s ease-out;
         }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
+        
         .dashboard-wrapper {
             background-color: var(--md-sys-color-background);
             width: 100%;
+            margin: 0;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden; /* Prevent horizontal scroll on dashboard */
+            overflow-x: hidden;
         }
 
         .logo {
-            max-width: 154px;
-            margin: 0 auto var(--md-sys-spacing-l) auto;
-            transition: transform var(--m3-sys-motion-duration-medium2) var(--m3-sys-motion-easing-standard);
+            max-width: 154px; 
+            margin: 0 auto var(--md-sys-spacing-l) auto; /* 24px bottom margin */
+            transition: transform var(--md-sys-motion-duration-medium) var(--md-sys-motion-easing-standard);
         }
         .logo:hover { transform: scale(1.05); }
 
+        /* Dashboard Header - M3 Surface with Elevation */
         .dashboard-header {
-            background-color: var(--md-sys-color-surface);
-            box-shadow: var(--md-sys-elevation-level1);
-            /* padding, display, etc. are already in m3_styles.css */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--md-sys-spacing-m) var(--md-sys-spacing-l); /* 16px 24px */
+            background-color: var(--md-sys-color-surface); 
+            box-shadow: var(--md-sys-elevation-level1); /* Subtle shadow for header */
+            position: sticky;
+            top: 0;
+            z-index: 1000; /* Ensure header is on top */
         }
         .dashboard-header .logo-small { max-width: 132px; }
+        .settings-icon span { color: var(--md-sys-color-on-surface-variant); transition: color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard); }
+        .settings-icon:hover span { color: var(--md-sys-color-primary); }
 
+        /* Main Navigation - M3 Surface with Active Indicator */
         .main-nav {
+            display: flex;
+            justify-content: center;
             background-color: var(--md-sys-color-surface);
+            padding: var(--md-sys-spacing-xxs) 0; 
             box-shadow: var(--md-sys-elevation-level1);
-            top: 72px; /* Approximate height of dashboard-header (adjust if header height changes, M3 uses 64dp typically) */
-            /* Other styles like display flex, justify center are in m3_styles.css */
+            position: sticky;
+            top: 68px; /* Approx height of dashboard-header (adjust if header height changes) */
+            z-index: 999; /* Below header, above content */
+            overflow-x: auto; /* For smaller screens */
         }
+
         .nav-tab {
-            /* Uses M3 styling from m3_styles.css */
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l); 
+            margin: 0 var(--md-sys-spacing-xs); 
+            cursor: pointer;
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium); /* M3 Label Large uses medium weight */
+            font-size: var(--md-sys-typescale-label-large-font-size);
+            color: var(--md-sys-color-on-surface-variant); /* Lower emphasis for inactive tabs */
+            border-bottom: 2px solid transparent;
+            transition: color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard), 
+                        border-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
+                        background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+            border-radius: var(--md-sys-shape-corner-small) var(--md-sys-shape-corner-small) 0 0;
+            position: relative;
+            user-select: none;
+            text-decoration: none;
+            display: inline-flex; /* To align icon and text */
+            align-items: center;
+            gap: var(--md-sys-spacing-xs); /* Space between icon and text */
         }
         .nav-tab:hover {
             color: var(--md-sys-color-primary);
-            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); /* Subtle hover bg */
         }
         .nav-tab.active {
             color: var(--md-sys-color-primary);
-            border-bottom-color: var(--md-sys-color-primary);
+            border-bottom-color: var(--md-sys-color-primary); /* M3 active tab indicator */
+        }
+        .nav-tab.active::after { /* Remove if direct border-bottom is preferred */
+           content: none;
+        }
+        .nav-tab-disabled {
+            color: var(--md-sys-color-on-surface-variant);
+            opacity: 0.38; /* M3 disabled state opacity */
+            cursor: not-allowed;
+        }
+        .nav-tab-disabled .coming-soon-inline {
+            font-size: 0.65rem;
+            color: var(--md-sys-color-on-surface-variant);
+            margin-left: var(--md-sys-spacing-xxs);
+            background-color: var(--md-sys-color-surface-variant);
+            padding: 0.1rem 0.4rem;
+            border-radius: var(--md-sys-shape-corner-full);
         }
 
+        /* Dashboard Content Area */
         .dashboard-content-area {
-            padding: var(--md-sys-spacing-l);
+            padding: var(--md-sys-spacing-l); /* 24px */
             flex-grow: 1;
             background-color: var(--md-sys-color-background);
-            overflow-y: auto; /* Allow content to scroll if it overflows */
+            overflow-y: auto;
         }
 
-        /* M3 Inspired Text Field Styling for Auth Inputs */
-        .auth-input-container { /* New wrapper for icon + input */
-            position: relative;
-            margin-bottom: var(--md-sys-spacing-m);
-        }
-        .auth-input {
+        /* Auth Form Inputs - M3 Text Fields */
+        .auth-input { /* Generic class for all auth inputs */
             width: 100%;
-            padding-top: var(--md-sys-spacing-m); /* 16dp */
+            padding-top: var(--md-sys-spacing-m); 
             padding-bottom: var(--md-sys-spacing-m);
-            padding-left: calc(var(--md-sys-spacing-xs) + var(--md-sys-spacing-m) + var(--md-sys-spacing-s)); /* Icon space + padding */
-            padding-right: var(--md-sys-spacing-m);
-            border: none; /* Remove default border */
-            border-bottom: 1px solid var(--md-sys-color-on-surface-variant); /* M3 underline */
-            border-radius: var(--md-sys-shape-corner-extra-small) var(--md-sys-shape-corner-extra-small) 0 0; /* Top corners rounded */
+            padding-right: var(--md-sys-spacing-m); 
+            padding-left: var(--md-sys-spacing-xl); /* Space for icon */
+            margin-bottom: var(--md-sys-spacing-m); 
+            border: 1px solid var(--md-sys-color-outline);
+            border-radius: var(--md-sys-shape-corner-extra-small); /* M3 Text Field uses 4dp corners */
             box-sizing: border-box;
             font-size: var(--md-sys-typescale-body-large-font-size);
-            background-color: color-mix(in srgb, var(--md-sys-color-primary) 4%, var(--md-sys-color-surface-container-highest)); /* M3 Filled text field subtle bg */
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 4%, var(--md-sys-color-surface)); /* M3 Filled text field subtle bg */
             color: var(--md-sys-color-on-surface);
-            transition: background-color var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard),
-                        border-color var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard);
+            transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard), 
+                        border-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
         }
         .auth-input:focus {
             outline: none;
-            border-bottom: 2px solid var(--md-sys-color-primary); /* M3 focus indicator */
-            padding-bottom: calc(var(--md-sys-spacing-m) - 1px); /* Adjust padding for thicker border */
-            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, var(--md-sys-color-surface-container-highest));
+            border-color: var(--md-sys-color-primary); /* Focus border to primary */
+            border-width: 2px; /* M3 focus indicator often a thicker line */
+            padding-bottom: calc(var(--md-sys-spacing-m) - 1px); /* Adjust padding to maintain height with thicker border */
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, var(--md-sys-color-surface));
         }
-        .auth-input-icon {
+        .auth-input-icon { 
             position: absolute;
-            top: 50%;
-            left: var(--md-sys-spacing-m); /* 16dp */
-            transform: translateY(-50%);
+            inset-y: 0;
+            left: var(--md-sys-spacing-s); /* 12px */
+            display: flex;
+            align-items: center;
             color: var(--md-sys-color-on-surface-variant);
-            pointer-events: none; /* So icon doesn't interfere with input click */
+            pointer-events: none;
         }
+        
+        /* Buttons - M3 Filled Button (Primary) & M3 Outlined/Text Button (Secondary) */
+        .btn {
+            display: inline-flex; 
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l); /* M3 Button typical padding for height ~40dp */
+            border: none;
+            border-radius: var(--md-sys-shape-corner-full); /* Pill shape for M3 buttons */
+            cursor: pointer;
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            font-size: var(--md-sys-typescale-label-large-font-size);
+            transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard), 
+                        box-shadow var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+            text-align: center;
+            box-shadow: var(--md-sys-elevation-level0); /* No shadow for resting state */
+            position: relative;
+            overflow: hidden; /* For ripple effect if added */
+            gap: var(--md-sys-spacing-xs);
+        }
+        .btn:hover { box-shadow: var(--md-sys-elevation-level1); } 
+        .btn:active { box-shadow: var(--md-sys-elevation-level0); } 
 
+        .btn-primary {
+            background-color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+        }
+        .btn-primary:hover { background-color: color-mix(in srgb, var(--md-sys-color-primary) 92%, black); } 
+
+        .btn-google { /* M3 Outlined Button style */
+            background-color: transparent;
+            color: var(--md-sys-color-primary);
+            border: 1px solid var(--md-sys-color-outline);
+        }
+        .btn-google:hover { background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); }
+        .btn-google img { width: 20px; height: 20px; /* margin-right handled by gap in .btn */ }
+
+        .btn-logout { /* M3 Filled Button with Error color */
+            background-color: var(--md-sys-color-error);
+            color: var(--md-sys-color-on-error);
+            padding: var(--md-sys-spacing-xs) var(--md-sys-spacing-m); 
+            border-radius: var(--md-sys-shape-corner-full);
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            font-size: var(--md-sys-typescale-label-large-font-size);
+            border: none;
+            display: inline-flex; align-items: center; gap: var(--md-sys-spacing-xs);
+        }
+        .btn-logout:hover { background-color: color-mix(in srgb, var(--md-sys-color-error) 92%, black); box-shadow: var(--md-sys-elevation-level1); }
+        
         .auth-toggle-link {
             color: var(--md-sys-color-primary);
             cursor: pointer;
-            text-decoration: none;
+            text-decoration: none; /* M3 links often don't have underlines unless interactive state */
             font-family: var(--md-sys-typescale-label-large-font-family-name);
-            font-weight: var(--md-sys-typescale-label-large-font-weight); /* Medium */
+            font-weight: var(--md-sys-font-weight-medium);
         }
-        .auth-toggle-link:hover { text-decoration: underline; }
+        .auth-toggle-link:hover { color: var(--md-sys-color-primary); text-decoration: underline; } /* Underline on hover */
 
-        .error-message, .success-message {
-            font-family: var(--md-sys-typescale-body-small-font-size);
+        .error-message, .success-message { /* Updated for M3 */
+            font-family: var(--md-sys-typescale-body-small-font-family-name);
+            font-size: var(--md-sys-typescale-body-small-font-size);
+            line-height: var(--md-sys-typescale-body-small-line-height);
+            min-height: var(--md-sys-typescale-body-small-line-height);
+            margin-top: var(--md-sys-spacing-xs); 
             padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m);
             border-radius: var(--md-sys-shape-corner-extra-small);
-            text-align: left; /* M3 typically left-aligns inline messages */
+            text-align: left;
             display: flex; align-items: center; gap: var(--md-sys-spacing-xs);
-            margin-top: var(--md-sys-spacing-xs);
         }
         .error-message {
             background-color: var(--md-sys-color-error-container);
             color: var(--md-sys-color-on-error-container);
         }
-        .success-message {
+        .success-message { /* Added for consistency if needed */
             background-color: var(--md-sys-color-success-container);
             color: var(--md-sys-color-on-success-container);
         }
-
-        .divider { /* M3 Divider style */
+        
+        .divider {
             display: flex;
             align-items: center;
-            margin: var(--md-sys-spacing-l) 0;
+            margin: var(--md-sys-spacing-l) 0; 
             color: var(--md-sys-color-on-surface-variant);
             font-family: var(--md-sys-typescale-label-large-font-family-name);
             font-size: var(--md-sys-typescale-label-large-font-size);
         }
         .divider::before, .divider::after {
-            content: ""; flex: 1; border-bottom: 1px solid var(--md-sys-color-outline-variant); /* Thinner outline */
+            content: ""; flex: 1; border-bottom: 1px solid var(--md-sys-color-outline);
         }
         .divider::before { margin-right: var(--md-sys-spacing-xs); }
         .divider::after { margin-left: var(--md-sys-spacing-xs); }
 
-        .spinner { /* Using M3 progress indicator idea */
+        .spinner {
             border: 3px solid color-mix(in srgb, currentColor 20%, transparent);
             border-radius: 50%;
-            border-top-color: currentColor; /* Uses button's text color */
-            width: 1.125rem; /* 18dp, matches icon size */
-            height: 1.125rem;
+            border-top-color: currentColor; 
+            width: 18px; height: 18px; /* Slightly smaller for buttons */
             animation: spin 1s linear infinite;
-            display: inline-block;
+            display: inline-block; /* margin-right handled by gap in .btn */
             vertical-align: middle;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
+        
         /* Results specific styling */
         #results-content h1 {
-            font-family: var(--md-sys-typescale-headline-small-font-family-name); /* Using Headline Small */
+            font-family: var(--md-sys-typescale-headline-small-font-family-name);
             font-size: var(--md-sys-typescale-headline-small-font-size);
-            font-weight: var(--md-sys-typescale-headline-small-font-weight); /* Regular */
+            font-weight: var(--md-sys-font-weight-regular);
             color: var(--md-sys-color-primary);
-            text-align:left; /* As per original */
-            margin-bottom: var(--md-sys-spacing-xs);
+            text-align:left;
         }
-        #results-content > p {
-             font-family: var(--md-sys-typescale-title-medium-font-family-name); /* Title Medium for subtitle */
+        #results-content > p { /* Description below heading */
+             font-family: var(--md-sys-typescale-body-large-font-family-name);
              color: var(--md-sys-color-on-surface-variant);
              text-align:left;
-             margin-bottom: var(--md-sys-spacing-l);
+             max-width: none; /* Remove max-width for better alignment */
+             margin-left: 0; margin-right: 0;
         }
 
-        #results-summary { /* M3 Card */
+        #results-summary {
             background-color: var(--md-sys-color-surface);
             padding: var(--md-sys-spacing-l);
-            border-radius: var(--md-sys-shape-corner-medium);
+            border-radius: var(--md-sys-shape-corner-medium); /* M3 Card 12dp */
             box-shadow: var(--md-sys-elevation-level1);
             margin-bottom: var(--md-sys-spacing-l);
         }
-        .info-card-results { /* M3 Card per metric */
-            background-color: var(--md-sys-color-surface-container-highest); /* Slightly more elevated */
-            border-radius: var(--md-sys-shape-corner-medium);
-            padding: var(--md-sys-spacing-l);
-            text-align: center;
-            box-shadow: var(--md-sys-elevation-level1);
-        }
-        .info-card-results .material-symbols-outlined {
-            font-size: 32px; /* Adjust as needed */
-            color: var(--md-sys-color-primary);
-            margin-bottom: var(--md-sys-spacing-s);
-        }
-        .info-card-results .metric-label {
-            font-family: var(--md-sys-typescale-body-medium-font-family-name);
-            color: var(--md-sys-color-on-surface-variant);
-            margin-bottom: var(--md-sys-spacing-xxs);
-        }
-        .info-card-results .metric-value {
-            font-family: var(--md-sys-typescale-headline-small-font-family-name); /* For impact */
-            color: var(--md-sys-color-primary);
-            font-weight: var(--md-sys-font-weight-medium); /* Regular is default for headline */
-        }
-
-        /* Accordion M3 Styling */
+         #results-summary h3 { /* If there's an H3 inside */
+            font-family: var(--md-sys-typescale-title-large-font-family-name);
+            font-size: var(--md-sys-typescale-title-large-font-size);
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: var(--md-sys-spacing-m);
+         }
+        
+        /* Accordion Styling */
         .section-accordion-item {
-            background-color: var(--md-sys-color-surface);
-            border: 1px solid var(--md-sys-color-outline-variant); /* Lighter border */
-            border-radius: var(--md-sys-shape-corner-medium);
-            margin-bottom: var(--md-sys-spacing-s);
-            box-shadow: var(--md-sys-elevation-level0); /* Default, can be elevated on hover/active */
+            background-color: var(--md-sys-color-surface); /* Main surface for accordion item */
+            border: 1px solid var(--md-sys-color-outline);
+            border-radius: var(--md-sys-shape-corner-medium); /* Consistent with cards */
+            margin-bottom: var(--md-sys-spacing-s); /* Space between accordion items */
+            box-shadow: var(--md-sys-elevation-level0); /* Optional subtle shadow, or level1 */
         }
         .section-accordion-header {
-            background-color: transparent;
-            color: var(--md-sys-color-on-surface);
-            padding: var(--md-sys-spacing-m);
+            background-color: transparent; /* Header takes surface from parent item */
+            color: var(--md-sys-color-on-surface); /* Readable text on surface */
+            padding: var(--md-sys-spacing-m); /* 16px padding */
             font-family: var(--md-sys-typescale-title-medium-font-family-name);
-            font-weight: var(--md-sys-typescale-title-medium-font-weight);
+            font-weight: var(--md-sys-font-weight-medium);
             cursor: pointer;
-            transition: background-color var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard);
+            transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
             width: 100%; display: flex; justify-content: space-between; align-items: center;
         }
         .section-accordion-header:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); /* Subtle hover */
         }
         .section-accordion-header .material-symbols-outlined {
-            transition: transform var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard);
+            transition: transform var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
             color: var(--md-sys-color-on-surface-variant);
         }
-        .section-accordion-header .material-symbols-outlined.rotate-180 { transform: rotate(180deg); }
-        .section-accordion-content {
-            background-color: var(--md-sys-color-surface);
-            padding: var(--md-sys-spacing-m);
-            border-top: 1px solid var(--md-sys-color-outline-variant);
+        .section-accordion-header .material-symbols-outlined.rotate-180 { /* JS will toggle this class */
+            transform: rotate(180deg);
         }
-
+        .section-accordion-content {
+            background-color: var(--md-sys-color-surface); /* Content area uses surface */
+            padding: var(--md-sys-spacing-m); /* Padding for content */
+            border-top: 1px solid var(--md-sys-color-outline); /* Separator */
+        }
+        
+        /* General table styling for results */
         #results-by-section-accordion table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: collapse; /* Or separate with border-spacing: 0 */
         }
         #results-by-section-accordion th, #results-by-section-accordion td {
-            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m);
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); 
             text-align: left;
-            border-bottom: 1px solid var(--md-sys-color-outline-variant);
+            border-bottom: 1px solid var(--md-sys-color-outline);
             font-family: var(--md-sys-typescale-body-medium-font-family-name);
             font-size: var(--md-sys-typescale-body-medium-font-size);
             color: var(--md-sys-color-on-surface);
         }
         #results-by-section-accordion th {
             font-family: var(--md-sys-typescale-label-large-font-family-name);
-            font-weight: var(--md-sys-typescale-label-large-font-weight);
+            font-weight: var(--md-sys-font-weight-medium);
             color: var(--md-sys-color-on-surface-variant);
-            background-color: var(--md-sys-color-surface-container); /* Lighter header for table */
+            background-color: var(--md-sys-color-surface-variant); 
         }
         #results-by-section-accordion tbody tr:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-primary) 4%, transparent);
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 4%, transparent); /* Subtle hover on rows */
         }
-        #results-by-section-accordion tbody tr:last-child td { border-bottom: none; }
-
+        #results-by-section-accordion tbody tr:last-child td {
+            border-bottom: none; /* Remove border from last row */
+        }
         .view-detail-button { /* Style as M3 Text Button */
             font-family: var(--md-sys-typescale-label-large-font-family-name);
-            font-weight: var(--md-sys-typescale-label-large-font-weight);
             color: var(--md-sys-color-primary);
-            background: none; border: none;
-            padding: var(--md-sys-spacing-xs) var(--md-sys-spacing-s);
+            background: none; border: none; padding: var(--md-sys-spacing-xs) var(--md-sys-spacing-s);
             border-radius: var(--md-sys-shape-corner-full);
             cursor: pointer;
-            transition: background-color var(--m3-sys-motion-duration-short2) ease;
+            text-transform: none; /* Override Tailwind if it uppercases */
         }
         .view-detail-button:hover {
              background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
         }
 
-        /* Result Detail View (Modal like) */
+        /* Result Detail View */
         #result-detail {
              background-color: var(--md-sys-color-surface);
              padding: var(--md-sys-spacing-l);
-             border-radius: var(--md-sys-shape-corner-large); /* M3 Dialog like */
-             box-shadow: var(--md-sys-elevation-level2);
+             border-radius: var(--md-sys-shape-corner-large);
+             box-shadow: var(--md-sys-elevation-level2); /* More prominent shadow for detail view */
              text-align: left;
         }
         #result-detail h3 {
@@ -319,61 +495,78 @@
             font-weight: var(--md-sys-font-weight-medium);
             color: var(--md-sys-color-on-surface-variant);
         }
-        #result-detail #detail-reflection { /* Make reflection area visually distinct */
-            background-color: var(--md-sys-color-surface-container);
-            padding: var(--md-sys-spacing-m);
-            border-radius: var(--md-sys-shape-corner-small);
-            color: var(--md-sys-color-on-surface-variant);
-            white-space: pre-wrap; /* Preserve formatting */
-            border: 1px solid var(--md-sys-color-outline-variant);
+        #back-to-results-list { /* M3 Outlined button */
+            background-color: transparent;
+            color: var(--md-sys-color-primary);
+            border: 1px solid var(--md-sys-color-outline);
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l);
+            border-radius: var(--md-sys-shape-corner-full);
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            margin-bottom: var(--md-sys-spacing-l);
+            display: inline-flex; align-items: center; gap: var(--md-sys-spacing-xs);
         }
-
-        /* Focus outline for accessibility */
-        *:focus-visible {
-            outline: 2px solid var(--md-sys-color-secondary); /* Using secondary for focus outline */
-            outline-offset: 2px;
-            box-shadow: none; /* Remove hover shadow on focus to make outline clear */
+         #back-to-results-list:hover { background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); }
+        
+        /* Responsive Overrides */
+        @media (max-width: 768px) {
+            .main-nav { justify-content: flex-start; padding-left: var(--md-sys-spacing-xs); padding-right: var(--md-sys-spacing-xs); }
+            .nav-tab { white-space: nowrap; margin: 0 var(--md-sys-spacing-xxs); padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); }
+            .dashboard-content-area { padding: var(--md-sys-spacing-m); } 
+            .auth-container { margin: var(--md-sys-spacing-m) auto; padding: var(--md-sys-spacing-l); }
         }
-
-        /* Ensure hidden class is effective */
+        @media (max-width: 480px) {
+            .dashboard-header { padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); }
+            .dashboard-header .logo-small { max-width: 100px; }
+            .welcome-user { display: none; } /* Hide welcome on very small screens or make it wrap */
+            .btn-logout { padding: var(--md-sys-spacing-xxs) var(--md-sys-spacing-s); font-size: var(--md-sys-typescale-label-large-font-size); }
+            .nav-tab { padding: var(--md-sys-spacing-s) var(--md-sys-spacing-s); }
+            #results-content h1 { font-size: var(--md-sys-typescale-title-large-font-size); }
+            #results-by-section-accordion th, #results-by-section-accordion td { padding: var(--md-sys-spacing-s) var(--md-sys-spacing-xs); font-size: var(--md-sys-typescale-body-medium-font-size); }
+        }
+         /* Ensure hidden class is effective */
         .hidden { display: none !important; }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
 <body>
     <div id="auth-section" class="auth-container">
         <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="logo" onerror="this.style.display='none'; this.onerror=null;">
-
+        
         <div id="login-form">
             <h2 style="font-family: var(--md-sys-typescale-headline-small-font-family-name); font-size: var(--md-sys-typescale-headline-small-font-size); color: var(--md-sys-color-on-surface); margin-bottom: var(--md-sys-spacing-s);">Welcome Back</h2>
             <p style="color: var(--md-sys-color-on-surface-variant); font-size: var(--md-sys-typescale-body-large-font-size); margin-bottom: var(--md-sys-spacing-l);">Log in to access your UCAT prep.</p>
-
-            <div class="auth-input-container">
+            
+            <div class="mb-4 relative">
                 <span class="auth-input-icon material-symbols-outlined">mail</span>
                 <input type="email" id="login-email" placeholder="Email Address" class="auth-input" aria-label="Email Address">
             </div>
-
-            <div class="auth-input-container">
+            
+            <div class="mb-6 relative">
                  <span class="auth-input-icon material-symbols-outlined">lock</span>
                 <input type="password" id="login-password" placeholder="Password" class="auth-input" aria-label="Password">
             </div>
-
+            
             <div style="text-align: right; margin-bottom: var(--md-sys-spacing-m);">
                 <a href="#" id="forgot-password-link" class="auth-toggle-link">Forgot Password?</a>
             </div>
-
-            <button id="login-button" class="m3-button m3-button-filled w-full mb-4">
+            
+            <button id="login-button" class="btn btn-primary mb-4">
                 <span id="login-spinner" class="spinner hidden"></span>
                 <span class="material-symbols-outlined">login</span>
                 <span>Login</span>
             </button>
-
+            
             <div class="divider mb-4"><span>OR</span></div>
-
-            <button id="google-login-button" class="m3-button m3-button-outlined w-full mb-6">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google icon" class="w-5 h-5">
+            
+            <button id="google-login-button" class="btn btn-google mb-6">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google icon">
                 <span>Sign in with Google</span>
             </button>
-
+            
             <p style="font-size: var(--md-sys-typescale-body-medium-font-size); color: var(--md-sys-color-on-surface-variant);">Don't have an account? <a href="#" id="show-signup-link" class="auth-toggle-link">Create Account</a></p>
             <p id="login-error" class="error-message text-center mt-3 hidden" aria-live="polite"></p>
         </div>
@@ -381,63 +574,63 @@
         <div id="signup-form" class="hidden">
             <h2 style="font-family: var(--md-sys-typescale-headline-small-font-family-name); font-size: var(--md-sys-typescale-headline-small-font-size); color: var(--md-sys-color-on-surface); margin-bottom: var(--md-sys-spacing-s);">Create Account</h2>
             <p style="color: var(--md-sys-color-on-surface-variant); font-size: var(--md-sys-typescale-body-large-font-size); margin-bottom: var(--md-sys-spacing-l);">Join thousands of students preparing for the UCAT.</p>
-
-            <div class="auth-input-container">
+            
+            <div class="mb-4 relative">
                 <span class="auth-input-icon material-symbols-outlined">person</span>
                 <input type="text" id="signup-name" placeholder="Full Name" class="auth-input" aria-label="Full Name">
             </div>
-
-            <div class="auth-input-container">
+            
+            <div class="mb-4 relative">
                 <span class="auth-input-icon material-symbols-outlined">mail</span>
                 <input type="email" id="signup-email" placeholder="Email Address" class="auth-input" aria-label="Email Address">
             </div>
-
-            <div class="auth-input-container">
+            
+            <div class="mb-6 relative">
                 <span class="auth-input-icon material-symbols-outlined">lock</span>
                 <input type="password" id="signup-password" placeholder="Password (min. 6 characters)" class="auth-input" aria-label="Password">
             </div>
-
-            <button id="signup-button" class="m3-button m3-button-filled w-full mb-4">
+            
+            <button id="signup-button" class="btn btn-primary mb-4">
                 <span id="signup-spinner" class="spinner hidden"></span>
                 <span class="material-symbols-outlined">person_add</span>
                 <span>Create Account</span>
             </button>
-
+            
             <div class="divider mb-4"><span>OR</span></div>
-
-            <button id="google-signup-button" class="m3-button m3-button-outlined w-full mb-6">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google icon" class="w-5 h-5">
+            
+            <button id="google-signup-button" class="btn btn-google mb-6">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google icon">
                 <span>Sign up with Google</span>
             </button>
-
+            
             <p style="font-size: var(--md-sys-typescale-body-medium-font-size); color: var(--md-sys-color-on-surface-variant);">Already have an account? <a href="#" id="show-login-link" class="auth-toggle-link">Login</a></p>
             <p id="signup-error" class="error-message text-center mt-3 hidden" aria-live="polite"></p>
         </div>
     </div>
 
     <div id="dashboard-wrapper" class="dashboard-wrapper hidden">
-        <header class="dashboard-header">
+        <div class="dashboard-header">
             <a href="home.html">
                 <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="logo-small" onerror="this.style.display='none'; this.onerror=null;">
             </a>
             <div class="flex items-center">
-                <span class="welcome-user mr-4">Welcome, <span id="student-display-name" class="font-semibold" style="color: var(--md-sys-color-on-surface);">Student</span></span>
-                <a href="settings.html" aria-label="Account Settings" class="mr-4 settings-icon m3-icon-button">
+                <span class="welcome-user mr-4" style="font-family: var(--md-sys-typescale-body-medium-font-family-name); color: var(--md-sys-color-on-surface-variant);">Welcome, <span id="student-display-name" style="font-weight: var(--md-sys-font-weight-medium); color: var(--md-sys-color-on-surface);">Student</span></span>
+                <a href="settings.html" aria-label="Account Settings" class="mr-4 settings-icon">
                      <span class="material-symbols-outlined">settings</span>
                 </a>
-                <button id="logout-button" class="m3-button m3-button-filled-error" aria-label="Logout">
+                <button id="logout-button" class="btn-logout" aria-label="Logout">
                     <span class="material-symbols-outlined">logout</span>
                     <span>Logout</span>
                 </button>
             </div>
-        </header>
+        </div>
 
         <nav class="main-nav" role="navigation" aria-label="Main Navigation">
             <a href="home.html" id="nav-home" class="nav-tab" role="tab" aria-selected="false">
                 <span class="material-symbols-outlined">home</span>Home
             </a>
             <a href="practice.html" id="nav-practice-main" class="nav-tab" role="tab" aria-selected="false">
-                <span class="material-symbols-outlined">exercise</span>Practice
+                <span class="material-symbols-outlined">model_training</span>Practice
             </a>
              <a href="student_dashboard.html#results" id="nav-results" class="nav-tab" role="tab" aria-selected="true">
                  <span class="material-symbols-outlined">bar_chart</span>Results
@@ -448,31 +641,30 @@
             </div>
         </nav>
 
-        <main id="dashboard-content-area" class="dashboard-content-area">
-            <div id="results-content" class="max-w-5xl mx-auto hidden">
-                <h1>Your Performance History</h1>
-                <p>Track your progress and identify areas for improvement.</p>
-
+        <div id="dashboard-content-area" class="dashboard-content-area">
+            <div id="results-content" class="max-w-5xl mx-auto"> <h1 class="text-left">Your Performance History</h1>
+                <p class="text-left mb-8">Track your progress and identify areas for improvement.</p>
+                
                 <div id="results-loading" class="text-center py-8 hidden">
-                    <div class="spinner mx-auto mb-4" style="color: var(--md-sys-color-primary);"></div>
+                    <div class="spinner mx-auto mb-4"></div>
                     <p style="color: var(--md-sys-color-on-surface-variant);">Loading your performance data...</p>
                 </div>
-
+                
                 <div id="results-error" class="hidden text-center py-8 error-message">
-                    <span class="material-symbols-outlined" style="font-size: 28px;">error</span>
+                    <span class="material-symbols-outlined" style="font-size: 28px; color: var(--md-sys-color-error);">error</span>
                     <p>Unable to load your results. Please try again later or contact support.</p>
-                    <button id="results-retry-button" class="m3-button m3-button-filled ml-auto" style="width:auto; margin-top: var(--md-sys-spacing-m);">Try Again</button>
+                    <button id="results-retry-button" class="btn btn-primary" style="width:auto; margin-top: var(--md-sys-spacing-m);">Try Again</button>
                 </div>
-
-                <div id="results-empty" class="hidden text-center py-8 m3-card m3-card-outlined items-center">
+                
+                <div id="results-empty" class="hidden text-center py-8">
                     <span class="material-symbols-outlined" style="font-size: 48px; color: var(--md-sys-color-primary); margin-bottom: var(--md-sys-spacing-m);">folder_off</span>
                     <h3 style="font-family: var(--md-sys-typescale-title-large-font-family-name); color: var(--md-sys-color-on-surface); margin-bottom: var(--md-sys-spacing-s);">No test results found</h3>
                     <p style="color: var(--md-sys-color-on-surface-variant); margin-bottom: var(--md-sys-spacing-l);">Complete a practice test and submit your reflections to see your performance history here.</p>
-                    <button id="go-to-tests-button" class="m3-button m3-button-filled" style="width:auto;">
-                        <span class="material-symbols-outlined">exercise</span> Go to Practice
+                    <button id="go-to-tests-button" class="btn btn-primary" style="width:auto;">
+                        <span class="material-symbols-outlined">model_training</span> Go to Practice
                     </button>
                 </div>
-
+                
                 <div id="results-summary" class="hidden">
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                         <div class="info-card-results">
@@ -481,46 +673,70 @@
                             <p id="tests-completed" class="metric-value">0</p>
                         </div>
                         <div class="info-card-results">
-                            <span class="material-symbols-outlined" style="color: var(--md-sys-color-success);">military_tech</span>
+                            <span class="material-symbols-outlined">leaderboard</span>
                             <p class="metric-label">Average Score</p>
-                            <p id="average-score" class="metric-value" style="color: var(--md-sys-color-success);">0%</p>
+                            <p id="average-score" class="metric-value">0%</p>
                         </div>
                          <div class="info-card-results">
-                            <span class="material-symbols-outlined" style="color: var(--md-sys-color-tertiary);">emoji_events</span>
+                            <span class="material-symbols-outlined">emoji_events</span>
                             <p class="metric-label">Highest Score</p>
-                            <p id="highest-score" class="metric-value" style="color: var(--md-sys-color-tertiary);">0%</p>
+                            <p id="highest-score" class="metric-value">0%</p>
                         </div>
                         <div class="info-card-results">
-                            <span class="material-symbols-outlined" style="color: var(--md-sys-color-secondary);">timer</span>
+                            <span class="material-symbols-outlined">timer</span>
                             <p class="metric-label">Hours Practiced</p>
-                            <p id="hours-practiced" class="metric-value" style="color: var(--md-sys-color-secondary);">0h 0m</p>
+                            <p id="hours-practiced" class="metric-value">0h 0m</p>
                         </div>
                     </div>
-
-                    <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-3 p-3" style="background-color: var(--md-sys-color-surface-container); border-radius: var(--md-sys-shape-corner-medium);">
+                    <style>
+                        .info-card-results {
+                            background-color: var(--md-sys-color-surface);
+                            border-radius: var(--md-sys-shape-corner-medium);
+                            padding: var(--md-sys-spacing-l);
+                            text-align: center;
+                            box-shadow: var(--md-sys-elevation-level1);
+                        }
+                        .info-card-results .material-symbols-outlined {
+                            font-size: 32px;
+                            color: var(--md-sys-color-primary);
+                            margin-bottom: var(--md-sys-spacing-s);
+                        }
+                        .info-card-results .metric-label {
+                            font-family: var(--md-sys-typescale-body-medium-font-family-name);
+                            color: var(--md-sys-color-on-surface-variant);
+                            margin-bottom: var(--md-sys-spacing-xxs);
+                        }
+                        .info-card-results .metric-value {
+                            font-family: var(--md-sys-typescale-headline-small-font-family-name);
+                            color: var(--md-sys-color-primary);
+                            font-weight: var(--md-sys-font-weight-medium);
+                        }
+                    </style>
+                    
+                    <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-3 p-3" style="background-color: var(--md-sys-color-surface-variant); border-radius: var(--md-sys-shape-corner-medium);">
                         <h3 style="font-family: var(--md-sys-typescale-title-medium-font-family-name); color: var(--md-sys-color-on-surface-variant);">Recent Tests</h3>
-                        <div class="flex gap-2 flex-wrap justify-center md:justify-end">
-                            <select id="results-filter" class="m3-text-field filter-input" style="width: auto; min-width:150px; padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); margin-bottom:0;">
+                        <div class="flex gap-2 flex-wrap justify-center">
+                            <select id="results-filter" class="auth-input" style="width: auto; min-width:150px; padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); margin-bottom:0;">
                                 <option value="all">All Exams</option>
                             </select>
-                            <select id="results-sort" class="m3-text-field filter-input" style="width: auto; min-width:150px; padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); margin-bottom:0;">
+                            <select id="results-sort" class="auth-input" style="width: auto; min-width:150px; padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); margin-bottom:0;">
                                 <option value="date-desc">Newest First</option>
                                 <option value="date-asc">Oldest First</option>
                                 <option value="score-desc">Highest Score</option>
                                 <option value="score-asc">Lowest Score</option>
                             </select>
-                            <button id="refresh-results-button" class="m3-button m3-button-filled" style="width:auto;">
+                            <button id="refresh-results-button" class="btn btn-primary" style="width:auto;">
                                 <span class="material-symbols-outlined">refresh</span> Refresh
                             </button>
                         </div>
                     </div>
-
+                    
                     <div id="results-by-section-accordion" class="space-y-3">
                         </div>
                 </div>
-
-                <div id="result-detail" class="hidden mt-6 m3-card m3-card-elevated">
-                    <button id="back-to-results-list" class="m3-button m3-button-outlined mb-6" style="width:auto;">
+                
+                <div id="result-detail" class="hidden mt-6">
+                    <button id="back-to-results-list" class="btn btn-outlined mb-6" style="width:auto;">
                         <span class="material-symbols-outlined">arrow_back</span> Back to Results List
                     </button>
                     <h3 id="detail-test-name">Test Name</h3>
@@ -529,17 +745,14 @@
                     <p><strong>Time Taken:</strong> <span id="detail-time"></span></p>
                     <p><strong>Focus Rating:</strong> <span id="detail-focus"></span></p>
                     <p><strong>Reflection:</strong></p>
-                    <div id="detail-reflection" style="white-space: pre-wrap;"></div>
-                </div>
+                    <div id="detail-reflection" style="background-color: var(--md-sys-color-surface-variant); padding: var(--md-sys-spacing-m); border-radius: var(--md-sys-shape-corner-small); color: var(--md-sys-color-on-surface-variant);"></div>
+                    </div>
+            </div>
+            
+            <div id="default-dashboard-message" class="hidden"> <p>Welcome to your dashboard. Select a section to get started.</p>
             </div>
 
-            <div id="default-dashboard-message" class="hidden m3-card m3-card-outlined p-8 text-center">
-                <span class="material-symbols-outlined text-5xl mb-4" style="color: var(--md-sys-color-primary);">waving_hand</span>
-                <h2 class="m3-title-large mb-2">Welcome to Your Dashboard</h2>
-                <p class="m3-body-large" style="color: var(--md-sys-color-on-surface-variant);">Select a section from the top navigation to get started or view your results.</p>
-            </div>
-
-        </main>
+        </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -566,9 +779,9 @@
         // DOM Elements
         const authSection = document.getElementById('auth-section');
         const dashboardWrapper = document.getElementById('dashboard-wrapper');
-        const loginFormEl = document.getElementById('login-form');
-        const signupFormEl = document.getElementById('signup-form');
-
+        const loginFormEl = document.getElementById('login-form'); 
+        const signupFormEl = document.getElementById('signup-form'); 
+        
         const loginEmailInput = document.getElementById('login-email');
         const loginPasswordInput = document.getElementById('login-password');
         const loginButton = document.getElementById('login-button');
@@ -599,7 +812,7 @@
         const resultsContent = document.getElementById('results-content');
         const defaultDashboardMessage = document.getElementById('default-dashboard-message');
         const resultsLoading = document.getElementById('results-loading');
-        const resultsErrorEl = document.getElementById('results-error'); // Renamed for clarity
+        const resultsError = document.getElementById('results-error');
         const resultsEmpty = document.getElementById('results-empty');
         const resultsSummary = document.getElementById('results-summary');
         const resultsBySectionAccordion = document.getElementById('results-by-section-accordion');
@@ -611,7 +824,7 @@
         const goToTestsButton = document.getElementById('go-to-tests-button');
 
 
-        let allUserResults = [];
+        let allUserResults = []; 
         let uniqueExamNames = new Set();
 
         // --- UI Helpers ---
@@ -619,196 +832,148 @@
             if (!button || !spinner) return;
             button.disabled = isLoading;
             spinner.classList.toggle('hidden', !isLoading);
-            button.classList.toggle('opacity-70', isLoading); // Consider M3 disabled styles
+            button.classList.toggle('opacity-70', isLoading); 
         }
 
         function showAuthMessage(element, text, isError = true) {
             if(!element) return;
-            element.textContent = text;
+            element.textContent = text; // Keep simple text content
             element.classList.remove('hidden', 'success-message', 'error-message');
             element.classList.add(isError ? 'error-message' : 'success-message');
-
-            const iconSpan = document.createElement('span');
-            iconSpan.classList.add('material-symbols-outlined');
-            iconSpan.style.marginRight = 'var(--md-sys-spacing-xs)';
-            iconSpan.textContent = isError ? 'error' : 'check_circle';
-            element.prepend(iconSpan);
+            
+            // Optionally, add an icon if you want, but for simplicity this is removed
+            // const iconType = isError ? 'error' : 'check_circle';
+            // element.innerHTML = `<span class="material-symbols-outlined" style="margin-right: 8px;">${iconType}</span> ${text}`;
         }
-
+        
         function toggleAuthForms(showSignup) {
-            if (loginFormEl) loginFormEl.classList.toggle('hidden', showSignup);
-            if (signupFormEl) signupFormEl.classList.toggle('hidden', !showSignup);
-            if (loginEmailInput) loginEmailInput.value = '';
-            if (loginPasswordInput) loginPasswordInput.value = '';
-            if (signupNameInput) signupNameInput.value = '';
-            if (signupEmailInput) signupEmailInput.value = '';
-            if (signupPasswordInput) signupPasswordInput.value = '';
-            if (loginErrorP) loginErrorP.classList.add('hidden');
-            if (signupErrorP) signupErrorP.classList.add('hidden');
+            loginFormEl.classList.toggle('hidden', showSignup);
+            signupFormEl.classList.toggle('hidden', !showSignup);
+            loginEmailInput.value = ''; loginPasswordInput.value = '';
+            signupNameInput.value = ''; signupEmailInput.value = ''; signupPasswordInput.value = '';
+            loginErrorP.classList.add('hidden'); signupErrorP.classList.add('hidden');
         }
 
-        if (showSignupLink) showSignupLink.addEventListener('click', (e) => { e.preventDefault(); toggleAuthForms(true); });
-        if (showLoginLink) showLoginLink.addEventListener('click', (e) => { e.preventDefault(); toggleAuthForms(false); });
+        showSignupLink.addEventListener('click', (e) => { e.preventDefault(); toggleAuthForms(true); });
+        showLoginLink.addEventListener('click', (e) => { e.preventDefault(); toggleAuthForms(false); });
 
         // --- Authentication Logic ---
-        if (signupButton) {
-            signupButton.addEventListener('click', () => {
-                const name = signupNameInput.value.trim();
-                const email = signupEmailInput.value.trim();
-                const password = signupPasswordInput.value;
-                if (!name) { showAuthMessage(signupErrorP, 'Please enter your name.'); return; }
-                if (!email || !/\S+@\S+\.\S+/.test(email)) { showAuthMessage(signupErrorP, 'Please enter a valid email.'); return; }
-                if (password.length < 6) { showAuthMessage(signupErrorP, 'Password must be at least 6 characters.'); return; }
+        signupButton.addEventListener('click', () => {
+            const name = signupNameInput.value.trim();
+            const email = signupEmailInput.value.trim();
+            const password = signupPasswordInput.value;
+            if (!name) { showAuthMessage(signupErrorP, 'Please enter your name.'); return; }
+            if (!email || !/\S+@\S+\.\S+/.test(email)) { showAuthMessage(signupErrorP, 'Please enter a valid email.'); return; }
+            if (password.length < 6) { showAuthMessage(signupErrorP, 'Password must be at least 6 characters.'); return; }
 
-                setButtonLoadingState(signupButton, signupSpinner, true);
-                auth.createUserWithEmailAndPassword(email, password)
-                    .then(userCredential => userCredential.user.updateProfile({ displayName: name }))
-                    .then(() => db.collection("users").doc(auth.currentUser.uid).set({ displayName: name, email: email, createdAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }))
-                    .catch(error => showAuthMessage(signupErrorP, error.message))
-                    .finally(() => setButtonLoadingState(signupButton, signupSpinner, false));
-            });
-        }
+            setButtonLoadingState(signupButton, signupSpinner, true);
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(userCredential => userCredential.user.updateProfile({ displayName: name }))
+                .then(() => db.collection("users").doc(auth.currentUser.uid).set({ displayName: name, email: email, createdAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }))
+                .catch(error => showAuthMessage(signupErrorP, error.message))
+                .finally(() => setButtonLoadingState(signupButton, signupSpinner, false));
+        });
 
-        if (loginButton) {
-            loginButton.addEventListener('click', () => {
-                const email = loginEmailInput.value.trim();
-                const password = loginPasswordInput.value;
-                if (!email || !password) { showAuthMessage(loginErrorP, 'Please enter email and password.'); return; }
-                setButtonLoadingState(loginButton, loginSpinner, true);
-                auth.signInWithEmailAndPassword(email, password)
-                    .catch(error => showAuthMessage(loginErrorP, error.message))
-                    .finally(() => setButtonLoadingState(loginButton, loginSpinner, false));
-            });
-        }
-
+        loginButton.addEventListener('click', () => {
+            const email = loginEmailInput.value.trim();
+            const password = loginPasswordInput.value;
+            if (!email || !password) { showAuthMessage(loginErrorP, 'Please enter email and password.'); return; }
+            setButtonLoadingState(loginButton, loginSpinner, true);
+            auth.signInWithEmailAndPassword(email, password)
+                .catch(error => showAuthMessage(loginErrorP, error.message))
+                .finally(() => setButtonLoadingState(loginButton, loginSpinner, false));
+        });
 
         function signInWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
-            // Determine which spinner to use based on which form is visible
-            const currentSpinner = loginFormEl && !loginFormEl.classList.contains('hidden') ? loginSpinner : signupSpinner;
-            const currentErrorP = loginFormEl && !loginFormEl.classList.contains('hidden') ? loginErrorP : signupErrorP;
-            const buttonToLoad = loginFormEl && !loginFormEl.classList.contains('hidden') ? googleLoginButton : googleSignupButton;
-
-
-            if (buttonToLoad && currentSpinner) setButtonLoadingState(buttonToLoad, currentSpinner, true);
-
+            setButtonLoadingState(googleLoginButton, loginSpinner, true); 
             auth.signInWithPopup(provider)
                 .then(result => {
                     const user = result.user;
                     return db.collection("users").doc(user.uid).set({ displayName: user.displayName, email: user.email, createdAt: firebase.firestore.FieldValue.serverTimestamp(), provider: 'google.com' }, { merge: true });
                 })
-                .catch(error => showAuthMessage(currentErrorP, error.message))
-                .finally(() => {
-                    if (buttonToLoad && currentSpinner) setButtonLoadingState(buttonToLoad, currentSpinner, false);
-                });
+                .catch(error => showAuthMessage(loginErrorP, error.message))
+                .finally(() => setButtonLoadingState(googleLoginButton, loginSpinner, false));
         }
-        if (googleLoginButton) googleLoginButton.addEventListener('click', signInWithGoogle);
-        if (googleSignupButton) googleSignupButton.addEventListener('click', signInWithGoogle);
+        googleLoginButton.addEventListener('click', signInWithGoogle);
+        googleSignupButton.addEventListener('click', signInWithGoogle);
 
+        forgotPasswordLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const email = loginEmailInput.value.trim();
+            if (!email) { showAuthMessage(loginErrorP, 'Please enter your email to reset password.'); return; }
+            auth.sendPasswordResetEmail(email)
+                .then(() => showAuthMessage(loginErrorP, 'Password reset email sent!', false))
+                .catch(error => showAuthMessage(loginErrorP, error.message));
+        });
 
-        if (forgotPasswordLink) {
-            forgotPasswordLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                const email = loginEmailInput.value.trim();
-                if (!email) { showAuthMessage(loginErrorP, 'Please enter your email to reset password.'); return; }
-                auth.sendPasswordResetEmail(email)
-                    .then(() => showAuthMessage(loginErrorP, 'Password reset email sent!', false))
-                    .catch(error => showAuthMessage(loginErrorP, error.message));
-            });
-        }
-
-        if (logoutButton) {
-            logoutButton.addEventListener('click', () => {
-                if (confirm("Are you sure you want to log out?")) {
-                    auth.signOut(); // onAuthStateChanged will handle redirect
-                }
-            });
-        }
-
+        logoutButton.addEventListener('click', () => {
+            if (confirm("Are you sure you want to log out?")) {
+                auth.signOut();
+            }
+        });
+        
         auth.onAuthStateChanged(user => {
-            const isCurrentlyOnDashboardPage = window.location.pathname.includes('student_dashboard.html');
-            
+            const pageJustLoaded = !dashboardWrapper.classList.contains('hidden') && authSection.classList.contains('hidden');
             if (user) {
-                if(studentDisplayNameHeader) studentDisplayNameHeader.textContent = user.displayName || user.email;
-                if(authSection) authSection.classList.add('hidden');
-                if(dashboardWrapper) dashboardWrapper.classList.remove('hidden');
-
-                if (isCurrentlyOnDashboardPage) {
+                studentDisplayNameHeader.textContent = user.displayName || user.email;
+                authSection.classList.add('hidden');
+                dashboardWrapper.classList.remove('hidden');
+                
+                if (window.location.pathname.includes('student_dashboard.html')) {
                     const hash = window.location.hash;
-                     if (hash === '#results') {
+                     if (hash === '#results' || (!hash && pageJustLoaded)) { 
                         showContentSection('results');
                         setActiveTab(navResults);
                         loadUserResults(user.uid);
-                    } else if (hash) { // Handle other potential hashes if student_dashboard can show more than just results
-                        const targetSectionId = hash.substring(1) + "-content"; // e.g. #practice -> practice-content
-                        const targetNavId = "nav-" + hash.substring(1).split('-')[0]; // e.g. #practice-main -> nav-practice
-                        const targetSectionEl = document.getElementById(targetSectionId);
-                        const targetNavEl = document.getElementById(targetNavId);
-
-                        if (targetSectionEl) {
-                             showContentSection(hash.substring(1)); // Pass without -content
-                             if(targetNavEl) setActiveTab(targetNavEl); else setActiveTab(null); // No specific nav or default
-                        } else {
-                             // Fallback to results if specific hash content not found on this page
-                             showContentSection('results');
-                             setActiveTab(navResults);
-                             loadUserResults(user.uid);
-                        }
-                    } else {
-                         // Default to results if no hash on student_dashboard.html
+                    } else if (hash) { 
+                        const targetSection = hash.substring(1);
+                        const targetNav = document.getElementById(`nav-${targetSection.split('-')[0]}`); 
+                        showContentSection(targetSection);
+                        if (targetNav) setActiveTab(targetNav);
+                        else setActiveTab(navResults); 
+                    } else { 
                          showContentSection('results');
                          setActiveTab(navResults);
                          loadUserResults(user.uid);
                     }
                 }
-                // If on other pages (like home.html, practice.html), their own JS will handle active tab and content.
             } else {
-                if(authSection) authSection.classList.remove('hidden');
-                if(dashboardWrapper) dashboardWrapper.classList.add('hidden');
-                if (isCurrentlyOnDashboardPage) {
-                     // If on dashboard and logs out, clear results, show auth
-                    if(resultsContent) resultsContent.classList.add('hidden');
-                    if(defaultDashboardMessage) defaultDashboardMessage.classList.add('hidden');
-                }
+                authSection.classList.remove('hidden');
+                dashboardWrapper.classList.add('hidden');
             }
         });
 
         // --- Content Display ---
-        function showContentSection(contentIdSuffix) {
-            [resultsContent, defaultDashboardMessage, resultDetailView].forEach(el => {
+        function showContentSection(contentIdSuffix) { // contentIdSuffix e.g., "results"
+            [resultsContent, defaultDashboardMessage].forEach(el => {
                 if(el) el.classList.add('hidden');
             });
-            const sectionToShow = document.getElementById(contentIdSuffix + '-content') || document.getElementById(contentIdSuffix);
+            const sectionToShow = document.getElementById(contentIdSuffix + '-content') || document.getElementById(contentIdSuffix); // try with and without -content
             if (sectionToShow) {
                 sectionToShow.classList.remove('hidden');
             } else {
-                if(defaultDashboardMessage) defaultDashboardMessage.classList.remove('hidden');
+                if(defaultDashboardMessage) defaultDashboardMessage.classList.remove('hidden'); 
             }
         }
-
+        
         function setActiveTab(selectedTabEl) {
-            allNavTabs.forEach(tab => {
-                tab.classList.remove('active');
-                tab.setAttribute('aria-selected', 'false');
-            });
+            allNavTabs.forEach(tab => tab.classList.remove('active'));
             if (selectedTabEl && !selectedTabEl.classList.contains('nav-tab-disabled')) {
                 selectedTabEl.classList.add('active');
-                selectedTabEl.setAttribute('aria-selected', 'true');
             }
         }
 
-        if(navHome) navHome.addEventListener('click', (e) => { e.preventDefault(); window.location.href = 'home.html'; });
-        if(navPracticeMain) navPracticeMain.addEventListener('click', (e) => { e.preventDefault(); window.location.href = 'practice.html'; });
-        if(navResults) {
-            navResults.addEventListener('click', (e) => {
-                e.preventDefault();
-                showContentSection('results');
-                setActiveTab(navResults);
-                if (auth.currentUser) loadUserResults(auth.currentUser.uid);
-                window.history.pushState({}, "", "#results"); // Update hash for direct linking
-            });
-        }
-        // if(navSkills) navSkills.addEventListener('click', (e) => { /* Future functionality */ });
+        navHome.addEventListener('click', (e) => { e.preventDefault(); window.location.href = 'home.html'; });
+        navPracticeMain.addEventListener('click', (e) => { e.preventDefault(); window.location.href = 'practice.html'; });
+        navResults.addEventListener('click', (e) => {
+            e.preventDefault();
+            showContentSection('results'); 
+            setActiveTab(navResults);
+            if (auth.currentUser) loadUserResults(auth.currentUser.uid);
+            window.history.pushState({}, "", "#results");
+        });
+        navSkills.addEventListener('click', (e) => { e.preventDefault(); /* show coming soon or navigate if implemented */ });
 
 
         // --- Results Logic ---
@@ -817,243 +982,238 @@
             if (nameLower.includes('qr') || nameLower.includes('quantitative')) return 'qr';
             if (nameLower.includes('dm') || nameLower.includes('decision') || nameLower.includes('syllogism')) return 'dm';
             if (nameLower.includes('vr') || nameLower.includes('verbal')) return 'vr';
-            // Add other sections if needed
             return 'other';
         }
-
+        
         async function loadUserResults(userId) {
-            if (!db) { console.error("Firestore not initialized."); resultsLoading.classList.add('hidden'); resultsErrorEl.classList.remove('hidden'); return; } //
-            if (!userId) { console.error("No user ID provided for loading results."); resultsLoading.classList.add('hidden'); resultsErrorEl.classList.remove('hidden'); return; } //
+            if (!db) { console.error("Firestore not initialized."); resultsLoading.classList.add('hidden'); resultsError.classList.remove('hidden'); return; }
+            if (!userId) { console.error("No user ID provided for loading results."); resultsLoading.classList.add('hidden'); resultsError.classList.remove('hidden'); return; }
 
-            resultsLoading.classList.remove('hidden'); //
-            resultsErrorEl.classList.add('hidden'); //
-            resultsSummary.classList.add('hidden'); //
-            resultsBySectionAccordion.innerHTML = ''; //
-            resultsEmpty.classList.add('hidden'); //
-
+            resultsLoading.classList.remove('hidden');
+            resultsError.classList.add('hidden');
+            resultsSummary.classList.add('hidden'); 
+            resultsBySectionAccordion.innerHTML = ''; 
+            resultsEmpty.classList.add('hidden');
+            
             try {
                 const querySnapshot = await db.collection("performanceSubmissions")
-                                          .where("userId", "==", userId) //
-                                          .orderBy("submissionTimestamp", "desc") //
+                                          .where("userId", "==", userId)
+                                          .orderBy("submissionTimestamp", "desc")
                                           .get();
-                allUserResults = querySnapshot.docs.map(doc => ({ //
-                    id: doc.id, //
-                    ...doc.data(), //
-                    date: doc.data().submissionTimestamp?.toDate ? doc.data().submissionTimestamp.toDate() : new Date(doc.data().submissionTimestamp || 0) //
+                allUserResults = querySnapshot.docs.map(doc => ({
+                    id: doc.id, 
+                    ...doc.data(), 
+                    date: doc.data().submissionTimestamp?.toDate ? doc.data().submissionTimestamp.toDate() : new Date(0) 
                 }));
-
-                if (allUserResults.length === 0) { //
-                    resultsEmpty.classList.remove('hidden'); //
+                
+                if (allUserResults.length === 0) {
+                    resultsEmpty.classList.remove('hidden');
                 } else {
-                    populateExamFilterOptions(); //
-                    applyResultsFiltersAndSort(); //
-                    resultsSummary.classList.remove('hidden'); //
-                    updateOverallResultsSummary(allUserResults); //
+                    populateExamFilterOptions();
+                    applyResultsFiltersAndSort(); 
+                    resultsSummary.classList.remove('hidden'); 
+                    updateOverallResultsSummary(allUserResults); 
                 }
             } catch (error) {
                 console.error("Error loading results: ", error);
-                resultsErrorEl.classList.remove('hidden'); //
+                resultsError.classList.remove('hidden');
             } finally {
-                resultsLoading.classList.add('hidden'); //
+                resultsLoading.classList.add('hidden');
             }
         }
 
         function populateExamFilterOptions() {
-            uniqueExamNames.clear(); //
-            allUserResults.forEach(result => { //
-                if (result.examName) uniqueExamNames.add(result.examName); //
+            uniqueExamNames.clear();
+            allUserResults.forEach(result => {
+                if (result.examName) uniqueExamNames.add(result.examName);
             });
-            resultsFilterSelect.innerHTML = '<option value="all">All Exams</option>'; //
-            [...uniqueExamNames].sort().forEach(name => { //
-                const option = document.createElement('option'); //
-                option.value = name; //
-                option.textContent = name; //
-                resultsFilterSelect.appendChild(option); //
+            resultsFilterSelect.innerHTML = '<option value="all">All Exams</option>';
+            [...uniqueExamNames].sort().forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                resultsFilterSelect.appendChild(option);
             });
         }
-
+        
         function applyResultsFiltersAndSort() {
-            let filtered = [...allUserResults]; //
-            const filterValue = resultsFilterSelect.value; //
-            if (filterValue !== 'all') { //
-                filtered = filtered.filter(r => r.examName === filterValue); //
+            let filtered = [...allUserResults];
+            const filterValue = resultsFilterSelect.value;
+            if (filterValue !== 'all') {
+                filtered = filtered.filter(r => r.examName === filterValue);
             }
 
-            const sortValue = resultsSortSelect.value; //
-            filtered.sort((a, b) => { //
-                const dateA = a.date; //
-                const dateB = b.date; //
-                const scoreA = (parseFloat(a.score) / parseFloat(a.totalPossibleScore || a.totalQuestions || 1)) * 100 || 0; //
-                const scoreB = (parseFloat(b.score) / parseFloat(b.totalPossibleScore || b.totalQuestions || 1)) * 100 || 0; //
+            const sortValue = resultsSortSelect.value;
+            filtered.sort((a, b) => {
+                const dateA = a.date;
+                const dateB = b.date;
+                const scoreA = (parseFloat(a.score) / parseFloat(a.totalPossibleScore || a.totalQuestions || 1)) * 100 || 0;
+                const scoreB = (parseFloat(b.score) / parseFloat(b.totalPossibleScore || b.totalQuestions || 1)) * 100 || 0;
 
-                switch(sortValue) { //
-                    case 'date-asc': return dateA - dateB; //
-                    case 'score-desc': return scoreB - scoreA; //
-                    case 'score-asc': return scoreA - scoreB; //
-                    case 'date-desc': default: return dateB - dateA; //
+                switch(sortValue) {
+                    case 'date-asc': return dateA - dateB;
+                    case 'score-desc': return scoreB - scoreA;
+                    case 'score-asc': return scoreA - scoreB;
+                    case 'date-desc': default: return dateB - dateA;
                 }
             });
-            renderResults(filtered); //
+            renderResults(filtered);
         }
 
         function renderResults(resultsToDisplay) {
-            resultsBySectionAccordion.innerHTML = ''; //
-            const categorized = { qr: [], dm: [], vr: [], other: [] }; //
-            resultsToDisplay.forEach(r => { //
-                const section = getSectionFromExamName(r.examName); //
-                categorized[section].push(r); //
+            resultsBySectionAccordion.innerHTML = ''; 
+            const categorized = { qr: [], dm: [], vr: [], other: [] };
+            resultsToDisplay.forEach(r => {
+                const section = getSectionFromExamName(r.examName);
+                categorized[section].push(r);
             });
 
-            const sectionTitles = { qr: 'Quantitative Reasoning', dm: 'Decision Making', vr: 'Verbal Reasoning', other: 'Other Tests' }; //
-            Object.keys(categorized).forEach(sectionKey => { //
-                if (categorized[sectionKey].length > 0) { //
-                    const accordionItem = createAccordionItem(sectionTitles[sectionKey], sectionKey, categorized[sectionKey]); //
-                    resultsBySectionAccordion.appendChild(accordionItem); //
+            const sectionTitles = { qr: 'Quantitative Reasoning', dm: 'Decision Making', vr: 'Verbal Reasoning', other: 'Other Tests' };
+            Object.keys(categorized).forEach(sectionKey => {
+                if (categorized[sectionKey].length > 0) {
+                    const accordionItem = createAccordionItem(sectionTitles[sectionKey], sectionKey, categorized[sectionKey]);
+                    resultsBySectionAccordion.appendChild(accordionItem);
                 }
             });
-            if(resultsBySectionAccordion.innerHTML === ''){ //
-                 resultsEmpty.classList.remove('hidden'); //
-                 resultsSummary.classList.add('hidden'); //
+            if(resultsBySectionAccordion.innerHTML === ''){ 
+                 resultsEmpty.classList.remove('hidden');
+                 resultsSummary.classList.add('hidden'); 
             } else {
-                 resultsEmpty.classList.add('hidden'); //
+                 resultsEmpty.classList.add('hidden');
             }
         }
 
         function createAccordionItem(title, sectionKey, items) {
-            const itemDiv = document.createElement('div'); //
-            itemDiv.className = 'section-accordion-item'; //
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'section-accordion-item';
 
-            const headerButton = document.createElement('button'); //
-            headerButton.className = 'section-accordion-header'; //
+            const headerButton = document.createElement('button');
+            headerButton.className = 'section-accordion-header';
             headerButton.innerHTML = `
                 <span>${title}</span>
                 <span class="material-symbols-outlined">expand_more</span>
-            `; //
+            `;
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'section-accordion-content hidden'; 
+            contentDiv.id = `content-${sectionKey}`;
 
-            const contentDiv = document.createElement('div'); //
-            contentDiv.className = 'section-accordion-content hidden'; //
-            contentDiv.id = `content-${sectionKey}`; //
-
-            const table = document.createElement('table'); //
+            const table = document.createElement('table');
             table.innerHTML = `
                 <thead><tr>
                     <th>Date</th><th>Test</th><th>Score</th><th>Time Taken</th><th>Focus</th><th>Actions</th>
                 </tr></thead>
                 <tbody></tbody>
-            `; //
-            const tbody = table.querySelector('tbody'); //
-            items.forEach(item => { //
-                const row = tbody.insertRow(); //
-                const scoreDisplay = `${item.score || 0}/${item.totalPossibleScore || item.totalQuestions || '-'}`; //
+            `;
+            const tbody = table.querySelector('tbody');
+            items.forEach(item => {
+                const row = tbody.insertRow();
+                const scoreDisplay = `${item.score || 0}/${item.totalPossibleScore || item.totalQuestions || '-'}`;
                 row.innerHTML = `
                     <td>${item.date.toLocaleDateString()}</td>
                     <td>${item.examName}</td>
                     <td>${scoreDisplay}</td>
                     <td>${item.timeTaken || '-'}</td>
                     <td>${item.focusRating || '-'}/5</td>
-                    <td><button class="view-detail-button m3-button m3-button-text" data-result-id="${item.id}">
-                        <span class="material-symbols-outlined">visibility</span>View</button></td>
-                `; //
-                row.querySelector('.view-detail-button').addEventListener('click', (e) => { //
-                     const result = allUserResults.find(r => r.id === e.target.closest('button').dataset.resultId); //
-                     if(result) showResultDetail(result); //
+                    <td><button class="view-detail-button" data-result-id="${item.id}">View</button></td>
+                `;
+                row.querySelector('.view-detail-button').addEventListener('click', (e) => {
+                     const result = allUserResults.find(r => r.id === e.target.dataset.resultId);
+                     if(result) showResultDetail(result);
                 });
             });
-            contentDiv.appendChild(table); //
-
-            headerButton.addEventListener('click', () => { //
-                contentDiv.classList.toggle('hidden'); //
-                headerButton.querySelector('.material-symbols-outlined').classList.toggle('rotate-180'); //
+            contentDiv.appendChild(table);
+            
+            headerButton.addEventListener('click', () => {
+                contentDiv.classList.toggle('hidden');
+                headerButton.querySelector('.material-symbols-outlined').classList.toggle('rotate-180');
             });
 
-            itemDiv.appendChild(headerButton); //
-            itemDiv.appendChild(contentDiv); //
-            return itemDiv; //
+            itemDiv.appendChild(headerButton);
+            itemDiv.appendChild(contentDiv);
+            return itemDiv;
         }
-
+        
         function showResultDetail(result) {
-            if(resultsContent) resultsContent.classList.add('hidden'); //
-            if(resultDetailView) resultDetailView.classList.remove('hidden'); //
-
-            if(document.getElementById('detail-test-name')) document.getElementById('detail-test-name').textContent = result.examName || 'N/A'; //
-            if(document.getElementById('detail-test-date')) document.getElementById('detail-test-date').textContent = result.date ? result.date.toLocaleString() : 'N/A'; //
-            if(document.getElementById('detail-score')) document.getElementById('detail-score').textContent = `${result.score || 0}/${result.totalPossibleScore || result.totalQuestions || '-'}`; //
-            if(document.getElementById('detail-time')) document.getElementById('detail-time').textContent = result.timeTaken || 'N/A'; //
-            if(document.getElementById('detail-focus')) document.getElementById('detail-focus').textContent = `${result.focusRating || '-'}/5`; //
-            if(document.getElementById('detail-reflection')) document.getElementById('detail-reflection').textContent = result.reflection || 'No reflection provided.'; //
+            resultsContent.classList.add('hidden'); 
+            resultDetailView.classList.remove('hidden'); 
+            
+            document.getElementById('detail-test-name').textContent = result.examName || 'N/A';
+            document.getElementById('detail-test-date').textContent = result.date ? result.date.toLocaleString() : 'N/A';
+            document.getElementById('detail-score').textContent = `${result.score || 0}/${result.totalPossibleScore || result.totalQuestions || '-'}`;
+            document.getElementById('detail-time').textContent = result.timeTaken || 'N/A';
+            document.getElementById('detail-focus').textContent = `${result.focusRating || '-'}/5`;
+            document.getElementById('detail-reflection').textContent = result.reflection || 'No reflection provided.';
         }
 
-        function updateOverallResultsSummary(allResults) {
-            const testsCompletedEl = document.getElementById('tests-completed'); //
-            const averageScoreEl = document.getElementById('average-score'); //
-            const highestScoreEl = document.getElementById('highest-score'); //
-            const hoursPracticedEl = document.getElementById('hours-practiced'); //
+        function updateOverallResultsSummary(allResults) { 
+            const testsCompletedEl = document.getElementById('tests-completed');
+            const averageScoreEl = document.getElementById('average-score');
+            const highestScoreEl = document.getElementById('highest-score');
+            const hoursPracticedEl = document.getElementById('hours-practiced');
 
-            if (!testsCompletedEl || !averageScoreEl || !highestScoreEl || !hoursPracticedEl) return; //
+            if (!testsCompletedEl || !averageScoreEl || !highestScoreEl || !hoursPracticedEl) return;
 
-            const numTests = allResults.length; //
-            let totalPercentageSum = 0; //
-            let maxPercentage = 0; //
-            let totalMinutes = 0; //
+            const numTests = allResults.length;
+            let totalPercentageSum = 0;
+            let maxPercentage = 0;
+            let totalMinutes = 0;
 
-            allResults.forEach(result => { //
-                const score = parseFloat(result.score); //
-                const totalPossible = parseFloat(result.totalPossibleScore || result.totalQuestions); //
-                if (!isNaN(score) && !isNaN(totalPossible) && totalPossible > 0) { //
-                    const percentage = (score / totalPossible) * 100; //
-                    totalPercentageSum += percentage; //
-                    maxPercentage = Math.max(maxPercentage, percentage); //
+            allResults.forEach(result => {
+                const score = parseFloat(result.score);
+                const totalPossible = parseFloat(result.totalPossibleScore || result.totalQuestions);
+                if (!isNaN(score) && !isNaN(totalPossible) && totalPossible > 0) {
+                    const percentage = (score / totalPossible) * 100;
+                    totalPercentageSum += percentage;
+                    maxPercentage = Math.max(maxPercentage, percentage);
                 }
-                const timeTaken = result.timeTaken; //
-                if (timeTaken && typeof timeTaken === 'string') { //
-                    let minutesInThisEntry = 0;
-                    const hourMatch = timeTaken.match(/(\d+)\s*h/); //
-                    const minMatch = timeTaken.match(/(\d+)\s*min/); //
-                    const secMatch = timeTaken.match(/(\d+)\s*sec/); /* Extracted from logic in QR Test 2.html */
-                    if (hourMatch) minutesInThisEntry += parseInt(hourMatch[1]) * 60;
-                    if (minMatch) minutesInThisEntry += parseInt(minMatch[1]); //
-                    if (secMatch) minutesInThisEntry += parseInt(secMatch[1]) / 60; /* Extracted from logic in QR Test 2.html */
-                    totalMinutes += minutesInThisEntry;
+                const timeTaken = result.timeTaken; 
+                if (timeTaken) {
+                    const minMatch = timeTaken.match(/(\d+)\s*min/);
+                    const secMatch = timeTaken.match(/(\d+)\s*sec/);
+                    if (minMatch) totalMinutes += parseInt(minMatch[1]);
+                    if (secMatch) totalMinutes += parseInt(secMatch[1]) / 60; 
                 }
             });
 
-            testsCompletedEl.textContent = numTests; //
-            averageScoreEl.textContent = numTests > 0 ? (totalPercentageSum / numTests).toFixed(1) + '%' : '0%'; //
-            highestScoreEl.textContent = maxPercentage.toFixed(1) + '%'; //
-            const hours = Math.floor(totalMinutes / 60);
-            const minutes = Math.round(totalMinutes % 60); // Round minutes for display
-            hoursPracticedEl.textContent = `${hours}h ${minutes}m`; //
+            testsCompletedEl.textContent = numTests;
+            averageScoreEl.textContent = numTests > 0 ? (totalPercentageSum / numTests).toFixed(1) + '%' : '0%';
+            highestScoreEl.textContent = maxPercentage.toFixed(1) + '%';
+            hoursPracticedEl.textContent = (totalMinutes / 60).toFixed(1) + 'h';
         }
+        
+        backToResultsListButton.addEventListener('click', () => {
+            resultDetailView.classList.add('hidden');
+            resultsContent.classList.remove('hidden');
+            if (auth.currentUser) loadUserResults(auth.currentUser.uid); 
+        });
 
-        if(backToResultsListButton) {
-            backToResultsListButton.addEventListener('click', () => {
-                if(resultDetailView) resultDetailView.classList.add('hidden'); //
-                if(resultsContent) resultsContent.classList.remove('hidden'); //
-                // No need to reload all results if filters haven't changed,
-                // but if coming from a detail view, the main list might need re-rendering or ensuring it's up-to-date.
-                // For simplicity, we can just call applyResultsFiltersAndSort to ensure the view is correct.
-                applyResultsFiltersAndSort();
-            });
-        }
-
-
-        if(resultsFilterSelect) resultsFilterSelect.addEventListener('change', applyResultsFiltersAndSort); //
-        if(resultsSortSelect) resultsSortSelect.addEventListener('change', applyResultsFiltersAndSort); //
-        if(refreshResultsButton) refreshResultsButton.addEventListener('click', () => { if (auth.currentUser) loadUserResults(auth.currentUser.uid); }); //
-        if(goToTestsButton) goToTestsButton.addEventListener('click', () => window.location.href = 'practice.html'); //
-        if(document.getElementById('results-retry-button')) {
-            document.getElementById('results-retry-button').addEventListener('click', () => {
-                if (auth.currentUser) loadUserResults(auth.currentUser.uid);
-            });
-        }
+        resultsFilterSelect.addEventListener('change', applyResultsFiltersAndSort);
+        resultsSortSelect.addEventListener('change', applyResultsFiltersAndSort);
+        if(refreshResultsButton) refreshResultsButton.addEventListener('click', () => { if (auth.currentUser) loadUserResults(auth.currentUser.uid); });
+        if(goToTestsButton) goToTestsButton.addEventListener('click', () => window.location.href = 'practice.html');
 
 
         // --- Initial DOMContentLoaded Setup ---
         document.addEventListener('DOMContentLoaded', () => {
-            // The onAuthStateChanged listener will handle the initial content display and active tab
-            // based on the URL hash or default to results.
-            // No specific tab needs to be forced active here solely on DOMContentLoaded for this page,
-            // as auth state and hash will determine it.
+            if (window.location.pathname.includes('student_dashboard.html')) {
+                const hash = window.location.hash;
+                 if (hash === '#results') {
+                    showContentSection('results');
+                    setActiveTab(navResults);
+                    if (auth.currentUser) loadUserResults(auth.currentUser.uid);
+                } else {
+                     if(auth.currentUser && resultsContent.classList.contains('hidden') && resultDetailView.classList.contains('hidden')) {
+                        showContentSection('results');
+                        setActiveTab(navResults);
+                        loadUserResults(auth.currentUser.uid);
+                    } else if (!auth.currentUser) {
+                        // Auth section should be visible via onAuthStateChanged
+                    } else if (resultsContent.classList.contains('hidden') && resultDetailView.classList.contains('hidden')) {
+                        if(defaultDashboardMessage) defaultDashboardMessage.classList.remove('hidden');
+                    }
+                }
+            }
         });
     </script>
 </body>

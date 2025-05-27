@@ -6,223 +6,452 @@
     <title>Home - UCAT Platform</title>
     <link rel="icon" href="https://ik.imagekit.io/mwp/2.svg?updatedAt=1745982956185" type="image/svg+xml">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="m3_styles.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-
     <style>
-        /* Page-specific overrides if necessary, but m3_styles.css should handle most */
-        body {
-            font-family: var(--md-sys-typescale-font-family-name); /* Ensures Roboto Flex is used */
-            background-color: var(--md-sys-color-background);
-            color: var(--md-sys-color-on-background);
+        :root {
+            /* M3 Color Palette - Light Theme */
+            --md-sys-color-primary: #1967D2;
+            --md-sys-color-on-primary: #FFFFFF;
+            --md-sys-color-primary-container: #D1E3FF;
+            --md-sys-color-on-primary-container: #001E3A;
+            --md-sys-color-secondary: #5E89C2; /* Example desaturated blue */
+            --md-sys-color-on-secondary: #FFFFFF;
+            --md-sys-color-secondary-container: #D8E2FF;
+            --md-sys-color-on-secondary-container: #001A43;
+            --md-sys-color-tertiary: #7D5260; /* Example, M3 Tertiary */
+            --md-sys-color-on-tertiary: #FFFFFF;
+            --md-sys-color-tertiary-container: #FFD8E4;
+            --md-sys-color-on-tertiary-container: #31111D;
+            --md-sys-color-accent-cta: #FF6D00; 
+            --md-sys-color-on-accent-cta: #FFFFFF;
+            --md-sys-color-background: #F8F9FA; 
+            --md-sys-color-on-background: #1F1F1F;
+            --md-sys-color-surface: #FFFFFF; 
+            --md-sys-color-on-surface: #1F1F1F;
+            --md-sys-color-surface-variant: #E1E3E5; 
+            --md-sys-color-on-surface-variant: #444746;
+            --md-sys-color-outline: #747775;
+            --md-sys-color-error: #D93025;
+            --md-sys-color-on-error: #FFFFFF;
+            --md-sys-color-success: #1E8E3E; /* From design doc */
+            --md-sys-color-on-success: #FFFFFF;
+            --md-sys-color-warning: #F9AB00; /* From design doc */
+            --md-sys-color-on-warning: #000000;
+
+            /* M3 Typography */
+            --md-sys-font-family-name: 'Roboto', sans-serif;
+            --md-sys-typescale-display-large-font-size: 57px;
+            --md-sys-typescale-display-large-line-height: 64px;
+            --md-sys-typescale-display-medium-font-size: 45px;
+            --md-sys-typescale-display-medium-line-height: 52px;
+            --md-sys-typescale-headline-large-font-size: 32px;
+            --md-sys-typescale-headline-large-line-height: 40px;
+            --md-sys-typescale-headline-medium-font-size: 28px;
+            --md-sys-typescale-headline-medium-line-height: 36px;
+            --md-sys-typescale-headline-small-font-size: 24px;
+            --md-sys-typescale-headline-small-line-height: 32px;
+            --md-sys-typescale-title-large-font-size: 22px;
+            --md-sys-typescale-title-large-line-height: 28px;
+            --md-sys-typescale-title-medium-font-size: 16px;
+            --md-sys-typescale-title-medium-line-height: 24px;
+            --md-sys-typescale-title-small-font-size: 14px;
+            --md-sys-typescale-title-small-line-height: 20px;
+            --md-sys-typescale-body-large-font-size: 16px;
+            --md-sys-typescale-body-large-line-height: 24px;
+            --md-sys-typescale-body-medium-font-size: 14px;
+            --md-sys-typescale-body-medium-line-height: 20px;
+            --md-sys-typescale-label-large-font-size: 14px;
+            --md-sys-typescale-label-large-line-height: 20px;
+            --md-sys-font-weight-regular: 400;
+            --md-sys-font-weight-medium: 500;
+            --md-sys-font-weight-bold: 700;
+
+            /* M3 Spacing */
+            --md-sys-spacing-unit: 0.5rem; /* 8px */
+            --md-sys-spacing-xs: 0.5rem;  /* 8px */
+            --md-sys-spacing-s: 0.75rem;   /* 12px */
+            --md-sys-spacing-m: 1rem;     /* 16px */
+            --md-sys-spacing-l: 1.5rem;   /* 24px */
+            --md-sys-spacing-xl: 2rem;    /* 32px */
+            --md-sys-spacing-xxl: 3rem;   /* 48px */
+            
+            /* M3 Shape */
+            --md-sys-shape-corner-extra-small: 0.25rem; /* 4dp */
+            --md-sys-shape-corner-small: 0.5rem; /* 8dp */
+            --md-sys-shape-corner-medium: 0.75rem; /* 12dp M3 Card default */
+            --md-sys-shape-corner-large: 1rem;    /* 16dp */
+            --md-sys-shape-corner-full: 9999px;
+            
+            /* M3 Elevation */
+            --md-sys-elevation-level0: none;
+            --md-sys-elevation-level1: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0,0,0,0.15); /* M3 Level 1 */
+            --md-sys-elevation-level2: 0px 1px 2px rgba(0,0,0,0.3), 0px 2px 6px 2px rgba(0,0,0,0.15); /* M3 Level 2 */
+
+            /* Transitions */
+            --md-sys-motion-duration-short: 150ms;
+            --md-sys-motion-easing-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
         }
 
-        .dashboard-header .logo-small { max-width: 132px; }
+        body {
+            font-family: var(--md-sys-font-family-name);
+            background-color: var(--md-sys-color-background);
+            color: var(--md-sys-color-on-background);
+            line-height: var(--md-sys-typescale-body-large-line-height);
+            display: flex;
+            flex-direction: column; 
+            min-height: 100vh;
+            margin:0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
+        .dashboard-wrapper {
+            background-color: var(--md-sys-color-background); 
+            width: 100%;
+            flex-grow: 1; 
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--md-sys-spacing-m) var(--md-sys-spacing-l);
+            background-color: var(--md-sys-color-surface); 
+            box-shadow: var(--md-sys-elevation-level1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .dashboard-header .logo-small { max-width: 132px; }
+        .settings-icon span { color: var(--md-sys-color-on-surface-variant); transition: color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard); }
+        .settings-icon:hover span { color: var(--md-sys-color-primary); }
+
+        .main-nav {
+            display: flex;
+            justify-content: center;
+            background-color: var(--md-sys-color-surface);
+            padding: var(--md-sys-spacing-xxs) 0;
+            box-shadow: var(--md-sys-elevation-level1);
+            position: sticky;
+            top: 68px; /* Adjust based on actual header height. Initial was 61px, could be more with padding */
+            z-index: 999;
+            overflow-x: auto; /* Allow horizontal scroll on small screens */
+        }
+        .nav-tab {
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l);
+            margin: 0 var(--md-sys-spacing-xs);
+            cursor: pointer;
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            font-size: var(--md-sys-typescale-label-large-font-size);
+            color: var(--md-sys-color-on-surface-variant);
+            border-bottom: 2px solid transparent;
+            transition: color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard), 
+                        border-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+            border-radius: var(--md-sys-shape-corner-small) var(--md-sys-shape-corner-small) 0 0;
+            position: relative;
+            text-decoration: none;
+            display: inline-flex; align-items: center; gap: var(--md-sys-spacing-xs);
+            white-space: nowrap; /* Prevent tabs from wrapping */
+        }
+        .nav-tab:hover { color: var(--md-sys-color-primary); }
+        .nav-tab.active {
+            color: var(--md-sys-color-primary);
+            border-bottom-color: var(--md-sys-color-primary);
+        }
+        .nav-tab-disabled {
+            color: var(--md-sys-color-on-surface-variant);
+            opacity: 0.38; cursor: not-allowed;
+        }
+        .nav-tab-disabled .coming-soon-inline {
+            font-size: 0.65rem; margin-left: var(--md-sys-spacing-xxs);
+            background-color: var(--md-sys-color-surface-variant); color: var(--md-sys-color-on-surface-variant);
+            padding: 0.1rem 0.4rem; border-radius: var(--md-sys-shape-corner-full);
+        }
+        
+        .welcome-user {
+            font-size: var(--md-sys-typescale-body-medium-font-size);
+            color: var(--md-sys-color-on-surface-variant);
+            display: flex; align-items: center;
+        }
+        .welcome-user::before { /* Online indicator dot */
+            content: ""; display: inline-block; width: 8px; height: 8px;
+            background-color: var(--md-sys-color-success); /* Green for online */
+            border-radius: 50%; margin-right: var(--md-sys-spacing-xs);
+        }
+        .btn-logout { /* M3 Filled button with Error color */
+            background-color: var(--md-sys-color-error); color: var(--md-sys-color-on-error);
+            padding: var(--md-sys-spacing-xs) var(--md-sys-spacing-m);
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-size: var(--md-sys-typescale-label-large-font-size);
+            border-radius: var(--md-sys-shape-corner-full);
+            transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+            border: none; cursor: pointer; display: inline-flex; align-items: center; gap: var(--md-sys-spacing-xs);
+        }
+        .btn-logout:hover { background-color: color-mix(in srgb, var(--md-sys-color-error) 90%, black); }
+        
+        .dashboard-content-area {
+            padding: var(--md-sys-spacing-l); /* 24px */
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        #home-content {
+            color: var(--md-sys-color-on-background);
+        }
         #home-content .animated-welcome-text {
             font-family: var(--md-sys-typescale-display-medium-font-family-name);
             font-size: var(--md-sys-typescale-display-medium-font-size);
             line-height: var(--md-sys-typescale-display-medium-line-height);
-            font-weight: var(--md-sys-typescale-display-medium-font-weight); /* Regular for display */
-            color: var(--md-sys-color-on-background);
+            font-weight: var(--md-sys-font-weight-regular);
+            color: var(--md-sys-color-on-background); 
         }
         #home-content .animated-welcome-text .welcome-part1 { color: var(--md-sys-color-secondary); }
         #home-content .animated-welcome-text .welcome-part2 { color: var(--md-sys-color-primary); }
          @keyframes slideInFromLeft {
-            from { opacity: 0; transform: translateX(-30px); }
+            from { opacity: 0; transform: translateX(-30px); } 
             to { opacity: 1; transform: translateX(0); }
         }
-        .animated-welcome-text { animation: slideInFromLeft 0.6s var(--m3-sys-motion-easing-standard) forwards; opacity: 0; }
+        .animated-welcome-text { animation: slideInFromLeft 0.6s var(--md-sys-motion-easing-standard) forwards; opacity: 0; }
 
-        #home-content .subtitle-text {
-            font-family: var(--md-sys-typescale-title-large-font-family-name);
-            font-size: var(--md-sys-typescale-title-large-font-size);
+        #home-content .subtitle-text { /* Replaced .text-lg */
+            font-size: var(--md-sys-typescale-title-large-font-size); /* Larger subtitle */
             line-height: var(--md-sys-typescale-title-large-line-height);
-            color: var(--md-sys-color-on-surface-variant);
+            color: var(--md-sys-color-on-surface-variant); 
             margin-top: var(--md-sys-spacing-xs);
         }
 
-        .info-card-home { /* Renamed to avoid conflict if .info-card is global */
-            background-color: var(--md-sys-color-surface-container-highest); /* M3 card bg */
-            padding: var(--md-sys-spacing-l);
-            border-radius: var(--md-sys-shape-corner-medium);
+        /* M3 Card Styling for Dashboard Widgets */
+        .info-card {
+            background-color: var(--md-sys-color-surface);
+            padding: var(--md-sys-spacing-l); /* 24px */
+            border-radius: var(--md-sys-shape-corner-medium); /* 12dp */
             box-shadow: var(--md-sys-elevation-level1);
-            transition: box-shadow var(--m3-sys-motion-duration-medium2) var(--m3-sys-motion-easing-standard), transform var(--m3-sys-motion-duration-medium2) var(--m3-sys-motion-easing-standard);
+            transition: box-shadow var(--md-sys-motion-duration-medium) var(--md-sys-motion-easing-standard), transform var(--md-sys-motion-duration-medium) var(--md-sys-motion-easing-standard);
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
         }
-        .info-card-home:hover { box-shadow: var(--md-sys-elevation-level2); transform: translateY(-2px); }
-        .info-card-home .material-symbols-outlined {
-            font-size: 36px;
-            margin-bottom: var(--md-sys-spacing-m);
-            color: var(--md-sys-color-primary); /* Default icon color */
+        .info-card:hover { box-shadow: var(--md-sys-elevation-level2); transform: translateY(-2px); }
+        .info-card .material-symbols-outlined {
+            font-size: 36px; 
+            margin-bottom: var(--md-sys-spacing-m); 
         }
-        .info-card-home h3 {
+        .info-card h3 { /* Title Medium */
             font-family: var(--md-sys-typescale-title-medium-font-family-name);
-            font-weight: var(--md-sys-typescale-title-medium-font-weight);
+            font-weight: var(--md-sys-font-weight-medium);
             font-size: var(--md-sys-typescale-title-medium-font-size);
             color: var(--md-sys-color-on-surface);
-            margin-bottom: var(--md-sys-spacing-xs);
+            margin-bottom: var(--md-sys-spacing-xs); 
         }
-        .info-card-home p.metric {
-            font-family: var(--md-sys-typescale-headline-medium-font-family-name);
-            font-weight: var(--md-sys-typescale-headline-medium-font-weight);
+        .info-card p.metric { /* Display Small/Medium */
+            font-family: var(--md-sys-typescale-headline-medium-font-family-name); 
+            font-weight: var(--md-sys-font-weight-regular);
             font-size: var(--md-sys-typescale-headline-medium-font-size);
-            /* Colors for specific metrics, ensuring contrast */
+            /* Colors defined inline for specific metrics */
         }
         #home-total-activities.metric { color: var(--md-sys-color-primary); }
         #home-average-score.metric { color: var(--md-sys-color-success); }
-        #home-time-practiced.metric { color: var(--md-sys-color-tertiary); }
+        #home-time-practiced.metric { color: var(--md-sys-color-tertiary); } 
 
 
-        .action-card-home { /* Renamed for clarity */
+        .action-card { /* For "Continue Your Journey" links - M3 Card */
             display: block;
             background-color: var(--md-sys-color-primary-container);
             padding: var(--md-sys-spacing-l);
             border-radius: var(--md-sys-shape-corner-medium);
-            transition: background-color var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard),
-                        transform var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard),
-                        box-shadow var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard);
+            transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
+                        transform var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
+                        box-shadow var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
             text-align: center;
             color: var(--md-sys-color-on-primary-container);
             text-decoration: none;
             box-shadow: var(--md-sys-elevation-level0);
         }
-        .action-card-home:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-primary) 12%, var(--md-sys-color-primary-container)); /* M3 Hover state */
+        .action-card:hover {
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 20%, var(--md-sys-color-primary-container));
             transform: translateY(-2px);
             box-shadow: var(--md-sys-elevation-level1);
         }
-        .action-card-home h3 {
+        .action-card h3 { /* Title Medium */
             font-family: var(--md-sys-typescale-title-medium-font-family-name);
-            font-weight: var(--md-sys-typescale-title-medium-font-weight);
+            font-weight: var(--md-sys-font-weight-medium);
             font-size: var(--md-sys-typescale-title-medium-font-size);
             margin-bottom: var(--md-sys-spacing-xs);
         }
-        .action-card-home p {
+        .action-card p { /* Body Medium */
             font-family: var(--md-sys-typescale-body-medium-font-family-name);
             font-size: var(--md-sys-typescale-body-medium-font-size);
             color: var(--md-sys-color-on-primary-container);
             opacity: 0.8;
         }
-        #home-focus-groups-link.action-card-home {
+        
+        #home-focus-groups-link.action-card { /* Example for a secondary action card */
             background-color: var(--md-sys-color-secondary-container);
             color: var(--md-sys-color-on-secondary-container);
         }
-         #home-focus-groups-link.action-card-home:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-secondary) 12%, var(--md-sys-color-secondary-container));
+         #home-focus-groups-link.action-card:hover {
+            background-color: color-mix(in srgb, var(--md-sys-color-secondary) 20%, var(--md-sys-color-secondary-container));
+        }
+
+        /* Button for "View All Tests" - M3 Filled Button */
+        #home-view-all-tests-btn {
+            background-color: var(--md-sys-color-accent-cta); 
+            color: var(--md-sys-color-on-accent-cta);
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            font-size: var(--md-sys-typescale-label-large-font-size);
+            padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l); 
+            border-radius: var(--md-sys-shape-corner-full);
+            box-shadow: var(--md-sys-elevation-level0);
+            transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
+                        box-shadow var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+            border: none; cursor:pointer; text-decoration: none; display: inline-flex; align-items:center; gap: var(--md-sys-spacing-xs);
+        }
+        #home-view-all-tests-btn:hover {
+            background-color: color-mix(in srgb, var(--md-sys-color-accent-cta) 92%, black );
+            box-shadow: var(--md-sys-elevation-level1);
         }
         
-        /* Calendar specific M3 adaptations */
+        /* Calendar Styling (Basic M3 adaptation) */
         .setup-prep-card, .activity-calendar-card {
-            background-color: var(--md-sys-color-surface-container-high); /* slightly different from main surface */
+            background-color: var(--md-sys-color-surface);
             padding: var(--md-sys-spacing-l);
-            border-radius: var(--md-sys-shape-corner-large); /* M3 uses larger radii for larger cards */
+            border-radius: var(--md-sys-shape-corner-medium);
             box-shadow: var(--md-sys-elevation-level1);
             margin-bottom: var(--md-sys-spacing-l);
         }
         .setup-prep-card h2, .activity-calendar-card h2 {
             font-family: var(--md-sys-typescale-title-large-font-family-name);
-            font-weight: var(--md-sys-typescale-title-large-font-weight);
+            font-weight: var(--md-sys-font-weight-medium);
+            font-size: var(--md-sys-typescale-title-large-font-size);
             color: var(--md-sys-color-on-surface);
             margin-bottom: var(--md-sys-spacing-m);
+        }
+        .input-group { margin-bottom: var(--md-sys-spacing-l); }
+        .input-group label {
+            display: block;
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-font-weight-medium);
+            color: var(--md-sys-color-on-surface-variant);
+            margin-bottom: var(--md-sys-spacing-xs);
+        }
+        .input-group input[type="text"], .input-group input[type="date"] {
+             background-color: color-mix(in srgb, var(--md-sys-color-primary) 4%, var(--md-sys-color-surface)); 
+             border: none;
+             border-bottom: 1px solid var(--md-sys-color-on-surface-variant);
+             border-radius: var(--md-sys-shape-corner-extra-small) var(--md-sys-shape-corner-extra-small) 0 0; 
+             padding: var(--md-sys-spacing-m);
+             width: 100%;
+             font-size: var(--md-sys-typescale-body-large-font-size);
+             color: var(--md-sys-color-on-surface);
+        }
+         .input-group input[type="text"]:focus, .input-group input[type="date"]:focus {
+            border-bottom: 2px solid var(--md-sys-color-primary);
+            outline: none;
+            box-shadow: none;
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, var(--md-sys-color-surface));
+         }
+        .input-group input[type="text"]:read-only {
+             background-color: var(--md-sys-color-surface-variant);
+             color: var(--md-sys-color-on-surface-variant);
+             cursor: default;
+             border-bottom-color: var(--md-sys-color-outline);
         }
         .days-remaining, .consistency-score {
              color: var(--md-sys-color-primary);
              font-family: var(--md-sys-typescale-title-medium-font-family-name);
-             font-weight: var(--md-sys-typescale-title-medium-font-weight);
+             font-weight: var(--md-sys-font-weight-medium);
              margin-top: var(--md-sys-spacing-xs);
         }
-        #current-month-year {
-            font-family: var(--md-sys-typescale-title-medium-font-family-name);
-            font-weight: var(--md-sys-typescale-title-medium-font-weight);
-            color: var(--md-sys-color-on-surface);
-        }
-        .calendar-day-label {
-            font-family: var(--md-sys-typescale-label-large-font-family-name);
-            color: var(--md-sys-color-on-surface-variant);
-            font-weight: var(--md-sys-typescale-label-large-font-weight);
-        }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--md-sys-spacing-m);}
+        .calendar-nav button { color: var(--md-sys-color-primary); background: none; border: none; cursor: pointer; padding: var(--md-sys-spacing-xs); border-radius: 50%; }
+        .calendar-nav button:hover { background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); }
+        #current-month-year { font-family: var(--md-sys-typescale-title-medium-font-family-name); font-weight: var(--md-sys-font-weight-medium); color: var(--md-sys-color-on-surface); }
+        
+        .calendar-grid-container { display: flex; gap: var(--md-sys-spacing-l); }
+        .calendar-month { flex: 1; }
+        .calendar-month-label { font-family: var(--md-sys-typescale-title-medium-font-family-name); color: var(--md-sys-color-on-surface-variant); margin-bottom: var(--md-sys-spacing-s); text-align: center; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: var(--md-sys-spacing-xs); }
+        .calendar-day-label, .calendar-day { text-align: center; padding: var(--md-sys-spacing-xs); border-radius: var(--md-sys-shape-corner-small); }
+        .calendar-day-label { font-family: var(--md-sys-typescale-label-large-font-family-name); color: var(--md-sys-color-on-surface-variant); font-weight: var(--md-sys-font-weight-medium); }
         .calendar-day {
-            background-color: var(--md-sys-color-surface-container); /* Default day background */
+            background-color: var(--md-sys-color-surface-variant);
             border: 1px solid var(--md-sys-color-outline-variant);
             color: var(--md-sys-color-on-surface-variant);
             font-size: var(--md-sys-typescale-body-medium-font-size);
-            border-radius: var(--md-sys-shape-corner-small);
+            aspect-ratio: 1 / 1; /* Make cells square */
+            display: flex; align-items: center; justify-content: center;
         }
         .calendar-day.empty { background-color: transparent; border: none; }
-        .calendar-day.today {
-            background-color: var(--md-sys-color-primary);
-            color: var(--md-sys-color-on-primary);
-            border-color: var(--md-sys-color-primary);
-            font-weight: var(--md-sys-font-weight-medium);
-        }
-        .calendar-day.practice-some {
-            background-color: var(--md-sys-color-secondary-container);
-            border-color: var(--md-sys-color-secondary);
-            color: var(--md-sys-color-on-secondary-container);
-        }
-        .calendar-day.practice-lots {
-            background-color: var(--md-sys-color-tertiary-container);
-            border-color: var(--md-sys-color-tertiary);
-            color: var(--md-sys-color-on-tertiary-container);
-        }
-        .calendar-legend {
-            color: var(--md-sys-color-on-surface-variant);
-            font-size: var(--md-sys-typescale-body-small-font-size);
-        }
+        .calendar-day.today { background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); border-color: var(--md-sys-color-primary); font-weight: var(--md-sys-font-weight-bold); }
+        .calendar-day.practice-some { background-color: var(--md-sys-color-secondary-container); border-color: var(--md-sys-color-secondary); color: var(--md-sys-color-on-secondary-container); }
+        .calendar-day.practice-lots { background-color: var(--md-sys-color-tertiary-container); border-color: var(--md-sys-color-tertiary); color: var(--md-sys-color-on-tertiary-container);}
+        .calendar-legend { display: flex; gap: var(--md-sys-spacing-m); margin-top: var(--md-sys-spacing-m); font-size: var(--md-sys-typescale-body-small-font-size); color: var(--md-sys-color-on-surface-variant); }
+        .legend-item { display: flex; align-items: center; gap: var(--md-sys-spacing-xs); }
+        .legend-color-box { width: 12px; height: 12px; border-radius: var(--md-sys-shape-corner-extra-small); }
+        
+        .hidden { display: none !important; } 
 
-        .settings-icon-header:focus-visible, .nav-tab:focus-visible, .btn-logout:focus-visible,
-        .info-card-home:focus-visible, .action-card-home:focus-visible, #home-view-all-tests-btn:focus-visible,
-        .calendar-nav button:focus-visible, .m3-text-field input:focus-visible {
-            outline: 2px solid var(--md-sys-color-secondary); /* Using secondary for focus outline */
-            outline-offset: 2px;
-            box-shadow: none; /* Remove hover shadow on focus to make outline clear */
+        @media (max-width: 768px) {
+            .main-nav { justify-content: flex-start; } /* Keep tabs scrollable */
+            .dashboard-content-area { padding: var(--md-sys-spacing-m); }
+            #home-content .grid-cols-1.lg\:grid-cols-3 { grid-template-columns: 1fr; }
+            #home-content .grid-cols-1.md\:grid-cols-3 { grid-template-columns: 1fr; }
+            .calendar-grid-container { flex-direction: column; } /* Stack calendars on smaller screens */
+            #home-content .animated-welcome-text { font-size: var(--md-sys-typescale-headline-large-font-size); line-height: var(--md-sys-typescale-headline-large-line-height); }
+            #home-content .subtitle-text { font-size: var(--md-sys-typescale-title-medium-font-size); }
         }
-
-
+         @media (max-width: 480px) {
+            .dashboard-header { padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); }
+            .dashboard-header .logo-small { max-width: 100px; }
+            .welcome-user { display: none; } 
+            .btn-logout { padding: var(--md-sys-spacing-xxs) var(--md-sys-spacing-s); font-size: var(--md-sys-typescale-label-large-font-size); }
+            .nav-tab { padding: var(--md-sys-spacing-s); }
+         }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
-<body style="display: flex; flex-direction: column; min-height: 100vh; margin:0;">
+<body>
     <div id="auth-redirect-message" class="fixed inset-0 flex items-center justify-center z-50 hidden" style="background-color: var(--md-sys-color-background);">
-        <div class="m3-card m3-card-elevated p-8 max-w-md w-full text-center">
+        <div class="auth-container bg-white p-8 rounded-lg shadow-xl max-w-md w-full text-center" style="background-color: var(--md-sys-color-surface); border-radius: var(--md-sys-shape-corner-large);">
             <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="mx-auto h-12 w-auto mb-6">
-            <h2 class="m3-title-large mb-3" style="color: var(--md-sys-color-on-surface);">Access Denied</h2>
-            <p class="m3-body-large mb-6" style="color: var(--md-sys-color-on-surface-variant);">You need to be logged in to view this page.</p>
-            <a href="student_dashboard.html" class="m3-button m3-button-filled">
+            <h2 class="text-2xl font-bold mb-3" style="font-family: var(--md-sys-typescale-headline-small-font-family-name); color: var(--md-sys-color-on-surface);">Access Denied</h2>
+            <p class="mb-6" style="color: var(--md-sys-color-on-surface-variant);">You need to be logged in to view this page.</p>
+            <a href="student_dashboard.html" class="inline-block font-semibold py-2 px-6 rounded-full transition-colors" style="background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); font-family: var(--md-sys-typescale-label-large-font-family-name);">
                 Go to Login
             </a>
         </div>
     </div>
 
     <div id="dashboard-wrapper" class="dashboard-wrapper hidden">
-        <header class="dashboard-header">
+        <div class="dashboard-header">
             <a href="home.html">
                 <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="logo-small" onerror="this.style.display='none'; this.onerror=null;">
             </a>
             <div class="flex items-center">
-                <span class="welcome-user mr-4" style="font-family: var(--md-sys-typescale-body-medium-font-family-name);">Welcome, <span id="student-display-name" style="font-weight: var(--md-sys-font-weight-medium); color: var(--md-sys-color-on-surface);">Student</span></span>
-                <a href="settings.html" aria-label="Account Settings" class="mr-4 settings-icon-header m3-icon-button">
+                <span class="welcome-user mr-4">Welcome, <span id="student-display-name" class="font-semibold">Student</span></span>
+                <a href="settings.html" aria-label="Account Settings" class="mr-4 settings-icon">
                     <span class="material-symbols-outlined">settings</span>
                 </a>
-                <button id="logout-button" class="m3-button m3-button-filled-error" aria-label="Logout">
-                    <span class="material-symbols-outlined text-lg">logout</span>
+                <button id="logout-button" class="btn-logout" aria-label="Logout">
+                    <span class="material-symbols-outlined text-sm">logout</span>
                     <span>Logout</span>
                 </button>
             </div>
-        </header>
+        </div>
 
         <nav class="main-nav" role="navigation" aria-label="Main Navigation">
             <a href="home.html" id="nav-home" class="nav-tab active" role="tab" aria-selected="true">
                 <span class="material-symbols-outlined">home</span>Home
             </a>
             <a href="practice.html" id="nav-practice-main" class="nav-tab" role="tab" aria-selected="false">
-                 <span class="material-symbols-outlined">exercise</span>Practice
+                 <span class="material-symbols-outlined">model_training</span>Practice
             </a>
             <a href="student_dashboard.html#results" id="nav-results" class="nav-tab" role="tab" aria-selected="false">
                 <span class="material-symbols-outlined">bar_chart</span>Results
@@ -245,81 +474,87 @@
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                     <div class="lg:col-span-1 setup-prep-card">
                         <h2>Setup Your Prep</h2>
-                        <div class="m3-text-field">
+                        <div class="input-group">
                             <label for="user-name">Your Name:</label>
                             <input type="text" id="user-name" name="user-name" readonly>
                         </div>
-                        <div class="m3-text-field">
+                        <div class="input-group">
                             <label for="exam-date">Date of Your Exam:</label>
                             <div class="flex items-center">
                                 <input type="date" id="exam-date" name="exam-date">
                                 <span id="days-remaining" class="days-remaining ml-3"></span>
                             </div>
                         </div>
-                        <div class="m3-text-field">
+                        <div class="input-group">
                             <label>Daily Plan Consistency:</label>
-                            <p id="consistency-score" class="consistency-score" style="padding: var(--md-sys-spacing-m); background-color: var(--md-sys-color-surface); border-radius: var(--md-sys-shape-corner-extra-small); border-bottom: 1px solid var(--md-sys-color-outline);">0 Day(s) Completed</p>
+                            <p id="consistency-score" class="consistency-score">0 Day(s) Completed</p>
                         </div>
                     </div>
 
                     <div class="lg:col-span-2 activity-calendar-card">
                         <div class="calendar-header">
                             <h2>Activity Calendar</h2>
-                            <div class="calendar-nav flex items-center">
-                                <button id="prev-month-btn" aria-label="Previous month" class="m3-icon-button"><span class="material-symbols-outlined">arrow_back_ios</span></button>
-                                <span id="current-month-year" class="mx-2"></span>
-                                <button id="next-month-btn" aria-label="Next month" class="m3-icon-button"><span class="material-symbols-outlined">arrow_forward_ios</span></button>
+                            <div class="calendar-nav">
+                                <button id="prev-month-btn" aria-label="Previous month"><span class="material-symbols-outlined">arrow_back_ios</span></button>
+                                <span id="current-month-year"></span>
+                                <button id="next-month-btn" aria-label="Next month"><span class="material-symbols-outlined">arrow_forward_ios</span></button>
                             </div>
                         </div>
-                        <div id="calendar-grid-container" class="calendar-grid-container grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div id="calendar-grid-container" class="calendar-grid-container">
                             <div class="calendar-month" id="current-calendar-month">
-                                 <div class="calendar-month-label text-center mb-2" id="current-month-label"></div>
+                                 <div class="calendar-month-label" id="current-month-label"></div>
                                  <div class="calendar-grid" id="current-month-grid"></div>
                             </div>
                             <div class="calendar-month" id="next-calendar-month">
-                                 <div class="calendar-month-label text-center mb-2" id="next-month-label"></div>
+                                 <div class="calendar-month-label" id="next-month-label"></div>
                                  <div class="calendar-grid" id="next-month-grid"></div>
                             </div>
                         </div>
-                        <div class="calendar-legend mt-4">
-                            <div class="legend-item"><div class="legend-color-box mr-1" style="background-color: var(--md-sys-color-secondary-container);"></div>Some practice</div>
-                            <div class="legend-item"><div class="legend-color-box mr-1" style="background-color: var(--md-sys-color-tertiary-container);"></div>Lots of practice</div>
+                        <div class="calendar-legend">
+                            <div class="legend-item">
+                                <div class="legend-color-box" style="background-color: var(--md-sys-color-secondary-container);"></div>
+                                <span>Some practice</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color-box" style="background-color: var(--md-sys-color-tertiary-container);"></div>
+                                <span>Lots of practice</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                    <div class="info-card-home">
-                        <span class="material-symbols-outlined">checklist</span>
+                    <div class="info-card">
+                        <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">checklist</span>
                         <h3>Activities Completed</h3>
                         <p id="home-total-activities" class="metric">0</p>
                     </div>
-                    <div class="info-card-home">
+                    <div class="info-card">
                          <span class="material-symbols-outlined" style="color: var(--md-sys-color-success);">military_tech</span>
                         <h3>Average Score</h3>
                         <p id="home-average-score" class="metric">0%</p>
                     </div>
-                    <div class="info-card-home">
+                    <div class="info-card">
                         <span class="material-symbols-outlined" style="color: var(--md-sys-color-tertiary);">timer</span>
                         <h3>Time Practiced</h3>
                         <p id="home-time-practiced" class="metric">0h 0m</p>
                     </div>
                 </div>
 
-                <div class="p-6 rounded-xl shadow-lg mb-12 m3-card m3-card-elevated">
+                <div class="p-6 rounded-xl shadow-lg mb-12" style="background-color: var(--md-sys-color-surface); border-radius: var(--md-sys-shape-corner-large); box-shadow: var(--md-sys-elevation-level1);">
                     <h2 class="text-2xl font-semibold mb-6 text-center" style="font-family: var(--md-sys-typescale-headline-small-font-family-name); color: var(--md-sys-color-on-surface);">Continue Your Journey</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <a href="QR Test 1.html" class="action-card-home">
+                        <a href="QR Test 1.html" class="action-card">
                             <h3>Practice QR Test 1</h3>
                             <p>Sharpen your Quantitative Reasoning skills.</p>
                         </a>
-                        <a href="practice.html#focus-groups-content" id="home-focus-groups-link" class="action-card-home">
+                        <a href="practice.html#focus-groups-content" id="home-focus-groups-link" class="action-card">
                             <h3>Explore Focus Groups</h3>
                             <p>Target specific areas like Verbal Reasoning.</p>
                         </a>
                     </div>
                      <div class="mt-8 text-center">
-                        <a href="practice.html" id="home-view-all-tests-btn" class="m3-button m3-button-filled" style="background-color: var(--md-sys-color-tertiary); color: var(--md-sys-color-on-tertiary);">
+                        <a href="practice.html" id="home-view-all-tests-btn">
                            <span class="material-symbols-outlined">quiz</span> View All Tests
                         </a>
                     </div>
@@ -376,7 +611,7 @@
         const nextMonthLabel = document.getElementById('next-month-label');
 
         let currentCalendarDate = new Date();
-        let performanceData = []; 
+        let performanceData = []; // Store all fetched performance data
 
 
         auth.onAuthStateChanged(async user => {
@@ -384,19 +619,19 @@
                 const displayName = user.displayName || user.email || 'Student';
                 const firstName = displayName.split(' ')[0];
 
-                if(studentDisplayNameSpan) studentDisplayNameSpan.textContent = displayName;
+                studentDisplayNameSpan.textContent = displayName;
                 if (homeStudentFirstNameDisplay) homeStudentFirstNameDisplay.textContent = firstName;
                 if (userNameInput) userNameInput.value = displayName;
                 
                 if(authRedirectMessage) authRedirectMessage.classList.add('hidden');
-                if(dashboardWrapper) dashboardWrapper.classList.remove('hidden');
-                if(homeContentDiv) homeContentDiv.classList.remove('hidden');
+                dashboardWrapper.classList.remove('hidden');
+                homeContentDiv.classList.remove('hidden');
 
                 if (animatedWelcomeText) {
-                    animatedWelcomeText.style.animation = 'none'; // Reset animation
-                    animatedWelcomeText.offsetHeight; // Trigger reflow
+                    animatedWelcomeText.style.animation = 'none';
+                    animatedWelcomeText.offsetHeight; 
                     animatedWelcomeText.style.animation = null; 
-                    animatedWelcomeText.style.animation = 'slideInFromLeft 0.6s var(--m3-sys-motion-easing-standard) forwards';
+                    animatedWelcomeText.style.animation = 'slideInFromLeft 0.6s var(--md-sys-motion-easing-standard) forwards';
                 }
 
                 await loadUserPreferences(user);
@@ -406,9 +641,12 @@
                 renderCalendars();
 
             } else {
-                if(dashboardWrapper) dashboardWrapper.classList.add('hidden');
-                if(homeContentDiv) homeContentDiv.classList.add('hidden');
+                // User is signed out
+                dashboardWrapper.classList.add('hidden');
+                homeContentDiv.classList.add('hidden');
                 if (authRedirectMessage) authRedirectMessage.classList.remove('hidden');
+                // Optional: redirect to login page explicitly
+                // window.location.href = "student_dashboard.html";
             }
         });
 
@@ -416,7 +654,7 @@
             logoutButton.addEventListener('click', () => {
                 if (confirm("Are you sure you want to log out?")) {
                     auth.signOut().then(() => {
-                        window.location.href = "student_dashboard.html"; 
+                        window.location.href = "student_dashboard.html"; // Redirect to login after logout
                     }).catch((error) => {
                         console.error("Logout error:", error);
                         alert("There was an error logging out. Please try again.");
@@ -436,14 +674,14 @@
                         examDateInput.value = data.examDate;
                         updateDaysRemaining(data.examDate);
                     } else {
-                         updateDaysRemaining(null); 
+                         updateDaysRemaining(); // If no date, show "Not set"
                     }
                 } else {
-                    updateDaysRemaining(null); 
+                    updateDaysRemaining(); // No preferences doc, show "Not set"
                 }
             } catch (error) {
                 console.error("Error loading user preferences:", error);
-                updateDaysRemaining(null); 
+                updateDaysRemaining(); // On error, show "Not set"
             }
         }
         
@@ -458,11 +696,13 @@
                         await db.collection('userPreferences').doc(currentUser.uid).set({ examDate: selectedDate }, { merge: true });
                         updateDaysRemaining(selectedDate);
                     } else {
+                        // If date is cleared, remove it from preferences
                         await db.collection('userPreferences').doc(currentUser.uid).update({ examDate: firebase.firestore.FieldValue.delete() });
-                        updateDaysRemaining(null); 
+                        updateDaysRemaining(); // Update display to "Not set"
                     }
                 } catch (error) {
                     console.error("Error saving exam date:", error);
+                    // Optionally, show a user-friendly error message here
                 }
             });
         }
@@ -471,7 +711,7 @@
         function updateDaysRemaining(selectedDateStr) {
             if (!daysRemainingSpan) return;
             if (selectedDateStr) {
-                const examDate = new Date(selectedDateStr + "T00:00:00"); 
+                const examDate = new Date(selectedDateStr + "T00:00:00"); // Ensure it's parsed as local midnight
                 const today = new Date();
                 today.setHours(0,0,0,0); 
 
@@ -495,7 +735,7 @@
                  performanceData = [];
                  return;
             }
-            performanceData = []; 
+            performanceData = []; // Reset before loading
             const userId = currentUser.uid;
             try {
                 const querySnapshot = await db.collection("performanceSubmissions")
@@ -535,18 +775,18 @@
         }
 
         function updateHomeStats() {
-            const homeTotalActivitiesEl = document.getElementById('home-total-activities');
-            const homeAverageScoreEl = document.getElementById('home-average-score');
-            const homeTimePracticedEl = document.getElementById('home-time-practiced');
+            const homeTotalActivities = document.getElementById('home-total-activities');
+            const homeAverageScore = document.getElementById('home-average-score');
+            const homeTimePracticed = document.getElementById('home-time-practiced');
             
-            if (!homeTotalActivitiesEl || !homeAverageScoreEl || !homeTimePracticedEl) return;
+            if (!homeTotalActivities || !homeAverageScore || !homeTimePracticed) return;
 
-            homeTotalActivitiesEl.textContent = '0';
-            homeAverageScoreEl.textContent = '0%';
-            homeTimePracticedEl.textContent = '0h 0m';
+            homeTotalActivities.textContent = '0';
+            homeAverageScore.textContent = '0%';
+            homeTimePracticed.textContent = '0h 0m';
 
             if (performanceData.length > 0) {
-                homeTotalActivitiesEl.textContent = performanceData.length;
+                homeTotalActivities.textContent = performanceData.length;
                 let totalScoreSum = 0;
                 let validScoresCount = 0;
                 let totalMinutesPracticed = 0;
@@ -561,21 +801,21 @@
                     }
                     const timeTaken = result.timeTaken; 
                     if (timeTaken && typeof timeTaken === 'string') {
-                        let minutesInThisEntry = 0;
+                        let minutes = 0;
                         const hourMatch = timeTaken.match(/(\d+)\s*h/);
                         const minMatch = timeTaken.match(/(\d+)\s*min/);
-                        if (hourMatch) minutesInThisEntry += parseInt(hourMatch[1]) * 60;
-                        if (minMatch) minutesInThisEntry += parseInt(minMatch[1]);
-                        totalMinutesPracticed += minutesInThisEntry;
+                        if (hourMatch) minutes += parseInt(hourMatch[1]) * 60;
+                        if (minMatch) minutes += parseInt(minMatch[1]);
+                        totalMinutesPracticed += minutes;
                     }
                 });
 
                 if (validScoresCount > 0) {
-                    homeAverageScoreEl.textContent = (totalScoreSum / validScoresCount).toFixed(1) + '%';
+                    homeAverageScore.textContent = (totalScoreSum / validScoresCount).toFixed(1) + '%';
                 }
                 const hours = Math.floor(totalMinutesPracticed / 60);
                 const minutes = totalMinutesPracticed % 60;
-                homeTimePracticedEl.textContent = `${hours}h ${minutes}m`;
+                homeTimePracticed.textContent = `${hours}h ${minutes}m`;
             }
         }
 
@@ -592,7 +832,6 @@
         }
 
         function renderMonth(dateToRender, gridElement, labelElement) {
-            if (!gridElement || !labelElement) return;
             gridElement.innerHTML = ''; 
             const month = dateToRender.getMonth();
             const year = dateToRender.getFullYear();
@@ -605,16 +844,16 @@
             const dayHeaders = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
             dayHeaders.forEach(header => {
                 const dayLabelEl = document.createElement('div');
-                dayLabelEl.className = 'calendar-day-label p-1 text-center';
+                dayLabelEl.className = 'calendar-day-label';
                 dayLabelEl.textContent = header;
                 gridElement.appendChild(dayLabelEl);
             });
 
-            const startOffset = (firstDayOfMonth === 0) ? 6 : firstDayOfMonth - 1; // 0 (Sun) to 6 (Mon-Sat)
+            const startOffset = (firstDayOfMonth === 0) ? 6 : firstDayOfMonth - 1;
 
             for (let i = 0; i < startOffset; i++) {
                 const emptyCell = document.createElement('div');
-                emptyCell.className = 'calendar-day empty p-1 text-center aspect-square flex items-center justify-center';
+                emptyCell.className = 'calendar-day empty';
                 gridElement.appendChild(emptyCell);
             }
 
@@ -623,7 +862,7 @@
 
             for (let day = 1; day <= daysInMonth; day++) {
                 const dayCell = document.createElement('div');
-                dayCell.className = 'calendar-day p-1 text-center aspect-square flex items-center justify-center';
+                dayCell.className = 'calendar-day';
                 dayCell.textContent = day;
                 const cellDate = new Date(year, month, day);
                 cellDate.setHours(0,0,0,0);
@@ -676,9 +915,10 @@
         });
         
         const viewAllTestsBtn = document.getElementById('home-view-all-tests-btn');
-        if(viewAllTestsBtn) {
+        if(viewAllTestsBtn) { // This is now an <a> tag
+            // Event listener might not be strictly necessary if href is set, but good for consistency or future JS actions
             viewAllTestsBtn.addEventListener('click', (e) => {
-                e.preventDefault(); 
+                e.preventDefault(); // Prevent default if it was a button, good practice for <a> if more JS logic
                 window.location.href = "practice.html"; 
             });
         }
@@ -686,13 +926,11 @@
         document.addEventListener('DOMContentLoaded', () => {
             const navHome = document.getElementById('nav-home');
             if (navHome) {
-                document.querySelectorAll('.nav-tab').forEach(tab => {
-                    tab.classList.remove('active');
-                    tab.setAttribute('aria-selected', 'false');
-                });
+                document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
                 navHome.classList.add('active');
                 navHome.setAttribute('aria-selected', 'true');
             }
+            // Auth check for initial visibility is handled by onAuthStateChanged
         });
     </script>
 </body>
