@@ -13,9 +13,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
-        /* Page-specific overrides if necessary, but m3_styles.css should handle most */
         body {
-            font-family: var(--md-sys-typescale-font-family-name); /* Ensures Roboto Flex is used */
+            font-family: var(--md-sys-typescale-font-family-name);
             background-color: var(--md-sys-color-background);
             color: var(--md-sys-color-on-background);
         }
@@ -26,7 +25,7 @@
             font-family: var(--md-sys-typescale-display-medium-font-family-name);
             font-size: var(--md-sys-typescale-display-medium-font-size);
             line-height: var(--md-sys-typescale-display-medium-line-height);
-            font-weight: var(--md-sys-typescale-display-medium-font-weight); /* Regular for display */
+            font-weight: var(--md-sys-typescale-display-medium-font-weight);
             color: var(--md-sys-color-on-background);
         }
         #home-content .animated-welcome-text .welcome-part1 { color: var(--md-sys-color-secondary); }
@@ -45,8 +44,8 @@
             margin-top: var(--md-sys-spacing-xs);
         }
 
-        .info-card-home { /* Renamed to avoid conflict if .info-card is global */
-            background-color: var(--md-sys-color-surface-container-highest); /* M3 card bg */
+        .info-card-home {
+            background-color: var(--md-sys-color-surface-container-highest);
             padding: var(--md-sys-spacing-l);
             border-radius: var(--md-sys-shape-corner-medium);
             box-shadow: var(--md-sys-elevation-level1);
@@ -60,7 +59,7 @@
         .info-card-home .material-symbols-outlined {
             font-size: 36px;
             margin-bottom: var(--md-sys-spacing-m);
-            color: var(--md-sys-color-primary); /* Default icon color */
+            color: var(--md-sys-color-primary);
         }
         .info-card-home h3 {
             font-family: var(--md-sys-typescale-title-medium-font-family-name);
@@ -73,14 +72,12 @@
             font-family: var(--md-sys-typescale-headline-medium-font-family-name);
             font-weight: var(--md-sys-typescale-headline-medium-font-weight);
             font-size: var(--md-sys-typescale-headline-medium-font-size);
-            /* Colors for specific metrics, ensuring contrast */
         }
         #home-total-activities.metric { color: var(--md-sys-color-primary); }
         #home-average-score.metric { color: var(--md-sys-color-success); }
         #home-time-practiced.metric { color: var(--md-sys-color-tertiary); }
 
-
-        .action-card-home { /* Renamed for clarity */
+        .action-card-home {
             display: block;
             background-color: var(--md-sys-color-primary-container);
             padding: var(--md-sys-spacing-l);
@@ -94,7 +91,7 @@
             box-shadow: var(--md-sys-elevation-level0);
         }
         .action-card-home:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-primary) 12%, var(--md-sys-color-primary-container)); /* M3 Hover state */
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 12%, var(--md-sys-color-primary-container));
             transform: translateY(-2px);
             box-shadow: var(--md-sys-elevation-level1);
         }
@@ -117,12 +114,11 @@
          #home-focus-groups-link.action-card-home:hover {
             background-color: color-mix(in srgb, var(--md-sys-color-secondary) 12%, var(--md-sys-color-secondary-container));
         }
-        
-        /* Calendar specific M3 adaptations */
+
         .setup-prep-card, .activity-calendar-card {
-            background-color: var(--md-sys-color-surface-container-high); /* slightly different from main surface */
+            background-color: var(--md-sys-color-surface-container-high);
             padding: var(--md-sys-spacing-l);
-            border-radius: var(--md-sys-shape-corner-large); /* M3 uses larger radii for larger cards */
+            border-radius: var(--md-sys-shape-corner-large);
             box-shadow: var(--md-sys-elevation-level1);
             margin-bottom: var(--md-sys-spacing-l);
         }
@@ -132,16 +128,82 @@
             color: var(--md-sys-color-on-surface);
             margin-bottom: var(--md-sys-spacing-m);
         }
+        .input-group { margin-bottom: var(--md-sys-spacing-l); }
+        .input-group label {
+            display: block;
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-typescale-label-large-font-weight);
+            color: var(--md-sys-color-on-surface-variant);
+            margin-bottom: var(--md-sys-spacing-xs);
+        }
+        .m3-input {
+             background-color: color-mix(in srgb, var(--md-sys-color-primary) 4%, var(--md-sys-color-surface-container-highest));
+             border: none;
+             border-bottom: 1px solid var(--md-sys-color-on-surface-variant);
+             border-radius: var(--md-sys-shape-corner-extra-small) var(--md-sys-shape-corner-extra-small) 0 0;
+             padding: var(--md-sys-spacing-m);
+             width: 100%;
+             font-size: var(--md-sys-typescale-body-large-font-size);
+             color: var(--md-sys-color-on-surface);
+        }
+         .m3-input:focus {
+            border-bottom: 2px solid var(--md-sys-color-primary);
+            outline: none;
+            box-shadow: none;
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, var(--md-sys-color-surface-container-highest));
+            padding-bottom: calc(var(--md-sys-spacing-m) - 1px);
+         }
+        .m3-input:read-only {
+             background-color: var(--md-sys-color-surface-variant);
+             color: var(--md-sys-color-on-surface-variant);
+             cursor: default;
+             border-bottom-color: var(--md-sys-color-outline);
+        }
+
         .days-remaining, .consistency-score {
              color: var(--md-sys-color-primary);
              font-family: var(--md-sys-typescale-title-medium-font-family-name);
              font-weight: var(--md-sys-typescale-title-medium-font-weight);
              margin-top: var(--md-sys-spacing-xs);
         }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--md-sys-spacing-m);}
+        .calendar-nav button { color: var(--md-sys-color-primary); background: none; border: none; cursor: pointer; padding: var(--md-sys-spacing-xs); border-radius: 50%; }
+        .calendar-nav button:hover { background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); }
         #current-month-year {
             font-family: var(--md-sys-typescale-title-medium-font-family-name);
             font-weight: var(--md-sys-typescale-title-medium-font-weight);
             color: var(--md-sys-color-on-surface);
+        }
+
+        /* Corrected calendar grid container for side-by-side months */
+        .calendar-grid-container {
+            display: flex; /* Use flex to place month side-by-side */
+            gap: var(--md-sys-spacing-l); /* Space between months */
+            width: 100%; /* Take full width of its parent */
+        }
+        .calendar-month {
+            flex: 1; /* Allow months to share space equally */
+            min-width: 0; /* Important for flex items to shrink properly */
+        }
+        .calendar-month-label {
+            font-family: var(--md-sys-typescale-title-medium-font-family-name);
+            color: var(--md-sys-color-on-surface-variant);
+            margin-bottom: var(--md-sys-spacing-s);
+            text-align: center;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: var(--md-sys-spacing-xs);
+        }
+        .calendar-day-label, .calendar-day {
+            text-align: center;
+            padding: var(--md-sys-spacing-xs);
+            border-radius: var(--md-sys-shape-corner-small);
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .calendar-day-label {
             font-family: var(--md-sys-typescale-label-large-font-family-name);
@@ -149,18 +211,17 @@
             font-weight: var(--md-sys-typescale-label-large-font-weight);
         }
         .calendar-day {
-            background-color: var(--md-sys-color-surface-container); /* Default day background */
+            background-color: var(--md-sys-color-surface-container);
             border: 1px solid var(--md-sys-color-outline-variant);
             color: var(--md-sys-color-on-surface-variant);
             font-size: var(--md-sys-typescale-body-medium-font-size);
-            border-radius: var(--md-sys-shape-corner-small);
         }
         .calendar-day.empty { background-color: transparent; border: none; }
         .calendar-day.today {
             background-color: var(--md-sys-color-primary);
             color: var(--md-sys-color-on-primary);
             border-color: var(--md-sys-color-primary);
-            font-weight: var(--md-sys-font-weight-medium);
+            font-weight: var(--md-sys-font-weight-bold);
         }
         .calendar-day.practice-some {
             background-color: var(--md-sys-color-secondary-container);
@@ -173,19 +234,46 @@
             color: var(--md-sys-color-on-tertiary-container);
         }
         .calendar-legend {
-            color: var(--md-sys-color-on-surface-variant);
+            display: flex; flex-wrap: wrap;
+            gap: var(--md-sys-spacing-m);
+            margin-top: var(--md-sys-spacing-m);
             font-size: var(--md-sys-typescale-body-small-font-size);
+            color: var(--md-sys-color-on-surface-variant);
         }
+        .legend-item { display: flex; align-items: center; gap: var(--md-sys-spacing-xs); }
+        .legend-color-box { width: 12px; height: 12px; border-radius: var(--md-sys-shape-corner-extra-small); }
 
-        .settings-icon-header:focus-visible, .nav-tab:focus-visible, .btn-logout:focus-visible,
-        .info-card-home:focus-visible, .action-card-home:focus-visible, #home-view-all-tests-btn:focus-visible,
-        .calendar-nav button:focus-visible, .m3-text-field input:focus-visible {
-            outline: 2px solid var(--md-sys-color-secondary); /* Using secondary for focus outline */
+        .hidden { display: none !important; }
+
+        @media (max-width: 1024px) { /* Changed from 768px to 1024px for stacking calendar earlier */
+            .calendar-grid-container {
+                flex-direction: column;
+            }
+        }
+        @media (max-width: 768px) {
+            .main-nav { justify-content: flex-start; }
+            .dashboard-content-area { padding: var(--md-sys-spacing-m); }
+            /* Stack main cards on tablet portrait and mobile */
+            #home-content .grid.lg\:grid-cols-3 { grid-template-columns: 1fr; }
+
+            #home-content .animated-welcome-text {
+                font-size: var(--md-sys-typescale-headline-large-font-size);
+                line-height: var(--md-sys-typescale-headline-large-line-height);
+            }
+            #home-content .subtitle-text { font-size: var(--md-sys-typescale-title-medium-font-size); }
+        }
+         @media (max-width: 480px) {
+            .dashboard-header { padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); }
+            .dashboard-header .logo-small { max-width: 100px; }
+            .welcome-user { display: none; }
+            .nav-tab { padding: var(--md-sys-spacing-s); }
+         }
+        /* Focus outline for accessibility (should be in m3_styles.css but ensure it's present) */
+        *:focus-visible {
+            outline: 2px solid var(--md-sys-color-secondary);
             outline-offset: 2px;
-            box-shadow: none; /* Remove hover shadow on focus to make outline clear */
+            box-shadow: none;
         }
-
-
     </style>
 </head>
 <body style="display: flex; flex-direction: column; min-height: 100vh; margin:0;">
@@ -206,12 +294,12 @@
                 <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="logo-small" onerror="this.style.display='none'; this.onerror=null;">
             </a>
             <div class="flex items-center">
-                <span class="welcome-user mr-4" style="font-family: var(--md-sys-typescale-body-medium-font-family-name);">Welcome, <span id="student-display-name" style="font-weight: var(--md-sys-font-weight-medium); color: var(--md-sys-color-on-surface);">Student</span></span>
+                <span class="welcome-user mr-4">Welcome, <span id="student-display-name" class="font-semibold" style="color: var(--md-sys-color-on-surface);">Student</span></span>
                 <a href="settings.html" aria-label="Account Settings" class="mr-4 settings-icon-header m3-icon-button">
                     <span class="material-symbols-outlined">settings</span>
                 </a>
                 <button id="logout-button" class="m3-button m3-button-filled-error" aria-label="Logout">
-                    <span class="material-symbols-outlined text-lg">logout</span>
+                    <span class="material-symbols-outlined">logout</span>
                     <span>Logout</span>
                 </button>
             </div>
@@ -228,7 +316,7 @@
                 <span class="material-symbols-outlined">bar_chart</span>Results
             </a>
             <div id="nav-skills" class="nav-tab nav-tab-disabled" role="tab" aria-disabled="true">
-                 <span class="material-symbols-outlined">psychology</span>
+                 <span class="material-symbols-outlined">psychology_alt</span>
                 <span>Skills</span> <span class="coming-soon-inline">Soon</span>
             </div>
         </nav>
@@ -245,20 +333,20 @@
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                     <div class="lg:col-span-1 setup-prep-card">
                         <h2>Setup Your Prep</h2>
-                        <div class="m3-text-field">
+                        <div class="input-group">
                             <label for="user-name">Your Name:</label>
-                            <input type="text" id="user-name" name="user-name" readonly>
+                            <input type="text" id="user-name" name="user-name" class="m3-input" readonly>
                         </div>
-                        <div class="m3-text-field">
+                        <div class="input-group">
                             <label for="exam-date">Date of Your Exam:</label>
                             <div class="flex items-center">
-                                <input type="date" id="exam-date" name="exam-date">
+                                <input type="date" id="exam-date" name="exam-date" class="m3-input">
                                 <span id="days-remaining" class="days-remaining ml-3"></span>
                             </div>
                         </div>
-                        <div class="m3-text-field">
+                        <div class="input-group">
                             <label>Daily Plan Consistency:</label>
-                            <p id="consistency-score" class="consistency-score" style="padding: var(--md-sys-spacing-m); background-color: var(--md-sys-color-surface); border-radius: var(--md-sys-shape-corner-extra-small); border-bottom: 1px solid var(--md-sys-color-outline);">0 Day(s) Completed</p>
+                            <p id="consistency-score" class="consistency-score m3-input" style="background-color: var(--md-sys-color-surface); cursor: default;">0 Day(s) Completed</p>
                         </div>
                     </div>
 
@@ -271,13 +359,13 @@
                                 <button id="next-month-btn" aria-label="Next month" class="m3-icon-button"><span class="material-symbols-outlined">arrow_forward_ios</span></button>
                             </div>
                         </div>
-                        <div id="calendar-grid-container" class="calendar-grid-container grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div id="calendar-grid-container" class="calendar-grid-container">
                             <div class="calendar-month" id="current-calendar-month">
-                                 <div class="calendar-month-label text-center mb-2" id="current-month-label"></div>
+                                 <div class="calendar-month-label" id="current-month-label"></div>
                                  <div class="calendar-grid" id="current-month-grid"></div>
                             </div>
                             <div class="calendar-month" id="next-calendar-month">
-                                 <div class="calendar-month-label text-center mb-2" id="next-month-label"></div>
+                                 <div class="calendar-month-label" id="next-month-label"></div>
                                  <div class="calendar-grid" id="next-month-grid"></div>
                             </div>
                         </div>
@@ -297,16 +385,16 @@
                     <div class="info-card-home">
                          <span class="material-symbols-outlined" style="color: var(--md-sys-color-success);">military_tech</span>
                         <h3>Average Score</h3>
-                        <p id="home-average-score" class="metric">0%</p>
+                        <p id="home-average-score" class="metric" style="color: var(--md-sys-color-success);">0%</p>
                     </div>
                     <div class="info-card-home">
                         <span class="material-symbols-outlined" style="color: var(--md-sys-color-tertiary);">timer</span>
                         <h3>Time Practiced</h3>
-                        <p id="home-time-practiced" class="metric">0h 0m</p>
+                        <p id="home-time-practiced" class="metric" style="color: var(--md-sys-color-tertiary);">0h 0m</p>
                     </div>
                 </div>
 
-                <div class="p-6 rounded-xl shadow-lg mb-12 m3-card m3-card-elevated">
+                <div class="m3-card m3-card-elevated p-6 mb-12">
                     <h2 class="text-2xl font-semibold mb-6 text-center" style="font-family: var(--md-sys-typescale-headline-small-font-family-name); color: var(--md-sys-color-on-surface);">Continue Your Journey</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <a href="QR Test 1.html" class="action-card-home">
@@ -346,14 +434,14 @@
           appId: "1:309084045110:web:b09ca0fdff84b094963d97",
           measurementId: "G-4M3ED641M9"
         };
-        
+
         // Initialize Firebase
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.firestore();
         const auth = firebase.auth();
-        
+
         // DOM Elements
         const studentDisplayNameSpan = document.getElementById('student-display-name');
         const homeStudentFirstNameDisplay = document.getElementById('home-student-first-name');
@@ -376,7 +464,7 @@
         const nextMonthLabel = document.getElementById('next-month-label');
 
         let currentCalendarDate = new Date();
-        let performanceData = []; 
+        let performanceData = [];
 
 
         auth.onAuthStateChanged(async user => {
@@ -387,21 +475,21 @@
                 if(studentDisplayNameSpan) studentDisplayNameSpan.textContent = displayName;
                 if (homeStudentFirstNameDisplay) homeStudentFirstNameDisplay.textContent = firstName;
                 if (userNameInput) userNameInput.value = displayName;
-                
+
                 if(authRedirectMessage) authRedirectMessage.classList.add('hidden');
                 if(dashboardWrapper) dashboardWrapper.classList.remove('hidden');
                 if(homeContentDiv) homeContentDiv.classList.remove('hidden');
 
                 if (animatedWelcomeText) {
-                    animatedWelcomeText.style.animation = 'none'; // Reset animation
-                    animatedWelcomeText.offsetHeight; // Trigger reflow
-                    animatedWelcomeText.style.animation = null; 
+                    animatedWelcomeText.style.animation = 'none';
+                    void animatedWelcomeText.offsetWidth;
+                    animatedWelcomeText.style.animation = null;
                     animatedWelcomeText.style.animation = 'slideInFromLeft 0.6s var(--m3-sys-motion-easing-standard) forwards';
                 }
 
                 await loadUserPreferences(user);
-                await loadPerformanceData(user); 
-                updateHomeStats(); 
+                await loadPerformanceData(user);
+                updateHomeStats();
                 updateConsistencyScore();
                 renderCalendars();
 
@@ -416,7 +504,7 @@
             logoutButton.addEventListener('click', () => {
                 if (confirm("Are you sure you want to log out?")) {
                     auth.signOut().then(() => {
-                        window.location.href = "student_dashboard.html"; 
+                        window.location.href = "student_dashboard.html";
                     }).catch((error) => {
                         console.error("Logout error:", error);
                         alert("There was an error logging out. Please try again.");
@@ -426,27 +514,27 @@
         }
 
         async function loadUserPreferences(currentUser) {
-            if (!currentUser || !db) return;
+            if (!currentUser || !db || !examDateInput) return;
             const userPrefRef = db.collection('userPreferences').doc(currentUser.uid);
             try {
                 const doc = await userPrefRef.get();
                 if (doc.exists) {
                     const data = doc.data();
-                    if (data.examDate && examDateInput) {
+                    if (data.examDate) {
                         examDateInput.value = data.examDate;
                         updateDaysRemaining(data.examDate);
                     } else {
-                         updateDaysRemaining(null); 
+                         updateDaysRemaining(null);
                     }
                 } else {
-                    updateDaysRemaining(null); 
+                    updateDaysRemaining(null);
                 }
             } catch (error) {
                 console.error("Error loading user preferences:", error);
-                updateDaysRemaining(null); 
+                updateDaysRemaining(null);
             }
         }
-        
+
         if(examDateInput){
             examDateInput.addEventListener('change', async () => {
                 const currentUser = auth.currentUser;
@@ -459,7 +547,7 @@
                         updateDaysRemaining(selectedDate);
                     } else {
                         await db.collection('userPreferences').doc(currentUser.uid).update({ examDate: firebase.firestore.FieldValue.delete() });
-                        updateDaysRemaining(null); 
+                        updateDaysRemaining(null);
                     }
                 } catch (error) {
                     console.error("Error saving exam date:", error);
@@ -471,9 +559,9 @@
         function updateDaysRemaining(selectedDateStr) {
             if (!daysRemainingSpan) return;
             if (selectedDateStr) {
-                const examDate = new Date(selectedDateStr + "T00:00:00"); 
+                const examDate = new Date(selectedDateStr + "T00:00:00");
                 const today = new Date();
-                today.setHours(0,0,0,0); 
+                today.setHours(0,0,0,0);
 
                 if (examDate < today) {
                     daysRemainingSpan.textContent = "Date has passed";
@@ -495,19 +583,19 @@
                  performanceData = [];
                  return;
             }
-            performanceData = []; 
+            performanceData = [];
             const userId = currentUser.uid;
             try {
                 const querySnapshot = await db.collection("performanceSubmissions")
-                                          .where("userId", "==", userId) 
+                                          .where("userId", "==", userId)
                                           .get();
-                
+
                 querySnapshot.forEach(doc => {
                     performanceData.push({ id: doc.id, ...doc.data() });
                 });
             } catch (error) {
                 console.error("Error loading performance data for home page:", error);
-                performanceData = []; 
+                performanceData = [];
             }
         }
 
@@ -521,12 +609,12 @@
             performanceData.forEach(result => {
                 if (result.submissionTimestamp) {
                     let dateStr;
-                    if (result.submissionTimestamp.toDate) { 
+                    if (result.submissionTimestamp.toDate) {
                         dateStr = result.submissionTimestamp.toDate().toLocaleDateString();
-                    } else if (typeof result.submissionTimestamp === 'string') { 
+                    } else if (typeof result.submissionTimestamp === 'string') {
                         dateStr = new Date(result.submissionTimestamp).toLocaleDateString();
-                    } else if (typeof result.submissionTimestamp === 'number') { 
-                        dateStr = new Date(result.submissionTimestamp).toLocaleDateString();
+                    } else if (typeof result.submissionTimestamp === 'number') {
+                         dateStr = new Date(result.submissionTimestamp).toLocaleDateString();
                     }
                     if (dateStr) practiceDays.add(dateStr);
                 }
@@ -538,7 +626,7 @@
             const homeTotalActivitiesEl = document.getElementById('home-total-activities');
             const homeAverageScoreEl = document.getElementById('home-average-score');
             const homeTimePracticedEl = document.getElementById('home-time-practiced');
-            
+
             if (!homeTotalActivitiesEl || !homeAverageScoreEl || !homeTimePracticedEl) return;
 
             homeTotalActivitiesEl.textContent = '0';
@@ -553,17 +641,18 @@
 
                 performanceData.forEach(result => {
                     const score = parseFloat(result.score);
-                    const totalPossible = parseFloat(result.totalPossibleScore || result.totalQuestions); 
-                    
+                    const totalPossible = parseFloat(result.totalPossibleScore || result.totalQuestions);
+
                     if (!isNaN(score) && !isNaN(totalPossible) && totalPossible > 0) {
                         totalScoreSum += (score / totalPossible) * 100;
                         validScoresCount++;
                     }
-                    const timeTaken = result.timeTaken; 
+                    const timeTaken = result.timeTaken;
                     if (timeTaken && typeof timeTaken === 'string') {
                         let minutesInThisEntry = 0;
                         const hourMatch = timeTaken.match(/(\d+)\s*h/);
                         const minMatch = timeTaken.match(/(\d+)\s*min/);
+                        const secMatch = timeTaken.match(/(\d+)\s*sec/);
                         if (hourMatch) minutesInThisEntry += parseInt(hourMatch[1]) * 60;
                         if (minMatch) minutesInThisEntry += parseInt(minMatch[1]);
                         totalMinutesPracticed += minutesInThisEntry;
@@ -574,7 +663,7 @@
                     homeAverageScoreEl.textContent = (totalScoreSum / validScoresCount).toFixed(1) + '%';
                 }
                 const hours = Math.floor(totalMinutesPracticed / 60);
-                const minutes = totalMinutesPracticed % 60;
+                const minutes = Math.round(totalMinutesPracticed % 60);
                 homeTimePracticedEl.textContent = `${hours}h ${minutes}m`;
             }
         }
@@ -583,7 +672,7 @@
             if(!currentMonthGrid || !nextMonthGrid || !currentMonthLabel || !nextMonthLabel || !currentMonthYearSpan) return;
 
             renderMonth(currentCalendarDate, currentMonthGrid, currentMonthLabel);
-            
+
             let nextMonthDate = new Date(currentCalendarDate);
             nextMonthDate.setMonth(currentCalendarDate.getMonth() + 1);
             renderMonth(nextMonthDate, nextMonthGrid, nextMonthLabel);
@@ -593,28 +682,28 @@
 
         function renderMonth(dateToRender, gridElement, labelElement) {
             if (!gridElement || !labelElement) return;
-            gridElement.innerHTML = ''; 
+            gridElement.innerHTML = '';
             const month = dateToRender.getMonth();
             const year = dateToRender.getFullYear();
 
             labelElement.textContent = dateToRender.toLocaleDateString('default', { month: 'long' });
 
-            const firstDayOfMonth = new Date(year, month, 1).getDay(); 
+            const firstDayOfMonth = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
-            
+
             const dayHeaders = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
             dayHeaders.forEach(header => {
                 const dayLabelEl = document.createElement('div');
-                dayLabelEl.className = 'calendar-day-label p-1 text-center';
+                dayLabelEl.className = 'calendar-day-label'; // Tailwind classes removed
                 dayLabelEl.textContent = header;
                 gridElement.appendChild(dayLabelEl);
             });
 
-            const startOffset = (firstDayOfMonth === 0) ? 6 : firstDayOfMonth - 1; // 0 (Sun) to 6 (Mon-Sat)
+            const startOffset = (firstDayOfMonth === 0) ? 6 : firstDayOfMonth - 1;
 
             for (let i = 0; i < startOffset; i++) {
                 const emptyCell = document.createElement('div');
-                emptyCell.className = 'calendar-day empty p-1 text-center aspect-square flex items-center justify-center';
+                emptyCell.className = 'calendar-day empty'; // Tailwind classes removed
                 gridElement.appendChild(emptyCell);
             }
 
@@ -623,7 +712,7 @@
 
             for (let day = 1; day <= daysInMonth; day++) {
                 const dayCell = document.createElement('div');
-                dayCell.className = 'calendar-day p-1 text-center aspect-square flex items-center justify-center';
+                dayCell.className = 'calendar-day'; // Tailwind classes removed
                 dayCell.textContent = day;
                 const cellDate = new Date(year, month, day);
                 cellDate.setHours(0,0,0,0);
@@ -634,27 +723,27 @@
 
                 const activityCount = getActivityCountForDate(cellDate);
                 if (activityCount > 0) {
-                    if (activityCount >= 2) { 
+                    if (activityCount >= 2) {
                         dayCell.classList.add('practice-lots');
-                    } else { 
+                    } else {
                         dayCell.classList.add('practice-some');
                     }
                 }
                 gridElement.appendChild(dayCell);
             }
         }
-        
+
         function getActivityCountForDate(date) {
             let count = 0;
-            const dateString = date.toLocaleDateString(); 
+            const dateString = date.toLocaleDateString();
             performanceData.forEach(result => {
                 if (result.submissionTimestamp) {
                     let submissionDateStr;
-                     if (result.submissionTimestamp.toDate) { 
+                     if (result.submissionTimestamp.toDate) {
                         submissionDateStr = result.submissionTimestamp.toDate().toLocaleDateString();
-                    } else if (typeof result.submissionTimestamp === 'string') { 
+                    } else if (typeof result.submissionTimestamp === 'string') {
                         submissionDateStr = new Date(result.submissionTimestamp).toLocaleDateString();
-                    } else if (typeof result.submissionTimestamp === 'number') { 
+                    } else if (typeof result.submissionTimestamp === 'number') {
                          submissionDateStr = new Date(result.submissionTimestamp).toLocaleDateString();
                     }
                     if (submissionDateStr === dateString) {
@@ -674,12 +763,12 @@
             currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
             renderCalendars();
         });
-        
+
         const viewAllTestsBtn = document.getElementById('home-view-all-tests-btn');
         if(viewAllTestsBtn) {
             viewAllTestsBtn.addEventListener('click', (e) => {
-                e.preventDefault(); 
-                window.location.href = "practice.html"; 
+                e.preventDefault();
+                window.location.href = "practice.html";
             });
         }
 
