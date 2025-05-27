@@ -1,292 +1,286 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Practice - UCAT Platform</title>
-        <link rel="icon" href="https://ik.imagekit.io/mwp/2.svg?updatedAt=1745982956185" type="image/svg+xml">
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link rel="stylesheet" href="m3_styles.css">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - UCAT Platform</title>
+    <link rel="icon" href="https://ik.imagekit.io/mwp/2.svg?updatedAt=1745982956185" type="image/svg+xml">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="m3_styles.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
-        <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-        <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-        <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <style>
+        /* Page-specific overrides if necessary, but m3_styles.css should handle most */
+        body {
+            font-family: var(--md-sys-typescale-font-family-name); /* Ensures Roboto Flex is used */
+            background-color: var(--md-sys-color-background);
+            color: var(--md-sys-color-on-background);
+        }
 
-        <style>
-            /* Page-specific styles can be added here, or m3_styles.css can be expanded */
-            body {
-                font-family: var(--md-sys-typescale-font-family-name);
-                background-color: var(--md-sys-color-background);
-                color: var(--md-sys-color-on-background);
-            }
-            .dashboard-header .logo-small { max-width: 132px; }
+        .dashboard-header .logo-small { max-width: 132px; }
 
-            /* Practice Page Specific M3 Enhancements */
-            .practice-content-wrapper {
-                display: flex;
-                flex-grow: 1;
-                padding: var(--md-sys-spacing-l);
-                gap: var(--md-sys-spacing-l);
-            }
+        #home-content .animated-welcome-text {
+            font-family: var(--md-sys-typescale-display-medium-font-family-name);
+            font-size: var(--md-sys-typescale-display-medium-font-size);
+            line-height: var(--md-sys-typescale-display-medium-line-height);
+            font-weight: var(--md-sys-typescale-display-medium-font-weight); /* Regular for display */
+            color: var(--md-sys-color-on-background);
+        }
+        #home-content .animated-welcome-text .welcome-part1 { color: var(--md-sys-color-secondary); }
+        #home-content .animated-welcome-text .welcome-part2 { color: var(--md-sys-color-primary); }
+         @keyframes slideInFromLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .animated-welcome-text { animation: slideInFromLeft 0.6s var(--m3-sys-motion-easing-standard) forwards; opacity: 0; }
 
-            .left-nav-menu {
-                width: 280px; /* Consistent with M3 side sheet/nav rail */
-                flex-shrink: 0;
-                background-color: var(--md-sys-color-surface-container-low); /* M3 Surface for nav */
-                border-radius: var(--md-sys-shape-corner-large); /* More expressive rounding */
-                box-shadow: var(--md-sys-elevation-level1);
-                padding: var(--md-sys-spacing-m);
-            }
-            .left-nav-menu h3 {
-                font-family: var(--md-sys-typescale-title-medium-font-family-name); /* Title Medium for subtitles */
-                font-weight: var(--md-sys-typescale-title-medium-font-weight);
-                color: var(--md-sys-color-on-surface-variant);
-                margin-bottom: var(--md-sys-spacing-m);
-                padding: var(--md-sys-spacing-s) var(--md-sys-spacing-xs); /* Adjusted padding */
-            }
-            .left-nav-tab { /* M3 Navigation Rail Item Style */
-                display: flex;
-                align-items: center;
-                padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m);
-                margin-bottom: var(--md-sys-spacing-xs);
-                border-radius: var(--md-sys-shape-corner-full); /* Pill shape for active indicator */
-                font-family: var(--md-sys-typescale-label-large-font-family-name);
-                font-weight: var(--md-sys-typescale-label-large-font-weight); /* Updated to 500 */
-                cursor: pointer;
-                transition: background-color var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard),
-                            color var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard);
-                text-decoration: none;
-                border: 1px solid transparent; /* For focus state if needed */
-                color: var(--md-sys-color-on-surface-variant); /* Default state */
-            }
-            .left-nav-tab .material-symbols-outlined {
-                margin-right: var(--md-sys-spacing-m); /* 16dp space */
-                font-size: 20px; /* M3 icon size */
-            }
-            .left-nav-tab:hover {
-                background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); /* Subtle hover */
-                color: var(--md-sys-color-on-surface);
-            }
-            .left-nav-tab.active { /* M3 Active Indicator */
-                background-color: var(--md-sys-color-primary-container);
-                color: var(--md-sys-color-on-primary-container);
-                font-weight: 500; /* M3 Active Label Weight */
-            }
-            /* Section specific active colors for left nav */
-            .left-nav-tab[data-target="vr-content"].active { background-color: var(--section-vr-container); color: var(--section-vr-on-container); }
-            .left-nav-tab[data-target="dm-content"].active { background-color: var(--section-dm-container); color: var(--section-dm-on-container); }
-            .left-nav-tab[data-target="qr-content"].active { background-color: var(--section-qr-container); color: var(--section-qr-on-container); }
-            .left-nav-tab[data-target="focus-groups-content"].active { background-color: var(--section-fg-container); color: var(--section-fg-on-container); }
+        #home-content .subtitle-text {
+            font-family: var(--md-sys-typescale-title-large-font-family-name);
+            font-size: var(--md-sys-typescale-title-large-font-size);
+            line-height: var(--md-sys-typescale-title-large-line-height);
+            color: var(--md-sys-color-on-surface-variant);
+            margin-top: var(--md-sys-spacing-xs);
+        }
+
+        .info-card-home { /* Renamed to avoid conflict if .info-card is global */
+            background-color: var(--md-sys-color-surface-container-highest); /* M3 card bg */
+            padding: var(--md-sys-spacing-l);
+            border-radius: var(--md-sys-shape-corner-medium);
+            box-shadow: var(--md-sys-elevation-level1);
+            transition: box-shadow var(--m3-sys-motion-duration-medium2) var(--m3-sys-motion-easing-standard), transform var(--m3-sys-motion-duration-medium2) var(--m3-sys-motion-easing-standard);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .info-card-home:hover { box-shadow: var(--md-sys-elevation-level2); transform: translateY(-2px); }
+        .info-card-home .material-symbols-outlined {
+            font-size: 36px;
+            margin-bottom: var(--md-sys-spacing-m);
+            color: var(--md-sys-color-primary); /* Default icon color */
+        }
+        .info-card-home h3 {
+            font-family: var(--md-sys-typescale-title-medium-font-family-name);
+            font-weight: var(--md-sys-typescale-title-medium-font-weight);
+            font-size: var(--md-sys-typescale-title-medium-font-size);
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: var(--md-sys-spacing-xs);
+        }
+        .info-card-home p.metric {
+            font-family: var(--md-sys-typescale-headline-medium-font-family-name);
+            font-weight: var(--md-sys-typescale-headline-medium-font-weight);
+            font-size: var(--md-sys-typescale-headline-medium-font-size);
+        }
+        #home-total-activities.metric { color: var(--md-sys-color-primary); }
+        #home-average-score.metric { color: var(--md-sys-color-success); }
+        #home-time-practiced.metric { color: var(--md-sys-color-tertiary); }
 
 
-            .practice-main-content {
-                flex-grow: 1;
-                background-color: var(--md-sys-color-surface); /* Main content surface */
-                border-radius: var(--md-sys-shape-corner-large);
-                box-shadow: var(--md-sys-elevation-level1);
-                padding: var(--md-sys-spacing-xl);
-                overflow-y: auto;
-            }
-            .section-content { display: none; }
-            .section-content.active { display: block; animation: fadeInContent 0.3s var(--m3-sys-motion-easing-standard); }
-            @keyframes fadeInContent {
-                from { opacity: 0; transform: translateY(8px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
+        .action-card-home { /* Renamed for clarity */
+            display: block;
+            background-color: var(--md-sys-color-primary-container);
+            padding: var(--md-sys-spacing-l);
+            border-radius: var(--md-sys-shape-corner-medium);
+            transition: background-color var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard),
+                        transform var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard),
+                        box-shadow var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard);
+            text-align: center;
+            color: var(--md-sys-color-on-primary-container);
+            text-decoration: none;
+            box-shadow: var(--md-sys-elevation-level0);
+        }
+        .action-card-home:hover {
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 12%, var(--md-sys-color-primary-container)); /* M3 Hover state */
+            transform: translateY(-2px);
+            box-shadow: var(--md-sys-elevation-level1);
+        }
+        .action-card-home h3 {
+            font-family: var(--md-sys-typescale-title-medium-font-family-name);
+            font-weight: var(--md-sys-typescale-title-medium-font-weight);
+            font-size: var(--md-sys-typescale-title-medium-font-size);
+            margin-bottom: var(--md-sys-spacing-xs);
+        }
+        .action-card-home p {
+            font-family: var(--md-sys-typescale-body-medium-font-family-name);
+            font-size: var(--md-sys-typescale-body-medium-font-size);
+            color: var(--md-sys-color-on-primary-container);
+            opacity: 0.8;
+        }
+        #home-focus-groups-link.action-card-home {
+            background-color: var(--md-sys-color-secondary-container);
+            color: var(--md-sys-color-on-secondary-container);
+        }
+         #home-focus-groups-link.action-card-home:hover {
+            background-color: color-mix(in srgb, var(--md-sys-color-secondary) 12%, var(--md-sys-color-secondary-container));
+        }
 
-            .section-content > h2 { /* Headline Small */
-                font-family: var(--md-sys-typescale-headline-small-font-family-name);
-                font-weight: var(--md-sys-typescale-headline-small-font-weight);
-                font-size: var(--md-sys-typescale-headline-small-font-size);
-                padding-bottom: var(--md-sys-spacing-s);
-                margin-bottom: var(--md-sys-spacing-l);
-                border-bottom: 1px solid; /* Color set below */
-            }
-            /* Section specific heading colors */
-            #vr-content > h2 { color: var(--section-vr-primary); border-bottom-color: var(--section-vr-primary); }
-            #dm-content > h2 { color: var(--section-dm-primary); border-bottom-color: var(--section-dm-primary); }
-            #qr-content > h2 { color: var(--section-qr-primary); border-bottom-color: var(--section-qr-primary); }
-            #focus-groups-content > h2 { color: var(--section-fg-primary); border-bottom-color: var(--section-fg-primary); }
+        /* Calendar specific M3 adaptations */
+        .setup-prep-card, .activity-calendar-card {
+            background-color: var(--md-sys-color-surface-container-high);
+            padding: var(--md-sys-spacing-l);
+            border-radius: var(--md-sys-shape-corner-large);
+            box-shadow: var(--md-sys-elevation-level1);
+            margin-bottom: var(--md-sys-spacing-l);
+        }
+        .setup-prep-card h2, .activity-calendar-card h2 {
+            font-family: var(--md-sys-typescale-title-large-font-family-name);
+            font-weight: var(--md-sys-typescale-title-large-font-weight);
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: var(--md-sys-spacing-m);
+        }
+        .input-group { margin-bottom: var(--md-sys-spacing-l); }
+        .input-group label {
+            display: block;
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            font-weight: var(--md-sys-typescale-label-large-font-weight);
+            color: var(--md-sys-color-on-surface-variant);
+            margin-bottom: var(--md-sys-spacing-xs);
+        }
+        .m3-input { /* Class for M3 styled inputs */
+             background-color: color-mix(in srgb, var(--md-sys-color-primary) 4%, var(--md-sys-color-surface-container-highest));
+             border: none;
+             border-bottom: 1px solid var(--md-sys-color-on-surface-variant);
+             border-radius: var(--md-sys-shape-corner-extra-small) var(--md-sys-shape-corner-extra-small) 0 0;
+             padding: var(--md-sys-spacing-m);
+             width: 100%;
+             font-size: var(--md-sys-typescale-body-large-font-size);
+             color: var(--md-sys-color-on-surface);
+        }
+         .m3-input:focus {
+            border-bottom: 2px solid var(--md-sys-color-primary);
+            outline: none;
+            box-shadow: none;
+            background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, var(--md-sys-color-surface-container-highest));
+            padding-bottom: calc(var(--md-sys-spacing-m) - 1px);
+         }
+        .m3-input:read-only {
+             background-color: var(--md-sys-color-surface-variant);
+             color: var(--md-sys-color-on-surface-variant);
+             cursor: default;
+             border-bottom-color: var(--md-sys-color-outline);
+        }
 
-            .subsection-card { /* M3 Elevated Card */
-                background-color: var(--md-sys-color-surface-container-low); /* Slightly different from page bg */
-                padding: var(--md-sys-spacing-l);
-                border-radius: var(--md-sys-shape-corner-medium);
-                margin-bottom: var(--md-sys-spacing-l);
-                box-shadow: var(--md-sys-elevation-level1);
-            }
-            .subsection-card h4 { /* Title Medium */
-                font-family: var(--md-sys-typescale-title-medium-font-family-name);
-                font-weight: var(--md-sys-typescale-title-medium-font-weight);
-                color: var(--md-sys-color-on-surface-variant);
-                margin-bottom: var(--md-sys-spacing-s);
-            }
-            .subsection-card p { /* Body Medium */
-                font-family: var(--md-sys-typescale-body-medium-font-family-name);
-                color: var(--md-sys-color-on-surface-variant);
-                margin-bottom: var(--md-sys-spacing-m);
-            }
-             /* Buttons within subsection cards - M3 Filled Button */
-            .subsection-card .btn-view {
-                /* Basic button styles are in m3_styles.css under .m3-button */
-            }
-            #vr-content .subsection-card .btn-view { background-color: var(--section-vr-primary); color: var(--section-vr-on-primary); }
-            #vr-content .subsection-card .btn-view:hover { background-color: color-mix(in srgb, var(--section-vr-primary) 92%, black); }
-            #dm-content .subsection-card .btn-view { background-color: var(--section-dm-primary); color: var(--section-dm-on-primary); }
-            #dm-content .subsection-card .btn-view:hover { background-color: color-mix(in srgb, var(--section-dm-primary) 92%, black); }
-            #qr-content .subsection-card .btn-view { background-color: var(--section-qr-primary); color: var(--section-qr-on-primary); }
-            #qr-content .subsection-card .btn-view:hover { background-color: color-mix(in srgb, var(--section-qr-primary) 92%, black); }
+        .days-remaining, .consistency-score {
+             color: var(--md-sys-color-primary);
+             font-family: var(--md-sys-typescale-title-medium-font-family-name);
+             font-weight: var(--md-sys-typescale-title-medium-font-weight);
+             margin-top: var(--md-sys-spacing-xs);
+        }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--md-sys-spacing-m);}
+        .calendar-nav button { color: var(--md-sys-color-primary); background: none; border: none; cursor: pointer; padding: var(--md-sys-spacing-xs); border-radius: 50%; }
+        .calendar-nav button:hover { background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent); }
+        #current-month-year {
+            font-family: var(--md-sys-typescale-title-medium-font-family-name);
+            font-weight: var(--md-sys-typescale-title-medium-font-weight);
+            color: var(--md-sys-color-on-surface);
+        }
 
+        /* Corrected calendar grid container for side-by-side months */
+        .calendar-grid-container {
+            display: flex; /* Use flex to place month side-by-side */
+            gap: var(--md-sys-spacing-l); /* Space between months */
+            width: 100%; /* Take full width of its parent */
+        }
+        .calendar-month {
+            flex: 1; /* Allow months to share space equally */
+            min-width: 0; /* Important for flex items to shrink properly */
+        }
+        .calendar-month-label {
+            font-family: var(--md-sys-typescale-title-medium-font-family-name);
+            color: var(--md-sys-color-on-surface-variant);
+            margin-bottom: var(--md-sys-spacing-s);
+            text-align: center;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: var(--md-sys-spacing-xs);
+        }
+        .calendar-day-label, .calendar-day {
+            text-align: center;
+            padding: var(--md-sys-spacing-xs);
+            border-radius: var(--md-sys-shape-corner-small);
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .calendar-day-label {
+            font-family: var(--md-sys-typescale-label-large-font-family-name);
+            color: var(--md-sys-color-on-surface-variant);
+            font-weight: var(--md-sys-typescale-label-large-font-weight);
+        }
+        .calendar-day {
+            background-color: var(--md-sys-color-surface-container);
+            border: 1px solid var(--md-sys-color-outline-variant);
+            color: var(--md-sys-color-on-surface-variant);
+            font-size: var(--md-sys-typescale-body-medium-font-size);
+        }
+        .calendar-day.empty { background-color: transparent; border: none; }
+        .calendar-day.today {
+            background-color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            border-color: var(--md-sys-color-primary);
+            font-weight: var(--md-sys-font-weight-bold);
+        }
+        .calendar-day.practice-some {
+            background-color: var(--md-sys-color-secondary-container);
+            border-color: var(--md-sys-color-secondary);
+            color: var(--md-sys-color-on-secondary-container);
+        }
+        .calendar-day.practice-lots {
+            background-color: var(--md-sys-color-tertiary-container);
+            border-color: var(--md-sys-color-tertiary);
+            color: var(--md-sys-color-on-tertiary-container);
+        }
+        .calendar-legend {
+            display: flex; flex-wrap: wrap; /* Allow legend items to wrap */
+            gap: var(--md-sys-spacing-m);
+            margin-top: var(--md-sys-spacing-m);
+            font-size: var(--md-sys-typescale-body-small-font-size);
+            color: var(--md-sys-color-on-surface-variant);
+        }
+        .legend-item { display: flex; align-items: center; gap: var(--md-sys-spacing-xs); }
+        .legend-color-box { width: 12px; height: 12px; border-radius: var(--md-sys-shape-corner-extra-small); }
 
-            /* Focus Group Section Card - M3 Elevated Card */
-            .section-card-fg {
-                background-color: var(--md-sys-color-surface-container);
-                border: 1px solid var(--md-sys-color-outline-variant);
-                border-radius: var(--md-sys-shape-corner-medium); /* M3 medium radius */
-                padding: var(--md-sys-spacing-l);
-                cursor: pointer;
-                transition: transform var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard),
-                            box-shadow var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard),
-                            border-color var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard);
-                display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-                box-shadow: var(--md-sys-elevation-level1);
-            }
-            .section-card-fg:hover:not(.disabled), .section-card-fg.active {
-                transform: translateY(-2px);
-                box-shadow: var(--md-sys-elevation-level2);
-                border-color: var(--section-fg-primary);
-            }
-            .section-card-fg.active { background-color: var(--section-fg-container); }
-            .section-card-fg h3 { font-family: var(--md-sys-typescale-title-large-font-family-name); color: var(--md-sys-color-on-surface); margin-bottom: var(--md-sys-spacing-s);}
-            .section-card-fg p { font-family: var(--md-sys-typescale-body-medium-font-family-name); color: var(--md-sys-color-on-surface-variant); margin-bottom: var(--md-sys-spacing-m);}
-            .section-card-fg.active h3, .section-card-fg.active p { color: var(--section-fg-on-container); }
-            .section-card-fg .material-symbols-outlined { font-size: 36px; margin-bottom: var(--md-sys-spacing-s); color: var(--section-fg-primary);}
-            .section-card-fg.active .material-symbols-outlined { color: var(--section-fg-on-container); }
+        .hidden { display: none !important; }
 
-            .btn-select-section-fg { /* M3 Filled Button */
-                background-color: var(--section-fg-primary); color: var(--section-fg-on-primary);
-                /* Inherits .m3-button styles */
-                width: 100%; margin-top: auto;
+        @media (max-width: 768px) {
+            .main-nav { justify-content: flex-start; }
+            .dashboard-content-area { padding: var(--md-sys-spacing-m); }
+            #home-content .grid-cols-1.lg\:grid-cols-3 { grid-template-columns: 1fr; } /* Stack cards on smaller screens */
+            .calendar-grid-container {
+                flex-direction: column; /* Stack calendars on smaller screens */
             }
-             .btn-select-section-fg:hover:not(:disabled) { background-color: color-mix(in srgb, var(--section-fg-primary) 92%, black); }
-
-            .section-card-fg.disabled {
-                opacity: 0.6; /* M3 disabled opacity is often 0.38 for text, 0.12 for container if on surface. Using a general 0.6 for visibility. */
-                cursor: not-allowed;
-                background-color: var(--md-sys-color-surface-container); /* Less prominent bg */
-                box-shadow: var(--md-sys-elevation-level0);
+            #home-content .animated-welcome-text {
+                font-size: var(--md-sys-typescale-headline-large-font-size);
+                line-height: var(--md-sys-typescale-headline-large-line-height);
             }
-            .section-card-fg.disabled .material-symbols-outlined { color: var(--md-sys-color-on-surface-variant); opacity: 0.38;}
-            .section-card-fg.disabled .btn-select-section-fg {
-                background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
-                color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
-                cursor: not-allowed;
-            }
-
-            /* Practice Set Links - M3 Suggestion Chips */
-            .practice-set-link-fg {
-                background-color: var(--section-fg-container);
-                color: var(--section-fg-on-container);
-                border: 1px solid var(--section-fg-on-container); /* Outline for chips */
-                border-radius: var(--md-sys-shape-corner-small); /* 8dp radius */
-                padding: var(--md-sys-spacing-xs) var(--md-sys-spacing-m); /* 8dp 12dp */
-                font-family: var(--md-sys-typescale-label-large-font-family-name);
-                text-decoration: none; display: inline-block; text-align:center;
-                transition: background-color var(--m3-sys-motion-duration-short2) ease;
-            }
-            .practice-set-link-fg:hover {
-                background-color: color-mix(in srgb, var(--section-fg-on-container) 8%, var(--section-fg-container));
-            }
-            .practice-set-link-fg.disabled {
-                background-color: var(--md-sys-color-surface-variant);
-                color: var(--md-sys-color-on-surface-variant);
-                border-color: var(--md-sys-color-outline);
-                opacity: 0.38; cursor: not-allowed; pointer-events: none;
-            }
-
-            /* DM Subtopic Items - M3 Filter Chips */
-            .dm-subtopic-item {
-                background-color: var(--md-sys-color-surface);
-                border: 1px solid var(--md-sys-color-outline);
-                color: var(--md-sys-color-on-surface);
-                padding: var(--md-sys-spacing-xs) var(--md-sys-spacing-m);
-                border-radius: var(--md-sys-shape-corner-small); /* 8dp for chips */
-                display: block; text-align: center; margin-bottom: var(--md-sys-spacing-xs); cursor:pointer;
-                font-family: var(--md-sys-typescale-label-large-font-family-name);
-                transition: background-color var(--m3-sys-motion-duration-short2) ease, border-color var(--m3-sys-motion-duration-short2) ease, color var(--m3-sys-motion-duration-short2) ease;
-            }
-            .dm-subtopic-item:hover:not(.disabled) {
-                background-color: color-mix(in srgb, var(--section-dm-primary) 8%, var(--md-sys-color-surface) );
-            }
-            .dm-subtopic-item.active { /* M3 Selected Filter Chip */
-                background-color: var(--section-dm-container);
-                color: var(--section-dm-on-container);
-                border-color: transparent; /* Selected filter chips usually don't have a border */
-            }
-            .dm-subtopic-item.active .material-symbols-outlined { /* If icon is used */
-                font-variation-settings: 'FILL' 1;
-            }
-            .dm-subtopic-item.disabled {
-                background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
-                color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
-                border-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
-                opacity: 1; /* Use M3 standard disabled opacity for content */
-                cursor: not-allowed;
-            }
-            .coming-soon-inline-small {
-                font-size: var(--md-sys-typescale-label-small-font-size);
-                color: var(--md-sys-color-on-surface-variant);
-                margin-left: 4px; font-weight: normal;
-            }
-
-            /* DM Worksheet Links - M3 Cards or List Items */
-            .dm-worksheets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--md-sys-spacing-m); }
-            .dm-worksheet-link { /* Style as an M3 Card (Outlined or Filled) */
-                background-color: var(--section-dm-container);
-                color: var(--section-dm-on-container);
-                border: 1px solid var(--section-dm-primary); /* Outlined Card with primary border */
-                border-radius: var(--md-sys-shape-corner-medium);
-                padding: var(--md-sys-spacing-m);
-                font-family: var(--md-sys-typescale-label-large-font-family-name);
-                text-decoration: none; display: block; text-align: center;
-                transition: background-color var(--m3-sys-motion-duration-short2) ease, box-shadow var(--m3-sys-motion-duration-short2) ease;
-            }
-            .dm-worksheet-link:hover {
-                 background-color: color-mix(in srgb, var(--section-dm-on-container) 8%, var(--section-dm-container));
-                 box-shadow: var(--md-sys-elevation-level1);
-            }
-
-            .hidden { display: none !important; }
-
-            @media (max-width: 1024px) {
-                .practice-content-wrapper { flex-direction: column; padding: var(--md-sys-spacing-m); gap: var(--md-sys-spacing-m); }
-                .left-nav-menu { width: 100%; margin-bottom: var(--md-sys-spacing-m); border-radius:var(--md-sys-shape-corner-medium);} /* Medium radius for stacked */
-            }
-            @media (max-width: 768px) {
-                .main-nav { justify-content: flex-start; padding-left: var(--md-sys-spacing-xs); padding-right: var(--md-sys-spacing-xs);}
-                .nav-tab { white-space: nowrap; margin: 0 var(--md-sys-spacing-xxs); padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); }
-                .section-selection-container-fg { grid-template-columns: 1fr; }
-            }
-             @media (max-width: 480px) {
-                .dashboard-header { padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); }
-                .dashboard-header .logo-small { max-width: 100px; }
-                .welcome-user { display: none; }
-                .btn-logout { padding: var(--md-sys-spacing-xxs) var(--md-sys-spacing-s); font-size: var(--md-sys-typescale-label-large-font-size); }
-                .nav-tab { padding: var(--md-sys-spacing-s); }
-             }
-
-        </style>
-    </head>
-<body>
+            #home-content .subtitle-text { font-size: var(--md-sys-typescale-title-medium-font-size); }
+        }
+         @media (max-width: 480px) {
+            .dashboard-header { padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m); }
+            .dashboard-header .logo-small { max-width: 100px; }
+            .welcome-user { display: none; }
+            .nav-tab { padding: var(--md-sys-spacing-s); }
+         }
+          /* Focus outline for accessibility */
+        *:focus-visible {
+            outline: 2px solid var(--md-sys-color-secondary); /* Using secondary for focus outline */
+            outline-offset: 2px;
+            box-shadow: none; /* Remove hover shadow on focus to make outline clear */
+        }
+    </style>
+</head>
+<body style="display: flex; flex-direction: column; min-height: 100vh; margin:0;">
     <div id="auth-redirect-message" class="fixed inset-0 flex items-center justify-center z-50 hidden" style="background-color: var(--md-sys-color-background);">
         <div class="m3-card m3-card-elevated p-8 max-w-md w-full text-center">
             <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141" alt="MedwithPurpose Logo" class="mx-auto h-12 w-auto mb-6">
-            <h2 style="font-family: var(--md-sys-typescale-headline-small-font-family-name); color: var(--md-sys-color-on-surface); margin-bottom:var(--md-sys-spacing-s);">Access Denied</h2>
-            <p class="mb-6 m3-body-large" style="color: var(--md-sys-color-on-surface-variant);">You need to be logged in to view this page.</p>
+            <h2 class="m3-title-large mb-3" style="color: var(--md-sys-color-on-surface);">Access Denied</h2>
+            <p class="m3-body-large mb-6" style="color: var(--md-sys-color-on-surface-variant);">You need to be logged in to view this page.</p>
             <a href="student_dashboard.html" class="m3-button m3-button-filled">
                 Go to Login
             </a>
@@ -300,149 +294,493 @@
             </a>
             <div class="flex items-center">
                 <span class="welcome-user mr-4">Welcome, <span id="student-display-name" class="font-semibold" style="color: var(--md-sys-color-on-surface);">Student</span></span>
-                 <a href="settings.html" aria-label="Account Settings" class="mr-4 settings-icon m3-icon-button">
-                    <span class="material-symbols-outlined">settings</span>
+                <a href="settings.html" aria-label="Account Settings" class="mr-4 settings-icon-header m3-icon-button"> <span class="material-symbols-outlined">settings</span>
                 </a>
                 <button id="logout-button" class="m3-button m3-button-filled-error" aria-label="Logout">
-                     <span class="material-symbols-outlined">logout</span>
+                    <span class="material-symbols-outlined">logout</span>
                     <span>Logout</span>
                 </button>
             </div>
         </header>
 
         <nav class="main-nav" role="navigation" aria-label="Main Navigation">
-            <a href="home.html" id="nav-home" class="nav-tab" role="tab" aria-selected="false">
-                 <span class="material-symbols-outlined">home</span>Home
+            <a href="home.html" id="nav-home" class="nav-tab active" role="tab" aria-selected="true">
+                <span class="material-symbols-outlined">home</span>Home
             </a>
-            <a href="practice.html" id="nav-practice-main" class="nav-tab active" role="tab" aria-selected="true">
+            <a href="practice.html" id="nav-practice-main" class="nav-tab" role="tab" aria-selected="false">
                  <span class="material-symbols-outlined">exercise</span>Practice
             </a>
             <a href="student_dashboard.html#results" id="nav-results" class="nav-tab" role="tab" aria-selected="false">
-                 <span class="material-symbols-outlined">bar_chart</span>Results
+                <span class="material-symbols-outlined">bar_chart</span>Results
             </a>
             <div id="nav-skills" class="nav-tab nav-tab-disabled" role="tab" aria-disabled="true">
-                 <span class="material-symbols-outlined">psychology_alt</span>
-                <span>Skills</span> <span class="coming-soon-inline">Soon</span>
+                 <span class="material-symbols-outlined">psychology_alt</span> <span>Skills</span> <span class="coming-soon-inline">Soon</span>
             </div>
         </nav>
 
-        <div class="practice-content-wrapper">
-            <aside class="left-nav-menu">
-                <h3>Practice Sections</h3>
-                <a href="#" class="left-nav-tab active" data-target="vr-content">
-                    <span class="material-symbols-outlined">menu_book</span>Verbal Reasoning
-                </a>
-                <a href="#" class="left-nav-tab" data-target="dm-content">
-                    <span class="material-symbols-outlined">psychology</span>Decision Making
-                </a>
-                <a href="#" class="left-nav-tab" data-target="qr-content">
-                    <span class="material-symbols-outlined">calculate</span>Quantitative Reasoning
-                </a>
-                <a href="#" class="left-nav-tab" data-target="focus-groups-content">
-                    <span class="material-symbols-outlined">groups</span>Focus Groups
-                </a>
-            </aside>
+        <main id="dashboard-content-area" class="dashboard-content-area">
+            <div id="home-content" class="max-w-6xl mx-auto">
+                <div class="mb-10 text-left">
+                    <h1 class="animated-welcome-text">
+                        <span class="welcome-part1">Welcome </span><span id="home-student-first-name" class="welcome-part2">Student</span>
+                    </h1>
+                    <p class="subtitle-text">Ready to ace the UCAT? Here's your personalized dashboard.</p>
+                </div>
 
-            <main class="practice-main-content">
-                <section id="vr-content" class="section-content active">
-                    <h2>Verbal Reasoning</h2>
-                    <div class="subsection-card">
-                        <h4>Practice VR Questions</h4>
-                        <p>Hone your skills with a variety of VR passages and questions.</p>
-                        <a href="#" class="m3-button m3-button-filled btn-view">Start Practice</a>
-                    </div>
-                    <div class="subsection-card">
-                        <h4>VR Timed Tests</h4>
-                        <p>Simulate exam conditions with full VR timed sections.</p>
-                        <a href="#" class="m3-button m3-button-filled btn-view">View Tests</a>
-                    </div>
-                    <div class="subsection-card">
-                        <h4>VR Class Worksheets</h4>
-                        <p>Access worksheets and materials from VR focused classes.</p>
-                        <a href="VR focus group16.html" class="m3-button m3-button-filled btn-view">View Worksheets</a>
-                    </div>
-                </section>
-
-                <section id="dm-content" class="section-content">
-                    <h2>Decision Making</h2>
-                     <div class="subsection-card">
-                        <h4>Practice DM Questions</h4>
-                        <p>Work through syllogisms, logical puzzles, and other DM question types.</p>
-                        <a href="#" class="m3-button m3-button-filled btn-view">Start Practice</a>
-                    </div>
-                    <div class="subsection-card">
-                        <h4>DM Timed Tests</h4>
-                        <p>Challenge yourself with timed Decision Making sections.</p>
-                        <a href="#" class="m3-button m3-button-filled btn-view">View Tests</a>
-                    </div>
-                    <div class="subsection-card" id="dm-class-worksheets-card">
-                        <h4>DM Class Worksheets</h4>
-                        <p>Review materials from Decision Making classes.</p>
-                        <button id="dm-select-topic-btn" class="m3-button m3-button-filled btn-view">Select Topic</button>
-
-                        <div id="dm-subtopic-selection" class="hidden mt-4 space-y-2">
-                            <h5 class="text-md font-semibold mb-2" style="font-family: var(--md-sys-typescale-title-medium-font-family-name); color: var(--section-dm-on-container);">Select a Worksheet Topic:</h5>
-                            <a href="#" class="dm-subtopic-item active" data-subtopic="syllogisms">Syllogisms</a>
-                            <a href="#" class="dm-subtopic-item disabled" data-subtopic="logic-puzzles">Logic Puzzles <span class="coming-soon-inline-small">(Soon)</span></a>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="lg:col-span-1 setup-prep-card">
+                        <h2>Setup Your Prep</h2>
+                        <div class="input-group">
+                            <label for="user-name">Your Name:</label>
+                            <input type="text" id="user-name" name="user-name" class="m3-input" readonly>
                         </div>
-
-                        <div id="dm-worksheet-display" class="hidden mt-4">
-                            <h5 id="dm-worksheet-list-title" class="text-md font-semibold mb-2" style="font-family: var(--md-sys-typescale-title-medium-font-family-name); color: var(--section-dm-on-container);">Worksheets:</h5>
-                            <div id="dm-worksheets-grid" class="dm-worksheets-grid">
-                                </div>
-                            <button id="dm-back-to-topics-btn" class="m3-button m3-button-outlined btn-view mt-3" style="width:auto; border-color: var(--section-dm-primary); color: var(--section-dm-primary);">Back to Topics</button>
-                        </div>
-                    </div>
-                </section>
-
-                <section id="qr-content" class="section-content">
-                    <h2>Quantitative Reasoning</h2>
-                    <div class="subsection-card">
-                        <h4>Practice QR Drills</h4>
-                        <p>Improve your speed and accuracy with targeted QR drills.</p>
-                        <a href="QR Test 1.html" class="m3-button m3-button-filled btn-view">Go to QR Test 1</a>
-                         <a href="student_dashboard.html#results" class="m3-button m3-button-filled-tonal btn-view ml-2">More Drills</a>
-                    </div>
-                    <div class="subsection-card">
-                        <h4>QR Timed Tests</h4>
-                        <p>Take full Quantitative Reasoning timed sections.</p>
-                        <a href="student_dashboard.html#results" class="m3-button m3-button-filled btn-view">View Tests</a>
-                    </div>
-                </section>
-
-                <section id="focus-groups-content" class="section-content">
-                    <h2>Focus Groups Timed Practice</h2>
-
-                    <div class="section-selection-container-fg grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-                        <div id="select-vr-fg" class="section-card-fg text-center" data-section="VR">
-                            <span class="material-symbols-outlined">menu_book</span>
-                            <h3>Verbal Reasoning</h3>
-                            <p>Hone your VR skills with targeted practice sets.</p>
-                            <button class="m3-button btn-select-section-fg">Select VR</button>
-                        </div>
-                        <div id="select-dm-fg" class="section-card-fg text-center disabled" data-section="DM">
-                             <span class="material-symbols-outlined">decision_making</span> <h3>Decision Making</h3>
-                            <p>Sharpen your DM abilities (Coming Soon).</p>
-                            <button class="m3-button btn-select-section-fg" disabled>Coming Soon</button>
-                        </div>
-                        <div id="select-qr-fg" class="section-card-fg text-center disabled" data-section="QR">
-                            <span class="material-symbols-outlined">calculate</span>
-                            <h3>Quantitative Reasoning</h3>
-                            <p>Master QR exercises (Coming Soon).</p>
-                            <button class="m3-button btn-select-section-fg" disabled>Coming Soon</button>
-                        </div>
-                    </div>
-
-                    <div id="practice-sets-container-fg" class="practice-sets-container-fg hidden">
-                        <h3 class="text-xl font-semibold mb-4 text-center" style="font-family: var(--md-sys-typescale-title-large-font-family-name); color: var(--md-sys-color-on-surface);">Practice Sets for <span id="current-section-title-fg" style="color: var(--section-fg-primary);"></span></h3>
-                        <div id="practice-sets-grid-fg" class="practice-sets-grid-fg grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                        <div class="input-group">
+                            <label for="exam-date">Date of Your Exam:</label>
+                            <div class="flex items-center">
+                                <input type="date" id="exam-date" name="exam-date" class="m3-input">
+                                <span id="days-remaining" class="days-remaining ml-3"></span>
                             </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Daily Plan Consistency:</label>
+                            <p id="consistency-score" class="consistency-score m3-input" style="background-color: var(--md-sys-color-surface); cursor: default;">0 Day(s) Completed</p>
+                        </div>
                     </div>
-                </section>
-            </main>
-        </div>
+
+                    <div class="lg:col-span-2 activity-calendar-card">
+                        <div class="calendar-header">
+                            <h2>Activity Calendar</h2>
+                            <div class="calendar-nav flex items-center">
+                                <button id="prev-month-btn" aria-label="Previous month" class="m3-icon-button"><span class="material-symbols-outlined">arrow_back_ios</span></button>
+                                <span id="current-month-year" class="mx-2"></span>
+                                <button id="next-month-btn" aria-label="Next month" class="m3-icon-button"><span class="material-symbols-outlined">arrow_forward_ios</span></button>
+                            </div>
+                        </div>
+                        <div id="calendar-grid-container" class="calendar-grid-container">
+                            <div class="calendar-month" id="current-calendar-month">
+                                 <div class="calendar-month-label" id="current-month-label"></div>
+                                 <div class="calendar-grid" id="current-month-grid"></div>
+                            </div>
+                            <div class="calendar-month" id="next-calendar-month">
+                                 <div class="calendar-month-label" id="next-month-label"></div>
+                                 <div class="calendar-grid" id="next-month-grid"></div>
+                            </div>
+                        </div>
+                        <div class="calendar-legend mt-4">
+                            <div class="legend-item"><div class="legend-color-box mr-1" style="background-color: var(--md-sys-color-secondary-container);"></div>Some practice</div>
+                            <div class="legend-item"><div class="legend-color-box mr-1" style="background-color: var(--md-sys-color-tertiary-container);"></div>Lots of practice</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                    <div class="info-card-home">
+                        <span class="material-symbols-outlined">checklist</span>
+                        <h3>Activities Completed</h3>
+                        <p id="home-total-activities" class="metric">0</p>
+                    </div>
+                    <div class="info-card-home">
+                         <span class="material-symbols-outlined" style="color: var(--md-sys-color-success);">military_tech</span>
+                        <h3>Average Score</h3>
+                        <p id="home-average-score" class="metric" style="color: var(--md-sys-color-success);">0%</p>
+                    </div>
+                    <div class="info-card-home">
+                        <span class="material-symbols-outlined" style="color: var(--md-sys-color-tertiary);">timer</span>
+                        <h3>Time Practiced</h3>
+                        <p id="home-time-practiced" class="metric" style="color: var(--md-sys-color-tertiary);">0h 0m</p>
+                    </div>
+                </div>
+
+                <div class="m3-card m3-card-elevated p-6 mb-12"> <h2 class="text-2xl font-semibold mb-6 text-center" style="font-family: var(--md-sys-typescale-headline-small-font-family-name); color: var(--md-sys-color-on-surface);">Continue Your Journey</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <a href="QR Test 1.html" class="action-card-home">
+                            <h3>Practice QR Test 1</h3>
+                            <p>Sharpen your Quantitative Reasoning skills.</p>
+                        </a>
+                        <a href="practice.html#focus-groups-content" id="home-focus-groups-link" class="action-card-home">
+                            <h3>Explore Focus Groups</h3>
+                            <p>Target specific areas like Verbal Reasoning.</p>
+                        </a>
+                    </div>
+                     <div class="mt-8 text-center">
+                        <a href="practice.html" id="home-view-all-tests-btn" class="m3-button m3-button-filled" style="background-color: var(--md-sys-color-tertiary); color: var(--md-sys-color-on-tertiary);">
+                           <span class="material-symbols-outlined">quiz</span> View All Tests
+                        </a>
+                    </div>
+                </div>
+
+                <div class="text-center" style="color: var(--md-sys-color-on-surface-variant); font-family: var(--md-sys-typescale-body-medium-font-family-name);">
+                    <p>"The best way to predict the future is to create it." - Peter Drucker</p>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <script defer src="js/practice-main.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script>
+        // --- Firebase Configuration ---
+        const firebaseConfig = {
+          apiKey: "AIzaSyASKsaFFTZ-finv2d5egR9K_mZNstEwdns",
+          authDomain: "mwp-qr-test-page.firebaseapp.com",
+          projectId: "mwp-qr-test-page",
+          storageBucket: "mwp-qr-test-page.appspot.com",
+          messagingSenderId: "309084045110",
+          appId: "1:309084045110:web:b09ca0fdff84b094963d97",
+          measurementId: "G-4M3ED641M9"
+        };
+
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // DOM Elements
+        const studentDisplayNameSpan = document.getElementById('student-display-name');
+        const homeStudentFirstNameDisplay = document.getElementById('home-student-first-name');
+        const userNameInput = document.getElementById('user-name');
+        const examDateInput = document.getElementById('exam-date');
+        const daysRemainingSpan = document.getElementById('days-remaining');
+        const consistencyScoreP = document.getElementById('consistency-score');
+        const logoutButton = document.getElementById('logout-button');
+        const homeContentDiv = document.getElementById('home-content');
+        const dashboardWrapper = document.getElementById('dashboard-wrapper');
+        const authRedirectMessage = document.getElementById('auth-redirect-message');
+        const animatedWelcomeText = document.querySelector('#home-content .animated-welcome-text');
+
+        const prevMonthBtn = document.getElementById('prev-month-btn');
+        const nextMonthBtn = document.getElementById('next-month-btn');
+        const currentMonthYearSpan = document.getElementById('current-month-year');
+        const currentMonthGrid = document.getElementById('current-month-grid');
+        const nextMonthGrid = document.getElementById('next-month-grid');
+        const currentMonthLabel = document.getElementById('current-month-label');
+        const nextMonthLabel = document.getElementById('next-month-label');
+
+        let currentCalendarDate = new Date();
+        let performanceData = [];
+
+
+        auth.onAuthStateChanged(async user => {
+            if (user) {
+                const displayName = user.displayName || user.email || 'Student';
+                const firstName = displayName.split(' ')[0];
+
+                if(studentDisplayNameSpan) studentDisplayNameSpan.textContent = displayName;
+                if (homeStudentFirstNameDisplay) homeStudentFirstNameDisplay.textContent = firstName;
+                if (userNameInput) userNameInput.value = displayName;
+
+                if(authRedirectMessage) authRedirectMessage.classList.add('hidden');
+                if(dashboardWrapper) dashboardWrapper.classList.remove('hidden');
+                if(homeContentDiv) homeContentDiv.classList.remove('hidden');
+
+                if (animatedWelcomeText) {
+                    animatedWelcomeText.style.animation = 'none'; // Reset animation
+                    void animatedWelcomeText.offsetWidth; // Trigger reflow
+                    animatedWelcomeText.style.animation = null;
+                    animatedWelcomeText.style.animation = 'slideInFromLeft 0.6s var(--m3-sys-motion-easing-standard) forwards';
+                }
+
+                await loadUserPreferences(user);
+                await loadPerformanceData(user);
+                updateHomeStats();
+                updateConsistencyScore();
+                renderCalendars();
+
+            } else {
+                // User is signed out
+                if(dashboardWrapper) dashboardWrapper.classList.add('hidden');
+                if(homeContentDiv) homeContentDiv.classList.add('hidden');
+                if (authRedirectMessage) authRedirectMessage.classList.remove('hidden');
+            }
+        });
+
+        if(logoutButton) {
+            logoutButton.addEventListener('click', () => {
+                if (confirm("Are you sure you want to log out?")) {
+                    auth.signOut().then(() => {
+                        window.location.href = "student_dashboard.html"; // Redirect to login after logout
+                    }).catch((error) => {
+                        console.error("Logout error:", error);
+                        alert("There was an error logging out. Please try again.");
+                    });
+                }
+            });
+        }
+
+        async function loadUserPreferences(currentUser) {
+            if (!currentUser || !db || !examDateInput) return; // Added check for examDateInput
+            const userPrefRef = db.collection('userPreferences').doc(currentUser.uid);
+            try {
+                const doc = await userPrefRef.get();
+                if (doc.exists) {
+                    const data = doc.data();
+                    if (data.examDate) {
+                        examDateInput.value = data.examDate;
+                        updateDaysRemaining(data.examDate);
+                    } else {
+                         updateDaysRemaining(null);
+                    }
+                } else {
+                    updateDaysRemaining(null);
+                }
+            } catch (error) {
+                console.error("Error loading user preferences:", error);
+                updateDaysRemaining(null);
+            }
+        }
+
+        if(examDateInput){
+            examDateInput.addEventListener('change', async () => {
+                const currentUser = auth.currentUser;
+                if (!currentUser || !db) return;
+
+                const selectedDate = examDateInput.value;
+                try {
+                    if (selectedDate) {
+                        await db.collection('userPreferences').doc(currentUser.uid).set({ examDate: selectedDate }, { merge: true });
+                        updateDaysRemaining(selectedDate);
+                    } else {
+                        await db.collection('userPreferences').doc(currentUser.uid).update({ examDate: firebase.firestore.FieldValue.delete() });
+                        updateDaysRemaining(null);
+                    }
+                } catch (error) {
+                    console.error("Error saving exam date:", error);
+                }
+            });
+        }
+
+
+        function updateDaysRemaining(selectedDateStr) {
+            if (!daysRemainingSpan) return;
+            if (selectedDateStr) {
+                const examDate = new Date(selectedDateStr + "T00:00:00");
+                const today = new Date();
+                today.setHours(0,0,0,0);
+
+                if (examDate < today) {
+                    daysRemainingSpan.textContent = "Date has passed";
+                    daysRemainingSpan.style.color = "var(--md-sys-color-error)";
+                    return;
+                }
+                const diffTime = examDate.getTime() - today.getTime();
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                daysRemainingSpan.textContent = `${diffDays} day(s)`;
+                daysRemainingSpan.style.color = "var(--md-sys-color-primary)";
+            } else {
+                daysRemainingSpan.textContent = "Not set";
+                daysRemainingSpan.style.color = "var(--md-sys-color-on-surface-variant)";
+            }
+        }
+
+        async function loadPerformanceData(currentUser) {
+            if (!currentUser || !db) {
+                 performanceData = [];
+                 return;
+            }
+            performanceData = [];
+            const userId = currentUser.uid;
+            try {
+                const querySnapshot = await db.collection("performanceSubmissions")
+                                          .where("userId", "==", userId)
+                                          .get();
+
+                querySnapshot.forEach(doc => {
+                    performanceData.push({ id: doc.id, ...doc.data() });
+                });
+            } catch (error) {
+                console.error("Error loading performance data for home page:", error);
+                performanceData = [];
+            }
+        }
+
+        function updateConsistencyScore() {
+            if (!consistencyScoreP) return;
+            if (performanceData.length === 0) {
+                consistencyScoreP.textContent = '0 Days Completed';
+                return;
+            }
+            const practiceDays = new Set();
+            performanceData.forEach(result => {
+                if (result.submissionTimestamp) {
+                    let dateStr;
+                    if (result.submissionTimestamp.toDate) {
+                        dateStr = result.submissionTimestamp.toDate().toLocaleDateString();
+                    } else if (typeof result.submissionTimestamp === 'string') {
+                        dateStr = new Date(result.submissionTimestamp).toLocaleDateString();
+                    } else if (typeof result.submissionTimestamp === 'number') {
+                         dateStr = new Date(result.submissionTimestamp).toLocaleDateString();
+                    }
+                    if (dateStr) practiceDays.add(dateStr);
+                }
+            });
+            consistencyScoreP.textContent = `${practiceDays.size} Day(s) Completed`;
+        }
+
+        function updateHomeStats() {
+            const homeTotalActivitiesEl = document.getElementById('home-total-activities');
+            const homeAverageScoreEl = document.getElementById('home-average-score');
+            const homeTimePracticedEl = document.getElementById('home-time-practiced');
+
+            if (!homeTotalActivitiesEl || !homeAverageScoreEl || !homeTimePracticedEl) return;
+
+            homeTotalActivitiesEl.textContent = '0';
+            homeAverageScoreEl.textContent = '0%';
+            homeTimePracticedEl.textContent = '0h 0m';
+
+            if (performanceData.length > 0) {
+                homeTotalActivitiesEl.textContent = performanceData.length;
+                let totalScoreSum = 0;
+                let validScoresCount = 0;
+                let totalMinutesPracticed = 0;
+
+                performanceData.forEach(result => {
+                    const score = parseFloat(result.score);
+                    const totalPossible = parseFloat(result.totalPossibleScore || result.totalQuestions);
+
+                    if (!isNaN(score) && !isNaN(totalPossible) && totalPossible > 0) {
+                        totalScoreSum += (score / totalPossible) * 100;
+                        validScoresCount++;
+                    }
+                    const timeTaken = result.timeTaken;
+                    if (timeTaken && typeof timeTaken === 'string') {
+                        let minutesInThisEntry = 0;
+                        const hourMatch = timeTaken.match(/(\d+)\s*h/);
+                        const minMatch = timeTaken.match(/(\d+)\s*min/);
+                        const secMatch = timeTaken.match(/(\d+)\s*sec/);
+                        if (hourMatch) minutesInThisEntry += parseInt(hourMatch[1]) * 60;
+                        if (minMatch) minutesInThisEntry += parseInt(minMatch[1]);
+                        // No need to add seconds to totalMinutesPracticed if only showing hours and minutes
+                        totalMinutesPracticed += minutesInThisEntry;
+                    }
+                });
+
+                if (validScoresCount > 0) {
+                    homeAverageScoreEl.textContent = (totalScoreSum / validScoresCount).toFixed(1) + '%';
+                }
+                const hours = Math.floor(totalMinutesPracticed / 60);
+                const minutes = Math.round(totalMinutesPracticed % 60);
+                homeTimePracticedEl.textContent = `${hours}h ${minutes}m`;
+            }
+        }
+
+        function renderCalendars() {
+            if(!currentMonthGrid || !nextMonthGrid || !currentMonthLabel || !nextMonthLabel || !currentMonthYearSpan) return;
+
+            renderMonth(currentCalendarDate, currentMonthGrid, currentMonthLabel);
+
+            let nextMonthDate = new Date(currentCalendarDate);
+            nextMonthDate.setMonth(currentCalendarDate.getMonth() + 1);
+            renderMonth(nextMonthDate, nextMonthGrid, nextMonthLabel);
+
+            currentMonthYearSpan.textContent = currentCalendarDate.toLocaleDateString('default', { month: 'long', year: 'numeric' });
+        }
+
+        function renderMonth(dateToRender, gridElement, labelElement) {
+            if (!gridElement || !labelElement) return;
+            gridElement.innerHTML = '';
+            const month = dateToRender.getMonth();
+            const year = dateToRender.getFullYear();
+
+            labelElement.textContent = dateToRender.toLocaleDateString('default', { month: 'long' });
+
+            const firstDayOfMonth = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            const dayHeaders = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+            dayHeaders.forEach(header => {
+                const dayLabelEl = document.createElement('div');
+                dayLabelEl.className = 'calendar-day-label';
+                dayLabelEl.textContent = header;
+                gridElement.appendChild(dayLabelEl);
+            });
+
+            const startOffset = (firstDayOfMonth === 0) ? 6 : firstDayOfMonth - 1;
+
+            for (let i = 0; i < startOffset; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'calendar-day empty';
+                gridElement.appendChild(emptyCell);
+            }
+
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayCell = document.createElement('div');
+                dayCell.className = 'calendar-day';
+                dayCell.textContent = day;
+                const cellDate = new Date(year, month, day);
+                cellDate.setHours(0,0,0,0);
+
+                if (cellDate.getTime() === today.getTime()) {
+                    dayCell.classList.add('today');
+                }
+
+                const activityCount = getActivityCountForDate(cellDate);
+                if (activityCount > 0) {
+                    if (activityCount >= 2) {
+                        dayCell.classList.add('practice-lots');
+                    } else {
+                        dayCell.classList.add('practice-some');
+                    }
+                }
+                gridElement.appendChild(dayCell);
+            }
+        }
+
+        function getActivityCountForDate(date) {
+            let count = 0;
+            const dateString = date.toLocaleDateString();
+            performanceData.forEach(result => {
+                if (result.submissionTimestamp) {
+                    let submissionDateStr;
+                     if (result.submissionTimestamp.toDate) {
+                        submissionDateStr = result.submissionTimestamp.toDate().toLocaleDateString();
+                    } else if (typeof result.submissionTimestamp === 'string') {
+                        submissionDateStr = new Date(result.submissionTimestamp).toLocaleDateString();
+                    } else if (typeof result.submissionTimestamp === 'number') {
+                         submissionDateStr = new Date(result.submissionTimestamp).toLocaleDateString();
+                    }
+                    if (submissionDateStr === dateString) {
+                        count++;
+                    }
+                }
+            });
+            return count;
+        }
+
+
+        if(prevMonthBtn) prevMonthBtn.addEventListener('click', () => {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
+            renderCalendars();
+        });
+        if(nextMonthBtn) nextMonthBtn.addEventListener('click', () => {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
+            renderCalendars();
+        });
+
+        const viewAllTestsBtn = document.getElementById('home-view-all-tests-btn');
+        if(viewAllTestsBtn) {
+            viewAllTestsBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = "practice.html";
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const navHome = document.getElementById('nav-home');
+            if (navHome) {
+                document.querySelectorAll('.nav-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                    tab.setAttribute('aria-selected', 'false');
+                });
+                navHome.classList.add('active');
+                navHome.setAttribute('aria-selected', 'true');
+            }
+        });
+    </script>
 </body>
 </html>
