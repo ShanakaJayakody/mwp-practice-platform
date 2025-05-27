@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
+        /* Page-specific styles - most should be in m3_styles.css */
         body {
             font-family: var(--md-sys-typescale-font-family-name);
             background-color: var(--md-sys-color-background);
@@ -21,35 +22,30 @@
 
         .dashboard-header .logo-small { max-width: 132px; }
 
-#home-content .animated-welcome-text {
-    font-family: var(--md-sys-typescale-display-medium-font-family-name);
-    font-size: var(--md-sys-typescale-display-medium-font-size);
-    line-height: var(--md-sys-typescale-display-medium-line-height);
-    font-weight: var(--md-sys-typescale-display-medium-font-weight);
-    /* Apply the gradient here */
-    background-image: linear-gradient(to right, var(--md-sys-color-secondary) 20%, var(--md-sys-color-primary) 80%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent; /* Fallback for browsers that don&#39;t support text-fill-color */
-    -webkit-text-fill-color: transparent;
-    animation: slideInFromLeft 0.6s var(--m3-sys-motion-easing-standard) forwards; opacity: 0;
-}
-#home-content .animated-welcome-text .welcome-part1 { /* Removed specific color as gradient is applied to the whole element now */ }
-#home-content .animated-welcome-text .welcome-part2 { /* Removed specific color */ }
- @keyframes slideInFromLeft {
-    from { opacity: 0; transform: translateX(-30px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-.animated-welcome-text { opacity: 0; }
+        /* Welcome Text Animation & Base Style (Gradient is now handled by .gradient-text) */
+        #home-content .animated-welcome-text {
+            font-family: var(--md-sys-typescale-display-medium-font-family-name);
+            font-size: var(--md-sys-typescale-display-medium-font-size);
+            line-height: var(--md-sys-typescale-display-medium-line-height);
+            font-weight: var(--md-sys-typescale-display-medium-font-weight);
+            /* Base color will be overridden by gradient if .gradient-text is applied */
+            color: var(--md-sys-color-primary); 
+            animation: slideInFromLeft 0.6s var(--m3-sys-motion-easing-standard) forwards;
+            opacity: 0; /* Initial state for animation */
+        }
+         @keyframes slideInFromLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        /* No need for .welcome-part1, .welcome-part2 specific color styles here if gradient applies to whole h1 */
 
-#home-content .subtitle-text {
-    font-family: var(--md-sys-typescale-title-large-font-family-name);
-    font-size: var(--md-sys-typescale-title-large-font-size);
-    line-height: var(--md-sys-typescale-title-large-line-height);
-    color: var(--md-sys-color-on-surface-variant);
-    margin-top: var(--md-sys-spacing-xs);
-}
-
+        #home-content .subtitle-text {
+            font-family: var(--md-sys-typescale-title-large-font-family-name);
+            font-size: var(--md-sys-typescale-title-large-font-size);
+            line-height: var(--md-sys-typescale-title-large-line-height);
+            color: var(--md-sys-color-on-surface-variant);
+            margin-top: var(--md-sys-spacing-xs);
+        }
 
         .info-card-home {
             background-color: var(--md-sys-color-surface-container-highest);
@@ -182,15 +178,14 @@
             color: var(--md-sys-color-on-surface);
         }
 
-        /* Corrected calendar grid container for side-by-side months */
         .calendar-grid-container {
-            display: flex; /* Use flex to place month side-by-side */
-            gap: var(--md-sys-spacing-l); /* Space between months */
-            width: 100%; /* Take full width of its parent */
+            display: flex;
+            gap: var(--md-sys-spacing-l);
+            width: 100%;
         }
         .calendar-month {
-            flex: 1; /* Allow months to share space equally */
-            min-width: 0; /* Important for flex items to shrink properly */
+            flex: 1;
+            min-width: 0;
         }
         .calendar-month-label {
             font-family: var(--md-sys-typescale-title-medium-font-family-name);
@@ -252,7 +247,7 @@
 
         .hidden { display: none !important; }
 
-        @media (max-width: 1024px) { /* Changed from 768px to 1024px for stacking calendar earlier */
+        @media (max-width: 1024px) {
             .calendar-grid-container {
                 flex-direction: column;
             }
@@ -260,7 +255,6 @@
         @media (max-width: 768px) {
             .main-nav { justify-content: flex-start; }
             .dashboard-content-area { padding: var(--md-sys-spacing-m); }
-            /* Stack main cards on tablet portrait and mobile */
             #home-content .grid.lg\:grid-cols-3 { grid-template-columns: 1fr; }
 
             #home-content .animated-welcome-text {
@@ -275,7 +269,6 @@
             .welcome-user { display: none; }
             .nav-tab { padding: var(--md-sys-spacing-s); }
          }
-        /* Focus outline for accessibility (should be in m3_styles.css but ensure it's present) */
         *:focus-visible {
             outline: 2px solid var(--md-sys-color-secondary);
             outline-offset: 2px;
@@ -331,8 +324,8 @@
         <main id="dashboard-content-area" class="dashboard-content-area">
             <div id="home-content" class="max-w-6xl mx-auto">
                 <div class="mb-10 text-left">
-                    <h1 class="animated-welcome-text">
-                        <span class="welcome-part1">Welcome </span><span id="home-student-first-name" class="welcome-part2">Student</span>
+                    <h1 class="animated-welcome-text gradient-text">
+                        Welcome <span id="home-student-first-name">Student</span>
                     </h1>
                     <p class="subtitle-text">Ready to ace the UCAT? Here's your personalized dashboard.</p>
                 </div>
@@ -449,7 +442,7 @@
         const db = firebase.firestore();
         const auth = firebase.auth();
 
-        // DOM Elements
+        // DOM Elements (ensure all are correctly selected)
         const studentDisplayNameSpan = document.getElementById('student-display-name');
         const homeStudentFirstNameDisplay = document.getElementById('home-student-first-name');
         const userNameInput = document.getElementById('user-name');
@@ -473,14 +466,13 @@
         let currentCalendarDate = new Date();
         let performanceData = [];
 
-
         auth.onAuthStateChanged(async user => {
             if (user) {
                 const displayName = user.displayName || user.email || 'Student';
                 const firstName = displayName.split(' ')[0];
 
                 if(studentDisplayNameSpan) studentDisplayNameSpan.textContent = displayName;
-                if (homeStudentFirstNameDisplay) homeStudentFirstNameDisplay.textContent = firstName;
+                if (homeStudentFirstNameDisplay) homeStudentFirstNameDisplay.textContent = firstName; // This will be part of the gradient text
                 if (userNameInput) userNameInput.value = displayName;
 
                 if(authRedirectMessage) authRedirectMessage.classList.add('hidden');
@@ -562,7 +554,6 @@
             });
         }
 
-
         function updateDaysRemaining(selectedDateStr) {
             if (!daysRemainingSpan) return;
             if (selectedDateStr) {
@@ -596,7 +587,6 @@
                 const querySnapshot = await db.collection("performanceSubmissions")
                                           .where("userId", "==", userId)
                                           .get();
-
                 querySnapshot.forEach(doc => {
                     performanceData.push({ id: doc.id, ...doc.data() });
                 });
@@ -659,7 +649,7 @@
                         let minutesInThisEntry = 0;
                         const hourMatch = timeTaken.match(/(\d+)\s*h/);
                         const minMatch = timeTaken.match(/(\d+)\s*min/);
-                        const secMatch = timeTaken.match(/(\d+)\s*sec/);
+                        //const secMatch = timeTaken.match(/(\d+)\s*sec/); // Not used for total hours display
                         if (hourMatch) minutesInThisEntry += parseInt(hourMatch[1]) * 60;
                         if (minMatch) minutesInThisEntry += parseInt(minMatch[1]);
                         totalMinutesPracticed += minutesInThisEntry;
@@ -701,7 +691,7 @@
             const dayHeaders = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
             dayHeaders.forEach(header => {
                 const dayLabelEl = document.createElement('div');
-                dayLabelEl.className = 'calendar-day-label'; // Tailwind classes removed
+                dayLabelEl.className = 'calendar-day-label';
                 dayLabelEl.textContent = header;
                 gridElement.appendChild(dayLabelEl);
             });
@@ -710,7 +700,7 @@
 
             for (let i = 0; i < startOffset; i++) {
                 const emptyCell = document.createElement('div');
-                emptyCell.className = 'calendar-day empty'; // Tailwind classes removed
+                emptyCell.className = 'calendar-day empty';
                 gridElement.appendChild(emptyCell);
             }
 
@@ -719,7 +709,7 @@
 
             for (let day = 1; day <= daysInMonth; day++) {
                 const dayCell = document.createElement('div');
-                dayCell.className = 'calendar-day'; // Tailwind classes removed
+                dayCell.className = 'calendar-day';
                 dayCell.textContent = day;
                 const cellDate = new Date(year, month, day);
                 cellDate.setHours(0,0,0,0);
@@ -760,7 +750,6 @@
             });
             return count;
         }
-
 
         if(prevMonthBtn) prevMonthBtn.addEventListener('click', () => {
             currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);

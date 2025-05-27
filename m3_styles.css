@@ -75,6 +75,35 @@
   --md-sys-color-scrim: #000000;
   --md-sys-color-scrim-rgb: 0,0,0;
 
+  /* ... (all previous CSS content) ... */
+
+/* Gradient Text Utility Class */
+.gradient-text {
+  background-image: linear-gradient(to right, var(--md-sys-color-secondary) 20%, var(--md-sys-color-primary) 80%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent; /* Fallback for browsers that don't support text-fill-color */
+  -webkit-text-fill-color: transparent;
+  display: inline-block; /* Ensures the background doesn't stretch unnecessarily if the element is block */
+}
+
+/* Typography Helper Classes (ensure these are defined if not already) */
+.m3-display-medium {
+  font-family: var(--md-sys-typescale-display-medium-font-family-name);
+  font-size: var(--md-sys-typescale-display-medium-font-size);
+  line-height: var(--md-sys-typescale-display-medium-line-height);
+  font-weight: var(--md-sys-typescale-display-medium-font-weight);
+}
+
+.m3-title-large {
+  font-family: var(--md-sys-typescale-title-large-font-family-name);
+  font-size: var(--md-sys-typescale-title-large-font-size);
+  line-height: var(--md-sys-typescale-title-large-line-height);
+  font-weight: var(--md-sys-typescale-title-large-font-weight); /* Ensure this matches your desired weight */
+}
+
+/* ... (rest of your m3_styles.css) ... */
+
   /* Shape - From Expressive Plan */
   --md-sys-shape-corner-none: 0px;
   --md-sys-shape-corner-extra-small: 0.25rem; /* 4dp */
