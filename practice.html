@@ -81,6 +81,7 @@
             .left-nav-tab[data-target="dm-content"].active { background-color: var(--section-dm-container); color: var(--section-dm-on-container); }
             .left-nav-tab[data-target="qr-content"].active { background-color: var(--section-qr-container); color: var(--section-qr-on-container); }
             .left-nav-tab[data-target="focus-groups-content"].active { background-color: var(--section-fg-container); color: var(--section-fg-on-container); }
+            .left-nav-tab[data-target="exams-content"].active { background-color: var(--md-sys-color-tertiary-container); color: var(--md-sys-color-on-tertiary-container); }
 
 
             .practice-main-content {
@@ -111,6 +112,7 @@
             #dm-content > h2 { color: var(--section-dm-primary); border-bottom-color: var(--section-dm-primary); }
             #qr-content > h2 { color: var(--section-qr-primary); border-bottom-color: var(--section-qr-primary); }
             #focus-groups-content > h2 { color: var(--section-fg-primary); border-bottom-color: var(--section-fg-primary); }
+            #exams-content > h2 { color: var(--md-sys-color-tertiary); border-bottom-color: var(--md-sys-color-tertiary); }
 
             .subsection-card { /* M3 Elevated Card */
                 background-color: var(--md-sys-color-surface-container-low); /* Slightly different from page bg */
@@ -341,6 +343,9 @@
                 <a href="#" class="left-nav-tab" data-target="focus-groups-content">
                     <span class="material-symbols-outlined">groups</span>Focus Groups
                 </a>
+                <a href="#" class="left-nav-tab" data-target="exams-content">
+                    <span class="material-symbols-outlined">checklist</span>Exams
+                </a>
             </aside>
 
             <main class="practice-main-content">
@@ -438,6 +443,44 @@
                         <div id="practice-sets-grid-fg" class="practice-sets-grid-fg grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                             </div>
                     </div>
+                </section>
+
+                <section id="exams-content" class="section-content">
+                    <h2>Exams</h2>
+                    <div class="section-selection-container-exams grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                        <div id="select-vr-exam" class="section-card-exams text-center" data-section="VR-Exam">
+                            <span class="material-symbols-outlined">menu_book</span>
+                            <h3>Verbal Reasoning</h3>
+                            <p>Full VR timed exams.</p>
+                            <button class="m3-button btn-select-section-exams">Select VR Exam</button>
+                        </div>
+                        <div id="select-dm-exam" class="section-card-exams text-center" data-section="DM-Exam">
+                             <span class="material-symbols-outlined">psychology</span>
+                             <h3>Decision Making</h3>
+                            <p>Full DM timed exams.</p>
+                            <button class="m3-button btn-select-section-exams">Select DM Exam</button>
+                        </div>
+                        <div id="select-qr-exam" class="section-card-exams text-center" data-section="QR-Exam">
+                            <span class="material-symbols-outlined">calculate</span>
+                            <h3>Quantitative Reasoning</h3>
+                            <p>Full QR timed exams.</p>
+                            <button class="m3-button btn-select-section-exams">Select QR Exam</button>
+                        </div>
+                        <div id="select-full-exam" class="section-card-exams text-center" data-section="Full-Exam">
+                            <span class="material-symbols-outlined">quiz</span>
+                            <h3>Full UCAT Exam</h3>
+                            <p>Simulate a full UCAT exam.</p>
+                            <button class="m3-button btn-select-section-exams">Select Full Exam</button>
+                        </div>
+                    </div>
+                    <!-- Placeholder for exam sets if needed, similar to focus groups -->
+                    <!--
+                    <div id="exam-sets-container" class="exam-sets-container hidden">
+                        <h3 class="text-xl font-semibold mb-4 text-center" style="font-family: var(--md-sys-typescale-title-large-font-family-name); color: var(--md-sys-color-on-surface);">Exams for <span id="current-exam-section-title" style="color: var(--md-sys-color-tertiary);"></span></h3>
+                        <div id="exam-sets-grid" class="exam-sets-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                        </div>
+                    </div>
+                    -->
                 </section>
             </main>
         </div>

@@ -136,6 +136,12 @@ const firebaseConfig = {
       const practiceSetsGridFg = document.getElementById('practice-sets-grid-fg');
       const allSectionCardsFg = document.querySelectorAll('.section-card-fg');
   
+      // Exams Section Logic (New)
+      const allSectionCardsExams = document.querySelectorAll('.section-card-exams');
+      // const practiceSetsContainerExams = document.getElementById('exam-sets-container'); // If you uncomment the HTML for this
+      // const currentSectionTitleSpanExams = document.getElementById('current-exam-section-title'); // If you uncomment the HTML for this
+      // const practiceSetsGridExams = document.getElementById('exam-sets-grid'); // If you uncomment the HTML for this
+
       function displayPracticeSetsFg(sectionName, sectionShortName, sets) {
           if (!currentSectionTitleSpanFg || !practiceSetsGridFg || !practiceSetsContainerFg) return;
           currentSectionTitleSpanFg.textContent = sectionName;
@@ -188,6 +194,40 @@ const firebaseConfig = {
           }
       });
       
+      // Exams Section Card Click Logic (New)
+      allSectionCardsExams.forEach(card => {
+        const button = card.querySelector('.btn-select-section-exams');
+        if (button && !card.classList.contains('disabled')) {
+            button.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent card click if button is clicked
+                const section = card.dataset.section;
+                // Placeholder: Implement actual logic to display exams for the selected section
+                // For now, just mark as active and log
+                allSectionCardsExams.forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                console.log("Selected Exam Section:", section);
+
+                // Example: If you had an exam sets container similar to focus groups:
+                // let examSets = [];
+                // let sectionFullName = card.querySelector('h3').textContent;
+                // if (section === 'VR-Exam') {
+                //     examSets.push({ name: 'VR Mock 1', link: '#', disabled: true }); 
+                // }
+                // displayExamSets(sectionFullName, section, examSets); // You'd need to create displayExamSets
+                alert("Exam selection for " + card.querySelector('h3').textContent + " is coming soon!");
+            });
+        }
+        // Optional: If you want the whole card to be clickable (and not just the button)
+        // card.addEventListener('click', () => {
+        //     if (card.classList.contains('disabled')) return;
+        //     const section = card.dataset.section;
+        //     allSectionCardsExams.forEach(c => c.classList.remove('active'));
+        //     card.classList.add('active');
+        //     console.log("Clicked Exam Section Card:", section);
+        //     alert("Exam selection for " + card.querySelector('h3').textContent + " is coming soon!");
+        // });
+      });
+  
       // DM Class Worksheets Logic
       const dmSelectTopicBtn = document.getElementById('dm-select-topic-btn');
       const dmSubtopicSelectionDiv = document.getElementById('dm-subtopic-selection');
