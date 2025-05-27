@@ -43,7 +43,7 @@
   --md-sys-color-on-background: #202124; /* Dark Charcoal - Neutral On-surface */
   --md-sys-color-surface: #FFFFFF; /* Surface (Cards, etc.) */
   --md-sys-color-on-surface: #202124; /* Text on Surface */
-  
+
   --md-sys-color-surface-variant: #E1E3E5; /* From original plan (Tailwind's gray-200 equivalent) */
   --md-sys-color-on-surface-variant: #444746; /* From original plan */
 
@@ -57,7 +57,7 @@
   --md-sys-color-outline-variant: #C4C7C5; /* Subtle borders */
 
   /* Utility Colors */
-  --md-sys-color-error: #B3261E; 
+  --md-sys-color-error: #B3261E;
   --md-sys-color-on-error: #FFFFFF;
   --md-sys-color-error-container: #F9DEDC;
   --md-sys-color-on-error-container: #410E0B;
@@ -72,7 +72,7 @@
   --md-sys-color-warning-container: #FFECB3; /* Example light yellow */
   --md-sys-color-on-warning-container: #212121; /* Dark text for light yellow */
 
-  --md-sys-color-scrim: #000000; 
+  --md-sys-color-scrim: #000000;
   --md-sys-color-scrim-rgb: 0,0,0;
 
   /* Shape - From Expressive Plan */
@@ -82,7 +82,7 @@
   --md-sys-shape-corner-medium: 0.75rem; /* 12dp */
   --md-sys-shape-corner-large: 1rem;    /* 16dp */
   --md-sys-shape-corner-extra-large: 1.75rem; /* 28dp */
-  --md-sys-shape-corner-full: 9999px; 
+  --md-sys-shape-corner-full: 9999px;
 
   /* Typography - Roboto Flex, Scale from Expressive Plan */
   --md-sys-typescale-font-family-name: 'Roboto Flex', 'Roboto', sans-serif; /* Roboto Flex with fallback */
@@ -94,7 +94,7 @@
   --md-sys-typescale-display-medium-font-size: 45px;
   --md-sys-typescale-display-medium-line-height: 52px;
   --md-sys-typescale-display-medium-font-weight: 400;
-  
+
   --md-sys-typescale-headline-large-font-size: 32px;
   --md-sys-typescale-headline-large-line-height: 40px;
   --md-sys-typescale-headline-large-font-weight: 700; /* Bold for headlines */
@@ -106,7 +106,7 @@
   --md-sys-typescale-headline-small-font-size: 24px;
   --md-sys-typescale-headline-small-line-height: 32px;
   --md-sys-typescale-headline-small-font-weight: 400; /* Regular in plan */
-  
+
   --md-sys-typescale-title-large-font-size: 22px;
   --md-sys-typescale-title-large-line-height: 28px;
   --md-sys-typescale-title-large-font-weight: 700; /* Plan uses Medium, but Title Large often bolder */
@@ -122,7 +122,7 @@
   --md-sys-typescale-body-large-font-size: 16px;
   --md-sys-typescale-body-large-line-height: 24px;
   --md-sys-typescale-body-large-font-weight: 400;
-  
+
   --md-sys-typescale-body-medium-font-size: 14px;
   --md-sys-typescale-body-medium-line-height: 20px;
   --md-sys-typescale-body-medium-font-weight: 400;
@@ -130,7 +130,7 @@
   --md-sys-typescale-label-large-font-size: 14px;
   --md-sys-typescale-label-large-line-height: 20px;
   --md-sys-typescale-label-large-font-weight: 500; /* Medium (M3 Default) */
-  
+
   --md-sys-typescale-label-small-font-size: 11px; /* From plan */
   --md-sys-typescale-label-small-line-height: 16px; /* M3 default */
   --md-sys-typescale-label-small-font-weight: 500; /* Medium */
@@ -191,19 +191,19 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  display: flex; /* Often good for centering content */
-  flex-direction: column; /* If header/footer structure */
+  display: flex;
+  flex-direction: column;
 }
 
-/* M3 Component Base Styles (Examples) */
+/* M3 Component Base Styles */
 
 /* Buttons */
 .m3-button {
   font-family: var(--md-sys-typescale-label-large-font-family-name);
   font-size: var(--md-sys-typescale-label-large-font-size);
-  font-weight: var(--md-sys-typescale-label-large-font-weight); /* Updated to M3: 500 */
+  font-weight: var(--md-sys-typescale-label-large-font-weight);
   line-height: var(--md-sys-typescale-label-large-line-height);
-  padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l); /* 10px 24px -> 12px 24px is closer to 40dp height */
+  padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l);
   border-radius: var(--md-sys-shape-corner-full);
   border: none;
   cursor: pointer;
@@ -217,14 +217,19 @@ body {
   transition: background-color var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard),
               box-shadow var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard),
               transform var(--m3-sys-motion-duration-short1) var(--m3-sys-motion-easing-standard);
-  gap: var(--md-sys-spacing-xs); /* 8dp gap for icon + text */
+  gap: var(--md-sys-spacing-xs);
 }
 .m3-button:hover:not(:disabled) { box-shadow: var(--md-sys-elevation-level1); }
 .m3-button:active:not(:disabled) { transform: scale(0.98); box-shadow: var(--md-sys-elevation-level0); }
-.m3-button:disabled { cursor: not-allowed; box-shadow: none; }
+.m3-button:disabled {
+    cursor: not-allowed;
+    box-shadow: none;
+    background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
+    color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+    border-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent); /* For outlined disabled */
+}
 .m3-button .material-symbols-outlined {
   font-size: 1.125rem; /* 18dp */
-  /* margin-right: var(--md-sys-spacing-xs); Removed, using gap on parent */
 }
 
 .m3-button-filled {
@@ -232,23 +237,25 @@ body {
   color: var(--md-sys-color-on-primary);
 }
 .m3-button-filled:hover:not(:disabled) {
-  background-color: color-mix(in srgb, var(--md-sys-color-primary) 92%, var(--md-sys-color-on-primary) 8%); /* M3 hover state layer */
+  background-color: color-mix(in srgb, var(--md-sys-color-primary) 92%, var(--md-sys-color-on-primary) 8%);
 }
-.m3-button-filled:disabled {
-  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
-  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+/* Disabled state handled by general .m3-button:disabled */
+
+.m3-button-filled-error { /* Specific for logout or destructive actions */
+    background-color: var(--md-sys-color-error);
+    color: var(--md-sys-color-on-error);
+}
+.m3-button-filled-error:hover:not(:disabled) {
+    background-color: color-mix(in srgb, var(--md-sys-color-error) 92%, var(--md-sys-color-on-error) 8%);
 }
 
-.m3-button-filled-tonal { /* Example for secondary actions if needed */
+
+.m3-button-filled-tonal {
     background-color: var(--md-sys-color-secondary-container);
     color: var(--md-sys-color-on-secondary-container);
 }
 .m3-button-filled-tonal:hover:not(:disabled) {
     background-color: color-mix(in srgb, var(--md-sys-color-on-secondary-container) 8%, var(--md-sys-color-secondary-container));
-}
-.m3-button-filled-tonal:disabled {
-  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
-  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
 }
 
 .m3-button-outlined {
@@ -259,261 +266,297 @@ body {
 .m3-button-outlined:hover:not(:disabled) {
   background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
 }
-.m3-button-outlined:disabled {
-  border-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
-  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
-}
 
 .m3-button-text {
   background-color: transparent;
   color: var(--md-sys-color-primary);
-  padding: var(--md-sys-spacing-s) var(--md-sys-spacing-s); /* Slightly less horizontal padding for text buttons */
+  padding: var(--md-sys-spacing-s) var(--md-sys-spacing-s);
 }
 .m3-button-text:hover:not(:disabled) {
   background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
 }
-.m3-button-text:disabled {
-  color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+
+/* Icon Button */
+.m3-icon-button {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2.5rem; height: 2.5rem; /* 40dp */
+  padding: var(--md-sys-spacing-xs); /* 8dp */
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: transparent;
+  color: var(--md-sys-color-on-surface-variant); /* Default icon color */
+  border: none; cursor: pointer;
+  transition: background-color var(--m3-sys-motion-duration-short1) var(--m3-sys-motion-easing-standard);
 }
+.m3-icon-button .material-symbols-outlined { font-size: 1.5rem; /* 24px */ margin: 0; }
+.m3-icon-button:hover:not(:disabled) { background-color: color-mix(in srgb, currentColor 12%, transparent); }
+.m3-icon-button:disabled {
+    color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+    background-color: transparent;
+    cursor: not-allowed;
+}
+.m3-icon-button.selected { /* For toggle states */
+    background-color: var(--md-sys-color-primary-container);
+    color: var(--md-sys-color-primary);
+}
+.m3-icon-button.selected .material-symbols-outlined {
+    font-variation-settings: "FILL" 1; /* Filled icon for selected state */
+}
+
 
 /* Cards */
 .m3-card {
-  background-color: var(--md-sys-color-surface-container-highest); /* Expressive plan: surface-container-highest */
-  border-radius: var(--md-sys-shape-corner-medium); /* Expressive plan: 24dp -> M3 Medium is 12dp, Large 16dp. Choosing Medium */
-  padding: var(--md-sys-spacing-l); /* 24px */
-  box-shadow: var(--md-sys-elevation-level1);
-  transition: box-shadow var(--m3-sys-motion-duration-medium2) var(--m3-sys-motion-easing-standard),
-              transform var(--m3-sys-motion-duration-medium2) var(--m3-sys-motion-easing-standard);
-  overflow: hidden; /* For ripple effects if any */
+  background-color: var(--md-sys-color-surface); /* Default to base surface */
+  border-radius: var(--md-sys-shape-corner-medium);
+  padding: var(--md-sys-spacing-l);
+  box-shadow: var(--md-sys-elevation-level0); /* Outlined/Filled often level 0, Elevated uses level 1+ */
+  border: 1px solid transparent; /* Placeholder for outlined */
 }
-.m3-card-elevated { /* For cards that need more emphasis */
-    box-shadow: var(--md-sys-elevation-level2);
-    background-color: var(--md-sys-color-surface-container-high);
+.m3-card-elevated {
+    background-color: var(--md-sys-color-surface-container-low); /* Slightly elevated surface color */
+    box-shadow: var(--md-sys-elevation-level1);
+    border: none;
+}
+.m3-card-filled {
+    background-color: var(--md-sys-color-surface-container-highest); /* Highest non-primary container */
+    box-shadow: var(--md-sys-elevation-level0);
+    border: none;
 }
 .m3-card-outlined {
-    background-color: var(--md-sys-color-surface);
     border: 1px solid var(--md-sys-color-outline-variant);
     box-shadow: var(--md-sys-elevation-level0);
 }
-.m3-card:hover:not(.m3-card-outlined) { /* Subtle lift on hover for filled/elevated cards */
-  box-shadow: var(--md-sys-elevation-level2);
-  transform: translateY(-2px);
+.m3-card:hover:not(.m3-card-outlined) {
+  box-shadow: var(--md-sys-elevation-level2); /* Example hover for elevated/filled */
 }
 
-/* Text Fields (Input) */
-.m3-text-field {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: var(--md-sys-spacing-m);
-}
-.m3-text-field label {
-  font-family: var(--md-sys-typescale-label-large-font-family-name);
-  font-size: var(--md-sys-typescale-label-large-font-size);
-  color: var(--md-sys-color-on-surface-variant);
-  margin-bottom: var(--md-sys-spacing-xxs); /* 4dp */
-}
-.m3-text-field input[type="text"],
-.m3-text-field input[type="email"],
-.m3-text-field input[type="password"],
-.m3-text-field input[type="number"],
-.m3-text-field input[type="date"],
-.m3-text-field textarea,
-.m3-text-field select {
+/* Text Fields */
+.m3-text-field-input { /* Applied to the <input> or <textarea> itself */
   font-family: var(--md-sys-typescale-body-large-font-family-name);
   font-size: var(--md-sys-typescale-body-large-font-size);
   color: var(--md-sys-color-on-surface);
-  background-color: color-mix(in srgb, var(--md-sys-color-primary) 4%, var(--md-sys-color-surface-container-highest)); /* M3 Filled Text Field Base */
-  padding: var(--md-sys-spacing-m); /* 16dp */
+  background-color: color-mix(in srgb, var(--md-sys-color-primary) 4%, var(--md-sys-color-surface-container-highest));
+  padding: var(--md-sys-spacing-m);
   border: none;
   border-bottom: 1px solid var(--md-sys-color-on-surface-variant);
-  border-radius: var(--md-sys-shape-corner-extra-small) var(--md-sys-shape-corner-extra-small) 0 0; /* Top corners rounded */
+  border-radius: var(--md-sys-shape-corner-extra-small) var(--md-sys-shape-corner-extra-small) 0 0;
   width: 100%;
   transition: border-color var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard),
               background-color var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard);
 }
-.m3-text-field input:focus,
-.m3-text-field textarea:focus,
-.m3-text-field select:focus {
+.m3-text-field-input:focus {
   outline: none;
   border-bottom: 2px solid var(--md-sys-color-primary);
   background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, var(--md-sys-color-surface-container-highest));
-  padding-bottom: calc(var(--md-sys-spacing-m) - 1px); /* Adjust for thicker border */
+  padding-bottom: calc(var(--md-sys-spacing-m) - 1px);
 }
-.m3-text-field input:read-only,
-.m3-text-field textarea:read-only {
+.m3-text-field-input:read-only {
     background-color: var(--md-sys-color-surface-variant);
     border-bottom-color: var(--md-sys-color-outline);
     color: var(--md-sys-color-on-surface-variant);
     cursor: default;
 }
-.m3-text-field input:disabled,
-.m3-text-field textarea:disabled,
-.m3-text-field select:disabled {
+.m3-text-field-input:disabled {
     background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 4%, transparent);
     border-bottom-color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
     color: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
     cursor: not-allowed;
 }
-
-/* Dialogs (Modals) */
-/* Already covered by .m3-dialog-scrim and .m3-dialog in previous version - this is a reminder */
-
-/* Chips */
-.m3-chip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 var(--md-sys-spacing-s); /* 0 12dp */
-  height: 2rem; /* 32dp */
-  border-radius: var(--md-sys-shape-corner-small); /* 8dp */
+.m3-text-field label { /* For floating labels or labels above the field */
   font-family: var(--md-sys-typescale-label-large-font-family-name);
   font-size: var(--md-sys-typescale-label-large-font-size);
-  font-weight: var(--md-sys-typescale-label-large-font-weight);
-  cursor: pointer;
-  transition: background-color var(--m3-sys-motion-duration-short2) ease,
-              border-color var(--m3-sys-motion-duration-short2) ease,
-              color var(--m3-sys-motion-duration-short2) ease;
-}
-.m3-chip-filter { /* For filter chips */
-  border: 1px solid var(--md-sys-color-outline);
-  background-color: var(--md-sys-color-surface);
   color: var(--md-sys-color-on-surface-variant);
+  margin-bottom: var(--md-sys-spacing-xxs);
+  display: block;
 }
-.m3-chip-filter:hover {
+
+
+/* Navigation Elements */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--md-sys-spacing-m) var(--md-sys-spacing-l);
+    background-color: var(--md-sys-color-surface);
+    box-shadow: var(--md-sys-elevation-level1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    min-height: 72px; /* Ensure header has a consistent height for sticky nav positioning */
+}
+
+.main-nav {
+  display: flex;
+  justify-content: center;
+  background-color: var(--md-sys-color-surface);
+  padding: var(--md-sys-spacing-xxs) 0;
+  box-shadow: var(--md-sys-elevation-level1);
+  position: sticky;
+  top: 72px; /* Should match header height */
+  z-index: 999;
+  overflow-x: auto;
+  width: 100%;
+}
+
+.nav-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--md-sys-spacing-xs);
+  padding: var(--md-sys-spacing-s) var(--md-sys-spacing-l);
+  margin: 0 var(--md-sys-spacing-xxs);
+  cursor: pointer;
+  font-family: var(--md-sys-typescale-label-large-font-family-name);
+  font-weight: var(--md-sys-typescale-label-large-font-weight);
+  font-size: var(--md-sys-typescale-label-large-font-size);
+  color: var(--md-sys-color-on-surface-variant);
+  border-bottom: 2px solid transparent;
+  border-radius: var(--md-sys-shape-corner-none);
+  transition: color var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard),
+              border-color var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard),
+              background-color var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard);
+  text-decoration: none;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-tab:hover {
+  color: var(--md-sys-color-primary);
+  background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+}
+.nav-tab.active {
+  color: var(--md-sys-color-primary);
+  border-bottom-color: var(--md-sys-color-primary);
+  font-weight: var(--md-sys-font-weight-medium);
+}
+.nav-tab .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+.nav-tab-disabled {
+  color: var(--md-sys-color-on-surface-variant) !important; /* Ensure override */
+  opacity: 0.38 !important;
+  cursor: not-allowed !important;
+  pointer-events: none;
+  background-color: transparent !important;
+  border-bottom-color: transparent !important;
+}
+.nav-tab-disabled .coming-soon-inline {
+  font-size: var(--md-sys-typescale-label-small-font-size);
+  color: var(--md-sys-color-on-surface-variant);
+  margin-left: var(--md-sys-spacing-xxs);
   background-color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 8%, var(--md-sys-color-surface));
-}
-.m3-chip-filter.active {
-  background-color: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
-  border-color: transparent;
-}
-.m3-chip-filter.active .material-symbols-outlined { /* If checkmark icon used */
-    font-variation-settings: 'FILL' 1;
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--md-sys-shape-corner-extra-small);
 }
 
-/* General App Structure classes from HTML files, now with M3 variables */
-/* Ensure these are applied where appropriate */
-#app-container {
-    /* Styles from previous m3_styles.css or individual HTML files can be consolidated here or kept page-specific */
-    background-color: var(--md-sys-color-surface-container-low); /* Example */
-    border-radius: var(--md-sys-shape-corner-large); /* Example */
-    box-shadow: var(--md-sys-elevation-level1); /* Example */
-}
-
-.header-bar {
-    background-color: var(--md-sys-color-primary);
-    color: var(--md-sys-color-on-primary);
-}
-.secondary-toolbar {
-    background-color: var(--md-sys-color-surface-container-high); /* Lighter blue -> surface-like with slight tint */
-    color: var(--md-sys-color-on-surface-variant);
-    border-bottom: 1px solid var(--md-sys-color-outline-variant);
-}
-.footer-bar {
-    background-color: var(--md-sys-color-surface-container); /* Neutral, slightly elevated surface */
-    color: var(--md-sys-color-on-surface);
-    border-top: 1px solid var(--md-sys-color-outline-variant);
-}
-
-/* Timer styling with M3 variables */
-#timer {
-    background-color: color-mix(in srgb, var(--md-sys-color-on-primary) 15%, transparent); /* Semi-transparent on-primary */
-    color: var(--md-sys-color-on-primary);
+/* Specifics for calendar, results grid etc. (from home.html context) */
+.calendar-day-label {
     font-family: var(--md-sys-typescale-label-large-font-family-name);
+    color: var(--md-sys-color-on-surface-variant);
     font-weight: var(--md-sys-typescale-label-large-font-weight);
+}
+.calendar-day {
+    background-color: var(--md-sys-color-surface-container);
+    border: 1px solid var(--md-sys-color-outline-variant);
+    color: var(--md-sys-color-on-surface-variant);
+    font-size: var(--md-sys-typescale-body-medium-font-size);
     border-radius: var(--md-sys-shape-corner-small);
 }
-
-/* Passage and Question Columns */
-.passage-column, .question-column {
-    background-color: var(--md-sys-color-surface); /* Clean surface for content */
-    border-radius: var(--md-sys-shape-corner-medium);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    font-family: var(--md-sys-typescale-body-large-font-family-name);
-    line-height: var(--md-sys-typescale-body-large-line-height);
+.calendar-day.today {
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+    border-color: var(--md-sys-color-primary);
+    font-weight: var(--md-sys-font-weight-bold); /* M3 uses bold for today */
+}
+.calendar-day.practice-some {
+    background-color: var(--md-sys-color-secondary-container);
+    border-color: var(--md-sys-color-secondary);
+    color: var(--md-sys-color-on-secondary-container);
+}
+.calendar-day.practice-lots {
+    background-color: var(--md-sys-color-tertiary-container);
+    border-color: var(--md-sys-color-tertiary);
+    color: var(--md-sys-color-on-tertiary-container);
 }
 
-/* Option Labels (like chips or selectable items) */
-.option-label {
-  display: block;
-  padding: var(--md-sys-spacing-m); /* 16dp padding for touch target */
-  border: 1px solid var(--md-sys-color-outline);
-  border-radius: var(--md-sys-shape-corner-medium); /* Consistent with cards/chips */
-  margin-bottom: var(--md-sys-spacing-xs);
-  cursor: pointer;
-  background-color: var(--md-sys-color-surface);
-  color: var(--md-sys-color-on-surface);
-  transition: background-color var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard),
-              border-color var(--m3-sys-motion-duration-short2) var(--m3-sys-motion-easing-standard);
-  font-family: var(--md-sys-typescale-body-large-font-family-name);
+/* Review/Navigator Grid Button States */
+.review-grid-button, #navigator-grid .m3-button { /* Assuming navigator buttons become .m3-button */
+    /* Base styles from .m3-button-outlined or .m3-button-text */
 }
-.option-label:hover:not(.selected-answer) {
-  background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, var(--md-sys-color-surface));
-  border-color: color-mix(in srgb, var(--md-sys-color-primary) 20%, var(--md-sys-color-outline));
+.nav-answered { /* For navigator */
+    background-color: var(--md-sys-color-success-container) !important;
+    color: var(--md-sys-color-on-success-container) !important;
+    border-color: var(--md-sys-color-success) !important;
 }
-.option-label.selected-answer {
-  background-color: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-primary-container);
-  border: 2px solid var(--md-sys-color-primary);
-  font-weight: 500; /* Emphasize selected */
-  padding: calc(var(--md-sys-spacing-m) - 1px); /* Adjust padding for border */
-}
-
-/* Specific for Review/Navigator buttons */
-.review-grid-button, #navigator-grid button {
-    /* Use .m3-button-outlined as a base and then apply state colors */
-}
-.nav-answered { background-color: var(--md-sys-color-secondary-container) !important; color: var(--md-sys-color-on-secondary-container) !important; border-color: var(--md-sys-color-secondary) !important;}
-.nav-current {
+.nav-current { /* For navigator */
     border: 2px solid var(--md-sys-color-primary) !important;
-    font-weight: bold;
+    font-weight: bold; /* M3 uses bold for selected */
     background-color: var(--md-sys-color-primary-container) !important;
     color: var(--md-sys-color-on-primary-container) !important;
 }
-.nav-flagged, .review-flagged {
-    border: 2px solid var(--md-sys-color-tertiary) !important; /* Using Tertiary for flag */
-    background-color: var(--md-sys-color-tertiary-container) !important;
-    color: var(--md-sys-color-on-tertiary-container) !important;
+.nav-flagged, .review-flagged { /* For navigator and review grid */
+    border: 2px solid var(--md-sys-color-warning) !important; /* Using warning color for flag */
+    background-color: var(--md-sys-color-warning-container) !important;
+    color: var(--md-sys-color-on-warning-container) !important;
 }
-
-/* Result Summary Boxes */
-.correct-box {
-    background-color: var(--md-sys-color-success-container) !important; /* Green for correct */
-    border: 1px solid var(--md-sys-color-success) !important;
-    color: var(--md-sys-color-on-success-container) !important;
+/* Review grid buttons specific answered/unanswered state */
+.review-grid-button-answered {
+    background-color: var(--md-sys-color-success-container);
+    border-color: var(--md-sys-color-success);
+    color: var(--md-sys-color-on-success-container);
 }
-.incorrect-box {
-    background-color: var(--md-sys-color-error-container) !important; /* Red for incorrect */
-    border: 1px solid var(--md-sys-color-error) !important;
-    color: var(--md-sys-color-on-error-container) !important;
-}
-.not-answered-box {
-    background-color: var(--md-sys-color-surface-variant) !important; /* Neutral for not answered */
-    border: 1px solid var(--md-sys-color-outline) !important;
-    color: var(--md-sys-color-on-surface-variant) !important;
-}
-
-.explanation-box {
-     background-color: var(--md-sys-color-surface-container); /* Slightly different from main content surface */
-     border: 1px solid var(--md-sys-color-outline-variant);
-     color: var(--md-sys-color-on-surface-variant); /* Lower emphasis text */
-}
-
-/* Setup Screen Specifics (Example) */
-#setup-screen {
-    /* General M3 page structure */
-    text-align: center;
-}
-#setup-screen h1 {
-    font-family: var(--md-sys-typescale-headline-medium-font-family-name);
-    color: var(--md-sys-color-primary); /* Using primary for main heading */
-}
-#setup-screen p {
-    font-family: var(--md-sys-typescale-body-large-font-family-name);
+.review-grid-button-unanswered {
+    background-color: var(--md-sys-color-surface-variant);
+    border-color: var(--md-sys-color-outline);
     color: var(--md-sys-color-on-surface-variant);
 }
 
-/* Hide elements by default if JS is to show them */
+
+/* General App Structure classes from HTML files, now with M3 variables */
+#app-container {
+    background-color: var(--md-sys-color-background); /* Main app background */
+    border-radius: var(--md-sys-shape-corner-large);
+    box-shadow: var(--md-sys-elevation-level1);
+}
+
+/* Input styling (if .auth-input is still used and not fully .m3-text-field-input) */
+.auth-input {
+  /* Styles from m3-text-field-input would apply here if class is changed */
+  /* If keeping auth-input, ensure it inherits or duplicates m3-text-field-input styles */
+  font-family: var(--md-sys-typescale-body-large-font-family-name);
+  font-size: var(--md-sys-typescale-body-large-font-size);
+  color: var(--md-sys-color-on-surface);
+  background-color: color-mix(in srgb, var(--md-sys-color-primary) 4%, var(--md-sys-color-surface-container-highest));
+  padding: var(--md-sys-spacing-m);
+  border: none;
+  border-bottom: 1px solid var(--md-sys-color-on-surface-variant);
+  border-radius: var(--md-sys-shape-corner-extra-small) var(--md-sys-shape-corner-extra-small) 0 0;
+  width: 100%;
+}
+.auth-input:focus {
+  outline: none;
+  border-bottom: 2px solid var(--md-sys-color-primary);
+  background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, var(--md-sys-color-surface-container-highest));
+  padding-bottom: calc(var(--md-sys-spacing-m) - 1px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .main-nav {
+        justify-content: flex-start;
+        padding-left: var(--md-sys-spacing-s);
+        padding-right: var(--md-sys-spacing-s);
+    }
+    .nav-tab {
+        padding: var(--md-sys-spacing-s) var(--md-sys-spacing-m);
+    }
+}
+
+/* Hide elements utility */
 .hidden {
   display: none !important;
+}
+
+/* Focus outline for accessibility */
+*:focus-visible {
+    outline: 2px solid var(--md-sys-color-secondary); /* Using secondary for focus outline */
+    outline-offset: 2px;
+    box-shadow: none; /* Remove hover shadow on focus to make outline clear */
 }
