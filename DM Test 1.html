@@ -469,13 +469,13 @@
                 <h1 class="text-2xl md:text-3xl font-bold text-blue-600">Decision Making Test 1</h1>
                 <p class="text-gray-600 mt-2">Prepare for the UCAT DM section.</p>
                  <p class="text-sm text-gray-500 mt-4">
-                     This section contains <strong id="setup-question-count">6 questions</strong> and you have <strong id="setup-time-limit">7 minutes</strong> to complete it. Max score <strong id="setup-max-score">12 points</strong>.
+                     This section contains <strong id="setup-question-count">8 questions</strong> and you have <strong id="setup-time-limit">9 minutes</strong> to complete it. Max score <strong id="setup-max-score">16 points</strong>.
                  </p>
             </div>
             <div class="space-y-4 w-full max-w-md">
                 <div>
-                    <label for="goal" class="block text-sm font-medium text-gray-700">Goal (Score out of 12):</label>
-                    <input type="number" id="goal" name="goal" min="0" max="12" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., 10">
+                    <label for="goal" class="block text-sm font-medium text-gray-700">Goal (Score out of 16):</label>
+                    <input type="number" id="goal" name="goal" min="0" max="16" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., 10">
                 </div>
                 <div>
                     <label for="focus-area" class="block text-sm font-medium text-gray-700">Area of Focus / Intention For Practice:</label>
@@ -492,8 +492,8 @@
             <div class="header-bar">
                 <span id="practice-session-title" class="font-semibold">Decision Making</span>
                 <div class="flex items-center space-x-4">
-                    <div id="timer" class="text-base px-3 py-1 rounded-md">07:00</div>
-                    <span class="text-sm">Question <span id="question-number-info">1</span> of 6</span>
+                    <div id="timer" class="text-base px-3 py-1 rounded-md">09:00</div>
+                    <span class="text-sm">Question <span id="question-number-info">1</span> of 8</span>
                 </div>
             </div>
             <div class="secondary-toolbar">
@@ -582,7 +582,7 @@
                  <h2 class="text-2xl md:text-3xl font-bold text-blue-600">Practice Session Results</h2>
              </div>
             <div class="bg-blue-50 p-4 rounded-lg mb-6 text-center flex-shrink-0">
-                 <p class="text-lg font-semibold">Your Score: <span id="score" class="text-blue-700">0</span> / <span id="total-score-possible">12</span> Points</p>
+                 <p class="text-lg font-semibold">Your Score: <span id="score" class="text-blue-700">0</span> / <span id="total-score-possible">16</span> Points</p>
                  <p class="text-gray-600">Time Taken: <span id="time-taken"></span></p>
             </div>
             <h3 class="text-xl font-semibold mb-2 flex-shrink-0">Detailed Results Summary:</h3>
@@ -666,7 +666,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             userGoal = document.getElementById('goal').value.trim();
             userFocusArea = document.getElementById('focus-area').value.trim();
-            timeLeft = 7 * 60; // 7 minutes for 6 passage-questions
+            timeLeft = 9 * 60; // 9 minutes for 8 questions
             
             userAnswers = new Array(passageTexts.length).fill(null).map(() => new Array(5).fill(null));
             questionTimes = new Array(passageTexts.length).fill(0);
@@ -687,7 +687,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let currentQuestionIndex = 0; // Current passage index
         let userAnswers = []; // userAnswers[passageIndex][statementIndex] = 'Y' or 'N'
         let timerInterval;
-        let timeLeft = 7 * 60; 
+        let timeLeft = 9 * 60; 
         let practiceSessionStartTime;
         let practiceSessionEndTime;
         let userName = '';
@@ -700,7 +700,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let flaggedQuestions = []; // Flagged status per passage
         let isFilteringFlagged = false;
         let score = 0; // Ensure score is globally defined
-        let maxScore = 12; // Define maxScore globally for DM Test 1
+        let maxScore = 16; // Define maxScore globally for DM Test 1
 
         let calcCurrentInput = '0';
         let calcPreviousInput = '';
@@ -759,7 +759,9 @@ document.addEventListener('DOMContentLoaded', function() {
             "The bookstore received the same number of hard-cover, paperback, and audio-book copies of a new title.<br>On one particular day:<br>It sold twice as many paperbacks as hard-covers, and<br>It sold exactly as many audio-books as hard-covers and paperbacks combined.<br><br>(Place 'Yes' if the conclusion does follow, 'No' if it does not follow.)",
             "Inside the suitcase were some green hats, some yellow hats, but only a few purple hats.<br>There was nothing else in the suitcase except for some black gloves and a few purple gloves.<br><br>(Place 'Yes' if the conclusion does follow, 'No' if it does not follow.)",
             "Zephyrs and kites are types of aircraft.<br>All zephyrs are aeros.<br>Only the aeros that fly over the Atlantic carry radar.<br>All aeros are blue.<br><br>(Place 'Yes' if the conclusion does follow, 'No' if it does not.)",
-            "In Maria's fruit bowl, there are green apples and there are peaches.<br>Nothing else is in the bowl except for the yellow bananas.<br><br>(Place 'Yes' if the conclusion does follow, 'No' if it does not follow.)"
+            "In Maria's fruit bowl, there are green apples and there are peaches.<br>Nothing else is in the bowl except for the yellow bananas.<br><br>(Place 'Yes' if the conclusion does follow, 'No' if it does not follow.)",
+            "Lina has copper (C), aluminium (A) and steel (S) rods.<br>All rods of the same metal weigh the same.<br>A bundle containing 2 copper + 3 aluminium + 1 steel rod weighs 70 kg.<br>A bundle containing 1 copper + 2 aluminium + 1 steel rod weighs 40 kg.<br><br>What is most likely the weight of a bundle containing 4 copper rods, 4 aluminium rods and 1 steel rod?",
+            "There are six folders stacked in a tray, numbered 1 (top) to 6 (bottom).<br>Zoe's folder is not the bottom-most folder.<br>The number of folders below Zoe's folder is less than the number above it.<br>Ethan's folder is the last-but-one folder from the bottom of the stack.<br>There are exactly two folders between Maya's folder and Zoe's folder.<br>Liam's folder is not above Zoe's folder.<br><br>How many folders are there between Maya's folder and Liam's folder?"
         ];
 
         // questions array will now group statements by passage
@@ -806,11 +808,29 @@ document.addEventListener('DOMContentLoaded', function() {
             ],
             // Passage 6 statements
             [
-                { text: "Some of the fruit is red.", correctAnswer: "N", explanation: "Peaches might be red-tinged, but this is not stated; the information only guarantees green apples and yellow bananas, so a red fruit is not certain." },
-                { text: "There are some green fruits.", correctAnswer: "Y", explanation: "The premise explicitly says the bowl contains green apples, so at least some fruit is green." },
                 { text: "There are no yellow fruits.", correctAnswer: "N", explanation: "The bowl definitely contains yellow bananas; therefore it is false that there are no yellow fruits." },
+                { text: "There are some green fruits.", correctAnswer: "Y", explanation: "The premise explicitly says the bowl contains green apples, so at least some fruit is green." },
+                { text: "Some of the fruit is red.", correctAnswer: "N", explanation: "Peaches might be red-tinged, but this is not stated; the information only guarantees green apples and yellow bananas, so a red fruit is not certain." },
                 { text: "There are no red bananas.", correctAnswer: "Y", explanation: "Bananas in the bowl are specified as yellow; hence red bananas do not exist in this scenario." },
                 { text: "All of the fruit is either green or yellow.", correctAnswer: "N", explanation: "Although all apples are green and all bananas are yellow, the colour of the peaches is unspecified; they could be orange, red, etc., so not all fruit is necessarily green or yellow." }
+            ],
+            // Question 7 - MCQ
+            [
+                { 
+                    type: "mcq",
+                    options: ["120 kg", "128 kg", "160 kg", "176 kg"],
+                    correctAnswer: "B",
+                    explanation: "Let C = weight of copper rod, A = weight of aluminium rod, S = weight of steel rod.\nFrom the given information:\n2C + 3A + S = 70 ... (1)\nC + 2A + S = 40 ... (2)\nSubtracting (2) from (1): C + A = 30\nFrom (2): C + 2A + S = 40\nSubstituting C = 30 - A: (30 - A) + 2A + S = 40\n30 + A + S = 40\nA + S = 10\nSo S = 10 - A\nFrom C + A = 30 and A + S = 10:\nC = 30 - A and S = 10 - A\nSubstituting back into equation (1):\n2(30 - A) + 3A + (10 - A) = 70\n60 - 2A + 3A + 10 - A = 70\n70 = 70 ✓\nThis confirms our equations are consistent.\nTo find specific values, from equation (2):\nC + 2A + S = 40\n(30 - A) + 2A + (10 - A) = 40\n30 - A + 2A + 10 - A = 40\n40 = 40 ✓\nSince C + A = 30 and A + S = 10, and all weights must be positive:\nIf A = 10, then C = 20 and S = 0 (not valid as S must be positive)\nIf A = 8, then C = 22 and S = 2\nChecking: 2(22) + 3(8) + 2 = 44 + 24 + 2 = 70 ✓\nAnd: 22 + 2(8) + 2 = 22 + 16 + 2 = 40 ✓\nTherefore: C = 22 kg, A = 8 kg, S = 2 kg\nFor 4C + 4A + S: 4(22) + 4(8) + 2 = 88 + 32 + 8 = 128 kg"
+                }
+            ],
+            // Question 8 - MCQ
+            [
+                {
+                    type: "mcq",
+                    options: ["1", "2", "3", "4"],
+                    correctAnswer: "D",
+                    explanation: "Let's work through the constraints:\n- 6 folders numbered 1 (top) to 6 (bottom)\n- Zoe is not in position 6\n- Folders below Zoe < folders above Zoe\n- Ethan is in position 5 (last-but-one from bottom)\n- Exactly 2 folders between Maya and Zoe\n- Liam is not above Zoe\n\nFrom constraint 2: If Zoe is in position p, then (6-p) < (p-1), so 6-p < p-1, thus 7 < 2p, so p > 3.5\nSince p must be integer and Zoe ≠ 6, Zoe must be in position 4 or 5.\nBut Ethan is in position 5, so Zoe must be in position 4.\n\nWith Zoe in position 4 and exactly 2 folders between Maya and Zoe:\nMaya must be in position 1 (3 positions away from 4).\n\nLiam is not above Zoe (position 4), so Liam must be in position 5 or 6.\nBut Ethan is in position 5, so Liam must be in position 6.\n\nPositions: Maya(1), Zoe(4), Ethan(5), Liam(6)\nFolders between Maya(1) and Liam(6): positions 2, 3, 4, 5 = 4 folders"
+                }
             ]
         ];
 
@@ -897,25 +917,42 @@ document.addEventListener('DOMContentLoaded', function() {
             const statementsForPassage = questionsByPassage[index];
             const questionContainer = document.querySelector('.question-column');
             
+            // Check if this is an MCQ question
+            const isMCQ = statementsForPassage.length === 1 && statementsForPassage[0].type === 'mcq';
+            
             if (questionContainer) {
-                questionContainer.innerHTML = `
-                    <div class="p-4 bg-gray-50 rounded-md mb-4" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 1.25rem; line-height: 1.5;">
-                        ${currentPassageText}
-                    </div>
-                    <div class="flex justify-between items-center mb-3">
-                        <div>
-                            <h4 class="text-md font-semibold bg-white pb-1">Question ${index + 1}</h4>
-                            <h5 class="font-medium mb-2">Conclusions</h5>
-                            <p class="text-sm text-gray-600">Drag 'Yes' or 'No' onto the statement row, or click a statement then click 'Yes' or 'No'.</p>
+                if (isMCQ) {
+                    // MCQ layout (similar to QR Test)
+                    questionContainer.innerHTML = `
+                        <div class="p-4 bg-gray-50 rounded-md mb-4" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 1.25rem; line-height: 1.5;">
+                            ${currentPassageText}
                         </div>
-                        <div class="flex space-x-2">
-                            <button id="yes-button" class="drag-button px-6 py-2 rounded-md font-medium">Yes</button>
-                            <button id="no-button" class="drag-button px-6 py-2 rounded-md font-medium">No</button>
+                        <h4 class="text-md font-semibold mb-3 bg-white pb-1">Question ${index + 1}</h4>
+                        <div id="options-container" class="space-y-2"></div>
+                        <div id="review-explanation-container"></div>
+                    `;
+                } else {
+                    // Syllogism layout (existing)
+                    questionContainer.innerHTML = `
+                        <div class="p-4 bg-gray-50 rounded-md mb-4" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 1.25rem; line-height: 1.5;">
+                            ${currentPassageText}
                         </div>
-                    </div>
-                    <div id="statements-container" class="space-y-3"></div>
-                    <div id="review-explanation-container"></div>
-                `;
+                        <div class="flex justify-between items-center mb-3">
+                            <div>
+                                <h4 class="text-md font-semibold bg-white pb-1">Question ${index + 1}</h4>
+                                <h5 class="font-medium mb-2">Conclusions</h5>
+                                <p class="text-sm text-gray-600">Drag 'Yes' or 'No' onto the statement row, or click a statement then click 'Yes' or 'No'.</p>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button id="yes-button" class="drag-button px-6 py-2 rounded-md font-medium">Yes</button>
+                                <button id="no-button" class="drag-button px-6 py-2 rounded-md font-medium">No</button>
+                            </div>
+                        </div>
+                        <div id="statements-container" class="space-y-3"></div>
+                        <div id="review-explanation-container"></div>
+                    `;
+                }
+                
                 
                 const stimulusDiv = questionContainer.querySelector('.p-4.bg-gray-50');
                 if (stimulusDiv) {
@@ -1246,11 +1283,20 @@ document.addEventListener('DOMContentLoaded', function() {
                         const passageResultDiv = document.createElement('div');
                         passageResultDiv.classList.add('passage-result-summary', 'p-3', 'border', 'rounded-md', 'bg-gray-50', 'text-sm');
                         passageResultDiv.style.marginBottom = '10px';
+                        passageResultDiv.style.cursor = 'pointer';
+                        
+                        // Add click handler to review the question
+                        passageResultDiv.addEventListener('click', () => {
+                            revisitQuestionFromResults(index);
+                        });
                         
                         // Using string concatenation to avoid template literal issues
+                        const questionType = item.isMCQ ? ' (MCQ)' : '';
                         passageResultDiv.innerHTML = 
-                            '<h4 class="font-semibold text-md mb-1">Passage ' + (index + 1) + '</h4>' +
-                            '<p>Correct Statements: ' + item.correctCount + ' / ' + item.totalStatements + '</p>' +
+                            '<h4 class="font-semibold text-md mb-1">Question ' + (index + 1) + questionType + '</h4>' +
+                            (item.isMCQ 
+                                ? '<p>' + (item.correctCount === 1 ? 'Correct' : 'Incorrect') + '</p>'
+                                : '<p>Correct Statements: ' + item.correctCount + ' / ' + item.totalStatements + '</p>') +
                             '<p>Points Awarded: <span class="font-bold">' + item.points + '</span></p>';
                         
                         resultsDetailsGridEl.appendChild(passageResultDiv);
@@ -1295,7 +1341,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 studentEmail: userEmail || '',
                 examName: "DM Test 1",
                 score: currentTotalScore,
-                maxScore: maxScore, // Use global maxScore (12)
+                maxScore: maxScore, // Use global maxScore (16)
                 detailedPassageScores: window.detailedPassageScores || [], // Add this for granular data
                 numberOfPassages: passageTexts.length,
                 timeTaken: formatTimeDifference(practiceSessionEndTime - practiceSessionStartTime),
@@ -1319,36 +1365,58 @@ document.addEventListener('DOMContentLoaded', function() {
         function calculateScore() {
             score = 0;
             window.detailedPassageScores = [];
-            const numPassages = passageTexts.length; // Should be 6
+            const numPassages = passageTexts.length; // Should be 8
 
             for (let i = 0; i < numPassages; i++) {
-                let correctCountForPassage = 0;
-                let passageScore = 0;
-                const numStatementsInPassage = questionsByPassage[i].length; // Should be 5
+                const statementsForPassage = questionsByPassage[i];
+                const isMCQ = statementsForPassage.length === 1 && statementsForPassage[0].type === 'mcq';
+                
+                if (isMCQ) {
+                    // MCQ scoring - 2 points for correct answer
+                    const mcqData = statementsForPassage[0];
+                    const userAnswer = userAnswers[i] && userAnswers[i][0] ? userAnswers[i][0] : null;
+                    const isCorrect = userAnswer === mcqData.correctAnswer;
+                    const passageScore = isCorrect ? 2 : 0;
+                    score += passageScore;
+                    
+                    window.detailedPassageScores.push({
+                        passageIndex: i,
+                        correctCount: isCorrect ? 1 : 0,
+                        totalStatements: 1,
+                        points: passageScore,
+                        isMCQ: true
+                    });
+                } else {
+                    // Syllogism scoring - existing logic
+                    let correctCountForPassage = 0;
+                    let passageScore = 0;
+                    const numStatementsInPassage = statementsForPassage.length; // Should be 5
 
-                if (userAnswers[i] && userAnswers[i].length === numStatementsInPassage) {
-                    for (let j = 0; j < numStatementsInPassage; j++) {
-                        if (userAnswers[i][j] && questionsByPassage[i][j].correctAnswer &&
-                            userAnswers[i][j].toUpperCase() === questionsByPassage[i][j].correctAnswer.toUpperCase()) {
-                            correctCountForPassage++;
+                    if (userAnswers[i] && userAnswers[i].length === numStatementsInPassage) {
+                        for (let j = 0; j < numStatementsInPassage; j++) {
+                            if (userAnswers[i][j] && statementsForPassage[j].correctAnswer &&
+                                userAnswers[i][j].toUpperCase() === statementsForPassage[j].correctAnswer.toUpperCase()) {
+                                correctCountForPassage++;
+                            }
                         }
                     }
-                }
 
-                if (correctCountForPassage === 5) {
-                    passageScore = 2;
-                } else if (correctCountForPassage === 4) {
-                    passageScore = 1;
-                } else {
-                    passageScore = 0;
+                    if (correctCountForPassage === 5) {
+                        passageScore = 2;
+                    } else if (correctCountForPassage === 4) {
+                        passageScore = 1;
+                    } else {
+                        passageScore = 0;
+                    }
+                    score += passageScore;
+                    window.detailedPassageScores.push({
+                        passageIndex: i,
+                        correctCount: correctCountForPassage,
+                        totalStatements: numStatementsInPassage,
+                        points: passageScore,
+                        isMCQ: false
+                    });
                 }
-                score += passageScore;
-                window.detailedPassageScores.push({
-                    passageIndex: i,
-                    correctCount: correctCountForPassage,
-                    totalStatements: numStatementsInPassage,
-                    points: passageScore
-                });
             }
             return score;
         }
@@ -2063,10 +2131,20 @@ document.addEventListener('DOMContentLoaded', function() {
                      default: return; 
                  }
              } else { 
-                 // Keyboard shortcuts for A-E (or Y/N) are not directly applicable to this drag-and-drop interface.
-                 // Users will use mouse/touch or click interactions for Yes/No.
-                 // If specific keyboard selection for Yes/No is desired for selected statement, that would be a new feature.
-                 if (['y', 'n'].includes(key) && !isReviewingFromResults && !isCalcVisible) {
+                 // Check if current question is MCQ
+                 const statementsForPassage = questionsByPassage[currentQuestionIndex];
+                 const isMCQ = statementsForPassage && statementsForPassage.length === 1 && statementsForPassage[0].type === 'mcq';
+                 
+                 if (isMCQ && ['a', 'b', 'c', 'd'].includes(key) && !isReviewingFromResults && !isCalcVisible) {
+                     e.preventDefault();
+                     const optionIndex = ['a', 'b', 'c', 'd'].indexOf(key);
+                     const optionValue = ['A', 'B', 'C', 'D'][optionIndex];
+                     const mcqData = statementsForPassage[0];
+                     if (optionIndex < mcqData.options.length) {
+                         handleMCQSelect(currentQuestionIndex, optionIndex, optionValue);
+                     }
+                     return;
+                 } else if (!isMCQ && ['y', 'n'].includes(key) && !isReviewingFromResults && !isCalcVisible) {
                     e.preventDefault();
                     const selectedRow = document.querySelector('.statement-row.selected');
                     if (selectedRow) {
@@ -2226,10 +2304,10 @@ document.addEventListener('DOMContentLoaded', function() {
             
             userGoal = goalInput.value.trim();
             userFocusArea = focusAreaInput.value.trim();
-            timeLeft = 7 * 60; // 7 minutes for 6 questions
-            userAnswers = new Array(questions.length).fill(null);
-            questionTimes = new Array(questions.length).fill(0);
-            flaggedQuestions = new Array(questions.length).fill(false);
+            timeLeft = 9 * 60; // 9 minutes for 8 questions
+            userAnswers = new Array(passageTexts.length).fill(null).map(() => new Array(5).fill(null));
+            questionTimes = new Array(passageTexts.length).fill(0);
+            flaggedQuestions = new Array(passageTexts.length).fill(false);
             questionStartTime = null;
             currentQuestionIndex = 0;
             isReviewingFromResults = false;
@@ -2244,10 +2322,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Function to initialize the application - moved to the end to ensure all functions are defined
         function initializeApp() {
-            // Initialize arrays with questions.length
-            userAnswers = new Array(questions.length).fill(null);
-            questionTimes = new Array(questions.length).fill(0);
-            flaggedQuestions = new Array(questions.length).fill(false);
+            // Initialize arrays with passageTexts.length
+            userAnswers = new Array(passageTexts.length).fill(null).map(() => new Array(5).fill(null));
+            questionTimes = new Array(passageTexts.length).fill(0);
+            flaggedQuestions = new Array(passageTexts.length).fill(false);
             
             // Check for review mode and initialize appropriate screen
             if (reviewParam) {
