@@ -473,14 +473,117 @@
                             <button class="m3-button btn-select-section-exams">Select Full Exam</button>
                         </div>
                     </div>
-                    <!-- Placeholder for exam sets if needed, similar to focus groups -->
-                    <!--
-                    <div id="exam-sets-container" class="exam-sets-container hidden">
-                        <h3 class="text-xl font-semibold mb-4 text-center" style="font-family: var(--md-sys-typescale-title-large-font-family-name); color: var(--md-sys-color-on-surface);">Exams for <span id="current-exam-section-title" style="color: var(--md-sys-color-tertiary);"></span></h3>
-                        <div id="exam-sets-grid" class="exam-sets-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                        <!-- Full Exam Card -->
+                        <div class="exam-card subsection-card section-card-exams">
+                            <span class="material-symbols-outlined text-4xl mb-3 text-tertiary">assignment</span>
+                            <h4 class="text-lg font-semibold mb-2 text-on-surface-variant">Full Exam 1</h4>
+                            <p class="text-sm text-on-surface-variant mb-4">Comprehensive UCAT style exam covering all sections.</p>
+                            <a href="#" class="m3-button btn-view-exam w-full text-center">
+                                <span class="material-symbols-outlined mr-2">play_arrow</span>
+                                Start Exam 1
+                            </a>
+                        </div>
+                         <!-- Full Exam Card 2 (Placeholder) -->
+                        <div class="exam-card subsection-card section-card-exams disabled">
+                            <span class="material-symbols-outlined text-4xl mb-3 text-outline">assignment</span>
+                            <h4 class="text-lg font-semibold mb-2 text-on-surface-variant">Full Exam 2</h4>
+                            <p class="text-sm text-on-surface-variant mb-4">Another full-length UCAT practice exam. (Coming Soon)</p>
+                            <button class="m3-button btn-view-exam w-full text-center" disabled>
+                                <span class="material-symbols-outlined mr-2">schedule</span>
+                                Coming Soon
+                            </button>
                         </div>
                     </div>
-                    -->
+
+                    <h3 class="text-xl font-medium mb-4 text-on-surface">Decision Making Tests</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                        <!-- DM Test 1 Card -->
+                        <div class="exam-card subsection-card section-card-exams">
+                            <span class="material-symbols-outlined text-4xl mb-3" style="color: var(--section-dm-primary);">balance</span>
+                            <h4 class="text-lg font-semibold mb-2 text-on-surface-variant">DM Test 1</h4>
+                            <p class="text-sm text-on-surface-variant mb-4">Focused Decision Making practice test.</p>
+                            <a href="DM Test 1.html" class="m3-button btn-view-exam w-full text-center" style="background-color: var(--section-dm-primary); color: var(--section-dm-on-primary);">
+                                <span class="material-symbols-outlined mr-2">play_arrow</span>
+                                Start DM Test 1
+                            </a>
+                        </div>
+                        <!-- DM Test 2 Card (Placeholder) -->
+                        <div class="exam-card subsection-card section-card-exams disabled">
+                            <span class="material-symbols-outlined text-4xl mb-3 text-outline">balance</span>
+                            <h4 class="text-lg font-semibold mb-2 text-on-surface-variant">DM Test 2</h4>
+                            <p class="text-sm text-on-surface-variant mb-4">Focused Decision Making practice test. (Coming Soon)</p>
+                            <button class="m3-button btn-view-exam w-full text-center" disabled>
+                                <span class="material-symbols-outlined mr-2">schedule</span>
+                                Coming Soon
+                            </button>
+                        </div>
+                        <!-- DM Test 3 Card (Placeholder) -->
+                        <div class="exam-card subsection-card section-card-exams disabled">
+                            <span class="material-symbols-outlined text-4xl mb-3 text-outline">balance</span>
+                            <h4 class="text-lg font-semibold mb-2 text-on-surface-variant">DM Test 3</h4>
+                            <p class="text-sm text-on-surface-variant mb-4">Focused Decision Making practice test. (Coming Soon)</p>
+                            <button class="m3-button btn-view-exam w-full text-center" disabled>
+                                <span class="material-symbols-outlined mr-2">schedule</span>
+                                Coming Soon
+                            </button>
+                        </div>
+                        <!-- DM Test 4 Card (Placeholder) -->
+                        <div class="exam-card subsection-card section-card-exams disabled">
+                            <span class="material-symbols-outlined text-4xl mb-3 text-outline">balance</span>
+                            <h4 class="text-lg font-semibold mb-2 text-on-surface-variant">DM Test 4</h4>
+                            <p class="text-sm text-on-surface-variant mb-4">Focused Decision Making practice test. (Coming Soon)</p>
+                            <button class="m3-button btn-view-exam w-full text-center" disabled>
+                                <span class="material-symbols-outlined mr-2">schedule</span>
+                                Coming Soon
+                            </button>
+                        </div>
+                        <!-- DM Test 5 Card (Placeholder) -->
+                        <div class="exam-card subsection-card section-card-exams disabled">
+                            <span class="material-symbols-outlined text-4xl mb-3 text-outline">balance</span>
+                            <h4 class="text-lg font-semibold mb-2 text-on-surface-variant">DM Test 5</h4>
+                            <p class="text-sm text-on-surface-variant mb-4">Focused Decision Making practice test. (Coming Soon)</p>
+                            <button class="m3-button btn-view-exam w-full text-center" disabled>
+                                <span class="material-symbols-outlined mr-2">schedule</span>
+                                Coming Soon
+                            </button>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-medium mb-4 text-on-surface">Verbal Reasoning Tests</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                        <!-- VR Test 1 Card -->
+                        <div class="exam-card subsection-card section-card-exams">
+                            <span class="material-symbols-outlined text-4xl mb-3" style="color: var(--section-vr-primary);">menu_book</span>
+                            <h4 class="text-lg font-semibold mb-2 text-on-surface-variant">VR Test 1</h4>
+                            <p class="text-sm text-on-surface-variant mb-4">Focused Verbal Reasoning practice test.</p>
+                            <a href="VR Test 1.html" class="m3-button btn-view-exam w-full text-center" style="background-color: var(--section-vr-primary); color: var(--section-vr-on-primary);">
+                                <span class="material-symbols-outlined mr-2">play_arrow</span>
+                                Start VR Test 1
+                            </a>
+                        </div>
+                        <!-- VR Test 2 Card (Placeholder) -->
+                        <div class="exam-card subsection-card section-card-exams disabled">
+                            <span class="material-symbols-outlined text-4xl mb-3 text-outline">menu_book</span>
+                            <h4 class="text-lg font-semibold mb-2 text-on-surface-variant">VR Test 2</h4>
+                            <p class="text-sm text-on-surface-variant mb-4">Another focused Verbal Reasoning practice test. (Coming Soon)</p>
+                            <button class="m3-button btn-view-exam w-full text-center" disabled>
+                                <span class="material-symbols-outlined mr-2">schedule</span>
+                                Coming Soon
+                            </button>
+                        </div>
+                        <!-- VR Test 3 Card (Placeholder) -->
+                        <div class="exam-card subsection-card section-card-exams disabled">
+                            <span class="material-symbols-outlined text-4xl mb-3 text-outline">menu_book</span>
+                            <h4 class="text-lg font-semibold mb-2 text-on-surface-variant">VR Test 3</h4>
+                            <p class="text-sm text-on-surface-variant mb-4">Another focused Verbal Reasoning practice test. (Coming Soon)</p>
+                            <button class="m3-button btn-view-exam w-full text-center" disabled>
+                                <span class="material-symbols-outlined mr-2">schedule</span>
+                                Coming Soon
+                            </button>
+                        </div>
+                    </div>
                 </section>
             </main>
         </div>
