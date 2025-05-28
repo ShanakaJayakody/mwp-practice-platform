@@ -887,7 +887,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         function recordTimeSpent(index) {
-            if (questionStartTime && index >= 0 && index < questions.length) {
+            if (questionStartTime && index >= 0 && index < passageTexts.length) {
                 const timeSpent = Date.now() - questionStartTime;
                 questionTimes[index] = (questionTimes[index] || 0) + timeSpent;
             }
@@ -1182,15 +1182,19 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             reviewGrid.innerHTML = '';
-            questions.forEach((_, index) => {
+            for (let index = 0; index < passageTexts.length; index++) {
                  if (filterFlagged && !flaggedQuestions[index]) {
-                     return;
+                     continue;
                  }
                 const button = document.createElement('button');
                 button.textContent = index + 1;
                 button.className = 'review-grid-button';
                 button.dataset.questionIndex = index;
-                if (userAnswers[index] !== null && userAnswers[index] !== undefined) {
+                
+                // Check if any answer exists for this passage
+                const hasAnswer = userAnswers[index] && userAnswers[index].some(answer => answer !== null);
+                
+                if (hasAnswer) {
                     button.classList.add('review-grid-button-answered');
                 } else {
                      button.classList.add('review-grid-button-unanswered');
@@ -1200,18 +1204,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 // Using event delegation, so no individual onclick handler
                 reviewGrid.appendChild(button);
-            });
+            }
              filterFlaggedButton.textContent = filterFlagged ? 'Show All Questions' : 'Show Flagged Only';
         }
 
         function populateNavigator() {
             navigatorGrid.innerHTML = '';
-            questions.forEach((_, index) => {
+            for (let index = 0; index < passageTexts.length; index++) {
                 const button = document.createElement('button');
                 button.textContent = index + 1;
                 button.classList.add('py-2', 'px-1', 'border', 'border-gray-300', 'rounded-md', 'text-center', 'transition', 'duration-150', 'ease-in-out', 'text-sm', 'hover:bg-gray-100');
                 button.dataset.questionIndex = index;
-                if (userAnswers[index]) button.classList.add('nav-answered');
+                
+                // Check if any answer exists for this passage
+                const hasAnswer = userAnswers[index] && userAnswers[index].some(answer => answer !== null);
+                
+                if (hasAnswer) button.classList.add('nav-answered');
                 if (index === currentQuestionIndex) button.classList.add('nav-current');
                 if (flaggedQuestions[index]) button.classList.add('nav-flagged');
                 button.onclick = () => {
@@ -1225,7 +1233,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     loadQuestion(targetIndex, isReviewingFromResults);
                 };
                 navigatorGrid.appendChild(button);
-            });
+            }
         }
 
         function updateNavigatorButtons() {
@@ -1234,7 +1242,11 @@ document.addEventListener('DOMContentLoaded', function() {
             buttons.forEach(button => {
                 const index = parseInt(button.dataset.questionIndex, 10);
                 button.classList.remove('nav-answered', 'nav-current', 'nav-flagged');
-                if (userAnswers[index]) button.classList.add('nav-answered');
+                
+                // Check if any answer exists for this passage
+                const hasAnswer = userAnswers[index] && userAnswers[index].some(answer => answer !== null);
+                
+                if (hasAnswer) button.classList.add('nav-answered');
                 if (index === currentQuestionIndex) button.classList.add('nav-current');
                 if (flaggedQuestions[index]) button.classList.add('nav-flagged');
             });
@@ -2172,7 +2184,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 reviewScreen.classList.remove('flex');
                 showPracticeSessionScreen();
                 const index = parseInt(e.target.dataset.questionIndex);
-                if (!isNaN(index) && index >= 0 && index < questions.length) {
+                if (!isNaN(index) && index >= 0 && index < passageTexts.length) {
                     // Hide calculator if it's open
                     if (calculatorUI.classList.contains('visible')) {
                         toggleCalculator();
@@ -2244,9 +2256,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     userName = resultData.studentName || '';
                     userGoal = resultData.goal || '';
                     userFocusArea = resultData.focusArea || '';
-                    userAnswers = resultData.answers || new Array(questions.length).fill(null);
-                    questionTimes = resultData.questionTimes || new Array(questions.length).fill(0);
-                    flaggedQuestions = resultData.flaggedQuestions || new Array(questions.length).fill(false);
+                    userAnswers = resultData.answers || new Array(passageTexts.length).fill(null).map(() => new Array(5).fill(null));
+                    questionTimes = resultData.questionTimes || new Array(passageTexts.length).fill(0);
+                    flaggedQuestions = resultData.flaggedQuestions || new Array(passageTexts.length).fill(false);
                     practiceSessionStartTime = new Date(resultData.submissionTimestamp || Date.now());
                     practiceSessionEndTime = new Date(practiceSessionStartTime.getTime() + 26 * 60 * 1000); // Estimate end time
                     isReviewingFromResults = true;
