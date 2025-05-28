@@ -718,7 +718,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const reviewScreen = document.getElementById('review-screen');
         const resultsScreen = document.getElementById('results-screen');
         const navigatorModal = document.getElementById('navigator-modal');
-        const startButton = document.getElementById('start-button');
+        const startButton = document.getElementById('start-button'); // Only declare this ONCE
         const prevButton = document.getElementById('prev-button');
         const nextButton = document.getElementById('next-button');
         const navigatorButton = document.getElementById('navigator-button');
@@ -762,77 +762,14 @@ document.addEventListener('DOMContentLoaded', function() {
             "In Maria's fruit bowl, there are green apples and there are peaches.<br>Nothing else is in the bowl except for the yellow bananas.<br><br>(Place 'Yes' if the conclusion does follow, 'No' if it does not follow.)",
             "Lina has copper (C), aluminium (A) and steel (S) rods.<br>All rods of the same metal weigh the same.<br>A bundle containing 2 copper + 3 aluminium + 1 steel rod weighs 70 kg.<br>A bundle containing 1 copper + 2 aluminium + 1 steel rod weighs 40 kg.<br><br>What is most likely the weight of a bundle containing 4 copper rods, 4 aluminium rods and 1 steel rod?",
             "There are six folders stacked in a tray, numbered 1 (top) to 6 (bottom).<br>Zoe's folder is not the bottom-most folder.<br>The number of folders below Zoe's folder is less than the number above it.<br>Ethan's folder is the last-but-one folder from the bottom of the stack.<br>There are exactly two folders between Maya's folder and Zoe's folder.<br>Liam's folder is not above Zoe's folder.<br><br>How many folders are there between Maya's folder and Liam's folder?",
-            "There are 6 aviaries in Feather Lane, with a total of 46 birds.
-Each aviary normally houses 4 finches.
-
-In aviaries 1–5, the macaw counts are arranged as follows: 2 macaws in one aviary, 3 macaws in two aviaries, and 4 macaws in two aviaries.
-
-One of these five aviaries (not the 6th) also shelters 2 rescued owls and 2 extra finches.
-How many birds live in the 6th aviary?
-            "Leah has a certain number of marbles and a certain number of jars.
-If she puts 3 marbles in each jar, she has 3 marbles left over.
-
-If she puts 2 marbles in each jar, she has 8 marbles left over.
-
-How many jars does Leah have?",
-Answer: B",
-            "Mr and Mrs Rivers hosted a dinner party. They invited two couples – Mr & Mrs Hart and Mr & Mrs Patel – as well as Ms Quinn, Mr Banner, Ms Lopez and Mr Diaz.
-
-@https://ik.imagekit.io/mwp/dmtest1a 
-
-Mr Rivers and Mrs Rivers sit at opposite ends (shown above).
-Male guests occupy the even-numbered seats.
-Married couples are not seated next to each other.
-Mrs Rivers sits next to neither of the Harts nor the Patels.
-Mr Diaz sits on Mrs Rivers' right-hand side, but on the opposite side of the table to Ms Quinn and as far from her as possible.
-Ms Lopez sits directly next to Mr Hart.
-
-Who occupies seat 2?
-A. Mr Banner
-B. Mr Hart
-C. Mr Diaz
-D. Mr Patel
-
-Answer: B",
-            "A star-shaped counter and a circle-shaped counter move around the seven vertices of a regular heptagon labelled P Q R S T U V in clockwise order.
-The star moves two vertices clockwise in every step.
-The circle moves three vertices anti-clockwise (counter-clockwise) in every step.
-
-At which of the following pairs of vertices should the counters be placed originally so that they arrive at the same vertex after exactly the third move?
-A. Star at Q and circle at T
-B. Star at R and circle at P
-C. Star at S and circle atQ
-D. Star at V and circle at P
-
-Answer: D",
-            "To reduce serious injuries among e-scooter riders, should cities make helmet use compulsory?
-A. Yes, because helmets are inexpensive and easy to carry, so most riders would not object to wearing one.
-B. Yes, because head-impact data show helmets cut the risk of fatal or disabling injury dramatically in similar micro-mobility devices.
-C. No, because many riders rent short-term scooters while travelling and may forget to bring a helmet with them.
-D. No, because compulsory rules could slow growth of the e-scooter industry and reduce urban transport choices.
-
-Answer: B",
-            "To minimise food waste, should grocery stores be fined for discarding unsold yet edible products?
-A. Yes, because the possibility of a fine will incentivise stores to donate or discount food instead of throwing it away.
-B. Yes, because charities that receive surplus food can then spend more money on other social causes.
-C. No, because stores already pay disposal fees, so extra fines would be an unfair double penalty.
-D. No, because some food waste is inevitable due to safety regulations and customer expectations of freshness.
-
-Answer: A",
-            "To ensure equal access to higher education, should governments abolish tuition fees at public universities?
-A. Yes, because removing fees eliminates a direct financial barrier that disproportionately deters low-income students.
-B. Yes, because countries with free universities often attract international applicants, boosting cultural diversity on campus.
-C. No, because universities would then rely more heavily on public funds, potentially reducing educational quality.
-D. No, because many students pay with government loans, so fees do not actually block access for those who truly wish to study.
-
-Answer: A",
-            "To protect native pollinator species, should the sale of imported ornamental plants be restricted?
-A. Yes, because imported ornamentals may harbour parasites that can devastate pollinators like local bee populations.
-B. Yes, because encouraging gardeners to buy native plants supports regional horticultural businesses.
-C. No, because restricting plant choice would upset gardening enthusiasts and hurt retail sales.
-D. No, because most imported plants are already certified pest-free, so the additional restriction would not meaningfully reduce harm.
-
-Answer: A",
+            "There are 6 aviaries in Feather Lane, with a total of 46 birds.<br>Each aviary normally houses 4 finches.<br>In aviaries 1–5, the macaw counts are arranged as follows: 2 macaws in one aviary, 3 macaws in two aviaries, and 4 macaws in two aviaries.<br>One of these five aviaries (not the 6th) also shelters 2 rescued owls and 2 extra finches.<br>How many birds live in the 6th aviary?",
+            "Leah has a certain number of marbles and a certain number of jars.<br>If she puts 3 marbles in each jar, she has 3 marbles left over.<br>If she puts 2 marbles in each jar, she has 8 marbles left over.<br>How many jars does Leah have?",
+            "Mr and Mrs Rivers hosted a dinner party. They invited two couples – Mr & Mrs Hart and Mr & Mrs Patel – as well as Ms Quinn, Mr Banner, Ms Lopez and Mr Diaz.<br><br>@https://ik.imagekit.io/mwp/dmtest1a <br><br>Mr Rivers and Mrs Rivers sit at opposite ends (shown above).<br>Male guests occupy the even-numbered seats.<br>Married couples are not seated next to each other.<br>Mrs Rivers sits next to neither of the Harts nor the Patels.<br>Mr Diaz sits on Mrs Rivers' right-hand side, but on the opposite side of the table to Ms Quinn and as far from her as possible.<br>Ms Lopez sits directly next to Mr Hart.<br><br>Who occupies seat 2?",
+            "A star-shaped counter and a circle-shaped counter move around the seven vertices of a regular heptagon labelled P Q R S T U V in clockwise order.<br>The star moves two vertices clockwise in every step.<br>The circle moves three vertices anti-clockwise (counter-clockwise) in every step.<br><br>At which of the following pairs of vertices should the counters be placed originally so that they arrive at the same vertex after exactly the third move?",
+            "To reduce serious injuries among e-scooter riders, should cities make helmet use compulsory?<br><br>Yes, because helmets are inexpensive and easy to carry, so most riders would not object to wearing one.<br>Yes, because head-impact data show helmets cut the risk of fatal or disabling injury dramatically in similar micro-mobility devices.<br>No, because many riders rent short-term scooters while travelling and may forget to bring a helmet with them.<br>No, because compulsory rules could slow growth of the e-scooter industry and reduce urban transport choices.",
+            "To minimise food waste, should grocery stores be fined for discarding unsold yet edible products?<br><br>Yes, because the possibility of a fine will incentivise stores to donate or discount food instead of throwing it away.<br>Yes, because charities that receive surplus food can then spend more money on other social causes.<br>No, because stores already pay disposal fees, so extra fines would be an unfair double penalty.<br>No, because some food waste is inevitable due to safety regulations and customer expectations of freshness.",
+            "To ensure equal access to higher education, should governments abolish tuition fees at public universities?<br><br>Yes, because removing fees eliminates a direct financial barrier that disproportionately deters low-income students.<br>Yes, because countries with free universities often attract international applicants, boosting cultural diversity on campus.<br>No, because universities would then rely more heavily on public funds, potentially reducing educational quality.<br>No, because many students pay with government loans, so fees do not actually block access for those who truly wish to study.",
+            "To protect native pollinator species, should the sale of imported ornamental plants be restricted?<br><br>Yes, because imported ornamentals may harbour parasites that can devastate pollinators like local bee populations.<br>Yes, because encouraging gardeners to buy native plants supports regional horticultural businesses.<br>No, because restricting plant choice would upset gardening enthusiasts and hurt retail sales.<br>No, because most imported plants are already certified pest-free, so the additional restriction would not meaningfully reduce harm.",
             "Digital agriculture is rapidly reshaping crop production in Brazil. Aerial drones equipped with multispectral cameras identify pest hotspots within hours, enabling spot-spraying that cuts chemical use and prevents large-scale infestations. Integrated “farm-to-market” apps now link growers directly with urban retailers, so produce is picked, packed and shipped without passing through traditional wholesale markets. Because family farms share soil-analysis data on an open cloud platform, fertiliser co-operatives can formulate nutrient blends tailored to each individual plot. Agronomists monitoring the platform receive real-time dashboards and can advise farmers the same day instead of after a field visit several days later.<br><br>Place ‘Yes’ if the conclusion does follow from the passage.<br>Place ‘No’ if the conclusion does not follow.",
             "​​Public concern is mounting over the rise of antibiotic-resistant bacteria. Several multinational meat-packing firms have been accused of quietly financing trade associations that lobby against tighter restrictions on antibiotic use in livestock. The exact amounts of these contributions and the purposes for which they are used are not publicly reported. At the opposite end of the spectrum, a large dairy co-operative has launched a US $700 million programme to certify herds as antibiotic-free, and a national supermarket chain now sources 60 % of its beef from farms audited for responsible drug use.<br><br>Place ‘Yes’ if the conclusion does follow from the passage.<br>Place ‘No’ if the conclusion does not follow."
         ];
@@ -902,81 +839,7 @@ Answer: A",
                     type: "mcq",
                     options: ["1", "2", "3", "4"],
                     correctAnswer: "D",
-                    explanation: "Let's work through the constraints:\n- 6 folders numbered 1 (top) to 6 (bottom)\n- Zoe is not in position 6\n- Folders below Zoe < folders above Zoe\n- Ethan is in position 5 (last-but-one from bottom)\n- Exactly 2 folders between Maya and Zoe\n- Liam is not above Zoe\n\nFrom constraint 2: If Zoe is in position p, then (6-p) < (p-1), so 6-p < p-1, thus 7 < 2p, so p > 3.5\nSince p must be integer and Zoe ≠ 6, Zoe must be in position 4 or 5.\nBut Ethan is in position 5, so Zoe must be in position 4.\n\nWith Zoe in position 4 and exactly 2 folders between Maya and Zoe:\nMaya must be in position 1 (3 positions away from 4).\n\nLiam is not above Zoe (position 4), so Liam must be in position 5 or 6.\nBut Ethan is in position 5, so Liam must be in position 6.\n\nPositions: Maya(1), Zoe(4), Ethan(5), Liam(6)\nFolders between Maya(1) and Liam(6): positions 2, 3, 4, 5 = 4 folders"
-                }
-            ],
-            // Question 9 - MCQ
-            [
-                {
-                    type: "mcq",
-                    options: ["1", "2", "3", "4"],
-                    correctAnswer: "B",
-                    explanation: "There are 6 aviaries in Feather Lane, with a total of 46 birds.
-Each aviary normally houses 4 finches.
-
-In aviaries 1–5, the macaw counts are arranged as follows: 2 macaws in one aviary, 3 macaws in two aviaries, and 4 macaws in two aviaries.
-
-One of these five aviaries (not the 6th) also shelters 2 rescued owls and 2 extra finches.
-How many birds live in the 6th aviary?
-1
-2
-3
-4
-
-Answer: 2"
-                }
-            ],
-            // Question 10 - MCQ
-5
-6
-7
-
-Answer: B"
-                }
-            ],
-            // Question 11 - MCQ
-            [
-                {
-                    type: "mcq",
-                    options: ["A. Mr Banner", "B. Mr Hart", "C. Mr Diaz", "D. Mr Patel"],
-                    correctAnswer: "B",
-                    explanation: "Mr and Mrs Rivers hosted a dinner party. They invited two couples – Mr & Mrs Hart and Mr & Mrs Patel – as well as Ms Quinn, Mr Banner, Ms Lopez and Mr Diaz.
-
-@https://ik.imagekit.io/mwp/dmtest1a 
-
-Mr Rivers and Mrs Rivers sit at opposite ends (shown above).
-Male guests occupy the even-numbered seats.
-Married couples are not seated next to each other.
-Mrs Rivers sits next to neither of the Harts nor the Patels.
-Mr Diaz sits on Mrs Rivers' right-hand side, but on the opposite side of the table to Ms Quinn and as far from her as possible.
-Ms Lopez sits directly next to Mr Hart.
-
-Who occupies seat 2?
-A. Mr Banner
-B. Mr Hart
-C. Mr Diaz
-D. Mr Patel
-
-Answer: B"
-                }
-            ],
-            // Question 12 - MCQ
-            [
-                {
-                    type: "mcq",
-                    options: ["A. Star at Q and circle at T", "B. Star at R and circle at P", "C. Star at S and circle atQ", "D. Star at V and circle at P"],
-                    correctAnswer: "D",
-                    explanation: "A star-shaped counter and a circle-shaped counter move around the seven vertices of a regular heptagon labelled P Q R S T U V in clockwise order.
-The star moves two vertices clockwise in every step.
-The circle moves three vertices anti-clockwise (counter-clockwise) in every step.
-
-At which of the following pairs of vertices should the counters be placed originally so that they arrive at the same vertex after exactly the third move?
-A. Star at Q and circle at T
-B. Star at R and circle at P
-C. Star at S and circle atQ
-D. Star at V and circle at P
-
-Answer: D"
+                    explanation: "A star-shaped counter and a circle-shaped counter move around the seven vertices of a regular heptagon labelled P Q R S T U V in clockwise order.The star moves two vertices clockwise in every step.The circle moves three vertices anti-clockwise (counter-clockwise) in every step.At which of the following pairs of vertices should the counters be placed originally so that they arrive at the same vertex after exactly the third move?Answer: D"
                 }
             ],
             // Question 13 - Argument MCQ
@@ -1007,6 +870,12 @@ Answer: D"
                 }
             ],
             // Question 16 - Argument MCQ
+            [
+                {
+                    type: "mcq",
+                    options: ["Yes, because imported ornamentals may harbour parasites that can devastate pollinators like local bee populations.", "Yes, because encouraging gardeners to buy native plants supports regional horticultural businesses.", "No, because restricting plant choice would upset gardening enthusiasts and hurt retail sales.", "No, because most imported plants are already certified pest-free, so the additional restriction would not meaningfully reduce harm."],
+                    correctAnswer: "A",
+                    explanation: "To protect native pollinator species, should the sale of imported ornamental plants be restricted?"
                 }
             ]
         ];
@@ -2314,9 +2183,13 @@ Answer: D"
 
 
         // --- Event Listeners ---
-        startButton.addEventListener('click', () => {
-            console.log("Start button event listener triggered, calling window.startTest()");
-            window.startTest();
+        document.addEventListener('DOMContentLoaded', function() {
+            if (startButton) {
+                startButton.addEventListener('click', function() {
+                    console.log("Start button event listener triggered, calling window.startTest()");
+                    window.startTest();
+                });
+            }
         });
 
         nextButton.addEventListener('click', showNextQuestion);
@@ -2584,33 +2457,14 @@ Answer: D"
         }
         
         // Add a direct click event listener to the Start button to ensure it works
-        const startButton = document.getElementById('start-button');
         if (startButton) {
             startButton.addEventListener('click', function(e) {
                 e.preventDefault();
-                console.log("Start button clicked - calling startTest()");
-                try {
-                    // Call the global startTest function
-                    if (typeof window.startTest === 'function') {
-                        window.startTest();
-                    } else {
-                        console.error("startTest function not found on window object");
-                        // Try to call it directly in case it's in scope
-                        if (typeof startTest === 'function') {
-                            console.log("Found startTest in local scope");
-                            startTest();
-                        } else {
-                            throw new Error("Could not find startTest function");
-                        }
-                    }
-                } catch (error) {
-                    console.error("Error in start button click handler:", error);
-                    alert("Failed to start the test. Please check the console for errors and refresh the page.");
-                }
+                window.startTest();
             });
-            console.log("Start button event listener added");
-        } else {
-            console.error("Start button not found in the DOM");
+        }
+
+
         }
 
         // Function to initialize the application - moved to the end to ensure all functions are defined
