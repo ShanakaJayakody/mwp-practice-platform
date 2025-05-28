@@ -402,6 +402,58 @@
              .calc-button { padding: 7px 0; font-size: 0.75rem;}
              #calc-display { font-size: 1.3rem; }
          }
+
+        /* Statement answer boxes and Yes/No buttons - Copied from DM sylls 1.html */
+        .statement-row {
+            transition: all 0.2s ease;
+            border-radius: 0.375rem;
+            cursor: pointer;
+        }
+        .statement-row:hover {
+            background-color: #f9fafb;
+        }
+        .statement-row.selected {
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* blue-500 with 50% opacity */
+            background-color: #eff6ff; /* blue-50 */
+        }
+        .statement-answer-box {
+            transition: all 0.2s ease;
+            font-weight: 600;
+            font-size: 1rem;
+            user-select: none;
+            background-color: #f5f5f5; /* neutral-200 */
+            color: #4b5563; /* gray-600 */
+        }
+        .drag-button {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        #yes-button {
+            background-color: #dcfce7; /* green-100 */
+            border-color: #22c55e; /* green-500 */
+            color: #166534; /* green-800 */
+        }
+        #yes-button:hover {
+            background-color: #bbf7d0; /* green-200 */
+            transform: translateY(-1px);
+        }
+        #no-button {
+            background-color: #fee2e2; /* red-100 */
+            border-color: #ef4444; /* red-500 */
+            color: #991b1b; /* red-800 */
+        }
+        #no-button:hover {
+            background-color: #fecaca; /* red-200 */
+            transform: translateY(-1px);
+        }
+        .drag-button[draggable=true] {
+            cursor: grab;
+        }
+        .drag-button.opacity-50 {
+            opacity: 0.5;
+        }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -417,13 +469,13 @@
                 <h1 class="text-2xl md:text-3xl font-bold text-blue-600">Decision Making Test 1</h1>
                 <p class="text-gray-600 mt-2">Prepare for the UCAT DM section.</p>
                  <p class="text-sm text-gray-500 mt-4">
-                     This section contains <strong id="setup-question-count">30 questions</strong> and you have <strong id="setup-time-limit">31 minutes</strong> to complete it.
+                     This section contains <strong id="setup-question-count">6 questions</strong> and you have <strong id="setup-time-limit">7 minutes</strong> to complete it. Max score <strong id="setup-max-score">12 points</strong>.
                  </p>
             </div>
             <div class="space-y-4 w-full max-w-md">
                 <div>
-                    <label for="goal" class="block text-sm font-medium text-gray-700">Goal (Score out of 30):</label>
-                    <input type="number" id="goal" name="goal" min="0" max="30" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., 25">
+                    <label for="goal" class="block text-sm font-medium text-gray-700">Goal (Score out of 12):</label>
+                    <input type="number" id="goal" name="goal" min="0" max="12" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., 10">
                 </div>
                 <div>
                     <label for="focus-area" class="block text-sm font-medium text-gray-700">Area of Focus / Intention For Practice:</label>
@@ -440,8 +492,8 @@
             <div class="header-bar">
                 <span id="practice-session-title" class="font-semibold">Decision Making</span>
                 <div class="flex items-center space-x-4">
-                    <div id="timer" class="text-base px-3 py-1 rounded-md">31:00</div>
-                    <span class="text-sm">Question <span id="question-number-info">1</span> of 30</span>
+                    <div id="timer" class="text-base px-3 py-1 rounded-md">07:00</div>
+                    <span class="text-sm">Question <span id="question-number-info">1</span> of 6</span>
                 </div>
             </div>
             <div class="secondary-toolbar">
@@ -530,7 +582,7 @@
                  <h2 class="text-2xl md:text-3xl font-bold text-blue-600">Practice Session Results</h2>
              </div>
             <div class="bg-blue-50 p-4 rounded-lg mb-6 text-center flex-shrink-0">
-                 <p class="text-lg font-semibold">Your Score: <span id="score" class="text-blue-700">0</span> / <span id="total-questions-results">4</span></p>
+                 <p class="text-lg font-semibold">Your Score: <span id="score" class="text-blue-700">0</span> / <span id="total-score-possible">12</span> Points</p>
                  <p class="text-gray-600">Time Taken: <span id="time-taken"></span></p>
             </div>
             <h3 class="text-xl font-semibold mb-2 flex-shrink-0">Detailed Results Summary:</h3>
@@ -586,16 +638,16 @@ document.addEventListener('DOMContentLoaded', function() {
           appId: "1:309084045110:web:b09ca0fdff84b094963d97",
           measurementId: "G-4M3ED641M9"
         };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore(); // Initialize Firestore
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore(); 
+        const auth = firebase.auth();
 
-        // Check for review mode from URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const reviewParam = urlParams.get('review');
         
-        // Check if user is logged in via Firebase
-        firebase.auth().onAuthStateChanged(user => {
+        auth.onAuthStateChanged(user => {
             if (user) {
                 console.log("User is logged in:", user.displayName, user.email);
             } else {
@@ -603,64 +655,39 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Expose startTest function to global window object so it can be called from onclick
         window.startTest = function() {
-            console.log("startTest() function called directly");
-            
-            // Get user info from Firebase Auth if available
-            if (firebase.auth && firebase.auth().currentUser) {
-                const currentUser = firebase.auth().currentUser;
-                userName = currentUser.displayName || currentUser.email || '';
-                // Store email to be used later in submission
-                userEmail = currentUser.email || '';
-                console.log("Using user info from Firebase:", userName, userEmail);
+            if (auth.currentUser) {
+                userName = auth.currentUser.displayName || auth.currentUser.email || '';
+                userEmail = auth.currentUser.email || '';
             } else {
                 userName = '';
                 userEmail = '';
-                console.log("No user logged in - using empty user info");
             }
             
             userGoal = document.getElementById('goal').value.trim();
             userFocusArea = document.getElementById('focus-area').value.trim();
-            timeLeft = 31 * 60;
+            timeLeft = 7 * 60; // 7 minutes for 6 passage-questions
             
-            // Make sure arrays are properly initialized with the correct length
-            if (userAnswers.length !== questions.length) {
-                userAnswers = new Array(questions.length).fill(null);
-            } else {
-                userAnswers.fill(null);
-            }
-            
-            if (questionTimes.length !== questions.length) {
-                questionTimes = new Array(questions.length).fill(0);
-            } else {
-                questionTimes.fill(0);
-            }
-            
-            if (flaggedQuestions.length !== questions.length) {
-                flaggedQuestions = new Array(questions.length).fill(false);
-            } else {
-                flaggedQuestions.fill(false);
-            }
+            userAnswers = new Array(passageTexts.length).fill(null).map(() => new Array(5).fill(null));
+            questionTimes = new Array(passageTexts.length).fill(0);
+            flaggedQuestions = new Array(passageTexts.length).fill(false);
             
             questionStartTime = null;
-            currentQuestionIndex = 0;
+            currentQuestionIndex = 0; // Passage index
             isReviewingFromResults = false;
             isFilteringFlagged = false;
-            currentlyDisplayedPassageIndex = -1;
             practiceSessionEndTime = null;
+
             showPracticeSessionScreen();
             startTimer();
-            loadQuestion(0);
+            loadQuestion(0); // Load first passage
             populateNavigator();
         };
         
-        // --- State Variables ---
-        // Define all state variables before any functions are called to avoid reference errors
-        let currentQuestionIndex = 0;
-        let userAnswers = [];
+        let currentQuestionIndex = 0; // Current passage index
+        let userAnswers = []; // userAnswers[passageIndex][statementIndex] = 'Y' or 'N'
         let timerInterval;
-        let timeLeft = 31 * 60; 
+        let timeLeft = 7 * 60; 
         let practiceSessionStartTime;
         let practiceSessionEndTime;
         let userName = '';
@@ -669,12 +696,12 @@ document.addEventListener('DOMContentLoaded', function() {
         let userFocusArea = '';
         let isReviewingFromResults = false;
         let questionStartTime = null;
-        let questionTimes = [];
-        let flaggedQuestions = [];
+        let questionTimes = []; // Time per passage
+        let flaggedQuestions = []; // Flagged status per passage
         let isFilteringFlagged = false;
-        let currentlyDisplayedPassageIndex = -1;
-        
-        // Calculator State
+        let score = 0; // Ensure score is globally defined
+        let maxScore = 12; // Define maxScore globally for DM Test 1
+
         let calcCurrentInput = '0';
         let calcPreviousInput = '';
         let calcOperator = null;
@@ -683,11 +710,8 @@ document.addEventListener('DOMContentLoaded', function() {
         let calcMrcPressedOnce = false; 
         let isDraggingCalculator = false;
         let calculatorOffsetX, calculatorOffsetY;
-        
-        // Add a debounce flag for submissions
         let isSubmittingReflection = false;
         
-        // --- Elements ---
         const appContainer = document.getElementById('app-container');
         const setupScreen = document.getElementById('setup-screen');
         const practiceSessionScreen = document.getElementById('practice-session-screen');
@@ -726,9 +750,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const calcButtons = document.querySelectorAll('.calc-button');
         const closeCalculatorButton = document.getElementById('close-calculator-button');
         const calculatorDragHeader = document.getElementById('calculator-drag-header');
+        const setupMaxScoreEl = document.getElementById('setup-max-score'); // For max score display
 
         // --- Data ---
-        const passages = [
+        const passageTexts = [ // Renamed from 'passages' to avoid conflict with the concept of passages in questions array
             "No reptile is a mammal.<br>All pythons are reptiles.<br>Some reptiles are kept as pets.<br><br>Place 'Yes' if the conclusion does follow. Place 'No' if the conclusion does not follow.",
             "Whiffles and sparrows are animals, but neither has scales, although both have wings. A flarn has wings but is not a sparrow.<br><br>(Place 'Yes' if the conclusion does follow, 'No' if it does not.)",
             "The bookstore received the same number of hard-cover, paperback, and audio-book copies of a new title.<br>On one particular day:<br>It sold twice as many paperbacks as hard-covers, and<br>It sold exactly as many audio-books as hard-covers and paperbacks combined.<br><br>(Place 'Yes' if the conclusion does follow, 'No' if it does not follow.)",
@@ -736,49 +761,63 @@ document.addEventListener('DOMContentLoaded', function() {
             "Zephyrs and kites are types of aircraft.<br>All zephyrs are aeros.<br>Only the aeros that fly over the Atlantic carry radar.<br>All aeros are blue.<br><br>(Place 'Yes' if the conclusion does follow, 'No' if it does not.)",
             "In Maria's fruit bowl, there are green apples and there are peaches.<br>Nothing else is in the bowl except for the yellow bananas.<br><br>(Place 'Yes' if the conclusion does follow, 'No' if it does not follow.)"
         ];
-        const questions = [
-            // Question 1 (Passage 0)
-            { passageIndex: 0, text: "Nobody kept as a pet is a python.", options: ["Yes", "No"], correctAnswer: "B", explanation: "The premises allow for the possibility that some pythons are among the pet reptiles mentioned in premise 3, so the universal denial does not follow." },
-            { passageIndex: 0, text: "No python is a mammal.", options: ["Yes", "No"], correctAnswer: "A", explanation: "All pythons are reptiles (premise 2) and no reptile is a mammal (premise 1); by transitive reasoning, no python is a mammal." },
-            { passageIndex: 0, text: "An animal that is a mammal cannot be kept as a pet.", options: ["Yes", "No"], correctAnswer: "B", explanation: "The premises provide no information about whether mammals can or cannot be pets; many mammals (e.g., cats, dogs) could be pets, so the conclusion is unsupported." },
-            { passageIndex: 0, text: "An animal that is not a python cannot be a mammal.", options: ["Yes", "No"], correctAnswer: "B", explanation: "Knowing an animal is \"not a python\" tells us nothing about its mammal status; plenty of non-pythons (horses, cats) are mammals, so the conclusion does not follow." },
-            { passageIndex: 0, text: "No mammals are reptiles.", options: ["Yes", "No"], correctAnswer: "A", explanation: "A universal negative is symmetric: if no reptile is a mammal, then no mammal is a reptile. This restatement of premise 1 therefore follows." },
-            // Question 2 (Passage 1)
-            { passageIndex: 1, text: "Flarns do not have scales.", options: ["Yes", "No"], correctAnswer: "B", explanation: "The premises never state whether flarns have, or lack, scales—so the universal denial is unsupported." },
-            { passageIndex: 1, text: "Flarns are animals.", options: ["Yes", "No"], correctAnswer: "B", explanation: "The information given does not tell us whether a flarn is (or is not) an animal." },
-            { passageIndex: 1, text: "Either sparrows or flarns have scales.", options: ["Yes", "No"], correctAnswer: "B", explanation: "We know sparrows lack scales, and flarns may or may not have scales; hence the disjunction \"either … or …\" is unjustified." },
-            { passageIndex: 1, text: "If an animal has no wings, it cannot be a whiffle.", options: ["Yes", "No"], correctAnswer: "A", explanation: "All whiffles possess wings; so any animal without wings cannot be a whiffle (valid contrapositive of a universal affirmative)." },
-            { passageIndex: 1, text: "If an animal is a flarn, it cannot be a sparrow.", options: ["Yes", "No"], correctAnswer: "A", explanation: "The premise explicitly says a flarn is not a sparrow; therefore the conditional statement follows." },
-            // Question 3 (Passage 2)
-            { passageIndex: 2, text: "A quarter of all sales that day were hard-cover copies.", options: ["Yes", "No"], correctAnswer: "B", explanation: "Let the number of hard-covers sold = H. Then paperbacks sold = 2H, and audio-books sold = (H + 2H) = 3H. Total sales = 6H, so hard-covers represent 1⁄6 of sales, not 1⁄4." },
-            { passageIndex: 2, text: "By closing time the store had fewer paperbacks left in stock than hard-covers.", options: ["Yes", "No"], correctAnswer: "A", explanation: "The store began with equal quantities of each format. Because it sold twice as many paperbacks as hard-covers, more paperbacks left the shelves, leaving fewer paperbacks than hard-covers remaining in stock." },
-            { passageIndex: 2, text: "Hard-cover copies were less popular with customers than audio-books.", options: ["Yes", "No"], correctAnswer: "A", explanation: "Audio-book sales equalled the combined sales of hard-covers and paperbacks, making audio-books the top-selling format and hard-covers the least popular of the three." },
-            { passageIndex: 2, text: "If, on the following day, the store doubled the number of hard-covers sold while selling the same number of paperbacks, it would have sold more hard-covers than paperbacks.", options: ["Yes", "No"], correctAnswer: "B", explanation: "Doubling hard-cover sales would make them 2H (the same figure already achieved by paperbacks). Hence the two formats would be tied, not with hard-covers ahead." },
-            { passageIndex: 2, text: "Exactly one-third of all the copies originally stocked were audio-books.", options: ["Yes", "No"], correctAnswer: "A", explanation: "The initial shipment was divided equally among three formats; therefore each format— including audio-books—accounted for one-third of the total stock." },
-            // Question 4 (Passage 3)
-            { passageIndex: 3, text: "If you took out a purple item, it would be a hat.", options: ["Yes", "No"], correctAnswer: "B", explanation: "The suitcase holds purple gloves as well as purple hats, so drawing a purple item does not guarantee it is a hat." },
-            { passageIndex: 3, text: "As well as purple and black items, the suitcase also contained some yellow items.", options: ["Yes", "No"], correctAnswer: "A", explanation: "The premise lists yellow hats in addition to the purple (hats + gloves) and black (gloves) items, so yellow garments are indeed present." },
-            { passageIndex: 3, text: "There were no black garments in the suitcase.", options: ["Yes", "No"], correctAnswer: "B", explanation: "The suitcase explicitly contains black gloves, so the claim that no black garments are present is false." },
-            { passageIndex: 3, text: "There were more purple garments than green garments in the suitcase.", options: ["Yes", "No"], correctAnswer: "B", explanation: "Quantities are unspecified: we know only \"some\" green hats and \"a few\" purple hats plus \"a few\" purple gloves. Without actual counts, we cannot rank total purple versus green garments." },
-            { passageIndex: 3, text: "The only yellow garments were hats.", options: ["Yes", "No"], correctAnswer: "A", explanation: "Yellow appears only as hats, because—apart from hats—the suitcase contains only black or purple gloves. Hence no yellow gloves (or other yellow garments) exist." },
-            // Question 5 (Passage 4)
-            { passageIndex: 4, text: "Zephyrs are blue.", options: ["Yes", "No"], correctAnswer: "A", explanation: "Every zephyr is an aero (premise 2), and every aero is blue (premise 4) ⇒ all zephyrs are blue." },
-            { passageIndex: 4, text: "All aircraft are aeros.", options: ["Yes", "No"], correctAnswer: "B", explanation: "The premises tell us that zephyrs ⊂ aeros, but give no information about kites (or any other aircraft) being aeros; therefore we cannot extend \"aero\" to all aircraft." },
-            { passageIndex: 4, text: "Neither zephyrs nor kites fly over the Atlantic.", options: ["Yes", "No"], correctAnswer: "B", explanation: "Some zephyrs are aeros, and some aeros fly over the Atlantic (implied by \"only the aeros that fly over the Atlantic carry radar\"); hence we cannot rule out the possibility that zephyrs—or even kites—fly there." },
-            { passageIndex: 4, text: "If an aero carries radar, it must fly over the Atlantic.", options: ["Yes", "No"], correctAnswer: "A", explanation: "\"Only the aeros that fly over the Atlantic carry radar\" translates to: If an aero carries radar ⇒ it flies over the Atlantic (valid conditional direction).\"" },
-            { passageIndex: 4, text: "Not all blue aeros carry radar.", options: ["Yes", "No"], correctAnswer: "A", explanation: "All aeros are blue, but only those that fly over the Atlantic carry radar. Therefore at least some blue aeros (those that do not fly over the Atlantic) lack radar, so \"not all blue aeros carry radar\" is true." },
-            // Question 6 (Passage 5)
-            { passageIndex: 5, text: "Some of the fruit is red.", options: ["Yes", "No"], correctAnswer: "B", explanation: "Peaches might be red-tinged, but this is not stated; the information only guarantees green apples and yellow bananas, so a red fruit is not certain." },
-            { passageIndex: 5, text: "There are some green fruits.", options: ["Yes", "No"], correctAnswer: "A", explanation: "The premise explicitly says the bowl contains green apples, so at least some fruit is green." },
-            { passageIndex: 5, text: "There are no yellow fruits.", options: ["Yes", "No"], correctAnswer: "B", explanation: "The bowl definitely contains yellow bananas; therefore it is false that there are no yellow fruits." },
-            { passageIndex: 5, text: "There are no red bananas.", options: ["Yes", "No"], correctAnswer: "A", explanation: "Bananas in the bowl are specified as yellow; hence red bananas do not exist in this scenario." },
-            { passageIndex: 5, text: "All of the fruit is either green or yellow.", options: ["Yes", "No"], correctAnswer: "B", explanation: "Although all apples are green and all bananas are yellow, the colour of the peaches is unspecified; they could be orange, red, etc., so not all fruit is necessarily green or yellow." }
+
+        // questions array will now group statements by passage
+        const questionsByPassage = [
+            // Passage 1 statements
+            [
+                { text: "Nobody kept as a pet is a python.", correctAnswer: "N", explanation: "The premises allow for the possibility that some pythons are among the pet reptiles mentioned in premise 3, so the universal denial does not follow." },
+                { text: "No python is a mammal.", correctAnswer: "Y", explanation: "All pythons are reptiles (premise 2) and no reptile is a mammal (premise 1); by transitive reasoning, no python is a mammal." },
+                { text: "An animal that is a mammal cannot be kept as a pet.", correctAnswer: "N", explanation: "The premises provide no information about whether mammals can or cannot be pets; many mammals (e.g., cats, dogs) could be pets, so the conclusion is unsupported." },
+                { text: "An animal that is not a python cannot be a mammal.", correctAnswer: "N", explanation: "Knowing an animal is \"not a python\" tells us nothing about its mammal status; plenty of non-pythons (horses, cats) are mammals, so the conclusion does not follow." },
+                { text: "No mammals are reptiles.", correctAnswer: "Y", explanation: "A universal negative is symmetric: if no reptile is a mammal, then no mammal is a reptile. This restatement of premise 1 therefore follows." }
+            ],
+            // Passage 2 statements
+            [
+                { text: "Flarns do not have scales.", correctAnswer: "N", explanation: "The premises never state whether flarns have, or lack, scales—so the universal denial is unsupported." },
+                { text: "Flarns are animals.", correctAnswer: "N", explanation: "The information given does not tell us whether a flarn is (or is not) an animal." },
+                { text: "Either sparrows or flarns have scales.", correctAnswer: "N", explanation: "We know sparrows lack scales, and flarns may or may not have scales; hence the disjunction \"either … or …\" is unjustified." },
+                { text: "If an animal has no wings, it cannot be a whiffle.", correctAnswer: "Y", explanation: "All whiffles possess wings; so any animal without wings cannot be a whiffle (valid contrapositive of a universal affirmative)." },
+                { text: "If an animal is a flarn, it cannot be a sparrow.", correctAnswer: "Y", explanation: "The premise explicitly says a flarn is not a sparrow; therefore the conditional statement follows." }
+            ],
+            // Passage 3 statements
+            [
+                { text: "A quarter of all sales that day were hard-cover copies.", correctAnswer: "N", explanation: "Let the number of hard-covers sold = H. Then paperbacks sold = 2H, and audio-books sold = (H + 2H) = 3H. Total sales = 6H, so hard-covers represent 1⁄6 of sales, not 1⁄4." },
+                { text: "By closing time the store had fewer paperbacks left in stock than hard-covers.", correctAnswer: "Y", explanation: "The store began with equal quantities of each format. Because it sold twice as many paperbacks as hard-covers, more paperbacks left the shelves, leaving fewer paperbacks than hard-covers remaining in stock." },
+                { text: "Hard-cover copies were less popular with customers than audio-books.", correctAnswer: "Y", explanation: "Audio-book sales equalled the combined sales of hard-covers and paperbacks, making audio-books the top-selling format and hard-covers the least popular of the three." },
+                { text: "If, on the following day, the store doubled the number of hard-covers sold while selling the same number of paperbacks, it would have sold more hard-covers than paperbacks.", correctAnswer: "N", explanation: "Doubling hard-cover sales would make them 2H (the same figure already achieved by paperbacks). Hence the two formats would be tied, not with hard-covers ahead." },
+                { text: "Exactly one-third of all the copies originally stocked were audio-books.", correctAnswer: "Y", explanation: "The initial shipment was divided equally among three formats; therefore each format— including audio-books—accounted for one-third of the total stock." }
+            ],
+            // Passage 4 statements
+            [
+                { text: "If you took out a purple item, it would be a hat.", correctAnswer: "N", explanation: "The suitcase holds purple gloves as well as purple hats, so drawing a purple item does not guarantee it is a hat." },
+                { text: "As well as purple and black items, the suitcase also contained some yellow items.", correctAnswer: "Y", explanation: "The premise lists yellow hats in addition to the purple (hats + gloves) and black (gloves) items, so yellow garments are indeed present." },
+                { text: "There were no black garments in the suitcase.", correctAnswer: "N", explanation: "The suitcase explicitly contains black gloves, so the claim that no black garments are present is false." },
+                { text: "There were more purple garments than green garments in the suitcase.", correctAnswer: "N", explanation: "Quantities are unspecified: we know only \"some\" green hats and \"a few\" purple hats plus \"a few\" purple gloves. Without actual counts, we cannot rank total purple versus green garments." },
+                { text: "The only yellow garments were hats.", correctAnswer: "Y", explanation: "Yellow appears only as hats, because—apart from hats—the suitcase contains only black or purple gloves. Hence no yellow gloves (or other yellow garments) exist." }
+            ],
+            // Passage 5 statements
+            [
+                { text: "Zephyrs are blue.", correctAnswer: "Y", explanation: "Every zephyr is an aero (premise 2), and every aero is blue (premise 4) ⇒ all zephyrs are blue." },
+                { text: "All aircraft are aeros.", correctAnswer: "N", explanation: "The premises tell us that zephyrs ⊂ aeros, but give no information about kites (or any other aircraft) being aeros; therefore we cannot extend \"aero\" to all aircraft." },
+                { text: "Neither zephyrs nor kites fly over the Atlantic.", correctAnswer: "N", explanation: "Some zephyrs are aeros, and some aeros fly over the Atlantic (implied by \"only the aeros that fly over the Atlantic carry radar\"); hence we cannot rule out the possibility that zephyrs—or even kites—fly there." },
+                { text: "If an aero carries radar, it must fly over the Atlantic.", correctAnswer: "Y", explanation: "\"Only the aeros that fly over the Atlantic carry radar\" translates to: If an aero carries radar ⇒ it flies over the Atlantic (valid conditional direction).\"" },
+                { text: "Not all blue aeros carry radar.", correctAnswer: "Y", explanation: "All aeros are blue, but only those that fly over the Atlantic carry radar. Therefore at least some blue aeros (those that do not fly over the Atlantic) lack radar, so \"not all blue aeros carry radar\" is true." }
+            ],
+            // Passage 6 statements
+            [
+                { text: "Some of the fruit is red.", correctAnswer: "N", explanation: "Peaches might be red-tinged, but this is not stated; the information only guarantees green apples and yellow bananas, so a red fruit is not certain." },
+                { text: "There are some green fruits.", correctAnswer: "Y", explanation: "The premise explicitly says the bowl contains green apples, so at least some fruit is green." },
+                { text: "There are no yellow fruits.", correctAnswer: "N", explanation: "The bowl definitely contains yellow bananas; therefore it is false that there are no yellow fruits." },
+                { text: "There are no red bananas.", correctAnswer: "Y", explanation: "Bananas in the bowl are specified as yellow; hence red bananas do not exist in this scenario." },
+                { text: "All of the fruit is either green or yellow.", correctAnswer: "N", explanation: "Although all apples are green and all bananas are yellow, the colour of the peaches is unspecified; they could be orange, red, etc., so not all fruit is necessarily green or yellow." }
+            ]
         ];
 
-        // Now initialize arrays with questions.length
-        userAnswers = new Array(questions.length).fill(null);
-        questionTimes = new Array(questions.length).fill(0);
-        flaggedQuestions = new Array(questions.length).fill(false);
+        // Now initialize arrays with passageTexts.length (which is the number of main questions)
+        userAnswers = new Array(passageTexts.length).fill(null).map(() => new Array(5).fill(null));
+        questionTimes = new Array(passageTexts.length).fill(0);
+        flaggedQuestions = new Array(passageTexts.length).fill(false);
 
         // Check for review mode and initialize appropriate screen
         if (reviewParam) {
@@ -850,132 +889,127 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         function loadQuestion(index, reviewMode = false) {
-            if (index < 0 || index >= questions.length) return;
+            if (index < 0 || index >= passageTexts.length) return; // Check against passageTexts length
              if (!isReviewingFromResults && !reviewMode) {
-                 recordTimeSpent(currentQuestionIndex);
+                 recordTimeSpent(currentQuestionIndex); // currentQuestionIndex is passage index
             }
-            const question = questions[index];
-            const newPassageIndex = question.passageIndex;
+            const currentPassageText = passageTexts[index];
+            const statementsForPassage = questionsByPassage[index];
             const questionContainer = document.querySelector('.question-column');
             
-            // Single column layout for all questions
             if (questionContainer) {
-                questionContainer.style.width = '100%';
-                questionContainer.style.flex = '1';
-                questionContainer.style.marginTop = '0';
-                
-                // Add the passage text to the question column
                 questionContainer.innerHTML = `
                     <div class="p-4 bg-gray-50 rounded-md mb-4" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 1.25rem; line-height: 1.5;">
-                        ${passages[newPassageIndex]}
+                        ${currentPassageText}
                     </div>
-                    <h4 class="text-md font-semibold mb-3 bg-white pb-1">Question ${index + 1}</h4>
-                    <p id="question-text" class="mb-4 text-black text-base"></p>
-                    <div id="options-container" class="space-y-2"></div>
+                    <div class="flex justify-between items-center mb-3">
+                        <div>
+                            <h4 class="text-md font-semibold bg-white pb-1">Question ${index + 1}</h4>
+                            <h5 class="font-medium mb-2">Conclusions</h5>
+                            <p class="text-sm text-gray-600">Drag 'Yes' or 'No' onto the statement row, or click a statement then click 'Yes' or 'No'.</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button id="yes-button" class="drag-button px-6 py-2 rounded-md font-medium">Yes</button>
+                            <button id="no-button" class="drag-button px-6 py-2 rounded-md font-medium">No</button>
+                        </div>
+                    </div>
+                    <div id="statements-container" class="space-y-3"></div>
                     <div id="review-explanation-container"></div>
                 `;
                 
-                // Make images in the stimulus region 50% smaller
                 const stimulusDiv = questionContainer.querySelector('.p-4.bg-gray-50');
                 if (stimulusDiv) {
                     const stimulusImages = stimulusDiv.querySelectorAll('img');
                     stimulusImages.forEach(img => {
-                        if (newPassageIndex === 7 || newPassageIndex === 8) {
-                            // 60% for TechCorp Industries comparison (passageIndex 7)
-                            // and vacation preferences survey (passageIndex 8)
-                            img.style.maxWidth = '60%';
-                        } else if (newPassageIndex === 12) {
-                            // 45% for square patio with fountain (passageIndex 12)
-                            img.style.maxWidth = '45%';
-                        } else {
-                            // Default size for other images
-                            img.style.maxWidth = '50%';
-                        }
+                        img.style.maxWidth = '60%'; // Consistent image sizing
                         img.style.margin = '0 auto';
                         img.style.display = 'block';
                     });
                 }
             }
             
-            currentQuestionIndex = index;
+            currentQuestionIndex = index; // This is passage index
             isReviewingFromResults = reviewMode;
-            const questionTextEl = document.getElementById('question-text');
-            const optionsContainer = document.getElementById('options-container');
+            
+            const statementsContainer = document.getElementById('statements-container');
             const reviewExplanationContainer = document.getElementById('review-explanation-container');
             
-            questionNumberInfoEl.textContent = `${index + 1} of ${questions.length}`;
-            if (questionTextEl) questionTextEl.textContent = question.text;
+            questionNumberInfoEl.textContent = `${index + 1} of ${passageTexts.length}`;
             if (questionContainer) questionContainer.scrollTop = 0;
             
-            if (optionsContainer) {
-                optionsContainer.innerHTML = '';
-                const optionLetters = ['A', 'B']; // For Yes/No
-                question.options.forEach((option, i) => {
-                    const optionId = `q${index}_opt${i}`;
-                    const label = document.createElement('label');
-                    label.htmlFor = optionId;
-                    label.classList.add('option-label');
-                    label.dataset.optionIndex = i;
-                    const radio = document.createElement('input');
-                    radio.type = 'radio';
-                    radio.id = optionId;
-                    radio.name = `question_${index}`;
-                    radio.value = optionLetters[i]; // A for Yes, B for No
-                    radio.disabled = reviewMode;
-                    label.classList.remove('border-green-500', 'border-red-500', 'border-2', 'bg-green-50', 'bg-red-50', 'selected-answer');
-                    label.style.cursor = reviewMode ? 'default' : 'pointer';
-                    if (userAnswers[index] === optionLetters[i]) {
-                        radio.checked = true;
-                        label.classList.add('selected-answer');
-                    }
+            if (statementsContainer) {
+                statementsContainer.innerHTML = '';
+                statementsForPassage.forEach((statementData, statementIdx) => {
+                    const statementId = `q${index}_statement${statementIdx}`;
+                    const rowDiv = document.createElement('div');
+                    rowDiv.className = 'statement-row flex items-center mb-3 border border-gray-200 rounded-md p-3 bg-white';
+                    rowDiv.dataset.statementIndex = statementIdx;
+                    
+                    const userAnswerForStatement = userAnswers[index] && userAnswers[index][statementIdx] ? userAnswers[index][statementIdx] : null;
+                    let displayAnswer = '...';
+                    if (userAnswerForStatement === 'Y') displayAnswer = 'Yes';
+                    else if (userAnswerForStatement === 'N') displayAnswer = 'No';
+
+                    rowDiv.innerHTML = `
+                        <div class="flex-grow statement-text">
+                            <span class="font-medium">${statementIdx + 1}.</span> ${statementData.text}
+                        </div>
+                        <div class="flex-shrink-0 ml-4 relative">
+                            <div class="statement-answer-box w-16 h-10 border border-gray-300 rounded flex items-center justify-center" 
+                                 data-statement-index="${statementIdx}">
+                                ${displayAnswer}
+                            </div>
+                        </div>
+                    `;
+                    statementsContainer.appendChild(rowDiv);
+
                     if (reviewMode) {
-                        const isCorrectAnswer = question.correctAnswer === optionLetters[i];
-                        const isSelectedAnswer = userAnswers[index] === optionLetters[i];
-                        if (isCorrectAnswer) {
-                            label.classList.add('border-green-500', 'border-2');
-                            if (!isSelectedAnswer) label.classList.add('bg-green-50');
-                        } else if (isSelectedAnswer) {
-                            label.classList.add('border-red-500', 'border-2', 'bg-red-50');
+                        const answerBox = rowDiv.querySelector('.statement-answer-box');
+                        const correctAnswer = statementData.correctAnswer; // Y or N
+                        
+                        answerBox.classList.remove('border-gray-300', 'bg-gray-50');
+                        if (userAnswerForStatement === correctAnswer) {
+                            answerBox.classList.add('border-green-500', 'bg-green-50', 'text-green-700');
+                        } else {
+                            answerBox.classList.add('border-red-500', 'bg-red-50', 'text-red-700');
+                            const correctDiv = document.createElement('div');
+                            correctDiv.className = 'mt-1 text-xs text-gray-600';
+                            correctDiv.textContent = `Correct: ${correctAnswer === 'Y' ? 'Yes' : 'No'}`;
+                            rowDiv.querySelector('.flex-shrink-0').appendChild(correctDiv);
+                        }
+                        
+                        // Display explanation for this statement
+                        if (statementData.explanation) {
+                             const explanationDiv = document.createElement('div');
+                             explanationDiv.classList.add('explanation-box', 'mt-2', 'text-sm');
+                             explanationDiv.innerHTML = `<strong class="font-semibold">Explanation (${statementIdx + 1}):</strong> ${statementData.explanation.replace(/\n/g, '<br>')}`;
+                             if(reviewExplanationContainer && statementIdx === 0) reviewExplanationContainer.innerHTML = ''; // Clear for new passage
+                             if(reviewExplanationContainer) reviewExplanationContainer.appendChild(explanationDiv);
                         }
                     }
-                    label.appendChild(radio);
-                    // Display "Yes" or "No" as the option text
-                    const textNode = document.createTextNode(`${optionLetters[i]}) ${option}`); // Option is "Yes" or "No"
-                    label.appendChild(textNode);
-                    if (!reviewMode) {
-                        label.addEventListener('click', (e) => {
-                            if (e.target.tagName !== 'INPUT') handleOptionSelect(index, i, optionLetters[i]);
-                        });
-                        radio.addEventListener('change', () => handleOptionSelect(index, i, optionLetters[i]));
-                    }
-                    optionsContainer.appendChild(label);
                 });
-            }
-            
-            if (reviewMode && reviewExplanationContainer && question.explanation) {
-                const explanationDiv = document.createElement('div');
-                explanationDiv.classList.add('explanation-box');
-                explanationDiv.innerHTML = `<strong class="font-semibold">Explanation:</strong> ${question.explanation.replace(/\n/g, '<br>')}`;
-                reviewExplanationContainer.appendChild(explanationDiv);
+                if (!reviewMode) {
+                    initDragAndDrop();
+                }
             }
             
             prevButton.disabled = index === 0;
-            if (!reviewMode && index === questions.length - 1) {
+            if (!reviewMode && index === passageTexts.length - 1) {
                  nextButton.textContent = 'Finish & Review';
                  nextButton.disabled = false;
             } else if (!reviewMode) {
                  nextButton.textContent = 'Next (Alt+N) →';
                  nextButton.disabled = false;
             } else {
-                 nextButton.disabled = index === questions.length - 1;
+                 nextButton.disabled = index === passageTexts.length - 1;
                  if (!nextButton.disabled) nextButton.textContent = 'Next →';
             }
+
             updateFlagButtonAppearance();
             if (reviewMode) {
                 backToResultsButton.classList.remove('hidden');
                 endPracticeSessionButtonFooter.classList.add('hidden');
                 practiceSessionTitleEl.textContent = "Reviewing Question";
-                prevButton.disabled = index === 0;
                 navigatorButton.disabled = false;
                 flagButton.disabled = true;
             } else {
@@ -984,7 +1018,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 practiceSessionTitleEl.textContent = "Decision Making";
                 navigatorButton.disabled = false;
                 flagButton.disabled = false;
-                prevButton.disabled = index === 0;
             }
             updateNavigatorHighlight();
             if (!isReviewingFromResults) {
@@ -993,20 +1026,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
          function handleOptionSelect(questionIndex, optionIndex, optionValue) {
-             if (questionIndex !== currentQuestionIndex || isReviewingFromResults) return;
-             userAnswers[questionIndex] = optionValue;
-             document.querySelectorAll(`#options-container .option-label`).forEach(lbl => {
-                 lbl.classList.remove('selected-answer');
-                 const radio = lbl.querySelector('input[type="radio"]');
-                 if(radio) radio.checked = false;
-             });
-             const selectedLabel = document.querySelector(`#options-container label[for="q${questionIndex}_opt${optionIndex}"]`);
-              if (selectedLabel) {
-                 selectedLabel.classList.add('selected-answer');
-                 const radio = selectedLabel.querySelector('input[type="radio"]');
-                 if (radio) radio.checked = true;
-             }
-             updateNavigatorButtons();
+             // This function is no longer used in the same way.
+             // Answer selection is handled by initDragAndDrop.
+             // We can remove this or adapt if a different selection method is needed.
+             console.warn("handleOptionSelect called, but should be handled by drag and drop logic for syllogisms.");
          }
 
         function showNextQuestion() {
@@ -1066,7 +1089,7 @@ document.addEventListener('DOMContentLoaded', function() {
             reviewScreen.classList.remove('flex');
             resultsScreen.classList.add('hidden');
             appContainer.classList.remove('flex', 'flex-col');
-            currentlyDisplayedPassageIndex = -1;
+            // currentlyDisplayedPassageIndex = -1; // No longer needed with this structure
             
             if (setupQuestionCountEl) setupQuestionCountEl.textContent = "30";
             if (setupTimeLimitEl) setupTimeLimitEl.textContent = `31 minutes`;
@@ -1089,7 +1112,7 @@ document.addEventListener('DOMContentLoaded', function() {
             reviewScreen.classList.add('hidden');
             resultsScreen.classList.add('hidden');
             appContainer.classList.add('flex', 'flex-col');
-            currentlyDisplayedPassageIndex = -1;
+            // currentlyDisplayedPassageIndex = -1; // No longer needed with this structure
             updateTimerVisibility();
         }
 
@@ -1191,73 +1214,65 @@ document.addEventListener('DOMContentLoaded', function() {
          }
 
         function showResultsScreen() {
-            practiceSessionEndTime = practiceSessionEndTime || new Date();
-            recordTimeSpent(currentQuestionIndex);
-            stopTimer();
-
+            // Correctly hide practice/review screens and show results screen
             practiceSessionScreen.classList.add('hidden');
             reviewScreen.classList.add('hidden');
             reviewScreen.classList.remove('flex');
             resultsScreen.classList.remove('hidden');
-            resultsScreen.classList.add('flex');
+            resultsScreen.classList.add('flex'); // Assuming flex is desired for resultsScreen
             setupScreen.classList.add('hidden');
-            appContainer.classList.add('flex', 'flex-col');
+            appContainer.classList.add('flex', 'flex-col'); // Ensure app container has flex if needed
 
-            let score = 0;
-            resultsDetailsGrid.innerHTML = ''; 
+            stopTimer(); // Should be called to stop the timer
+            calculateScore(); // Ensure score and detailedPassageScores are up-to-date
 
-            questions.forEach((qData, index) => {
-                const userAnswer = userAnswers[index];
-                const correctAnswer = qData.correctAnswer;
-                const isCorrect = userAnswer !== null && userAnswer !== undefined && userAnswer === correctAnswer;
-                if (isCorrect) score++;
+            const scoreEl = document.getElementById('score'); // User's score
+            const totalScorePossibleEl = document.getElementById('total-score-possible'); // Max possible score
+            const timeTakenEl = document.getElementById('time-taken'); // Time taken display
+            const resultsDetailsGridEl = document.getElementById('results-details-grid'); // For detailed breakdown
 
-                const timeSpentMs = questionTimes[index] || 0;
-                const timeSpentSec = Math.round(timeSpentMs / 1000);
+            if (scoreEl) scoreEl.textContent = score;
+            if (totalScorePossibleEl) totalScorePossibleEl.textContent = maxScore; 
+            if (timeTakenEl && practiceSessionStartTime && practiceSessionEndTime) {
+                 timeTakenEl.textContent = formatTimeDifference(practiceSessionEndTime - practiceSessionStartTime);
+            } else if (timeTakenEl) {
+                timeTakenEl.textContent = "N/A"; // Fallback if times are not set
+            }
 
-                const summaryItem = document.createElement('div');
-                summaryItem.classList.add('result-summary-item');
-
-                const summaryBox = document.createElement('div');
-                summaryBox.classList.add('result-summary-box');
-                if (userAnswer === null || userAnswer === undefined) {
-                    summaryBox.classList.add('not-answered-box');
+            if (resultsDetailsGridEl) {
+                resultsDetailsGridEl.innerHTML = ''; // Clear previous results
+                if (window.detailedPassageScores && window.detailedPassageScores.length > 0) {
+                    window.detailedPassageScores.forEach((item, index) => {
+                        const passageResultDiv = document.createElement('div');
+                        passageResultDiv.classList.add('passage-result-summary', 'p-3', 'border', 'rounded-md', 'bg-gray-50', 'text-sm');
+                        passageResultDiv.style.marginBottom = '10px';
+                        
+                        // Using string concatenation to avoid template literal issues
+                        passageResultDiv.innerHTML = 
+                            '<h4 class="font-semibold text-md mb-1">Passage ' + (index + 1) + '</h4>' +
+                            '<p>Correct Statements: ' + item.correctCount + ' / ' + item.totalStatements + '</p>' +
+                            '<p>Points Awarded: <span class="font-bold">' + item.points + '</span></p>';
+                        
+                        resultsDetailsGridEl.appendChild(passageResultDiv);
+                    });
                 } else {
-                    summaryBox.classList.add(isCorrect ? 'correct-box' : 'incorrect-box');
+                    resultsDetailsGridEl.innerHTML = '<p class="text-center text-gray-600 col-span-full">Could not load detailed score breakdown.</p>';
                 }
-                summaryBox.dataset.index = index;
-                summaryBox.title = `Click to review Question ${index + 1}`;
-
-                const timeDisplay = document.createElement('span');
-                timeDisplay.classList.add('time-display-in-box');
-                timeDisplay.textContent = `${timeSpentSec}s`;
-                summaryBox.appendChild(timeDisplay);
-
-                const numberLabel = document.createElement('div');
-                numberLabel.classList.add('question-number-label');
-                numberLabel.textContent = `Q${index + 1}`;
-
-                summaryBox.addEventListener('click', () => {
-                    revisitQuestionFromResults(index);
-                });
-
-                summaryItem.appendChild(summaryBox);
-                summaryItem.appendChild(numberLabel);
-                resultsDetailsGrid.appendChild(summaryItem);
-            });
-
-            scoreEl.textContent = score;
-            totalQuestionsResultsEl.textContent = questions.length;
-            const timeDiff = practiceSessionEndTime - practiceSessionStartTime;
-            timeTakenEl.textContent = formatTimeDifference(timeDiff);
+            }
             
-            // Make sure the submit performance button has an event listener
+            // Update reflection UI if needed
+            const reflectionTextEl = document.getElementById('reflection-text');
+            const focusRatingEl = document.getElementById('focus-rating');
+            if (reflectionTextEl) reflectionTextEl.value = ''; // Clear previous reflection
+            if (focusRatingEl) focusRatingEl.value = ''; // Clear previous rating
+
             const submitButton = document.getElementById('submit-performance-button');
             if (submitButton) {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Submit Reflections';
-                submitButton.classList.remove('bg-green-500');
+                 submitButton.disabled = false;
+                 submitButton.textContent = 'Submit Reflections';
+                 submitButton.classList.remove('bg-green-500');
             }
+            // Ensure other buttons like download PDF are correctly handled
         }
 
 
@@ -1271,42 +1286,70 @@ document.addEventListener('DOMContentLoaded', function() {
         // Only stop timer when showing final results
         function endPracticeSessionAndShowResults() {
             stopTimer();
+            practiceSessionEndTime = practiceSessionEndTime || new Date(); // Ensure end time is set
 
-            // Gather data to submit to Firebase
+            const currentTotalScore = calculateScore(); // Call once and store
+
             const performanceData = {
                 studentName: userName || 'Anonymous',
-                studentEmail: userEmail || '', // <--- ADD THIS LINE
+                studentEmail: userEmail || '',
                 examName: "DM Test 1",
-                score: calculateScore(), // New function to calculate score
-                totalQuestions: questions.length,
+                score: currentTotalScore,
+                maxScore: maxScore, // Use global maxScore (12)
+                detailedPassageScores: window.detailedPassageScores || [], // Add this for granular data
+                numberOfPassages: passageTexts.length,
                 timeTaken: formatTimeDifference(practiceSessionEndTime - practiceSessionStartTime),
                 answers: userAnswers,
                 questionTimes: questionTimes,
                 flaggedQuestions: flaggedQuestions,
                 goal: userGoal || '',
-                focusArea: userFocusArea || '',
-                focusRating: '', // No reflection data available at this point
-                reflection: '',  // No reflection data available at this point
+                focusArea: userFocusArea || '', // Corrected key name
+                focusRating: '', 
+                reflection: '',  
                 submissionTimestamp: new Date().toISOString(),
-                userAgent: navigator.userAgent
+                userAgent: navigator.userAgent,
+                isReflection: false // Explicitly false for initial submission
             };
 
-            // Submit data to Firebase
             submitDataToFirebase(performanceData);
-            
-            // Show results
             showResultsScreen();
         }
 
         // Function to calculate the score
         function calculateScore() {
-            let score = 0;
-            questions.forEach((qData, index) => {
-                const userAnswer = userAnswers[index];
-                const correctAnswer = qData.correctAnswer;
-                const isCorrect = userAnswer !== null && userAnswer !== undefined && userAnswer === correctAnswer;
-                if (isCorrect) score++;
-            });
+            score = 0;
+            window.detailedPassageScores = [];
+            const numPassages = passageTexts.length; // Should be 6
+
+            for (let i = 0; i < numPassages; i++) {
+                let correctCountForPassage = 0;
+                let passageScore = 0;
+                const numStatementsInPassage = questionsByPassage[i].length; // Should be 5
+
+                if (userAnswers[i] && userAnswers[i].length === numStatementsInPassage) {
+                    for (let j = 0; j < numStatementsInPassage; j++) {
+                        if (userAnswers[i][j] && questionsByPassage[i][j].correctAnswer &&
+                            userAnswers[i][j].toUpperCase() === questionsByPassage[i][j].correctAnswer.toUpperCase()) {
+                            correctCountForPassage++;
+                        }
+                    }
+                }
+
+                if (correctCountForPassage === 5) {
+                    passageScore = 2;
+                } else if (correctCountForPassage === 4) {
+                    passageScore = 1;
+                } else {
+                    passageScore = 0;
+                }
+                score += passageScore;
+                window.detailedPassageScores.push({
+                    passageIndex: i,
+                    correctCount: correctCountForPassage,
+                    totalStatements: numStatementsInPassage,
+                    points: passageScore
+                });
+            }
             return score;
         }
 
@@ -1316,67 +1359,67 @@ document.addEventListener('DOMContentLoaded', function() {
             if (typeof firebase !== 'undefined' && firebase.firestore) {
                 try {
                     const db = firebase.firestore();
-                    let userId = ''; // <--- Add this
+                    let userId = ''; 
                     if (firebase.auth && firebase.auth().currentUser) {
-                        userId = firebase.auth().currentUser.uid; // <--- Get the UID
+                        userId = firebase.auth().currentUser.uid; 
                     }
                     
                     const dataToSubmit = {
-                        ...data, // Spread existing data
-                        userId: userId // <--- Add userId here
+                        ...data, 
+                        userId: userId 
                     };
 
-                    db.collection("performanceSubmissions").add(dataToSubmit) // Use dataToSubmit
+                    db.collection("performanceSubmissions").add(dataToSubmit) 
                       .then(() => {
                           console.log("Performance data submitted to Firebase with userId");
                           
-                          // Show a success notification that will be displayed on the results screen
                           setTimeout(() => {
                               const successNotice = document.createElement('div');
                               successNotice.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow-lg z-50';
-                              successNotice.innerHTML = `
-                                  <div class="flex items-center">
-                                      <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                      </svg>
-                                      <span class="font-medium">Success!</span>
-                                      <span class="ml-2">Your test results have been submitted to the admin dashboard.</span>
-                                  </div>
-                              `;
+                              // Using string concatenation with single quotes for HTML attributes
+                              successNotice.innerHTML = 
+                                '<div class="flex items-center">' +
+                                  '<svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">' +
+                                    '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>' +
+                                  '</svg>' +
+                                  '<span class="font-medium">Success!</span>' +
+                                  '<span class="ml-2">Your test results have been submitted.</span>' +
+                                '</div>';
                               document.body.appendChild(successNotice);
                               
-                              // Remove the notice after 5 seconds
                               setTimeout(() => {
                                   successNotice.classList.add('opacity-0', 'transition-opacity', 'duration-500');
                                   setTimeout(() => {
-                                      document.body.removeChild(successNotice);
+                                      if (document.body.contains(successNotice)) {
+                                          document.body.removeChild(successNotice);
+                                      }
                                   }, 500);
                               }, 5000);
-                          }, 500); // Small delay to ensure results screen is visible
+                          }, 500); 
                       })
                       .catch((error) => {
                           console.error("Error submitting to Firebase:", error);
                           
-                          // Show error notification
                           setTimeout(() => {
                               const errorNotice = document.createElement('div');
                               errorNotice.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded shadow-lg z-50';
-                              errorNotice.innerHTML = `
-                                  <div class="flex items-center">
-                                      <svg class="h-6 w-6 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                      </svg>
-                                      <span class="font-medium">Error!</span>
-                                      <span class="ml-2">Could not submit your results. You can try adding a reflection.</span>
-                                  </div>
-                              `;
+                              // Using string concatenation with single quotes for HTML attributes
+                              errorNotice.innerHTML = 
+                                '<div class="flex items-center">' +
+                                  '<svg class="h-6 w-6 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">' +
+                                    '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>' +
+                                  '</svg>' +
+                                  '<span class="font-medium">Error!</span>' +
+                                  '<span class="ml-2">Could not submit your results. You can try adding a reflection.</span>' +
+                                '</div>';
                               document.body.appendChild(errorNotice);
                               
-                              // Remove the notice after 5 seconds
                               setTimeout(() => {
                                   errorNotice.classList.add('opacity-0', 'transition-opacity', 'duration-500');
                                   setTimeout(() => {
-                                      document.body.removeChild(errorNotice);
+                                     if (document.body.contains(errorNotice)) {
+                                         document.body.removeChild(errorNotice);
+                                     }
                                   }, 500);
                               }, 5000);
                           }, 500);
@@ -1399,55 +1442,63 @@ document.addEventListener('DOMContentLoaded', function() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             const reflection = reflectionText.value.trim();
-            const focusRating = focusRatingInput.value;
-            const finalScore = scoreEl.textContent;
-            const totalQs = totalQuestionsResultsEl.textContent;
-            const timeTaken = timeTakenEl.textContent;
+            const focusRatingValue = focusRatingInput.value; // Renamed to avoid conflict
+            const finalScore = score; // Use global score variable
+            const totalScorePossible = maxScore; // Use global maxScore
+            const timeTakenString = timeTakenEl.textContent; // Get from element, already formatted
+
             let y = 15;
             const lineHeight = 7;
             const pageHeight = doc.internal.pageSize.height;
             const margin = 15;
 
             doc.setFontSize(18);
-            doc.text("UCAT Quantitative Reasoning Results", margin, y);
+            doc.text("UCAT Decision Making Test 1 Results", margin, y); // Updated title
             y += lineHeight * 1.5;
             doc.setFontSize(12);
-            doc.text(`Name: ${userName || 'N/A'}`, margin, y); y += lineHeight;
-            doc.text(`Goal: ${userGoal || 'N/A'} / ${totalQs}`, margin, y); y += lineHeight;
-            doc.text(`Focus Area: ${userFocusArea || 'N/A'}`, margin, y); y += lineHeight;
-            doc.text(`Final Score: ${finalScore} / ${totalQs}`, margin, y); y += lineHeight;
-            doc.text(`Time Taken: ${timeTaken}`, margin, y); y += lineHeight * 1.5;
+            // Using string concatenation
+            doc.text('Name: ' + (userName || 'N/A'), margin, y); y += lineHeight;
+            doc.text('Goal: ' + (userGoal || 'N/A') + ' / ' + totalScorePossible, margin, y); y += lineHeight;
+            doc.text('Focus Area: ' + (userFocusArea || 'N/A'), margin, y); y += lineHeight;
+            doc.text('Final Score: ' + finalScore + ' / ' + totalScorePossible, margin, y); y += lineHeight;
+            doc.text('Time Taken: ' + timeTakenString, margin, y); y += lineHeight * 1.5;
+            
             doc.setFontSize(14);
             doc.text("Focus Rating (1-5):", margin, y); y += lineHeight;
             doc.setFontSize(10);
-            doc.text(focusRating || 'N/A', margin, y); y += lineHeight * 1.5;
+            doc.text(focusRatingValue || 'N/A', margin, y); y += lineHeight * 1.5;
+            
             doc.setFontSize(14);
             doc.text("Main Takeaway:", margin, y); y += lineHeight;
             doc.setFontSize(10);
             const reflectionLines = doc.splitTextToSize(reflection || 'No reflection provided.', doc.internal.pageSize.width - margin * 2);
             doc.text(reflectionLines, margin, y);
             y += reflectionLines.length * (lineHeight * 0.7) + lineHeight;
+            
             doc.setFontSize(14);
-            doc.text("Detailed Results Summary:", margin, y); y += lineHeight * 1.5;
+            doc.text("Detailed Passage Results:", margin, y); y += lineHeight * 1.5; // Updated heading
             doc.setFontSize(10);
 
-            questions.forEach((qData, index) => {
-                const userAnswer = userAnswers[index];
-                const correctAnswer = qData.correctAnswer;
-                const isCorrect = userAnswer !== null && userAnswer !== undefined && userAnswer === correctAnswer;
-                const status = userAnswer === null || userAnswer === undefined ? "Not Answered" : (isCorrect ? "Correct" : "Incorrect");
-                const timeSpentSec = Math.round((questionTimes[index] || 0) / 1000);
-                const resultText = `Q${index + 1}: Your Ans: ${userAnswer || 'N/A'}, Correct: ${correctAnswer}, Status: ${status}, Time: ${timeSpentSec}s`;
-                
-                let textLines = doc.splitTextToSize(resultText, doc.internal.pageSize.width - margin * 2);
-                if (y + (textLines.length * (lineHeight * 0.7)) > pageHeight - margin) {
-                    doc.addPage();
-                    y = margin;
-                }
-                doc.text(textLines, margin, y);
-                y += textLines.length * (lineHeight * 0.7) + (lineHeight*0.3);
-            });
-            doc.save(`ucat_qr_results_${userName || 'user'}.pdf`);
+            if (window.detailedPassageScores && window.detailedPassageScores.length > 0) {
+                window.detailedPassageScores.forEach((detail, passageIdx) => {
+                    if (y + (lineHeight * 5) > pageHeight - margin) { // Estimate space needed for a passage
+                        doc.addPage();
+                        y = margin;
+                    }
+                    doc.setFontSize(11);
+                    doc.text('Passage ' + (passageIdx + 1) + ':', margin, y); y += lineHeight;
+                    doc.setFontSize(10);
+                    doc.text('  Correct Statements: ' + detail.correctCount + ' / ' + detail.totalStatements, margin + 5, y); y += lineHeight;
+                    doc.text('  Points Awarded: ' + detail.points, margin + 5, y); y += lineHeight * 0.5;
+
+                    // Optionally, add individual statement details if needed
+                    // questionsByPassage[passageIdx].forEach((statement, stmtIdx) => { ... });
+                    y += lineHeight * 0.5; // Extra spacing between passages
+                });
+            } else {
+                doc.text("No detailed passage scores available.", margin, y); y+= lineHeight;
+            }
+            doc.save('ucat_dm_test1_results_' + (userName.replace(/[^a-zA-Z0-9]/g, '_') || 'user') + '.pdf');
         }
         
         // Function to submit performance data to server
@@ -1485,19 +1536,21 @@ document.addEventListener('DOMContentLoaded', function() {
                         studentEmail: userEmail || '',
                         userId: userId, // <--- Add userId here
                         examName: "DM Test 1",
-                        score: scoreEl.textContent,
-                        totalQuestions: totalQuestionsResultsEl.textContent,
-                        timeTaken: timeTakenEl.textContent,
-                        answers: userAnswers,
-                        questionTimes: questionTimes,
-                        flaggedQuestions: flaggedQuestions,
+                        score: score, // Use global score variable
+                        maxScore: maxScore, // Use global maxScore
+                        detailedPassageScores: window.detailedPassageScores || [], // Include detailed scores
+                        numberOfPassages: passageTexts.length, // Include number of passages
+                        timeTaken: timeTakenEl.textContent, // Get formatted time
+                        answers: userAnswers, // Raw answers
+                        questionTimes: questionTimes, // Time per passage
+                        flaggedQuestions: flaggedQuestions, // Flagged per passage
                         goal: userGoal || '',
                         focusArea: userFocusArea || '',
                         focusRating: focusRating,
                         reflection: reflection,
                         submissionTimestamp: new Date().toISOString(),
                         userAgent: navigator.userAgent,
-                        isReflection: true // Flag to indicate this is a reflection submission
+                        isReflection: true 
                     };
                     
                     // Add as a new document
@@ -1521,7 +1574,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     setTimeout(() => {
                         successNotice.classList.add('opacity-0', 'transition-opacity', 'duration-500');
                         setTimeout(() => {
-                            document.body.removeChild(successNotice);
+                            if (document.body.contains(successNotice)) {
+                                document.body.removeChild(successNotice);
+                            }
                         }, 500);
                     }, 5000);
                     
@@ -1983,7 +2038,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (mMinusButton) mMinusButton.click();
                     return; 
                 }
-                if (e.key.toLowerCase() === 'r' && !e.altKey && !e.metaKey && !e.ctrlKey) { // MRC in UCAT calc
+                if (e.key.toLowerCase() === 'r' && !e.altKey && !e.metaKey && !e.ctrlKey) { // MRC in UCAT calc. Changed 'c' to 'r' to avoid conflict with Alt+C for calculator.
                     e.preventDefault(); 
                     const mrcButton = document.querySelector('.calc-button[data-calc-action=\"mrc\"]');
                     if (mrcButton) mrcButton.click();
@@ -2003,32 +2058,23 @@ document.addEventListener('DOMContentLoaded', function() {
                  switch (code) { 
                      case 'keyn': e.preventDefault(); if (!nextButton.disabled) nextButton.click(); return;
                      case 'keyp': e.preventDefault(); if (!prevButton.disabled) prevButton.click(); return;
-                     case 'keyf': e.preventDefault(); if (!isReviewingFromResults && !flagButton.disabled) flagButton.click(); return;
+                     // case 'keyf': e.preventDefault(); if (!isReviewingFromResults && !flagButton.disabled) flagButton.click(); return; // Alt+F for flag still works
                      case 'keyc': e.preventDefault(); toggleCalculator(); return; 
                      default: return; 
                  }
              } else { 
-                 if (['a', 'b', 'y', 'n'].includes(key) && !isReviewingFromResults && !isCalcVisible) { 
-                     e.preventDefault();
-                     let optionIndex = -1;
-                     let optionValue = '';
-
-                     if (key === 'a' || key === 'y') {
-                         optionIndex = 0; // Yes
-                         optionValue = 'A';
-                     } else if (key === 'b' || key === 'n') {
-                         optionIndex = 1; // No
-                         optionValue = 'B';
-                     }
-                    
-                     if (optionIndex !== -1) {
-                        const currentQuestionData = questions[currentQuestionIndex];
-                        if (optionIndex < currentQuestionData.options.length) {
-                            handleOptionSelect(currentQuestionIndex, optionIndex, optionValue);
-                        }
-                     }
-                     return;
+                 // Keyboard shortcuts for A-E (or Y/N) are not directly applicable to this drag-and-drop interface.
+                 // Users will use mouse/touch or click interactions for Yes/No.
+                 // If specific keyboard selection for Yes/No is desired for selected statement, that would be a new feature.
+                 if (['y', 'n'].includes(key) && !isReviewingFromResults && !isCalcVisible) {
+                    e.preventDefault();
+                    const selectedRow = document.querySelector('.statement-row.selected');
+                    if (selectedRow) {
+                        const buttonToClick = key === 'y' ? document.getElementById('yes-button') : document.getElementById('no-button');
+                        if (buttonToClick) buttonToClick.click();
+                    }
                  }
+                 return;
              }
         }
         document.addEventListener('keydown', handleKeyboardShortcuts);
@@ -2180,7 +2226,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             userGoal = goalInput.value.trim();
             userFocusArea = focusAreaInput.value.trim();
-            timeLeft = 31 * 60; // Corrected time
+            timeLeft = 7 * 60; // 7 minutes for 6 questions
             userAnswers = new Array(questions.length).fill(null);
             questionTimes = new Array(questions.length).fill(0);
             flaggedQuestions = new Array(questions.length).fill(false);
@@ -2188,7 +2234,7 @@ document.addEventListener('DOMContentLoaded', function() {
             currentQuestionIndex = 0;
             isReviewingFromResults = false;
             isFilteringFlagged = false;
-            currentlyDisplayedPassageIndex = -1;
+            // currentlyDisplayedPassageIndex = -1; // No longer needed with this structure
             practiceSessionEndTime = null;
             showPracticeSessionScreen();
             startTimer();
@@ -2215,6 +2261,89 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Actually initialize the app now that all functions and DOM elements are defined
         initializeApp();
+
+        // Initialize drag and drop functionality (Copied from DM sylls 1.html and adapted)
+        function initDragAndDrop() {
+            const yesButton = document.getElementById('yes-button');
+            const noButton = document.getElementById('no-button');
+            const statementRows = document.querySelectorAll('.statement-row'); // These are the droppable targets
+            
+            if (!yesButton || !noButton) return;
+            
+            let draggedValue = null; // Will be "Yes" or "No"
+            
+            [yesButton, noButton].forEach(button => {
+                button.setAttribute('draggable', true);
+                
+                button.addEventListener('dragstart', function(e) {
+                    draggedValue = this.textContent; // "Yes" or "No"
+                    e.dataTransfer.setData('text/plain', draggedValue);
+                    this.classList.add('opacity-50');
+                });
+                
+                button.addEventListener('dragend', function() {
+                    this.classList.remove('opacity-50');
+                });
+                
+                // Click functionality as an alternative
+                button.addEventListener('click', function() {
+                    const selectedRow = document.querySelector('.statement-row.selected');
+                    if (selectedRow) {
+                        const statementIndex = parseInt(selectedRow.dataset.statementIndex);
+                        const answerBox = selectedRow.querySelector('.statement-answer-box');
+                        
+                        answerBox.textContent = this.textContent; // "Yes" or "No"
+                        selectedRow.classList.remove('selected', 'border-blue-500', 'bg-blue-50');
+                        
+                        if (!userAnswers[currentQuestionIndex]) { // currentQuestionIndex is passage index
+                            userAnswers[currentQuestionIndex] = new Array(5).fill(null);
+                        }
+                        userAnswers[currentQuestionIndex][statementIndex] = (this.textContent === "Yes" ? "Y" : "N");
+                        updateNavigatorButtons(); // Update based on passage completion
+                    }
+                });
+            });
+            
+            statementRows.forEach(row => {
+                // Click to select a row (for click-based Yes/No selection)
+                row.addEventListener('click', function() {
+                    document.querySelectorAll('.statement-row.selected').forEach(el => {
+                        el.classList.remove('selected', 'border-blue-500', 'bg-blue-50');
+                    });
+                    this.classList.add('selected', 'border-blue-500', 'bg-blue-50');
+                });
+
+                row.addEventListener('dragover', function(e) {
+                    e.preventDefault(); // Necessary to allow dropping
+                    this.classList.add('border-blue-500', 'bg-blue-50'); // Highlight on hover
+                });
+                
+                row.addEventListener('dragleave', function() {
+                    if (!this.classList.contains('selected')) { // Don't remove if it's the selected row for clicking
+                        this.classList.remove('border-blue-500', 'bg-blue-50');
+                    }
+                });
+                
+                row.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    if (!this.classList.contains('selected')) {
+                         this.classList.remove('border-blue-500', 'bg-blue-50');
+                    }
+                    
+                    const value = e.dataTransfer.getData('text/plain'); // "Yes" or "No"
+                    const answerBox = this.querySelector('.statement-answer-box');
+                    answerBox.textContent = value;
+                    
+                    const statementIndex = parseInt(this.dataset.statementIndex);
+                    if (!userAnswers[currentQuestionIndex]) { // currentQuestionIndex is passage index
+                        userAnswers[currentQuestionIndex] = new Array(5).fill(null);
+                    }
+                    userAnswers[currentQuestionIndex][statementIndex] = (value === "Yes" ? "Y" : "N");
+                    updateNavigatorButtons(); // Update based on passage completion
+                });
+            });
+        }
+
     }); // Closing bracket for DOMContentLoaded
     </script>
 </body>
