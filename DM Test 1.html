@@ -469,13 +469,13 @@
                 <h1 class="text-2xl md:text-3xl font-bold text-blue-600">Decision Making Test 1</h1>
                 <p class="text-gray-600 mt-2">Prepare for the UCAT DM section.</p>
                  <p class="text-sm text-gray-500 mt-4">
-                     This section contains <strong id="setup-question-count">8 questions</strong> and you have <strong id="setup-time-limit">9 minutes</strong> to complete it. Max score <strong id="setup-max-score">16 points</strong>.
+                     This section contains <strong id="setup-question-count">16 questions</strong> and you have <strong id="setup-time-limit">17 minutes</strong> to complete it. Max score <strong id="setup-max-score">32 points</strong>.
                  </p>
             </div>
             <div class="space-y-4 w-full max-w-md">
                 <div>
-                    <label for="goal" class="block text-sm font-medium text-gray-700">Goal (Score out of 16):</label>
-                    <input type="number" id="goal" name="goal" min="0" max="16" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., 10">
+                    <label for="goal" class="block text-sm font-medium text-gray-700">Goal (Score out of 32):</label>
+                    <input type="number" id="goal" name="goal" min="0" max="32" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., 10">
                 </div>
                 <div>
                     <label for="focus-area" class="block text-sm font-medium text-gray-700">Area of Focus / Intention For Practice:</label>
@@ -492,8 +492,8 @@
             <div class="header-bar">
                 <span id="practice-session-title" class="font-semibold">Decision Making</span>
                 <div class="flex items-center space-x-4">
-                    <div id="timer" class="text-base px-3 py-1 rounded-md">09:00</div>
-                    <span class="text-sm">Question <span id="question-number-info">1</span> of 8</span>
+                    <div id="timer" class="text-base px-3 py-1 rounded-md">17:00</div>
+                    <span class="text-sm">Question <span id="question-number-info">1</span> of 16</span>
                 </div>
             </div>
             <div class="secondary-toolbar">
@@ -582,7 +582,7 @@
                  <h2 class="text-2xl md:text-3xl font-bold text-blue-600">Practice Session Results</h2>
              </div>
             <div class="bg-blue-50 p-4 rounded-lg mb-6 text-center flex-shrink-0">
-                 <p class="text-lg font-semibold">Your Score: <span id="score" class="text-blue-700">0</span> / <span id="total-score-possible">16</span> Points</p>
+                 <p class="text-lg font-semibold">Your Score: <span id="score" class="text-blue-700">0</span> / <span id="total-score-possible">32</span> Points</p>
                  <p class="text-gray-600">Time Taken: <span id="time-taken"></span></p>
             </div>
             <h3 class="text-xl font-semibold mb-2 flex-shrink-0">Detailed Results Summary:</h3>
@@ -666,7 +666,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             userGoal = document.getElementById('goal').value.trim();
             userFocusArea = document.getElementById('focus-area').value.trim();
-            timeLeft = 9 * 60; // 9 minutes for 8 questions
+            timeLeft = 17 * 60; // 17 minutes for 16 questions
             
             userAnswers = new Array(passageTexts.length).fill(null).map(() => new Array(5).fill(null));
             questionTimes = new Array(passageTexts.length).fill(0);
@@ -687,7 +687,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let currentQuestionIndex = 0; // Current passage index
         let userAnswers = []; // userAnswers[passageIndex][statementIndex] = 'Y' or 'N'
         let timerInterval;
-        let timeLeft = 9 * 60; 
+        let timeLeft = 17 * 60; 
         let practiceSessionStartTime;
         let practiceSessionEndTime;
         let userName = '';
@@ -700,7 +700,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let flaggedQuestions = []; // Flagged status per passage
         let isFilteringFlagged = false;
         let score = 0; // Ensure score is globally defined
-        let maxScore = 16; // Define maxScore globally for DM Test 1
+        let maxScore = 32; // Define maxScore globally for DM Test 1
 
         let calcCurrentInput = '0';
         let calcPreviousInput = '';
@@ -761,7 +761,89 @@ document.addEventListener('DOMContentLoaded', function() {
             "Zephyrs and kites are types of aircraft.<br>All zephyrs are aeros.<br>Only the aeros that fly over the Atlantic carry radar.<br>All aeros are blue.<br><br>(Place 'Yes' if the conclusion does follow, 'No' if it does not.)",
             "In Maria's fruit bowl, there are green apples and there are peaches.<br>Nothing else is in the bowl except for the yellow bananas.<br><br>(Place 'Yes' if the conclusion does follow, 'No' if it does not follow.)",
             "Lina has copper (C), aluminium (A) and steel (S) rods.<br>All rods of the same metal weigh the same.<br>A bundle containing 2 copper + 3 aluminium + 1 steel rod weighs 70 kg.<br>A bundle containing 1 copper + 2 aluminium + 1 steel rod weighs 40 kg.<br><br>What is most likely the weight of a bundle containing 4 copper rods, 4 aluminium rods and 1 steel rod?",
-            "There are six folders stacked in a tray, numbered 1 (top) to 6 (bottom).<br>Zoe's folder is not the bottom-most folder.<br>The number of folders below Zoe's folder is less than the number above it.<br>Ethan's folder is the last-but-one folder from the bottom of the stack.<br>There are exactly two folders between Maya's folder and Zoe's folder.<br>Liam's folder is not above Zoe's folder.<br><br>How many folders are there between Maya's folder and Liam's folder?"
+            "There are six folders stacked in a tray, numbered 1 (top) to 6 (bottom).<br>Zoe's folder is not the bottom-most folder.<br>The number of folders below Zoe's folder is less than the number above it.<br>Ethan's folder is the last-but-one folder from the bottom of the stack.<br>There are exactly two folders between Maya's folder and Zoe's folder.<br>Liam's folder is not above Zoe's folder.<br><br>How many folders are there between Maya's folder and Liam's folder?",
+            "There are 6 aviaries in Feather Lane, with a total of 46 birds.
+Each aviary normally houses 4 finches.
+
+In aviaries 1–5, the macaw counts are arranged as follows: 2 macaws in one aviary, 3 macaws in two aviaries, and 4 macaws in two aviaries.
+
+One of these five aviaries (not the 6th) also shelters 2 rescued owls and 2 extra finches.
+How many birds live in the 6th aviary?
+1
+2
+3
+4
+
+Answer: 2",
+            "Leah has a certain number of marbles and a certain number of jars.
+If she puts 3 marbles in each jar, she has 3 marbles left over.
+
+If she puts 2 marbles in each jar, she has 8 marbles left over.
+
+How many jars does Leah have?
+4
+5
+6
+7
+
+Answer: B",
+            "Mr and Mrs Rivers hosted a dinner party. They invited two couples – Mr & Mrs Hart and Mr & Mrs Patel – as well as Ms Quinn, Mr Banner, Ms Lopez and Mr Diaz.
+
+@https://ik.imagekit.io/mwp/dmtest1a 
+
+Mr Rivers and Mrs Rivers sit at opposite ends (shown above).
+Male guests occupy the even-numbered seats.
+Married couples are not seated next to each other.
+Mrs Rivers sits next to neither of the Harts nor the Patels.
+Mr Diaz sits on Mrs Rivers' right-hand side, but on the opposite side of the table to Ms Quinn and as far from her as possible.
+Ms Lopez sits directly next to Mr Hart.
+
+Who occupies seat 2?
+A. Mr Banner
+B. Mr Hart
+C. Mr Diaz
+D. Mr Patel
+
+Answer: B",
+            "A star-shaped counter and a circle-shaped counter move around the seven vertices of a regular heptagon labelled P Q R S T U V in clockwise order.
+The star moves two vertices clockwise in every step.
+The circle moves three vertices anti-clockwise (counter-clockwise) in every step.
+
+At which of the following pairs of vertices should the counters be placed originally so that they arrive at the same vertex after exactly the third move?
+A. Star at Q and circle at T
+B. Star at R and circle at P
+C. Star at S and circle atQ
+D. Star at V and circle at P
+
+Answer: D",
+            "To reduce serious injuries among e-scooter riders, should cities make helmet use compulsory?
+A. Yes, because helmets are inexpensive and easy to carry, so most riders would not object to wearing one.
+B. Yes, because head-impact data show helmets cut the risk of fatal or disabling injury dramatically in similar micro-mobility devices.
+C. No, because many riders rent short-term scooters while travelling and may forget to bring a helmet with them.
+D. No, because compulsory rules could slow growth of the e-scooter industry and reduce urban transport choices.
+
+Answer: B",
+            "To minimise food waste, should grocery stores be fined for discarding unsold yet edible products?
+A. Yes, because the possibility of a fine will incentivise stores to donate or discount food instead of throwing it away.
+B. Yes, because charities that receive surplus food can then spend more money on other social causes.
+C. No, because stores already pay disposal fees, so extra fines would be an unfair double penalty.
+D. No, because some food waste is inevitable due to safety regulations and customer expectations of freshness.
+
+Answer: A",
+            "To ensure equal access to higher education, should governments abolish tuition fees at public universities?
+A. Yes, because removing fees eliminates a direct financial barrier that disproportionately deters low-income students.
+B. Yes, because countries with free universities often attract international applicants, boosting cultural diversity on campus.
+C. No, because universities would then rely more heavily on public funds, potentially reducing educational quality.
+D. No, because many students pay with government loans, so fees do not actually block access for those who truly wish to study.
+
+Answer: A",
+            "To protect native pollinator species, should the sale of imported ornamental plants be restricted?
+A. Yes, because imported ornamentals may harbour parasites that can devastate pollinators like local bee populations.
+B. Yes, because encouraging gardeners to buy native plants supports regional horticultural businesses.
+C. No, because restricting plant choice would upset gardening enthusiasts and hurt retail sales.
+D. No, because most imported plants are already certified pest-free, so the additional restriction would not meaningfully reduce harm.
+
+Answer: A"
         ];
 
         // questions array will now group statements by passage
@@ -820,7 +902,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     type: "mcq",
                     options: ["120 kg", "128 kg", "160 kg", "176 kg"],
                     correctAnswer: "B",
-                    explanation: "Let C = weight of copper rod, A = weight of aluminium rod, S = weight of steel rod.\nFrom the given information:\n2C + 3A + S = 70 ... (1)\nC + 2A + S = 40 ... (2)\nSubtracting (2) from (1): C + A = 30\nFrom (2): C + 2A + S = 40\nSubstituting C = 30 - A: (30 - A) + 2A + S = 40\n30 + A + S = 40\nA + S = 10\nSo S = 10 - A\nFrom C + A = 30 and A + S = 10:\nC = 30 - A and S = 10 - A\nSubstituting back into equation (1):\n2(30 - A) + 3A + (10 - A) = 70\n60 - 2A + 3A + 10 - A = 70\n70 = 70 ✓\nThis confirms our equations are consistent.\nTo find specific values, from equation (2):\nC + 2A + S = 40\n(30 - A) + 2A + (10 - A) = 40\n30 - A + 2A + 10 - A = 40\n40 = 40 ✓\nSince C + A = 30 and A + S = 10, and all weights must be positive:\nIf A = 10, then C = 20 and S = 0 (not valid as S must be positive)\nIf A = 8, then C = 22 and S = 2\nChecking: 2(22) + 3(8) + 2 = 44 + 24 + 2 = 70 ✓\nAnd: 22 + 2(8) + 2 = 22 + 16 + 2 = 40 ✓\nTherefore: C = 22 kg, A = 8 kg, S = 2 kg\nFor 4C + 4A + S: 4(22) + 4(8) + 2 = 88 + 32 + 8 = 128 kg"
+                    explanation: "Let C = weight of copper rod, A = weight of aluminium rod, S = weight of steel rod.\nFrom the given information:\n2C + 3A + S = 70 ... (1)\nC + 2A + S = 40 ... (2)\nSubtracting (2) from (1): C + A = 30\nFrom (2): C + 2A + S = 40\nSubstituting C = 30 - A: (30 - A) + 2A + S = 40\n30 + A + S = 40\nA + S = 10\nSo S = 10 - A\nFrom C + A = 30 and A + S = 10, and all weights must be positive:\nIf A = 10, then C = 20 and S = 0 (not valid as S must be positive)\nIf A = 8, then C = 22 and S = 2\nChecking: 2(22) + 3(8) + 2 = 44 + 24 + 2 = 70 ✓\nAnd: 22 + 2(8) + 2 = 22 + 16 + 2 = 40 ✓\nTherefore: C = 22 kg, A = 8 kg, S = 2 kg\nFor 4C + 4A + S: 4(22) + 4(8) + 2 = 88 + 32 + 8 = 128 kg"
                 }
             ],
             // Question 8 - MCQ
@@ -830,6 +912,152 @@ document.addEventListener('DOMContentLoaded', function() {
                     options: ["1", "2", "3", "4"],
                     correctAnswer: "D",
                     explanation: "Let's work through the constraints:\n- 6 folders numbered 1 (top) to 6 (bottom)\n- Zoe is not in position 6\n- Folders below Zoe < folders above Zoe\n- Ethan is in position 5 (last-but-one from bottom)\n- Exactly 2 folders between Maya and Zoe\n- Liam is not above Zoe\n\nFrom constraint 2: If Zoe is in position p, then (6-p) < (p-1), so 6-p < p-1, thus 7 < 2p, so p > 3.5\nSince p must be integer and Zoe ≠ 6, Zoe must be in position 4 or 5.\nBut Ethan is in position 5, so Zoe must be in position 4.\n\nWith Zoe in position 4 and exactly 2 folders between Maya and Zoe:\nMaya must be in position 1 (3 positions away from 4).\n\nLiam is not above Zoe (position 4), so Liam must be in position 5 or 6.\nBut Ethan is in position 5, so Liam must be in position 6.\n\nPositions: Maya(1), Zoe(4), Ethan(5), Liam(6)\nFolders between Maya(1) and Liam(6): positions 2, 3, 4, 5 = 4 folders"
+                }
+            ],
+            // Question 9 - MCQ
+            [
+                {
+                    type: "mcq",
+                    options: ["1", "2", "3", "4"],
+                    correctAnswer: "B",
+                    explanation: "There are 6 aviaries in Feather Lane, with a total of 46 birds.
+Each aviary normally houses 4 finches.
+
+In aviaries 1–5, the macaw counts are arranged as follows: 2 macaws in one aviary, 3 macaws in two aviaries, and 4 macaws in two aviaries.
+
+One of these five aviaries (not the 6th) also shelters 2 rescued owls and 2 extra finches.
+How many birds live in the 6th aviary?
+1
+2
+3
+4
+
+Answer: 2"
+                }
+            ],
+            // Question 10 - MCQ
+            [
+                {
+                    type: "mcq",
+                    options: ["4", "5", "6", "7"],
+                    correctAnswer: "B",
+                    explanation: "Leah has a certain number of marbles and a certain number of jars.
+If she puts 3 marbles in each jar, she has 3 marbles left over.
+
+If she puts 2 marbles in each jar, she has 8 marbles left over.
+
+How many jars does Leah have?
+4
+5
+6
+7
+
+Answer: B"
+                }
+            ],
+            // Question 11 - MCQ
+            [
+                {
+                    type: "mcq",
+                    options: ["A. Mr Banner", "B. Mr Hart", "C. Mr Diaz", "D. Mr Patel"],
+                    correctAnswer: "B",
+                    explanation: "Mr and Mrs Rivers hosted a dinner party. They invited two couples – Mr & Mrs Hart and Mr & Mrs Patel – as well as Ms Quinn, Mr Banner, Ms Lopez and Mr Diaz.
+
+@https://ik.imagekit.io/mwp/dmtest1a 
+
+Mr Rivers and Mrs Rivers sit at opposite ends (shown above).
+Male guests occupy the even-numbered seats.
+Married couples are not seated next to each other.
+Mrs Rivers sits next to neither of the Harts nor the Patels.
+Mr Diaz sits on Mrs Rivers' right-hand side, but on the opposite side of the table to Ms Quinn and as far from her as possible.
+Ms Lopez sits directly next to Mr Hart.
+
+Who occupies seat 2?
+A. Mr Banner
+B. Mr Hart
+C. Mr Diaz
+D. Mr Patel
+
+Answer: B"
+                }
+            ],
+            // Question 12 - MCQ
+            [
+                {
+                    type: "mcq",
+                    options: ["A. Star at Q and circle at T", "B. Star at R and circle at P", "C. Star at S and circle atQ", "D. Star at V and circle at P"],
+                    correctAnswer: "D",
+                    explanation: "A star-shaped counter and a circle-shaped counter move around the seven vertices of a regular heptagon labelled P Q R S T U V in clockwise order.
+The star moves two vertices clockwise in every step.
+The circle moves three vertices anti-clockwise (counter-clockwise) in every step.
+
+At which of the following pairs of vertices should the counters be placed originally so that they arrive at the same vertex after exactly the third move?
+A. Star at Q and circle at T
+B. Star at R and circle at P
+C. Star at S and circle atQ
+D. Star at V and circle at P
+
+Answer: D"
+                }
+            ],
+            // Question 13 - Argument MCQ
+            [
+                {
+                    type: "mcq",
+                    options: ["Yes, because helmets are inexpensive and easy to carry, so most riders would not object to wearing one.", "Yes, because head-impact data show helmets cut the risk of fatal or disabling injury dramatically in similar micro-mobility devices.", "No, because many riders rent short-term scooters while travelling and may forget to bring a helmet with them.", "No, because compulsory rules could slow growth of the e-scooter industry and reduce urban transport choices."],
+                    correctAnswer: "B",
+                    explanation: "To reduce serious injuries among e-scooter riders, should cities make helmet use compulsory?
+A. Yes, because helmets are inexpensive and easy to carry, so most riders would not object to wearing one.
+B. Yes, because head-impact data show helmets cut the risk of fatal or disabling injury dramatically in similar micro-mobility devices.
+C. No, because many riders rent short-term scooters while travelling and may forget to bring a helmet with them.
+D. No, because compulsory rules could slow growth of the e-scooter industry and reduce urban transport choices.
+
+Answer: B"
+                }
+            ],
+            // Question 14 - Argument MCQ
+            [
+                {
+                    type: "mcq",
+                    options: ["Yes, because the possibility of a fine will incentivise stores to donate or discount food instead of throwing it away.", "Yes, because charities that receive surplus food can then spend more money on other social causes.", "No, because stores already pay disposal fees, so extra fines would be an unfair double penalty.", "No, because some food waste is inevitable due to safety regulations and customer expectations of freshness."],
+                    correctAnswer: "A",
+                    explanation: "To minimise food waste, should grocery stores be fined for discarding unsold yet edible products?
+A. Yes, because the possibility of a fine will incentivise stores to donate or discount food instead of throwing it away.
+B. Yes, because charities that receive surplus food can then spend more money on other social causes.
+C. No, because stores already pay disposal fees, so extra fines would be an unfair double penalty.
+D. No, because some food waste is inevitable due to safety regulations and customer expectations of freshness.
+
+Answer: A"
+                }
+            ],
+            // Question 15 - Argument MCQ
+            [
+                {
+                    type: "mcq",
+                    options: ["Yes, because removing fees eliminates a direct financial barrier that disproportionately deters low-income students.", "Yes, because countries with free universities often attract international applicants, boosting cultural diversity on campus.", "No, because universities would then rely more heavily on public funds, potentially reducing educational quality.", "No, because many students pay with government loans, so fees do not actually block access for those who truly wish to study."],
+                    correctAnswer: "A",
+                    explanation: "To ensure equal access to higher education, should governments abolish tuition fees at public universities?
+A. Yes, because removing fees eliminates a direct financial barrier that disproportionately deters low-income students.
+B. Yes, because countries with free universities often attract international applicants, boosting cultural diversity on campus.
+C. No, because universities would then rely more heavily on public funds, potentially reducing educational quality.
+D. No, because many students pay with government loans, so fees do not actually block access for those who truly wish to study.
+
+Answer: A"
+                }
+            ],
+            // Question 16 - Argument MCQ
+            [
+                {
+                    type: "mcq",
+                    options: ["Yes, because imported ornamentals may harbour parasites that can devastate pollinators like local bee populations.", "Yes, because encouraging gardeners to buy native plants supports regional horticultural businesses.", "No, because restricting plant choice would upset gardening enthusiasts and hurt retail sales.", "No, because most imported plants are already certified pest-free, so the additional restriction would not meaningfully reduce harm."],
+                    correctAnswer: "A",
+                    explanation: "To protect native pollinator species, should the sale of imported ornamental plants be restricted?
+A. Yes, because imported ornamentals may harbour parasites that can devastate pollinators like local bee populations.
+B. Yes, because encouraging gardeners to buy native plants supports regional horticultural businesses.
+C. No, because restricting plant choice would upset gardening enthusiasts and hurt retail sales.
+D. No, because most imported plants are already certified pest-free, so the additional restriction would not meaningfully reduce harm.
+
+Answer: A"
                 }
             ]
         ];
@@ -919,29 +1147,59 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Check if this is an MCQ question
             const isMCQ = statementsForPassage.length === 1 && statementsForPassage[0].type === 'mcq';
+            const isArgumentMCQ = index >= 12 && index <= 15; // Questions 13-16 (0-indexed: 12, 13, 14, 15)
             
             if (questionContainer) {
+                let passageHtmlToRender = currentPassageText; // Use a new variable for potentially modified passage text
+
+                // Argument MCQ review mode: Highlight answers in passage text
+                if (isMCQ && isArgumentMCQ && reviewMode) {
+                    const mcqData = statementsForPassage[0];
+                    const userAnswer = userAnswers[index] && userAnswers[index][0] ? userAnswers[index][0] : null;
+                    const optionsLetters = ['A', 'B', 'C', 'D'];
+                    let styledPassage = currentPassageText;
+
+                    optionsLetters.forEach(letter => {
+                        const optionPrefix = `${letter}.`; // Match just "A.", "B.", etc.
+                        // Regex to find the option prefix and the text until the next <br> or end of string
+                        const regex = new RegExp(`(${optionPrefix.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&')}.*?)(?=<br>|$)`, 'gm');
+                        
+                        styledPassage = styledPassage.replace(regex, (match) => {
+                            if (letter === mcqData.correctAnswer) {
+                                return `<span style="background-color: #dcfce7; padding: 1px 3px; border-radius: 3px;">${match}</span>`;
+                            } else if (userAnswer === letter && userAnswer !== mcqData.correctAnswer) {
+                                return `<span style="background-color: #fee2e2; padding: 1px 3px; border-radius: 3px;">${match}</span>`;
+                            }
+                            return match; // No change if not correct or incorrect user answer
+                        });
+                    });
+                    passageHtmlToRender = styledPassage;
+                }
+
                 if (isMCQ) {
-                    // MCQ layout (similar to QR Test)
+                    let mcqOptionsHtml = '';
+                    if (!isArgumentMCQ) { // Only add separate options div for non-argument MCQs
+                        mcqOptionsHtml = '<div id="options-container" class="space-y-2"></div>';
+                    }
                     questionContainer.innerHTML = `
                         <div class="p-4 bg-gray-50 rounded-md mb-4" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 1.25rem; line-height: 1.5;">
-                            ${currentPassageText}
+                            ${passageHtmlToRender} 
                         </div>
                         <h4 class="text-md font-semibold mb-3 bg-white pb-1">Question ${index + 1}</h4>
-                        <div id="options-container" class="space-y-2"></div>
+                        ${mcqOptionsHtml}
                         <div id="review-explanation-container"></div>
                     `;
                 } else {
-                    // Syllogism layout (existing)
+                    // Syllogism layout
                     questionContainer.innerHTML = `
                         <div class="p-4 bg-gray-50 rounded-md mb-4" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 1.25rem; line-height: 1.5;">
-                            ${currentPassageText}
+                            ${currentPassageText} 
                         </div>
                         <div class="flex justify-between items-center mb-3">
                             <div>
                                 <h4 class="text-md font-semibold bg-white pb-1">Question ${index + 1}</h4>
                                 <h5 class="font-medium mb-2">Conclusions</h5>
-                                <p class="text-sm text-gray-600">Drag 'Yes' or 'No' onto the statement row, or click a statement then click 'Yes' or 'No'.</p>
+                                <p class="text-sm text-gray-600">Drag \'Yes\' or \'No\' onto the statement row, or click a statement then click \'Yes\' or \'No\'.</p>
                             </div>
                             <div class="flex space-x-2">
                                 <button id="yes-button" class="drag-button px-6 py-2 rounded-md font-medium">Yes</button>
@@ -953,28 +1211,108 @@ document.addEventListener('DOMContentLoaded', function() {
                     `;
                 }
                 
-                
                 const stimulusDiv = questionContainer.querySelector('.p-4.bg-gray-50');
                 if (stimulusDiv) {
                     const stimulusImages = stimulusDiv.querySelectorAll('img');
                     stimulusImages.forEach(img => {
-                        img.style.maxWidth = '60%'; // Consistent image sizing
+                        img.style.maxWidth = '60%';
                         img.style.margin = '0 auto';
                         img.style.display = 'block';
                     });
                 }
             }
             
-            currentQuestionIndex = index; // This is passage index
+            currentQuestionIndex = index;
             isReviewingFromResults = reviewMode;
             
             const statementsContainer = document.getElementById('statements-container');
+            const optionsContainer = document.getElementById('options-container'); // Will be null for argument MCQs
             const reviewExplanationContainer = document.getElementById('review-explanation-container');
             
             questionNumberInfoEl.textContent = `${index + 1} of ${passageTexts.length}`;
             if (questionContainer) questionContainer.scrollTop = 0;
             
-            if (statementsContainer) {
+            // Logic for populating optionsContainer (only if it exists and not argument MCQ)
+            if (isMCQ && optionsContainer && !isArgumentMCQ) { 
+                const mcqData = statementsForPassage[0];
+                const userAnswer = userAnswers[index] && userAnswers[index][0] ? userAnswers[index][0] : null;
+                
+                optionsContainer.innerHTML = '';
+                mcqData.options.forEach((option, optionIdx) => {
+                    const optionLetter = ['A', 'B', 'C', 'D'][optionIdx];
+                    const optionLabel = document.createElement('label');
+                    optionLabel.className = 'option-label';
+                    optionLabel.dataset.optionIndex = optionIdx;
+                    
+                    if (userAnswer === optionLetter) {
+                        optionLabel.classList.add('selected-answer');
+                    }
+                    
+                    optionLabel.innerHTML = `
+                        <input type="radio" name="q${index}_options" value="${optionLetter}" 
+                               ${userAnswer === optionLetter ? 'checked' : ''} 
+                               ${reviewMode ? 'disabled' : ''}>
+                        <span class="ml-2"><strong>${optionLetter}.</strong> ${option}</span>
+                    `;
+                    
+                    if (reviewMode) {
+                        if (optionLetter === mcqData.correctAnswer) {
+                            optionLabel.classList.add('border-green-500', 'bg-green-50');
+                        } else if (userAnswer === optionLetter && optionLetter !== mcqData.correctAnswer) {
+                            optionLabel.classList.add('border-red-500', 'bg-red-50');
+                        }
+                    }
+                    
+                    if (!reviewMode) {
+                        optionLabel.addEventListener('click', function() {
+                            optionsContainer.querySelectorAll('.option-label').forEach(label => {
+                                label.classList.remove('selected-answer');
+                            });
+                            this.classList.add('selected-answer');
+                            if (!userAnswers[index]) {
+                                userAnswers[index] = new Array(5).fill(null);
+                            }
+                            userAnswers[index][0] = optionLetter;
+                            updateNavigatorButtons();
+                        });
+                    }
+                    optionsContainer.appendChild(optionLabel);
+                });
+                
+                // Explanation for non-argument MCQs in review mode
+                if (reviewMode && statementsForPassage[0].explanation && reviewExplanationContainer) {
+                    const explanationDiv = document.createElement('div');
+                    explanationDiv.classList.add('explanation-box', 'mt-4', 'text-sm');
+                    explanationDiv.innerHTML = `<strong class="font-semibold">Explanation:</strong> ${statementsForPassage[0].explanation.replace(/\\n/g, '<br>')}`;
+                    reviewExplanationContainer.innerHTML = '';
+                    reviewExplanationContainer.appendChild(explanationDiv);
+                }
+            } else if (isMCQ && isArgumentMCQ) { // Argument MCQ (options in passage, handle selection and review explanation)
+                const mcqData = statementsForPassage[0];
+                // User answer is already stored if selected via keyboard. Visual indication handled by passage text highlighting (TBD if needed)
+                if (reviewMode && mcqData.explanation && reviewExplanationContainer) {
+                    const explanationDiv = document.createElement('div');
+                    explanationDiv.classList.add('explanation-box', 'mt-4', 'text-sm');
+                    explanationDiv.innerHTML = `<strong class="font-semibold">Explanation:</strong> ${mcqData.explanation.replace(/\\n/g, '<br>')}`;
+                    reviewExplanationContainer.innerHTML = '';
+                    reviewExplanationContainer.appendChild(explanationDiv);
+                    // Highlight correct/incorrect option in passage during review
+                    const passageDiv = questionContainer.querySelector('.p-4.bg-gray-50');
+                    if(passageDiv){
+                        const userAnswer = userAnswers[index] && userAnswers[index][0] ? userAnswers[index][0] : null;
+                        const lines = passageDiv.innerHTML.split('<br>');
+                        const updatedLines = lines.map(line => {
+                            if (line.trim().startsWith(mcqData.correctAnswer + '.')) {
+                                return `<span style="background-color: #dcfce7; padding: 2px; border-radius: 3px;">${line}</span>`; // Green highlight for correct
+                            } else if (userAnswer && line.trim().startsWith(userAnswer + '.') && userAnswer !== mcqData.correctAnswer) {
+                                return `<span style="background-color: #fee2e2; padding: 2px; border-radius: 3px;">${line}</span>`; // Red highlight for incorrect user answer
+                            }
+                            return line;
+                        });
+                        passageDiv.innerHTML = updatedLines.join('<br>');
+                    }
+                }
+            } else if (statementsContainer) { // Syllogism
                 statementsContainer.innerHTML = '';
                 statementsForPassage.forEach((statementData, statementIdx) => {
                     const statementId = `q${index}_statement${statementIdx}`;
@@ -1019,7 +1357,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         if (statementData.explanation) {
                              const explanationDiv = document.createElement('div');
                              explanationDiv.classList.add('explanation-box', 'mt-2', 'text-sm');
-                             explanationDiv.innerHTML = `<strong class="font-semibold">Explanation (${statementIdx + 1}):</strong> ${statementData.explanation.replace(/\n/g, '<br>')}`;
+                             explanationDiv.innerHTML = `<strong class="font-semibold">Explanation (${statementIdx + 1}):</strong> ${statementData.explanation.replace(/\\n/g, '<br>')}`;
                              if(reviewExplanationContainer && statementIdx === 0) reviewExplanationContainer.innerHTML = ''; // Clear for new passage
                              if(reviewExplanationContainer) reviewExplanationContainer.appendChild(explanationDiv);
                         }
@@ -1377,7 +1715,7 @@ document.addEventListener('DOMContentLoaded', function() {
         function calculateScore() {
             score = 0;
             window.detailedPassageScores = [];
-            const numPassages = passageTexts.length; // Should be 8
+            const numPassages = passageTexts.length; // Should be 16
 
             for (let i = 0; i < numPassages; i++) {
                 const statementsForPassage = questionsByPassage[i];
