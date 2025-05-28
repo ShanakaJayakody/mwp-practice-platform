@@ -1039,15 +1039,15 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             if (isReviewingFromResults) {
-                if (currentQuestionIndex < questions.length - 1) {
+                if (currentQuestionIndex < passageTexts.length - 1) {
                     loadQuestion(currentQuestionIndex + 1, true);
                 }
             }
             else if (!isReviewingFromResults) {
                  recordTimeSpent(currentQuestionIndex);
-                 if (currentQuestionIndex === questions.length - 1) {
+                 if (currentQuestionIndex === passageTexts.length - 1) {
                      showReviewScreen();
-                 } else if (currentQuestionIndex < questions.length - 1) {
+                 } else if (currentQuestionIndex < passageTexts.length - 1) {
                      loadQuestion(currentQuestionIndex + 1);
                  }
             }
@@ -2058,7 +2058,7 @@ document.addEventListener('DOMContentLoaded', function() {
                  switch (code) { 
                      case 'keyn': e.preventDefault(); if (!nextButton.disabled) nextButton.click(); return;
                      case 'keyp': e.preventDefault(); if (!prevButton.disabled) prevButton.click(); return;
-                     // case 'keyf': e.preventDefault(); if (!isReviewingFromResults && !flagButton.disabled) flagButton.click(); return; // Alt+F for flag still works
+                     case 'keyf': e.preventDefault(); if (!isReviewingFromResults && !flagButton.disabled) flagButton.click(); return;
                      case 'keyc': e.preventDefault(); toggleCalculator(); return; 
                      default: return; 
                  }
